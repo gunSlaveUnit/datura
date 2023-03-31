@@ -179,3 +179,12 @@ async def update_build(file: UploadFile):
     If the file is updated, the associated game will become unpublished.
     """
     pass
+
+
+@router.delete('/build/')
+async def delete_build(filename: str | None = None):
+    """
+    Deletes an existing build file
+    or removes all if "filename" query param not provided.
+    """
+    pass
