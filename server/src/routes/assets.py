@@ -108,9 +108,10 @@ async def update_screenshot(file: UploadFile):
 
 
 @router.delete('/screenshots/')
-async def delete_screenshot(filename: str):
+async def delete_screenshots(filename: str | None = None):
     """
-    Deletes an existing screenshot.
+    Deletes an existing screenshot
+    or removes all if "filename" query param not provided.
     """
     pass
 
@@ -144,9 +145,10 @@ async def update_trailer(file: UploadFile):
 
 
 @router.delete('/trailer/')
-async def delete_trailer(filename: str):
+async def delete_trailers(filename: str | None = None):
     """
-    Deletes an existing trailer.
+    Deletes an existing trailer
+    or removes all if "filename" query param not provided.
     """
     pass
 
