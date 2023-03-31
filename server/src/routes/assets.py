@@ -35,3 +35,11 @@ async def trailers_info():
     Returns the names of the trailers files
     """
     pass
+
+
+@router.get('/build/')
+async def build_info():
+    """
+    Returns the names of the build files
+    """
+    pass
