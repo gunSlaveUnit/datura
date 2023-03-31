@@ -4,7 +4,7 @@ from fastapi import APIRouter, UploadFile
 
 from server.src.settings import ASSETS_ROUTER_PREFIX, Tags
 
-router = APIRouter(prefix=ASSETS_ROUTER_PREFIX, tags=[Tags.GAMES])
+router = APIRouter(prefix=ASSETS_ROUTER_PREFIX, tags=[Tags.ASSETS])
 
 
 @router.get('/header/')
