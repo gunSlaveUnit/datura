@@ -1,4 +1,4 @@
-from typing import BinaryIO, Generator
+from typing import BinaryIO
 import gzip
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
