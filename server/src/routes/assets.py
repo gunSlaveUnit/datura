@@ -107,6 +107,14 @@ async def update_screenshot(file: UploadFile):
     pass
 
 
+@router.delete('/screenshots/')
+async def delete_screenshot(filename: str):
+    """
+    Deletes an existing screenshot.
+    """
+    pass
+
+
 @router.get('/trailers/')
 async def trailers_info(filename: str | None = None):
     """
