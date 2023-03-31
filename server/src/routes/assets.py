@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, UploadFile
 
 from settings import ASSETS_ROUTER_PREFIX, Tags
@@ -82,6 +84,15 @@ async def screenshots_info(filename: str | None = None):
     """
     Returns the names of the screenshot files.
     If "filename" query param was provided, returns a file.
+    """
+    pass
+
+
+@router.post('/screenshots/')
+async def upload_screenshot(files: List[UploadFile]):
+    """
+    Uploads screenshots to the server.
+    If something of them exists, won't be overwritten.
     """
     pass
 
