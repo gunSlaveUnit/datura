@@ -143,6 +143,14 @@ async def update_trailer(file: UploadFile):
     pass
 
 
+@router.delete('/trailer/')
+async def delete_trailer(filename: str):
+    """
+    Deletes an existing trailer.
+    """
+    pass
+
+
 @router.get('/build/')
 async def build_info(filename: str | None = None):
     """
