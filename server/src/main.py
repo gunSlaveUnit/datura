@@ -4,9 +4,9 @@ import gzip
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 
-from settings import tags_metadata
-from routes.games import router as games_router
-from routes.companies import router as companies_router
+from server.src.routes.games import router as games_router
+from server.src.routes.companies import router as companies_router
+from server.src.settings import tags_metadata
 
 
 def read_in_chunks(file_object: BinaryIO, chunk_size: int) -> bytes:

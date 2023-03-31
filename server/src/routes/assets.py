@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, UploadFile
 
-from settings import ASSETS_ROUTER_PREFIX, Tags
+from server.src.settings import ASSETS_ROUTER_PREFIX, Tags
 
 router = APIRouter(prefix=ASSETS_ROUTER_PREFIX, tags=[Tags.GAMES])
 
