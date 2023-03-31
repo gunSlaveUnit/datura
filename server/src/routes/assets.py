@@ -160,3 +160,12 @@ async def build_info(filename: str | None = None):
     If "filename" query param was provided, returns a file.
     """
     pass
+
+
+@router.post('/build/')
+async def upload_build(files: List[UploadFile]):
+    """
+    Uploads project build files to the server.
+    If something of them exists, won't be overwritten.
+    """
+    pass
