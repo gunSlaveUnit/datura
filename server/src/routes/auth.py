@@ -29,3 +29,11 @@ async def sign_out():
     Deletes a user session.
     """
     pass
+
+
+@router.get("/me/")
+async def me():
+    """
+    Returns current user data as a UserDBScheme
+    """
+    pass
