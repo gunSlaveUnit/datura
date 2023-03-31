@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from starlette import status
 from starlette.responses import Response
 
-from schemes.companies import CompanyCreateScheme, CompanyDBScheme
+from schemes.companies import CompanyCreateScheme, CompanyDBScheme, CompanyApprovingScheme
 from settings import COMPANIES_ROUTER_PREFIX, Tags
 
 router = APIRouter(prefix=COMPANIES_ROUTER_PREFIX, tags=[Tags.COMPANIES])
@@ -45,5 +45,15 @@ async def update(company_id: int) -> CompanyDBScheme:
 async def delete(company_id: int) -> Response:
     """
     Removes a company with the specified ID.
+    """
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.patch('/{company_id}/approve/')
+async def approve(company_id: int, approving: CompanyApprovingScheme) -> Response:
+    """
+    Confirms / denies information about the company.
+    If it denies, all games of the company become
+    unconfirmed and are not shown in the store.
     """
     return Response(status_code=status.HTTP_204_NO_CONTENT)
