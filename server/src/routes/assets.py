@@ -17,7 +17,7 @@ async def download_header():
 async def upload_header(file: UploadFile):
     """
     Uploads a header game section file to the server.
-    If exists, won't be created.
+    If exists, won't be overwritten or created on more.
     """
     pass
 
@@ -53,7 +53,7 @@ async def download_capsule():
 async def upload_capsule(file: UploadFile):
     """
     Uploads a capsule game section file to the server.
-    If exists, won't be created.
+    If exists, won't be overwritten or created on more.
     """
     pass
 
