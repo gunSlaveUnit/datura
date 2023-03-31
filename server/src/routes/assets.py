@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, UploadFile
 
 from settings import ASSETS_ROUTER_PREFIX, Tags
 
@@ -9,6 +9,15 @@ router = APIRouter(prefix=ASSETS_ROUTER_PREFIX, tags=[Tags.GAMES])
 async def download_header():
     """
     Returns an image for the header section of the game.
+    """
+    pass
+
+
+@router.post('/header/')
+async def upload_header(file: UploadFile):
+    """
+    Uploads a header game section file to the server.
+    If exists, won't be created.
     """
     pass
 
