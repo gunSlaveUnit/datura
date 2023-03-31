@@ -124,6 +124,15 @@ async def trailers_info(filename: str | None = None):
     pass
 
 
+@router.post('/trailers/')
+async def upload_trailers(files: List[UploadFile]):
+    """
+    Uploads trailers to the server.
+    If something of them exists, won't be overwritten.
+    """
+    pass
+
+
 @router.get('/build/')
 async def build_info(filename: str | None = None):
     """
