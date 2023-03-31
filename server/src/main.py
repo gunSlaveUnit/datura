@@ -7,6 +7,7 @@ from fastapi.responses import StreamingResponse
 from server.src.routes.games import router as games_router
 from server.src.routes.companies import router as companies_router
 from server.src.settings import tags_metadata
+from server.src.utils.db import Base, engine
 
 
 def read_in_chunks(file_object: BinaryIO, chunk_size: int) -> bytes:
@@ -22,6 +23,8 @@ def compress_file(file_path: str, chunk_size: int) -> bytes:
         for chunk in read_in_chunks(file, chunk_size):
             yield gzip.compress(chunk)
 
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(openapi_tags=tags_metadata)
 
