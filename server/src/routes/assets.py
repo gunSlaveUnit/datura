@@ -27,3 +27,11 @@ async def screenshots_info():
     Returns the names of the screenshot files
     """
     pass
+
+
+@router.get('/trailers/')
+async def trailers_info():
+    """
+    Returns the names of the trailers files
+    """
+    pass
