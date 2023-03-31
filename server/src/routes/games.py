@@ -55,3 +55,11 @@ async def approve(game_id: int, approving: GameApprovingScheme) -> Response:
     If it denies, the game becomes unpublished and not sent for verification
     """
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.patch('/{game_id}/verify/')
+async def verify(game_id: int) -> Response:
+    """
+    Sends a game for verification
+    """
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
