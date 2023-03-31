@@ -133,6 +133,16 @@ async def upload_trailers(files: List[UploadFile]):
     pass
 
 
+@router.put('/trailers/')
+async def update_trailer(file: UploadFile):
+    """
+    Uploads a trailer to the server to update existing file.
+    If not exists, won't be created.
+    If the file is updated, the associated game will become unpublished.
+    """
+    pass
+
+
 @router.get('/build/')
 async def build_info(filename: str | None = None):
     """
