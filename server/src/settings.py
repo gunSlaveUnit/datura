@@ -15,6 +15,7 @@ else:
 
 # Databases
 
+admin_config = dotenv_values(ENVS_DIR / ".admin")
 redis_config = dotenv_values(ENVS_DIR / ".redis")
 database_config = dotenv_values(ENVS_DIR / ".db")
 
