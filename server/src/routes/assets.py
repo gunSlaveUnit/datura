@@ -169,3 +169,13 @@ async def upload_build(files: List[UploadFile]):
     If something of them exists, won't be overwritten.
     """
     pass
+
+
+@router.put('/build/')
+async def update_build(file: UploadFile):
+    """
+    Uploads a build file to the server to update existing file.
+    If not exists, won't be created.
+    If the file is updated, the associated game will become unpublished.
+    """
+    pass
