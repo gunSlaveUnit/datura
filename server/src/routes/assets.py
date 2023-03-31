@@ -22,6 +22,15 @@ async def upload_header(file: UploadFile):
     pass
 
 
+@router.put('/header/')
+async def update_header(file: UploadFile):
+    """
+    Uploads a header game section file to the server to update existing file.
+    If not exists, won't be created.
+    """
+    pass
+
+
 @router.get('/capsule/')
 async def download_capsule():
     """
