@@ -31,6 +31,15 @@ async def update_header(file: UploadFile):
     pass
 
 
+@router.delete('/header/')
+async def delete_header():
+    """
+    Deletes an existing header game section file.
+    If the file is deleted, the associated game will become unpublished.
+    """
+    pass
+
+
 @router.get('/capsule/')
 async def download_capsule():
     """
