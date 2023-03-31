@@ -52,7 +52,7 @@ async def delete(game_id: int) -> Response:
 @router.patch('/{game_id}/approve/')
 async def approve(game_id: int, approving: GameApprovingScheme) -> Response:
     """
-    If it denies, the game becomes unpublished and not sent for verification
+    If it denies, the game becomes unpublished and not sent for verification.
     """
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
@@ -60,6 +60,16 @@ async def approve(game_id: int, approving: GameApprovingScheme) -> Response:
 @router.patch('/{game_id}/verify/')
 async def verify(game_id: int) -> Response:
     """
-    Sends a game for verification
+    Sends a game for verification.
+    """
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.patch('/{game_id}/publish/')
+async def publish(game_id: int) -> Response:
+    """
+    Publishes the game.
+    After that, it is shown in the store,
+    available for viewing and downloading.
     """
     return Response(status_code=status.HTTP_204_NO_CONTENT)
