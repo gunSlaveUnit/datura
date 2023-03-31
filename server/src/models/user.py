@@ -17,6 +17,6 @@ class User(Entity):
     last_login = Column(Integer, onupdate=datetime.datetime.now().timestamp())
     is_staff = Column(Boolean, nullable=False, default=False)
     is_superuser = Column(Boolean, nullable=False, default=False)
-    role_id = Column(Integer, ForeignKey('roles.id'), index=True, nullable=False)
+    role_id = Column(Integer, ForeignKey('roles.id', ondelete="RESTRICT"), index=True, nullable=False)
 
     role = relationship("Role", backref="users")
