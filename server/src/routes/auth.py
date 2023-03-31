@@ -12,3 +12,12 @@ async def sign_up():
     Login immediately.
     """
     pass
+
+
+@router.post("/sign-in/")
+async def sign_in():
+    """
+    Sets the session id in the request cookie
+    if the user is successfully authenticated.
+    """
+    pass
