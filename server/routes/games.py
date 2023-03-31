@@ -30,3 +30,12 @@ async def create(game: GameCreateScheme) -> GameDBScheme:
     Return a GameDBScheme with created entity data.
     """
     return GameDBScheme(title="Test game title")
+
+
+@router.put('/{game_id}/', response_model=GameDBScheme)
+async def update(game_id: int) -> GameDBScheme:
+    """
+    Updates game fields not related to publish/admin functions.
+    Returns a GameDBScheme with updated entity data.
+    """
+    return GameDBScheme(title="Updated test game title")
