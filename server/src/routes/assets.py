@@ -2,9 +2,9 @@ from typing import List
 
 from fastapi import APIRouter, UploadFile
 
-from server.src.settings import ASSETS_ROUTER_PREFIX, Tags
+from server.src.settings import ASSETS_ROUTER_PREFIX
 
-router = APIRouter(prefix=ASSETS_ROUTER_PREFIX, tags=[Tags.ASSETS])
+router = APIRouter(prefix=ASSETS_ROUTER_PREFIX)
 
 
 @router.get('/header/')
