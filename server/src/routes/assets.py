@@ -8,7 +8,7 @@ router = APIRouter(prefix=ASSETS_ROUTER_PREFIX, tags=[Tags.GAMES])
 @router.get('/header/')
 async def download_header():
     """
-    Returns an image for the header section of the game
+    Returns an image for the header section of the game.
     """
     pass
 
@@ -16,30 +16,33 @@ async def download_header():
 @router.get('/capsule/')
 async def download_capsule():
     """
-    Returns an image for the capsule section of the game
+    Returns an image for the capsule section of the game.
     """
     pass
 
 
 @router.get('/screenshots/')
-async def screenshots_info():
+async def screenshots_info(filename: str | None = None):
     """
-    Returns the names of the screenshot files
+    Returns the names of the screenshot files.
+    If "filename" query param was provided, returns a file.
     """
     pass
 
 
 @router.get('/trailers/')
-async def trailers_info():
+async def trailers_info(filename: str | None = None):
     """
-    Returns the names of the trailers files
+    Returns the names of the trailers files.
+    If "filename" query param was provided, returns a file.
     """
     pass
 
 
 @router.get('/build/')
-async def build_info():
+async def build_info(filename: str | None = None):
     """
-    Returns the names of the build files
+    Returns the names of the build files.
+    If "filename" query param was provided, returns a file.
     """
     pass
