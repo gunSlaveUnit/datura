@@ -21,3 +21,12 @@ async def every() -> List[GameDBScheme]:
         GameDBScheme(title="Test game title 1"),
         GameDBScheme(title="Test game title 2"),
     ]
+
+
+@router.post('/', response_model=GameDBScheme)
+async def create(game: GameCreateScheme) -> GameDBScheme:
+    """
+    Creating a new game.
+    Return a GameDBScheme with created entity data.
+    """
+    return GameDBScheme(title="Test game title")
