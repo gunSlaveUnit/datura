@@ -19,3 +19,11 @@ async def download_capsule():
     Returns an image for the capsule section of the game
     """
     pass
+
+
+@router.get('/screenshots/')
+async def screenshots_info():
+    """
+    Returns the names of the screenshot files
+    """
+    pass
