@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from starlette import status
 from starlette.responses import Response
 
-from schemes.games import GameCreateScheme, GameDBScheme
+from schemes.games import GameCreateScheme, GameDBScheme, GameApprovingScheme
 from settings import GAMES_ROUTER_PREFIX, Tags
 
 router = APIRouter(prefix=GAMES_ROUTER_PREFIX, tags=[Tags.GAMES])
@@ -45,5 +45,13 @@ async def update(game_id: int) -> GameDBScheme:
 async def delete(game_id: int) -> Response:
     """
     Removes a game with the specified ID.
+    """
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.patch('/{game_id}/approve/')
+async def approve(game_id: int, approving: GameApprovingScheme) -> Response:
+    """
+    If it denies, the game becomes unpublished and not sent for verification
     """
     return Response(status_code=status.HTTP_204_NO_CONTENT)
