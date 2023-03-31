@@ -27,6 +27,7 @@ async def update_header(file: UploadFile):
     """
     Uploads a header game section file to the server to update existing file.
     If not exists, won't be created.
+    If the file is deleted, the associated game will become unpublished.
     """
     pass
 
