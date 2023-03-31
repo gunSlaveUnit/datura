@@ -6,8 +6,10 @@ from starlette.responses import Response
 
 from schemes.games import GameCreateScheme, GameDBScheme, GameApprovingScheme
 from settings import GAMES_ROUTER_PREFIX, Tags
+from routes.assets import router as assets_router
 
 router = APIRouter(prefix=GAMES_ROUTER_PREFIX, tags=[Tags.GAMES])
+router.include_router(assets_router)
 
 
 @router.get('/', response_model=List[GameDBScheme])
