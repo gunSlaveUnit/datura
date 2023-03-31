@@ -47,3 +47,10 @@ tags_metadata = [
     {'name': Tags.GAMES, 'description': 'Describes an API to manage games'},
     {'name': Tags.COMPANIES, 'description': 'Describes an  API to manage companies'},
 ]
+
+# Types
+
+
+class RoleType(Enum):
+    ADMIN = "admin"
+    USER = "user"
