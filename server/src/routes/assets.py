@@ -58,6 +58,16 @@ async def upload_capsule(file: UploadFile):
     pass
 
 
+@router.put('/capsule/')
+async def update_capsule(file: UploadFile):
+    """
+    Uploads a capsule game section file to the server to update existing file.
+    If not exists, won't be created.
+    If the file is deleted, the associated game will become unpublished.
+    """
+    pass
+
+
 @router.get('/screenshots/')
 async def screenshots_info(filename: str | None = None):
     """
