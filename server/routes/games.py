@@ -39,3 +39,11 @@ async def update(game_id: int) -> GameDBScheme:
     Returns a GameDBScheme with updated entity data.
     """
     return GameDBScheme(title="Updated test game title")
+
+
+@router.delete('/{game_id}/')
+async def delete(game_id: int) -> Response:
+    """
+    Removes a game with the specified ID.
+    """
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
