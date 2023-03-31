@@ -68,6 +68,15 @@ async def update_capsule(file: UploadFile):
     pass
 
 
+@router.delete('/capsule/')
+async def delete_capsule():
+    """
+    Deletes an existing capsule game section file.
+    If the file is deleted, the associated game will become unpublished.
+    """
+    pass
+
+
 @router.get('/screenshots/')
 async def screenshots_info(filename: str | None = None):
     """
