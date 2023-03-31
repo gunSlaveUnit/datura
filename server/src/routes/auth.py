@@ -21,3 +21,11 @@ async def sign_in():
     if the user is successfully authenticated.
     """
     pass
+
+
+@router.post("/sign-out/")
+async def sign_out():
+    """
+    Deletes a user session.
+    """
+    pass
