@@ -12,8 +12,10 @@ COMPANIES_ROUTER_PREFIX = '/companies'
 
 class Tags(str, Enum):
     GAMES = 'Games'
+    COMPANIES = 'Companies'
 
 
 tags_metadata = [
     {'name': Tags.GAMES, 'description': 'Describes API to manage games'},
+    {'name': Tags.COMPANIES, 'description': 'Describes API to manage companies'},
 ]
