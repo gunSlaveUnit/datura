@@ -29,7 +29,7 @@ async def update_header(file: UploadFile):
     """
     Uploads a header game section file to the server to update existing file.
     If not exists, won't be created.
-    If the file is deleted, the associated game will become unpublished.
+    If the file is updated, the associated game will become unpublished.
     """
     pass
 
@@ -65,7 +65,7 @@ async def update_capsule(file: UploadFile):
     """
     Uploads a capsule game section file to the server to update existing file.
     If not exists, won't be created.
-    If the file is deleted, the associated game will become unpublished.
+    If the file is updated, the associated game will become unpublished.
     """
     pass
 
@@ -89,10 +89,20 @@ async def screenshots_info(filename: str | None = None):
 
 
 @router.post('/screenshots/')
-async def upload_screenshot(files: List[UploadFile]):
+async def upload_screenshots(files: List[UploadFile]):
     """
     Uploads screenshots to the server.
     If something of them exists, won't be overwritten.
+    """
+    pass
+
+
+@router.put('/screenshots/')
+async def update_screenshot(file: UploadFile):
+    """
+    Uploads a screenshot to the server to update existing file.
+    If not exists, won't be created.
+    If the file is updated, the associated game will become unpublished.
     """
     pass
 
