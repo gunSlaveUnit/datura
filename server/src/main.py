@@ -4,6 +4,7 @@ import gzip
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 
+from server.src.routes.auth import router as auth_router
 from server.src.routes.games import router as games_router
 from server.src.routes.companies import router as companies_router
 from server.src.settings import tags_metadata
@@ -28,6 +29,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(openapi_tags=tags_metadata)
 
+app.include_router(auth_router)
 app.include_router(games_router)
 app.include_router(companies_router)
 
