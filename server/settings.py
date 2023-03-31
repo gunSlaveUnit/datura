@@ -5,6 +5,7 @@ API_VERSION = '0.1.0'
 
 # Strings
 GAMES_ROUTER_PREFIX = '/games'
+COMPANIES_ROUTER_PREFIX = '/companies'
 
 # Tags
 
