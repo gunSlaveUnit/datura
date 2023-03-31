@@ -49,6 +49,15 @@ async def download_capsule():
     pass
 
 
+@router.post('/capsule/')
+async def upload_capsule(file: UploadFile):
+    """
+    Uploads a capsule game section file to the server.
+    If exists, won't be created.
+    """
+    pass
+
+
 @router.get('/screenshots/')
 async def screenshots_info(filename: str | None = None):
     """
