@@ -33,6 +33,7 @@ API_VERSION = '0.1.0'
 GAMES_ROUTER_PREFIX = '/games'
 COMPANIES_ROUTER_PREFIX = '/companies'
 ASSETS_ROUTER_PREFIX = '/{game_id}/assets'
+BUILDS_ROUTER_PREFIX = '/builds'
 
 # Tags
 
