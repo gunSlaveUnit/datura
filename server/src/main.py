@@ -31,8 +31,11 @@ def compress_file(file_path: str, chunk_size: int) -> bytes:
 def init_db():
     db = next(get_db())
 
-    _add_roles(db)
-    _add_admin(db)
+    if len(db.query(Role).all()) == 0:
+        _add_roles(db)
+
+    if len(db.query(User).all()) == 0:
+        _add_admin(db)
 
 
 def _add_admin(session):
@@ -59,14 +62,17 @@ def _add_roles(session):
     session.commit()
 
 
-Base.metadata.create_all(bind=engine)
-init_db()
-
 app = FastAPI(openapi_tags=tags_metadata)
 
 app.include_router(auth_router)
 app.include_router(games_router)
 app.include_router(companies_router)
+
+
+@app.on_event("startup")
+async def startup_event():
+    Base.metadata.create_all(bind=engine)
+    init_db()
 
 
 @app.get("/")
