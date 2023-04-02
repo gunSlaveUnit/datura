@@ -1,15 +1,17 @@
-import gzip
+import sys
 
-import requests
+from PySide6.QtGui import QGuiApplication, QColor, QIcon
+from PySide6.QtQml import QQmlApplicationEngine
 
-url = "http://localhost:8000/download/"
-response = requests.get(url, stream=True)
-file_name = response.headers.get("Content-Disposition").split('=')[1]
-with open(file_name, "wb") as f:
-    with gzip.GzipFile(fileobj=response.raw, mode="rb") as gz:
-        while True:
-            chunk = gz.read(8192)
-            if not chunk:
-                break
-            f.write(chunk)
-            print(f"Wrote {len(chunk)} bytes to file")
+from desktop.src.settings import LAYOUTS_DIR
+
+
+if __name__ == '__main__':
+    app = QGuiApplication(sys.argv)
+
+    engine = QQmlApplicationEngine()
+
+    start_file_location = LAYOUTS_DIR / "main.qml"
+    engine.load(start_file_location)
+
+    app.exec()
