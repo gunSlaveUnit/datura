@@ -7,6 +7,7 @@ Window {
   width: 1000
   height: 500
   title: qsTr("foogie")
+  color: "#474b63"
   visible: true
 
   property int defaultMargin: 8
