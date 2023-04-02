@@ -21,13 +21,13 @@ Window {
 
   ScrollView {
     anchors.fill: parent
-    anchors.topMargin: defaultMargin * 4
 
     ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
     ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
     ColumnLayout {
       anchors.fill: parent
+      anchors.topMargin: defaultMargin * 4
 
       RowLayout {
         Button {
@@ -70,6 +70,39 @@ Window {
           onClicked: game_screenshots_swipe_view.incrementCurrentIndex()
         }
       }
+
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
+      Button {}
 
       Button {
         id: multipleActionButton
