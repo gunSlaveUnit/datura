@@ -82,22 +82,49 @@ Window {
         text: "<p align='justify'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>"
       }
 
-      Button {
-        id: multipleActionButton
-        text: qsTr("Add to cart")
-        hoverEnabled: false
+      RowLayout {
+        Text {
+          text: qsTr("Buy")
+        }
 
-        background: Rectangle {
-          radius: defaultMargin / 2
-          color: "#177246"
+        Text {
+          text: qsTr("Elden Ring")
+        }
 
-          MouseArea {
-            anchors.fill: parent
-            hoverEnabled: true
-            onEntered: multipleActionButton.background.color = "#00a86b"
-            onExited: multipleActionButton.background.color = "#177246"
+        ColumnLayout {
+					Text {
+            Layout.alignment: Qt.AlignHCenter
+	          text: qsTr("60 $")
+					}
+
+          Text {
+            Layout.alignment: Qt.AlignHCenter
+	          text: qsTr("50 $")
+          }
+
+          Text {
+            Layout.alignment: Qt.AlignHCenter
+	          text: qsTr("-10 %")
           }
         }
+
+        Button {
+	        id: multipleActionButton
+	        text: qsTr("Add to cart")
+	        hoverEnabled: false
+
+	        background: Rectangle {
+	          radius: defaultMargin / 2
+	          color: "#177246"
+
+	          MouseArea {
+	            anchors.fill: parent
+	            hoverEnabled: true
+	            onEntered: multipleActionButton.background.color = "#00a86b"
+	            onExited: multipleActionButton.background.color = "#177246"
+	          }
+	        }
+	      }
       }
     }
   }
