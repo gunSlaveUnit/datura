@@ -1,16 +1,16 @@
 from pydantic import BaseModel
 
-from server.src.schemes.entity import EntityDBScheme
+from server.src.schemes.entity import EntityDBSchema
 
 
-class CompanyApprovingScheme(BaseModel):
+class CompanyApprovingSchema(BaseModel):
     is_approved: bool
 
 
-class CompanyCreateScheme(BaseModel):
+class CompanyCreateSchema(BaseModel):
     juridical_name: str
 
 
-class CompanyDBScheme(CompanyCreateScheme, EntityDBScheme):
+class CompanyDBSchema(CompanyCreateSchema, EntityDBSchema):
     class Config:
         orm_mode = True

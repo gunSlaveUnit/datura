@@ -4,41 +4,41 @@ from fastapi import APIRouter
 from starlette import status
 from starlette.responses import Response
 
-from server.src.schemes.companies import CompanyCreateScheme, CompanyDBScheme, CompanyApprovingScheme
+from server.src.schemes.companies import CompanyCreateSchema, CompanyDBSchema, CompanyApprovingSchema
 from server.src.settings import COMPANIES_ROUTER_PREFIX, Tags
 
 router = APIRouter(prefix=COMPANIES_ROUTER_PREFIX, tags=[Tags.COMPANIES])
 
 
-@router.get('/', response_model=List[CompanyDBScheme])
-async def every() -> List[CompanyDBScheme]:
+@router.get('/', response_model=List[CompanyDBSchema])
+async def every() -> List[CompanyDBSchema]:
     """
     List of all companies according to the given filters.
     Returns a list of CompanyDBScheme with company data.
     """
 
     return [
-        CompanyDBScheme(title="Test company juridical name 1"),
-        CompanyDBScheme(title="Test company juridical name 2"),
+        CompanyDBSchema(title="Test company juridical name 1"),
+        CompanyDBSchema(title="Test company juridical name 2"),
     ]
 
 
-@router.post('/', response_model=CompanyDBScheme)
-async def create(company: CompanyCreateScheme) -> CompanyDBScheme:
+@router.post('/', response_model=CompanyDBSchema)
+async def create(company: CompanyCreateSchema) -> CompanyDBSchema:
     """
     Creating a new company.
     Return a CompanyDBScheme with created entity data.
     """
-    return CompanyDBScheme(title="Test company juridical name")
+    return CompanyDBSchema(title="Test company juridical name")
 
 
-@router.put('/{company_id}/', response_model=CompanyDBScheme)
-async def update(company_id: int) -> CompanyDBScheme:
+@router.put('/{company_id}/', response_model=CompanyDBSchema)
+async def update(company_id: int) -> CompanyDBSchema:
     """
     Updates company fields not related to publish/admin functions.
     Returns a CompanyDBScheme with updated entity data.
     """
-    return CompanyDBScheme(title="Updated test company juridical name")
+    return CompanyDBSchema(title="Updated test company juridical name")
 
 
 @router.delete('/{company_id}/')
@@ -50,7 +50,7 @@ async def delete(company_id: int) -> Response:
 
 
 @router.patch('/{company_id}/approve/')
-async def approve(company_id: int, approving: CompanyApprovingScheme) -> Response:
+async def approve(company_id: int, approving: CompanyApprovingSchema) -> Response:
     """
     Confirms / denies information about the company.
     If it denies, all games of the company become

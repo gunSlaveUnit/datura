@@ -1,16 +1,16 @@
 from pydantic import BaseModel
 
-from server.src.schemes.entity import EntityDBScheme
+from server.src.schemes.entity import EntityDBSchema
 
 
-class GameApprovingScheme(BaseModel):
+class GameApprovingSchema(BaseModel):
     is_approved: bool
 
 
-class GameCreateScheme(BaseModel):
+class GameCreateSchema(BaseModel):
     title: str
 
 
-class GameDBScheme(GameCreateScheme, EntityDBScheme):
+class GameDBSchema(GameCreateSchema, EntityDBSchema):
     class Config:
         orm_mode = True
