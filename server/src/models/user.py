@@ -14,7 +14,7 @@ class User(Entity):
     displayed_name = Column(String(255), index=True, nullable=False)
     password = Column(String, nullable=False)
     is_active = Column(Boolean, nullable=False, default=True)
-    last_login = Column(Integer, onupdate=datetime.datetime.now().timestamp())
+    last_login_at = Column(Integer)
     is_staff = Column(Boolean, nullable=False, default=False)
     is_superuser = Column(Boolean, nullable=False, default=False)
     role_id = Column(Integer, ForeignKey('roles.id', ondelete="RESTRICT"), index=True, nullable=False)
