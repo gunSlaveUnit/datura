@@ -29,34 +29,47 @@ Window {
     ColumnLayout {
       anchors.fill: parent
 
-      Button {text: qsTr("Test 1")}
-      Button {text: qsTr("Test 2")}
-      Button {text: qsTr("Test 3")}
-      Button {text: qsTr("Test 4")}
-      Button {text: qsTr("Test 5")}
-      Button {text: qsTr("Test 6")}
-      Button {text: qsTr("Test 7")}
-      Button {text: qsTr("Test 8")}
-      Button {text: qsTr("Test 9")}
-      Button {text: qsTr("Test 10")}
-      Button {text: qsTr("Test 11")}
-      Button {text: qsTr("Test 12")}
-      Button {text: qsTr("Test 13")}
-      Button {text: qsTr("Test 14")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
-      Button {text: qsTr("Test 15")}
+      RowLayout {
+        Button {
+          Layout.fillHeight: true
+          Layout.preferredWidth: 30
+          text: "<"
+          flat: true
+          font.bold: true
+          font.pointSize: 16
+          enabled: game_screenshots_swipe_view.currentIndex > 0
+          onClicked: game_screenshots_swipe_view.decrementCurrentIndex()
+        }
+
+        SwipeView {
+          id: game_screenshots_swipe_view
+          Layout.preferredWidth: 16 * 30
+          Layout.preferredHeight: 9 * 30
+          clip: true
+
+          Repeater {
+            model: 6
+
+            Image {
+              source: "./resources/16x9_placeholder.jpg"
+              mipmap: true
+              Layout.preferredWidth: 16 * 30
+              Layout.preferredHeight: 9 * 30
+            }
+          }
+        }
+
+        Button {
+          Layout.fillHeight: true
+          Layout.preferredWidth: 30
+          text: ">"
+          flat: true
+          font.bold: true
+          font.pointSize: 16
+          enabled: game_screenshots_swipe_view.currentIndex < game_screenshots_swipe_view.count - 1
+          onClicked: game_screenshots_swipe_view.incrementCurrentIndex()
+        }
+      }
     }
   }
 }
