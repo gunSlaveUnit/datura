@@ -8,6 +8,7 @@ from desktop.src.settings import LAYOUTS_DIR
 
 if __name__ == '__main__':
     app = QGuiApplication(sys.argv)
+    app.setPalette(QColor("black"))
 
     engine = QQmlApplicationEngine()
 
