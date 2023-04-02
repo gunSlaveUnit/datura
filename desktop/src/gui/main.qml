@@ -70,6 +70,23 @@ Window {
           onClicked: game_screenshots_swipe_view.incrementCurrentIndex()
         }
       }
+
+      Button {
+        id: multipleActionButton
+        text: qsTr("Add to cart")
+
+        background: Rectangle {
+          radius: defaultMargin / 2
+          color: "#177246"
+
+          MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: multipleActionButton.background.color = "#00a86b"
+            onExited: multipleActionButton.background.color = "#177246"
+          }
+        }
+      }
     }
   }
 }
