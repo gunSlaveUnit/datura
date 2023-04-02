@@ -74,6 +74,7 @@ Window {
       Button {
         id: multipleActionButton
         text: qsTr("Add to cart")
+        hoverEnabled: false
 
         background: Rectangle {
           radius: defaultMargin / 2
