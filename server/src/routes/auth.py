@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 from starlette import status
 from starlette.responses import JSONResponse
@@ -48,11 +48,15 @@ async def sign_in(login_data: SignInSchema,
 
 
 @router.post("/sign-out/")
-async def sign_out():
+async def sign_out(authorization: str = Header(None),
+                   _=Depends(get_current_user),
+                   session_storage=Depends(get_session_storage)):
     """
     Deletes a user session.
     """
-    pass
+    session_storage.delete(authorization)
+    response = JSONResponse({"detail": f"Session {authorization} was removed"})
+    return response
 
 
 @router.get("/me/", response_model=UserDBSchema)
