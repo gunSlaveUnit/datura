@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from schemas.user import SignInSchema
 from server.src.settings import Tags
 
 router = APIRouter(prefix='/auth', tags=[Tags.AUTH])
@@ -15,7 +16,7 @@ async def sign_up():
 
 
 @router.post("/sign-in/")
-async def sign_in():
+async def sign_in(login_data: SignInSchema):
     """
     Sets the session id in the request cookie
     if the user is successfully authenticated.
