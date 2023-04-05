@@ -28,6 +28,7 @@ else:
 # Versions
 
 API_VERSION = '0.1.0'
+SESSION_TTL = 3 * 24 * 60 * 60
 
 # Strings
 GAMES_ROUTER_PREFIX = '/games'
