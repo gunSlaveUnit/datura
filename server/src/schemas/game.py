@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from server.src.schemes.entity import EntityDBSchema
+from server.src.schemas.entity import EntityDBSchema
 
 
 class GameApprovingSchema(BaseModel):
