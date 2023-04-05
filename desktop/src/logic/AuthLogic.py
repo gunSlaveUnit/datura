@@ -1,4 +1,7 @@
+import requests
 from PySide6.QtCore import QObject, Signal, Slot, Property
+
+from desktop.src.services.AuthService import AuthService
 
 
 class AuthLogic(QObject):
@@ -12,10 +15,16 @@ class AuthLogic(QObject):
     account_name_changed = Signal()
     password_changed = Signal()
 
+    registered = Signal()
+    login = Signal()
+    logout = Signal()
+
     # endregion
 
-    def __init__(self):
+    def __init__(self, auth_service: AuthService):
         super().__init__()
+
+        self._auth_service = auth_service
 
         self._email = ''
         self._account_name = ''
@@ -58,15 +67,37 @@ class AuthLogic(QObject):
 
     @Slot()
     def sign_up(self):
-        self.reset()
+        data = {
+            "email": self._email,
+            "account_name": self._account_name,
+            "password": self._password
+        }
+
+        reply = self._auth_service.sign_up(data)
+
+        if reply.status_code == requests.codes.ok:
+            self.registered.emit()
+            self.reset()
 
     @Slot()
     def sign_in(self):
-        self.reset()
+        data = {
+            "account_name": self._account_name,
+            "password": self._password
+        }
+
+        reply = self._auth_service.sign_in(data)
+
+        if reply.status_code == requests.codes.ok:
+            self.login.emit()
+            self.reset()
 
     @Slot()
     def sign_out(self):
-        pass
+        reply = self._auth_service.sign_out()
+
+        if reply.status_code == requests.codes.ok:
+            self.logout.emit()
 
     @Slot()
     def reset(self):
