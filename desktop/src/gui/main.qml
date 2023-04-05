@@ -31,14 +31,14 @@ Window {
 			anchors.centerIn: parent
 
 			Text {
-				text: qsTr("EMAIL")
+				text: qsTr("ACCOUNT NAME")
 				color: "white"
 			}
 
 			TextField {
 				Layout.preferredWidth: textFieldWidth
-				text: auth_logic.email
-        onTextChanged: auth_logic.email = text
+				text: auth_logic.account_name
+        onTextChanged: auth_logic.account_name = text
 			}
 
 			Text {
