@@ -1,13 +1,6 @@
 import datetime
 
-from pydantic import BaseModel
-
 from server.src.schemas.entity import EntityDBSchema
-
-
-class SignInSchema(BaseModel):
-    account_name: str
-    password: str
 
 
 class UserDBSchema(EntityDBSchema):
