@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from starlette import status
 from starlette.responses import Response
 
-from server.src.schemes.games import GameCreateSchema, GameDBSchema, GameApprovingSchema
+from server.src.schemas.game import GameCreateSchema, GameDBSchema, GameApprovingSchema
 from server.src.settings import GAMES_ROUTER_PREFIX, Tags
 from server.src.routes.assets import router as assets_router
 
