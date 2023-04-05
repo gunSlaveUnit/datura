@@ -6,10 +6,10 @@ from starlette import status
 from starlette.responses import JSONResponse
 
 from server.src.models.user import User
-from server.src.schemas.user import SignInSchema
+from server.src.schemas.user import SignInSchema, UserDBSchema
 from server.src.settings import Tags, SESSION_TTL
 from server.src.utils.db import get_db, get_session_storage
-from utils.auth import authenticate_user
+from server.src.utils.auth import authenticate_user, get_current_user
 
 router = APIRouter(prefix='/auth', tags=[Tags.AUTH])
 
@@ -55,9 +55,9 @@ async def sign_out():
     pass
 
 
-@router.get("/me/")
-async def me():
+@router.get("/me/", response_model=UserDBSchema)
+async def me(current_user: User = Depends(get_current_user)):
     """
     Returns current user data as a UserDBScheme
     """
-    pass
+    return current_user
