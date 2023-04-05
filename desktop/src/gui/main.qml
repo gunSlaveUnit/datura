@@ -37,6 +37,8 @@ Window {
 
 			TextField {
 				Layout.preferredWidth: textFieldWidth
+				text: auth_logic.email
+        onTextChanged: auth_logic.email = text
 			}
 
 			Text {
@@ -47,11 +49,14 @@ Window {
 			TextField {
 				Layout.preferredWidth: textFieldWidth
 				echoMode: TextInput.Password
+				text: auth_logic.password
+        onTextChanged: auth_logic.password = text
 			}
 
 			Button {
 				Layout.alignment: Qt.AlignHCenter
 				text: qsTr("Sign in")
+				onClicked: auth_logic.sign_in()
 			}
 
 			RowLayout {
@@ -90,6 +95,8 @@ Window {
 
 			TextField {
 				Layout.preferredWidth: textFieldWidth
+				text: auth_logic.email
+        onTextChanged: auth_logic.email = text
 			}
 
 			Text {
@@ -99,6 +106,8 @@ Window {
 
 			TextField {
 				Layout.preferredWidth: textFieldWidth
+				text: auth_logic.account_name
+        onTextChanged: auth_logic.account_name = text
 			}
 
 			Text {
@@ -109,11 +118,14 @@ Window {
 			TextField {
 				Layout.preferredWidth: textFieldWidth
 				echoMode: TextInput.Password
+				text: auth_logic.password
+        onTextChanged: auth_logic.password = text
 			}
 
 			Button {
 				Layout.alignment: Qt.AlignHCenter
 				text: qsTr("Sign up")
+				onClicked: auth_logic.sign_up()
 			}
 
 			RowLayout {
