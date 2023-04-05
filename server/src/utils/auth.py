@@ -1,5 +1,5 @@
-from models.user import User
-from utils.crypt import crypt_context
+from server.src.models.user import User
+from server.src.utils.crypt import crypt_context
 
 
 async def verify_password(plain_password, hashed_password):
