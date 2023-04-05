@@ -12,6 +12,7 @@ Window {
   color: "#0c0c0c"
 
   property int defaultMargin: 8
+  property int textFieldWidth: 240
 
   minimumWidth: signUpForm.implicitWidth + 2 * defaultMargin
   minimumHeight: signUpForm.implicitHeight + 2 * defaultMargin
@@ -35,7 +36,7 @@ Window {
 			}
 
 			TextField {
-				Layout.preferredWidth: 200
+				Layout.preferredWidth: textFieldWidth
 			}
 
 			Text {
@@ -44,7 +45,7 @@ Window {
 			}
 
 			TextField {
-				Layout.preferredWidth: 200
+				Layout.preferredWidth: textFieldWidth
 				echoMode: TextInput.Password
 			}
 
@@ -88,7 +89,7 @@ Window {
 			}
 
 			TextField {
-				Layout.preferredWidth: 200
+				Layout.preferredWidth: textFieldWidth
 			}
 
 			Text {
@@ -97,7 +98,7 @@ Window {
 			}
 
 			TextField {
-				Layout.preferredWidth: 200
+				Layout.preferredWidth: textFieldWidth
 			}
 
 			Text {
@@ -106,7 +107,7 @@ Window {
 			}
 
 			TextField {
-				Layout.preferredWidth: 200
+				Layout.preferredWidth: textFieldWidth
 				echoMode: TextInput.Password
 			}
 
