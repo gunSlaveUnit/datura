@@ -2,5 +2,5 @@ from pydantic import BaseModel
 
 
 class SignInSchema(BaseModel):
-    email: str
+    account_name: str
     password: str
