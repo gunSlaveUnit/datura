@@ -160,17 +160,20 @@ Window {
 				}
 			}
 		}
-  }
 
-  StackLayout {
-		id: storeStackLayout
+		StackLayout {
+			id: storeStackLayout
 
-		anchors.fill: parent
+			anchors.fill: parent
 
-    property int libraryFormIndex: 0
+	    property int libraryFormIndex: 0
 
-    ColumnLayout {
-      Text {text: "Boo"}
-    }
+	    ColumnLayout {
+	      Button {
+	        text: qsTr("Logout")
+	        onClicked: auth_logic.sign_out()
+	      }
+	    }
+	  }
   }
 }
