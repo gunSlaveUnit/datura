@@ -32,6 +32,7 @@ class AuthService(metaclass=Singleton):
         if reply.status_code == requests.codes.ok:
             self.session_id = None
             self.current_user = None
+        return reply
 
     def load_personal_user_data(self):
         headers = {"Authorization": self.session_id}
