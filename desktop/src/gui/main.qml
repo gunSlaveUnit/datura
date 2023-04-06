@@ -22,8 +22,8 @@ Window {
 
 		anchors.fill: parent
 
-    property int authorization_section_index: 0
-    property int store_section_index: 1
+    property int authorizationSectionIndex: 0
+    property int storeSectionIndex: 1
 
     StackLayout {
 			id: authStackLayout
