@@ -194,7 +194,7 @@ Window {
 
 			anchors.fill: parent
 
-	    property int libraryFormIndex: 0
+	    property int libraryGamesIndex: 0
 
 	    ColumnLayout {
 	      Button {
