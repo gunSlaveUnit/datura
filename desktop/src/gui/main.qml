@@ -28,6 +28,18 @@ Window {
     StackLayout {
 			id: authStackLayout
 
+			Connections {
+				target: auth_logic
+
+				function onRegistered() {
+					mainStackLayout.currentIndex = mainStackLayout.storeSectionIndex
+				}
+
+		    function onLogin() {
+					mainStackLayout.currentIndex = mainStackLayout.storeSectionIndex
+		    }
+			}
+
 			anchors.fill: parent
 
 	    property int signInFormIndex: 0
