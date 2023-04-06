@@ -176,6 +176,22 @@ Window {
 		StackLayout {
 			id: storeStackLayout
 
+			Connections {
+				target: auth_logic
+
+				function onRegistered() {
+
+				}
+
+		    function onLogin() {
+
+		    }
+
+		    function onLogout() {
+					mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
+		    }
+			}
+
 			anchors.fill: parent
 
 	    property int libraryFormIndex: 0
