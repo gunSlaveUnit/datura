@@ -7,6 +7,8 @@ DEBUG = False
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 ENVS_DIR = BASE_DIR / 'envs'
+MEDIA_DIR = BASE_DIR.parent / 'media'
+GAMES_ASSETS_DIR = MEDIA_DIR / 'assets'
 
 if DEBUG:
     ENVS_DIR = ENVS_DIR / 'dev'
