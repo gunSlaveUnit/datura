@@ -15,6 +15,8 @@ class GameTagAssociation(Entity):
 
 
 class Tag(Entity):
+    # TODO: or use categories with genres?
+
     __tablename__ = "tags"
 
     title = Column(String, unique=True, nullable=False)

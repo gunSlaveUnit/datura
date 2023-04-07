@@ -5,6 +5,7 @@ from server.src.models.entity import Entity
 from server.src.models.game_status import GameStatus
 from server.src.models.build import Build
 from server.src.models.age import Age
+from server.src.models.language import GameLanguage
 
 
 class Game(Entity):
@@ -22,6 +23,8 @@ class Game(Entity):
     directory = Column(String, nullable=False)
 
     builds = relationship("Build", back_populates="game")
+
+    languages = relationship("GameLanguage", back_populates="game")
 
     author_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
     author = relationship("User", back_populates="games")
