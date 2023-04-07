@@ -1,7 +1,9 @@
-from sqlalchemy import Column, String, Integer, Text, Boolean, Float, ForeignKey
+from sqlalchemy import Column, String, Integer, Text, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
 from server.src.models.entity import Entity
+from server.src.models.game_status import GameStatus
+from server.src.models.build import Build
 
 
 class Game(Entity):
@@ -18,7 +20,7 @@ class Game(Entity):
     price = Column(Float, default=0.0, nullable=False)
     directory = Column(String, nullable=False)
 
-    builds = relationship("Build", backref="game")
+    builds = relationship("Build", back_populates="game")
 
     author_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
     author = relationship("User", back_populates="games")

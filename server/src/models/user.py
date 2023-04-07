@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
 from server.src.models.entity import Entity
+from server.src.models.game import Game
 
 
 class User(Entity):
