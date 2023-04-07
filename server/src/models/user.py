@@ -21,3 +21,5 @@ class User(Entity):
     role = relationship("Role", back_populates="users")
 
     games = relationship("Game", back_populates="author")
+
+    reviews = relationship("Review", back_populates="user")

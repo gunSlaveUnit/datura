@@ -6,6 +6,7 @@ from server.src.models.game_status import GameStatus
 from server.src.models.build import Build
 from server.src.models.age import Age
 from server.src.models.language import GameLanguage
+from server.src.models.review import Review
 
 
 class Game(Entity):
@@ -23,6 +24,8 @@ class Game(Entity):
     directory = Column(String, nullable=False)
 
     builds = relationship("Build", back_populates="game")
+
+    reviews = relationship("Review", back_populates="game")
 
     languages = relationship("GameLanguage", back_populates="game")
 
