@@ -57,3 +57,12 @@ tags_metadata = [
 class RoleType(Enum):
     ADMIN = "admin"
     USER = "user"
+
+
+class GameStatusType(Enum):
+    NOT_SEND = 'Not send'
+    SEND = 'Send'
+    NOT_APPROVED = 'Not approved'
+    APPROVED = 'Approved'
+    NOT_PUBLISHED = 'Not published'
+    PUBLISHED = 'Published'
