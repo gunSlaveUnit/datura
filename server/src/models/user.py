@@ -15,6 +15,8 @@ class User(Entity):
     last_login_at = Column(Integer)
     is_staff = Column(Boolean, nullable=False, default=False)
     is_superuser = Column(Boolean, nullable=False, default=False)
-    role_id = Column(Integer, ForeignKey('roles.id', ondelete="RESTRICT"), index=True, nullable=False)
 
-    role = relationship("Role", backref="users")
+    role_id = Column(Integer, ForeignKey('roles.id', ondelete="RESTRICT"), index=True, nullable=False)
+    role = relationship("Role", back_populates="users")
+
+    games = relationship("Game", back_populates="author")
