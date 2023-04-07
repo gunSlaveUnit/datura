@@ -66,3 +66,11 @@ class GameStatusType(Enum):
     APPROVED = 'Approved'
     NOT_PUBLISHED = 'Not published'
     PUBLISHED = 'Published'
+
+
+class AgeType(Enum):
+    PEGI_3 = 'PEGI 3'
+    PEGI_7 = 'PEGI 7'
+    PEGI_12 = 'PEGI 12'
+    PEGI_16 = 'PEGI 16'
+    PEGI_18 = 'PEGI 18'
