@@ -97,7 +97,10 @@ Window {
 	            anchors.fill: parent
 	            cursorShape: Qt.PointingHandCursor
 	            hoverEnabled: true
-	            onClicked: authStackLayout.currentIndex = authStackLayout.signUpFormIndex
+	            onClicked: {
+	              auth_logic.reset()
+	              authStackLayout.currentIndex = authStackLayout.signUpFormIndex
+	            }
 	          }
 	        }
 				}
@@ -166,7 +169,10 @@ Window {
 	            anchors.fill: parent
 	            cursorShape: Qt.PointingHandCursor
 	            hoverEnabled: true
-	            onClicked: authStackLayout.currentIndex = authStackLayout.signInFormIndex
+	            onClicked: {
+	              auth_logic.reset()
+	              authStackLayout.currentIndex = authStackLayout.signInFormIndex
+              }
 	          }
 	        }
 				}
