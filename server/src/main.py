@@ -11,6 +11,7 @@ from server.src.models.user import User
 from server.src.routes.auth import router as auth_router
 from server.src.routes.games import router as games_router
 from server.src.routes.companies import router as companies_router
+from server.src.routes.library import router as library_router
 from server.src.settings import tags_metadata, RoleType, admin_config, GameStatusType, AgeType
 from server.src.utils.crypt import get_password_hash
 from server.src.utils.db import Base, engine, get_db
@@ -107,6 +108,7 @@ app = FastAPI(openapi_tags=tags_metadata)
 app.include_router(auth_router)
 app.include_router(games_router)
 app.include_router(companies_router)
+app.include_router(library_router)
 
 
 @app.on_event("startup")
