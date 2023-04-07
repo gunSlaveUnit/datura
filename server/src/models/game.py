@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from server.src.models.entity import Entity
 from server.src.models.game_status import GameStatus
 from server.src.models.build import Build
+from server.src.models.age import Age
 
 
 class Game(Entity):
@@ -27,3 +28,6 @@ class Game(Entity):
 
     status_id = Column(Integer, ForeignKey("game_statuses.id", ondelete="RESTRICT"), index=True, nullable=False)
     status = relationship("GameStatus", back_populates="games")
+
+    age_id = Column(Integer, ForeignKey("ages.id", ondelete="RESTRICT"), index=True, nullable=False)
+    age = relationship("Age", back_populates="games")
