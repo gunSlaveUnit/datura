@@ -1,12 +1,19 @@
+import uuid
+from pathlib import Path
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 from starlette import status
 from starlette.responses import Response
 
+from server.src.models.game import Game
+from server.src.models.user import User
 from server.src.schemas.game import GameCreateSchema, GameDBSchema, GameApprovingSchema
-from server.src.settings import GAMES_ROUTER_PREFIX, Tags
+from server.src.settings import GAMES_ROUTER_PREFIX, Tags, GAMES_ASSETS_DIR
 from server.src.routes.assets import router as assets_router
+from server.src.utils.auth import get_current_user
+from server.src.utils.db import get_db
 
 router = APIRouter(prefix=GAMES_ROUTER_PREFIX, tags=[Tags.GAMES])
 router.include_router(assets_router)
@@ -26,12 +33,27 @@ async def every() -> List[GameDBSchema]:
 
 
 @router.post('/', response_model=GameDBSchema)
-async def create(game: GameCreateSchema) -> GameDBSchema:
+async def create(game_create_data: GameCreateSchema,
+                 db: Session = Depends(get_db),
+                 current_user: User = Depends(get_current_user)) -> GameDBSchema:
     """
     Creating a new game.
     Return a GameDBScheme with created entity data.
     """
-    return GameDBSchema(title="Test game title")
+
+    game = Game(**vars(game_create_data))
+    game.author = current_user
+
+    assets_directory = Path(GAMES_ASSETS_DIR)
+    new_directory_uuid = str(uuid.uuid4())
+    assets_directory.joinpath(new_directory_uuid)
+    game.directory = new_directory_uuid
+
+    db.add(game)
+    db.commit()
+    db.refresh(game)
+
+    return game
 
 
 @router.put('/{game_id}/', response_model=GameDBSchema)
