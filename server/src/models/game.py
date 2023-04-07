@@ -11,6 +11,7 @@ from server.src.models.review import Review
 
 class Game(Entity):
     # TODO: slight simplification: developer and publisher must be ForeignKeys I think
+    # TODO: think about DLC
 
     __tablename__ = "games"
 
