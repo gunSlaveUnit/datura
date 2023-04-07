@@ -45,12 +45,14 @@ class Tags(str, Enum):
     AUTH = 'Auth'
     GAMES = 'Games'
     COMPANIES = 'Companies'
+    LIBRARY = 'Library'
 
 
 tags_metadata = [
     {'name': Tags.AUTH, 'description': 'Describes an authentication API'},
     {'name': Tags.GAMES, 'description': 'Describes an API to manage games'},
-    {'name': Tags.COMPANIES, 'description': 'Describes an  API to manage companies'},
+    {'name': Tags.COMPANIES, 'description': 'Describes an API to manage companies'},
+    {'name': Tags.LIBRARY, 'description': 'Describes an API to manage library records'},
 ]
 
 # Types
