@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from server.src.models.entity import Entity
 from server.src.models.platform import Platform
+from server.src.models.system_requirement import SystemRequirement
 
 
 class Build(Entity):
@@ -17,3 +18,6 @@ class Build(Entity):
 
     platform_id = Column(Integer, ForeignKey("platforms.id", ondelete="RESTRICT"), index=True, nullable=False)
     platform = relationship("Platform", backref="platforms")
+
+    requirements_id = Column(Integer, ForeignKey("system_requirements.id", ondelete="RESTRICT"), index=True, nullable=False)
+    requirements = relationship("SystemRequirement",backref="system_requirements")
