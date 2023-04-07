@@ -4,12 +4,13 @@ import gzip
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 
+from server.src.models.game_status import GameStatus
 from server.src.models.role import Role
 from server.src.models.user import User
 from server.src.routes.auth import router as auth_router
 from server.src.routes.games import router as games_router
 from server.src.routes.companies import router as companies_router
-from server.src.settings import tags_metadata, RoleType, admin_config
+from server.src.settings import tags_metadata, RoleType, admin_config, GameStatusType
 from server.src.utils.crypt import get_password_hash
 from server.src.utils.db import Base, engine, get_db
 
@@ -37,6 +38,9 @@ def init_db():
     if len(db.query(User).all()) == 0:
         _add_admin(db)
 
+    if len(db.query(GameStatus).all()) == 0:
+        _add_game_statuses(db)
+
 
 def _add_admin(session):
     admin_role = session.query(Role).filter(Role.title == RoleType.ADMIN).one()
@@ -59,6 +63,13 @@ def _add_roles(session):
     for role_type in RoleType:
         role = Role(title=role_type)
         session.add(role)
+    session.commit()
+
+
+def _add_game_statuses(session):
+    for game_status_type in GameStatusType:
+        game_status = GameStatus(title=game_status_type)
+        session.add(game_status)
     session.commit()
 
 
