@@ -5,10 +5,10 @@ from server.src.models.entity import Entity
 from server.src.settings import AgeType
 
 
-class Age(Entity):
-    __tablename__ = "ages"
+class AgeCategory(Entity):
+    __tablename__ = "age_categories"
 
     title = Column(Enum(AgeType), unique=True, index=True, nullable=False)
     description = Column(Text, nullable=False)
 
-    games = relationship("Game", back_populates="age")
+    games = relationship("Game", back_populates="age_category")

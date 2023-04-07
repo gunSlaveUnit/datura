@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from server.src.models.entity import Entity
 from server.src.models.game_status import GameStatus
 from server.src.models.build import Build
-from server.src.models.age import Age
+from server.src.models.age_category import AgeCategory
 from server.src.models.language import GameLanguage
 from server.src.models.review import Review
 
@@ -33,5 +33,5 @@ class Game(Entity):
     status_id = Column(Integer, ForeignKey("game_statuses.id", ondelete="RESTRICT"), index=True, nullable=False)
     status = relationship("GameStatus", back_populates="games")
 
-    age_id = Column(Integer, ForeignKey("ages.id", ondelete="RESTRICT"), index=True, nullable=False)
-    age = relationship("Age", back_populates="games")
+    age_category_id = Column(Integer, ForeignKey("age_categories.id", ondelete="RESTRICT"), index=True, nullable=False)
+    age_category = relationship("AgeCategory", back_populates="games")
