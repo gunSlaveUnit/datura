@@ -6,8 +6,6 @@ from server.src.settings import RoleType
 
 
 class Role(Entity):
-    # TODO: Should we be able to add / edit roles? Do we need Enum here?
-
     __tablename__ = "roles"
 
     title = Column(Enum(RoleType), unique=True, index=True, nullable=False)
