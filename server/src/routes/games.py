@@ -10,7 +10,7 @@ from starlette.responses import Response
 from server.src.models.game import Game
 from server.src.models.user import User
 from server.src.schemas.game import GameCreateSchema, GameDBSchema, GameApprovingSchema
-from server.src.settings import GAMES_ROUTER_PREFIX, Tags, GAMES_ASSETS_DIR
+from server.src.settings import GAMES_ROUTER_PREFIX, Tags, GAMES_ASSETS_PATH
 from server.src.routes.assets import router as assets_router
 from server.src.utils.auth import get_current_user
 from server.src.utils.db import get_db
@@ -44,9 +44,10 @@ async def create(game_create_data: GameCreateSchema,
     game = Game(**vars(game_create_data))
     game.author = current_user
 
-    assets_directory = Path(GAMES_ASSETS_DIR)
+    assets_directory = Path(GAMES_ASSETS_PATH)
     new_directory_uuid = str(uuid.uuid4())
-    assets_directory.joinpath(new_directory_uuid)
+    assets_directory = assets_directory.joinpath(new_directory_uuid)
+    assets_directory.mkdir(parents=True)
     game.directory = new_directory_uuid
 
     db.add(game)
