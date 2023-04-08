@@ -16,7 +16,7 @@ class GameCreateSchema(BaseModel):
     long_description: str
     price: float
     status_id: int
-    age_id: int
+    age_category_id: int
 
 
 class GameDBSchema(GameCreateSchema, EntityDBSchema):
