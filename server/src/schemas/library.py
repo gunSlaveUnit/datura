@@ -1,4 +1,5 @@
 from server.src.schemas.entity import EntityDBSchema
+from server.src.schemas.game import GameDBSchema
 
 
 class LibraryDBSchema(EntityDBSchema):
@@ -9,3 +10,7 @@ class LibraryDBSchema(EntityDBSchema):
 
     class Config:
         orm_mode = True
+
+
+class LibraryJoinedSchema(LibraryDBSchema):
+    game: GameDBSchema
