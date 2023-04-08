@@ -5,24 +5,25 @@ from dotenv import dotenv_values
 
 DEBUG = False
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-ENVS_DIR = BASE_DIR / 'envs'
-MEDIA_DIR = BASE_DIR.parent / 'media'
-GAMES_ASSETS_DIR = MEDIA_DIR / 'assets'
+BASE_PATH = Path(__file__).resolve().parent.parent
+ENVS_PATH = BASE_PATH / 'envs'
+MEDIA_PATH = BASE_PATH.parent / 'media'
+GAMES_ASSETS_PATH = MEDIA_PATH / 'assets'
+GAMES_ASSETS_CAPSULE_DIR = 'capsule'
 
 if DEBUG:
-    ENVS_DIR = ENVS_DIR / 'dev'
+    ENVS_PATH = ENVS_PATH / 'dev'
 else:
-    ENVS_DIR = ENVS_DIR / 'prod'
+    ENVS_PATH = ENVS_PATH / 'prod'
 
 # Databases
 
-admin_config = dotenv_values(ENVS_DIR / ".admin")
-redis_config = dotenv_values(ENVS_DIR / ".redis")
-database_config = dotenv_values(ENVS_DIR / ".db")
+admin_config = dotenv_values(ENVS_PATH / ".admin")
+redis_config = dotenv_values(ENVS_PATH / ".redis")
+database_config = dotenv_values(ENVS_PATH / ".db")
 
 if DEBUG:
-    CONNECTION_STRING = f"sqlite:///{BASE_DIR / database_config['NAME']}"
+    CONNECTION_STRING = f"sqlite:///{BASE_PATH / database_config['NAME']}"
 else:
     CONNECTION_STRING = f'postgresql://{database_config["USER"]}:{database_config["PASSWORD"]}' \
                         f'@{database_config["HOST"]}:{database_config["PORT"]}/{database_config["NAME"]}'
