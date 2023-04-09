@@ -1,6 +1,6 @@
 import uuid
 from pathlib import Path
-from typing import List
+from typing import List, Type
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -20,16 +20,13 @@ router.include_router(assets_router)
 
 
 @router.get('/', response_model=List[GameDBSchema])
-async def every() -> List[GameDBSchema]:
+async def every(db: Session = Depends(get_db)) -> list[Type[Game]]:
     """
     List of all games according to the given filters.
     Returns a list of GameDBScheme with game data.
     """
 
-    return [
-        GameDBSchema(title="Test game title 1"),
-        GameDBSchema(title="Test game title 2"),
-    ]
+    return db.query(Game).all()
 
 
 @router.post('/', response_model=GameDBSchema)
