@@ -185,12 +185,10 @@ Window {
 			Connections {
 				target: auth_logic
 
-				function onRegistered() {
-
-				}
+				function onRegistered() {}
 
 		    function onLogin() {
-
+					game_list_model.load()
 		    }
 
 		    function onLogout() {
