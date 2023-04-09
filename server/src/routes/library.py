@@ -14,7 +14,7 @@ from server.src.utils.db import get_db
 router = APIRouter(prefix=LIBRARY_ROUTER_PREFIX, tags=[Tags.LIBRARY])
 
 
-@router.get('/', response_model=List[LibraryDBSchema | LibraryJoinedSchema])
+@router.get('/', response_model=List[LibraryJoinedSchema | LibraryDBSchema])
 async def every(user_id: int | None = None,
                 include_games: bool = False,
                 db: Session = Depends(get_db),
