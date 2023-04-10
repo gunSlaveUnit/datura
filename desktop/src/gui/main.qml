@@ -242,6 +242,7 @@ Window {
 	            onEntered: parent.color = "#36373a"
 	            onExited: parent.color = "transparent"
 	            onClicked: {
+	              library_detailed_logic.load(id)
 	              storeStackLayout.currentIndex = storeStackLayout.libraryDetailedGameIndex
 	            }
 	          }
@@ -249,7 +250,15 @@ Window {
 	      }
 
 	      ColumnLayout {
-	        Button {text: qsTr("Boo")}
+	        Text {
+		        text: library_detailed_logic.game_title
+		        color: "white"
+	        }
+
+	        Button {
+	          text: library_detailed_logic.is_game_installed ? "Launch" : "Download"
+	          onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : library_detailed_logic.download()
+	        }
 	      }
 		  }
 		}
