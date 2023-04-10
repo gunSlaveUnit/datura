@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 from PySide6.QtCore import QObject, Signal, Slot, Property
@@ -76,7 +76,14 @@ class LibraryDetailedLogic(QObject):
 
             possible_last_launch_stamp: int | None = data["last_run"]
             if possible_last_launch_stamp:
-                self.last_launched = datetime.fromtimestamp(possible_last_launch_stamp).strftime('%d %b %y')
+                launch_date = datetime.fromtimestamp(possible_last_launch_stamp)
+
+                if datetime.today().date() == launch_date.date():
+                    self.last_launched = "Today"
+                elif datetime.today().date() - timedelta(1) == launch_date.date():
+                    self.last_launched = "Yesterday"
+                else:
+                    self.last_launched = launch_date.strftime('%d %b %y')
             else:
                 self.last_launched = "Never"
 
