@@ -179,74 +179,79 @@ Window {
 			}
 		}
 
-		StackLayout {
-			id: storeStackLayout
+		ColumnLayout {
+			Button {
+	      text: qsTr("Logout")
+	      onClicked: auth_logic.sign_out()
+	    }
 
-			Connections {
-				target: auth_logic
+	    StackLayout {
+				id: storeStackLayout
 
-				function onRegistered() {}
+				Connections {
+					target: auth_logic
 
-		    function onLogin() {
-					game_list_model.load()
-		    }
+					function onRegistered() {}
 
-		    function onLogout() {
-					mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
-		    }
-			}
+			    function onLogin() {
+						game_list_model.load()
+			    }
 
-			anchors.fill: parent
+			    function onLogout() {
+						mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
+			    }
+				}
 
-	    property int libraryGamesIndex: 0
-
-	    ColumnLayout {
-	      Button {
-	        text: qsTr("Logout")
-	        onClicked: auth_logic.sign_out()
-	      }
+		    property int libraryGamesIndex: 0
+		    property int libraryDetailedGameIndex: 1
 
 	      GridView {
-          id: library_games_grid_view
+	        id: library_games_grid_view
 
-          property int capsuleImageWidth: 12 * 10
-          property int capsuleImageHeight: 17 * 10
+	        property int capsuleImageWidth: 12 * 10
+	        property int capsuleImageHeight: 17 * 10
 
-          Layout.preferredWidth: window.width
-          Layout.preferredHeight: window.height
+	        Layout.preferredWidth: window.width
+	        Layout.preferredHeight: window.height
 
-          cellWidth: capsuleImageWidth + defaultMargin * 2
-          cellHeight: capsuleImageHeight + defaultMargin * 2.5
+	        cellWidth: capsuleImageWidth + defaultMargin * 2
+	        cellHeight: capsuleImageHeight + defaultMargin * 2.5
 
-          clip: true
+	        clip: true
 
-          model: game_list_model
+	        model: game_list_model
 
-          delegate: Rectangle {
-            width: library_games_grid_view.cellWidth
-            height: library_games_grid_view.cellHeight
-            color: "transparent"
-            radius: defaultMargin / 2
+	        delegate: Rectangle {
+	          width: library_games_grid_view.cellWidth
+	          height: library_games_grid_view.cellHeight
+	          color: "transparent"
+	          radius: defaultMargin / 2
 
-            Image {
-              anchors.centerIn: parent
-              width: library_games_grid_view.capsuleImageWidth
-              height: library_games_grid_view.capsuleImageHeight
-              source: `http://localhost:8000/games/${id}/assets/capsule/`
-              mipmap: true
-            }
+	          Image {
+	            anchors.centerIn: parent
+	            width: library_games_grid_view.capsuleImageWidth
+	            height: library_games_grid_view.capsuleImageHeight
+	            source: `http://localhost:8000/games/${id}/assets/capsule/`
+	            mipmap: true
+	          }
 
-            MouseArea {
-              id: cell_mouse_area
-              anchors.fill: parent
-              hoverEnabled: true
-              onEntered: parent.color = "#36373a"
-              onExited: parent.color = "transparent"
-              onClicked: {}
-            }
-          }
+	          MouseArea {
+	            id: cell_mouse_area
+	            anchors.fill: parent
+	            hoverEnabled: true
+	            onEntered: parent.color = "#36373a"
+	            onExited: parent.color = "transparent"
+	            onClicked: {
+	              storeStackLayout.currentIndex = storeStackLayout.libraryDetailedGameIndex
+	            }
+	          }
+	        }
 	      }
-	    }
-	  }
+
+	      ColumnLayout {
+	        Button {text: qsTr("Boo")}
+	      }
+		  }
+		}
   }
 }
