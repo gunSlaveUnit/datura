@@ -229,8 +229,9 @@ Window {
             radius: defaultMargin / 2
 
             Image {
-              Layout.preferredWidth: library_games_grid_view.capsuleImageWidth
-              Layout.preferredHeight: library_games_grid_view.capsuleImageHeight
+              anchors.centerIn: parent
+              width: library_games_grid_view.capsuleImageWidth
+              height: library_games_grid_view.capsuleImageHeight
               source: `http://localhost:8000/games/${id}/assets/capsule/`
               mipmap: true
             }
