@@ -255,6 +255,11 @@ Window {
 		        color: "white"
 	        }
 
+	        Text {
+		        text: library_detailed_logic.last_launched
+		        color: "white"
+	        }
+
 	        Button {
 	          text: library_detailed_logic.is_game_installed ? "Launch" : "Download"
 	          onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : library_detailed_logic.download()

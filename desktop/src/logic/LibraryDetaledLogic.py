@@ -10,6 +10,7 @@ from desktop.src.settings import LIBRARY_URL
 class LibraryDetailedLogic(QObject):
     game_title_changed = Signal()
     is_game_installed_changed = Signal()
+    last_launched_changed = Signal()
 
     def __init__(self, auth_service: AuthService):
         super().__init__()
@@ -48,6 +49,20 @@ class LibraryDetailedLogic(QObject):
 
     # endregion
 
+    # region Last launched
+
+    @Property(str, notify=last_launched_changed)
+    def last_launched(self):
+        return self._last_launched
+
+    @last_launched.setter
+    def last_launched(self, new_value: str):
+        if self._last_launched != new_value:
+            self._last_launched = new_value
+            self.last_launched_changed.emit()
+
+    # endregion
+
     @Slot(int)
     def load(self, game_id: int):
         headers = {"Authorization": self._auth_service.session_id}
@@ -58,6 +73,12 @@ class LibraryDetailedLogic(QObject):
             data = reply.json()[0]
 
             self.game_title = data["game"]["title"]
+
+            possible_last_launch_stamp: int | None = data["last_run"]
+            if possible_last_launch_stamp:
+                self.last_launched = datetime.fromtimestamp(possible_last_launch_stamp).strftime('%d %b %y')
+            else:
+                self.last_launched = "Never"
 
     @Slot()
     def download(self):
