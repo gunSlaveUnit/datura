@@ -16,6 +16,7 @@ router = APIRouter(prefix=LIBRARY_ROUTER_PREFIX, tags=[Tags.LIBRARY])
 
 @router.get('/', response_model=List[LibraryJoinedSchema | LibraryDBSchema])
 async def every(user_id: int | None = None,
+                game_id: int | None = None,
                 include_games: bool = False,
                 db: Session = Depends(get_db),
                 current_user: User = Depends(get_current_user)) -> list[Type[Library]]:
@@ -27,6 +28,9 @@ async def every(user_id: int | None = None,
     records_query = db.query(Library)
     if user_id:
         records_query = records_query.filter(Library.player_id == user_id)
+
+    if game_id:
+        records_query = records_query.filter(Library.game_id == game_id)
 
     if include_games:
         records_query = records_query.join(Game)
