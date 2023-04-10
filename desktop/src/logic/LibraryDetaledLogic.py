@@ -11,6 +11,7 @@ class LibraryDetailedLogic(QObject):
     game_title_changed = Signal()
     is_game_installed_changed = Signal()
     last_launched_changed = Signal()
+    play_time_changed = Signal()
 
     def __init__(self, auth_service: AuthService):
         super().__init__()
@@ -20,6 +21,7 @@ class LibraryDetailedLogic(QObject):
         self._game_title = ''
         self._is_game_installed = False
         self._last_launched = False
+        self._play_time = ''
 
     # region Game title
 
@@ -63,6 +65,20 @@ class LibraryDetailedLogic(QObject):
 
     # endregion
 
+    # region Last launched
+
+    @Property(str, notify=play_time_changed)
+    def play_time(self):
+        return self._play_time
+
+    @play_time.setter
+    def play_time(self, new_value: str):
+        if self._play_time != new_value:
+            self._play_time = new_value
+            self.play_time_changed.emit()
+
+    # endregion
+
     @Slot(int)
     def load(self, game_id: int):
         headers = {"Authorization": self._auth_service.session_id}
@@ -73,6 +89,12 @@ class LibraryDetailedLogic(QObject):
             data = reply.json()[0]
 
             self.game_title = data["game"]["title"]
+
+            game_play_time = data["game_time"]
+            if game_play_time / 3600 < 1:
+                self.play_time = '{00:.0f}'.format(game_play_time // 60)
+            else:
+                self.play_time = '{0:.1f}'.format(game_play_time / 3600)
 
             possible_last_launch_stamp: int | None = data["last_run"]
             if possible_last_launch_stamp:

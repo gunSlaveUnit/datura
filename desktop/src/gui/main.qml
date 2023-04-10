@@ -260,6 +260,12 @@ Window {
 		        color: "white"
 	        }
 
+	        Text {
+	          visible: library_detailed_logic.play_time !== "0"
+		        text: library_detailed_logic.play_time
+		        color: "white"
+	        }
+
 	        Button {
 	          text: library_detailed_logic.is_game_installed ? "Launch" : "Download"
 	          onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : library_detailed_logic.download()
