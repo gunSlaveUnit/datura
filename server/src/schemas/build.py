@@ -4,9 +4,9 @@ from server.src.schemas.entity import EntityDBSchema
 
 
 class BuildCreateSchema(BaseModel):
-    platform: int
+    platform_id: int
     call: str
-    params: str
+    params: str | None
 
 
 class BuildDBSchema(BuildCreateSchema, EntityDBSchema):
