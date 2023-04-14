@@ -80,3 +80,6 @@ class AgeType(Enum):
     PEGI_12 = 'PEGI 12'
     PEGI_16 = 'PEGI 16'
     PEGI_18 = 'PEGI 18'
+
+
+PLATFORMS = ["windows", "linux"]
