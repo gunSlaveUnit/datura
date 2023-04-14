@@ -12,6 +12,7 @@ from server.src.schemas.build import BuildDBSchema, BuildCreateSchema
 from server.src.settings import BUILDS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_BUILDS_DIR
 from server.src.utils.auth import get_current_user
 from server.src.utils.db import get_db
+from server.src.utils.file_system_storage import store
 
 router = APIRouter(prefix=BUILDS_ROUTER_PREFIX)
 
@@ -70,12 +71,20 @@ async def build_info(filename: str | None = None):
 
 
 @router.post('/{build_id}/')
-async def upload_build(files: List[UploadFile]):
+async def upload_build(game_id: int,
+                       build_id: int,
+                       files: List[UploadFile],
+                       db: Session = Depends(get_db)):
     """
     Uploads project build files to the server.
     If something of them exists, won't be overwritten.
     """
-    pass
+    game = db.query(Game).filter(Game.id == game_id).one()
+    build = db.query(Build).filter(Build.id == build_id).one()
+
+    store_files_directory = Path(GAMES_ASSETS_PATH).joinpath(game.directory, GAMES_ASSETS_BUILDS_DIR, build.directory)
+
+    return await store(store_files_directory, files)
 
 
 @router.put('/{build_id}/')
