@@ -10,6 +10,7 @@ ENVS_PATH = BASE_PATH / 'envs'
 MEDIA_PATH = BASE_PATH.parent / 'media'
 GAMES_ASSETS_PATH = MEDIA_PATH / 'assets'
 GAMES_ASSETS_CAPSULE_DIR = 'capsule'
+GAMES_ASSETS_BUILDS_DIR = 'builds'
 
 if DEBUG:
     ENVS_PATH = ENVS_PATH / 'dev'
