@@ -19,5 +19,4 @@ class Build(Entity):
     platform_id = Column(Integer, ForeignKey("platforms.id", ondelete="RESTRICT"), index=True, nullable=False)
     platform = relationship("Platform", backref="platforms")
 
-    requirements_id = Column(Integer, ForeignKey("system_requirements.id", ondelete="RESTRICT"), index=True, nullable=False)
-    requirements = relationship("SystemRequirement",backref="system_requirements")
+    requirements = relationship("SystemRequirement", backref="system_requirements")
