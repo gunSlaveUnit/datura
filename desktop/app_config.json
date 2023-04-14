@@ -3,7 +3,7 @@
     "default_library_path_name": "GabeStoreLibrary",
     "default_games_installation_path": {
       "win": "C:\\",
-      "unix": "/home/"
+      "linux": "/home/"
     },
     "apps": [
       {
