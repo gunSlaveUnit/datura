@@ -6,13 +6,14 @@ from fastapi.responses import StreamingResponse
 
 from server.src.models.age_category import AgeCategory
 from server.src.models.game_status import GameStatus
+from server.src.models.platform import Platform
 from server.src.models.role import Role
 from server.src.models.user import User
 from server.src.routes.auth import router as auth_router
 from server.src.routes.games import router as games_router
 from server.src.routes.companies import router as companies_router
 from server.src.routes.library import router as library_router
-from server.src.settings import tags_metadata, RoleType, admin_config, GameStatusType, AgeType
+from server.src.settings import tags_metadata, RoleType, admin_config, GameStatusType, AgeType, PLATFORMS
 from server.src.utils.crypt import get_password_hash
 from server.src.utils.db import Base, engine, get_db
 
@@ -45,6 +46,9 @@ def init_db():
 
     if len(db.query(AgeCategory).all()) == 0:
         _add_ages(db)
+
+    if len(db.query(Platform).all()) == 0:
+        _add_platforms(db)
 
 
 def _add_admin(session):
@@ -102,6 +106,15 @@ def _add_ages(session):
     session.add(pegi_12)
     session.add(pegi_16)
     session.add(pegi_18)
+
+    session.commit()
+
+
+def _add_platforms(session):
+    for platform_title in PLATFORMS:
+        platform = Platform(platform_title)
+
+        session.add(platform)
 
     session.commit()
 
