@@ -1,10 +1,9 @@
 import requests
 
 from desktop.src.settings import REGISTER_URL, LOGIN_URL, ME_URL, LOGOUT_URL
-from desktop.src.utils.singleton import Singleton
 
 
-class AuthService(metaclass=Singleton):
+class AuthService:
     def __init__(self):
         super().__init__()
 
