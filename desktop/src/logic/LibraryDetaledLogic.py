@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 
 import requests
@@ -39,12 +40,12 @@ class LibraryDetailedLogic(QObject):
 
     # region Is game installed
 
-    @Property(str, notify=is_game_installed_changed)
+    @Property(bool, notify=is_game_installed_changed)
     def is_game_installed(self):
         return self._is_game_installed
 
     @is_game_installed.setter
-    def is_game_installed(self, new_value: str):
+    def is_game_installed(self, new_value: bool):
         if self._is_game_installed != new_value:
             self._is_game_installed = new_value
             self.is_game_installed_changed.emit()
@@ -79,6 +80,14 @@ class LibraryDetailedLogic(QObject):
 
     # endregion
 
+    def _check_game_installed(self, game_id: int) -> bool:
+        with open("../app_config.json", "r") as app_config_file:
+            config = json.load(app_config_file)['config']
+            for app in config["apps"]:
+                if game_id == app['id']:
+                    return True
+            return False
+
     @Slot(int)
     def load(self, game_id: int):
         headers = {"Authorization": self._auth_service.session_id}
@@ -89,6 +98,8 @@ class LibraryDetailedLogic(QObject):
             data = reply.json()[0]
 
             self.game_title = data["game"]["title"]
+
+            self.is_game_installed = self._check_game_installed(data["game"]["id"])
 
             game_play_time = data["game_time"]
             if game_play_time / 3600 < 1:
