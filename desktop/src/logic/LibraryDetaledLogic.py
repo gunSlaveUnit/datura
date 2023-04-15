@@ -151,18 +151,41 @@ class LibraryDetailedLogic(QObject):
             if build['platform']['title'] == sys.platform:
                 get_build_filenames = get_builds_url + str(build["id"])
                 filenames = requests.get(get_build_filenames).json()["filenames"]
+
+                library_path = QUrl(self.installation_path).toLocalFile()
+                game_installation_path = Path(library_path).joinpath(self.game_title)
+
+                Path.mkdir(game_installation_path, parents=True)
+
                 for filename in filenames:
-                    file_url = get_build_filenames + f'?filename={filename}'
+                    file_url = get_build_filenames + f'/?filename={filename}'
                     response = requests.get(file_url, stream=True)
                     file_name = response.headers.get("Content-Disposition").split('=')[1]
-                    directory = QUrl(self.installation_path).toLocalFile()
-                    with open(Path(directory).joinpath(file_name), "wb") as f:
+                    with open(game_installation_path.joinpath(file_name), "wb") as f:
                         with gzip.GzipFile(fileobj=response.raw, mode="rb") as gz:
                             while True:
                                 chunk = gz.read(8192)
                                 if not chunk:
                                     break
                                 f.write(chunk)
+
+                app_config_file = open("../app_config.json", "r")
+                config = json.load(app_config_file)['config']
+                app_config_file.close()
+
+                game_running_config = {
+                    "game_id": build["game_id"],
+                    "path": game_installation_path.name,
+                    "call": build["call"]
+                }
+                if build["params"]:
+                    game_running_config["params"] = build["params"]
+
+                config["apps"].append(game_running_config)
+
+                app_config_file = open("../app_config.json", "w")
+                json.dump(config, app_config_file)
+                app_config_file.close()
 
     @Slot()
     def run(self):
