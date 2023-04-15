@@ -1,5 +1,7 @@
 from pathlib import Path
 
+# TODO: rename URL URI URN, may be it will be better than ...URL_PART
+
 # Paths
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,6 +20,8 @@ ME_URL = AUTH_URL + "me/"
 
 # Games
 GAMES_URL = SERVER_URL + 'games/'
+ASSETS_URL_PART = 'assets/'
+BUILDS_URL_PART = 'builds/'
 
 # Library
 LIBRARY_URL = SERVER_URL + 'library/'
