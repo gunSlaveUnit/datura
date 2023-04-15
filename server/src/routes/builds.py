@@ -1,9 +1,11 @@
+import gzip
 import uuid
 from pathlib import Path
-from typing import List
+from typing import List, BinaryIO
 
 from fastapi import APIRouter, UploadFile, Depends
 from sqlalchemy.orm import Session, joinedload
+from starlette.responses import StreamingResponse
 
 from server.src.models.build import Build
 from server.src.models.game import Game
@@ -15,7 +17,24 @@ from server.src.utils.auth import get_current_user
 from server.src.utils.db import get_db
 from server.src.utils.file_system_storage import store
 
+CHUNK_SIZE = 8192
+MEDIA_TYPE = "application/gzip"
+
 router = APIRouter(prefix=BUILDS_ROUTER_PREFIX)
+
+
+def read_in_chunks(file_object: BinaryIO, chunk_size: int) -> bytes:
+    while True:
+        chunk = file_object.read(chunk_size)
+        if not chunk:
+            break
+        yield chunk
+
+
+def compress_file(file_path: str, chunk_size: int) -> bytes:
+    with open(file_path, "rb") as file:
+        for chunk in read_in_chunks(file, chunk_size):
+            yield gzip.compress(chunk)
 
 
 @router.get('/', response_model=List[BuildDBSchema])
@@ -83,12 +102,19 @@ async def build_info(game_id: int,
     game = db.query(Game).filter(Game.id == game_id).one()
     build = db.query(Build).filter(Build.id == build_id).one()
 
+    path = Path(GAMES_ASSETS_PATH).joinpath(game.directory,
+                                            GAMES_ASSETS_BUILDS_DIR,
+                                            build.directory)
+
     if filename:
-        pass
+        headers = {"Content-Disposition": f"filename={filename}"}
+
+        return StreamingResponse(
+            compress_file(path.joinpath(filename), CHUNK_SIZE),
+            headers=headers,
+            media_type=MEDIA_TYPE
+        )
     else:
-        path = Path(GAMES_ASSETS_PATH).joinpath(game.directory,
-                                                GAMES_ASSETS_BUILDS_DIR,
-                                                build.directory)
         return {"filenames": [f.name for f in path.iterdir() if f.is_file()]}
 
 
