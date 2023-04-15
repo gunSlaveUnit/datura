@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 2.15
+import Qt.labs.platform
 
 Window {
   id: window
@@ -266,9 +267,18 @@ Window {
 		        color: "white"
 	        }
 
+	        FolderDialog {
+            id: installation_path_dialog
+
+            onAccepted: {
+              library_detailed_logic.installation_path = folder
+              library_detailed_logic.download()
+            }
+          }
+
 	        Button {
-	          text: library_detailed_logic.is_game_installed ? "Launch" : "Download"
-	          onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : library_detailed_logic.download()
+	          text: library_detailed_logic.is_game_installed ? "Launch" : "Install"
+	          onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : installation_path_dialog.open()
 	        }
 	      }
 		  }

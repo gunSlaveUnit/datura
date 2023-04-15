@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timedelta
 
 import requests
-from PySide6.QtCore import QObject, Signal, Slot, Property
+from PySide6.QtCore import QObject, Signal, Slot, Property, QUrl
 
 from desktop.src.services.AuthService import AuthService
 from desktop.src.settings import LIBRARY_URL
@@ -13,6 +13,7 @@ class LibraryDetailedLogic(QObject):
     is_game_installed_changed = Signal()
     last_launched_changed = Signal()
     play_time_changed = Signal()
+    installation_path_changed = Signal()
 
     def __init__(self, auth_service: AuthService):
         super().__init__()
@@ -23,6 +24,7 @@ class LibraryDetailedLogic(QObject):
         self._is_game_installed = False
         self._last_launched = False
         self._play_time = ''
+        self._installation_path = ''
 
     # region Game title
 
@@ -80,6 +82,21 @@ class LibraryDetailedLogic(QObject):
 
     # endregion
 
+    # region Installation path
+
+    @Property(str, notify=installation_path_changed)
+    def installation_path(self):
+        return self._installation_path
+
+    @installation_path.setter
+    def installation_path(self, new_value: str):
+        if self._installation_path == new_value:
+            return
+        self._installation_path = new_value
+        self.installation_path_changed.emit()
+
+    # endregion
+
     def _check_game_installed(self, game_id: int) -> bool:
         with open("../app_config.json", "r") as app_config_file:
             config = json.load(app_config_file)['config']
@@ -122,7 +139,7 @@ class LibraryDetailedLogic(QObject):
 
     @Slot()
     def download(self):
-        pass
+        print(QUrl(self.installation_path).toLocalFile())
 
     @Slot()
     def run(self):

@@ -1,16 +1,10 @@
 {
   "config": {
-    "default_library_path_name": "GabeStoreLibrary",
+    "default_library_path_name": "FoogieLibrary",
     "default_games_installation_path": {
       "win": "C:\\",
       "linux": "/home/"
     },
-    "apps": [
-      {
-        "id": 1,
-        "path": "C:\\VulkanSDK\\1.3.239.0\\Bin",
-        "exec": "vkcube.exe"
-      }
-    ]
+    "apps": []
   }
 }
