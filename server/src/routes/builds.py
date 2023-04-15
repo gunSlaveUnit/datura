@@ -3,10 +3,11 @@ from pathlib import Path
 from typing import List
 
 from fastapi import APIRouter, UploadFile, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from server.src.models.build import Build
 from server.src.models.game import Game
+from server.src.models.platform import Platform
 from server.src.models.user import User
 from server.src.schemas.build import BuildDBSchema, BuildCreateSchema
 from server.src.settings import BUILDS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_BUILDS_DIR
@@ -17,9 +18,18 @@ from server.src.utils.file_system_storage import store
 router = APIRouter(prefix=BUILDS_ROUTER_PREFIX)
 
 
-@router.get('/')
-async def every():
-    pass
+@router.get('/', response_model=List[BuildDBSchema])
+async def every(game_id: int,
+                include_platforms: bool = False,
+                db: Session = Depends(get_db)):
+
+    items_query = db.query(Build).filter(Build.game_id == game_id)
+
+    if include_platforms:
+        items_query = items_query.join(Platform)
+        items_query = items_query.options(joinedload(Build.platform))
+
+    return items_query.all()
 
 
 @router.post('/', response_model=BuildDBSchema)
