@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
 from server.src.schemas.entity import EntityDBSchema
+from server.src.schemas.platform import PlatformDBSchema
 
 
 class BuildCreateSchema(BaseModel):
@@ -12,6 +13,7 @@ class BuildCreateSchema(BaseModel):
 class BuildDBSchema(BuildCreateSchema, EntityDBSchema):
     game_id: int
     directory: str
+    platform: PlatformDBSchema | None
 
     class Config:
         orm_mode = True
