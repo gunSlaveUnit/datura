@@ -41,6 +41,7 @@ ASSETS_ROUTER_PREFIX = '/{game_id}/assets'
 BUILDS_ROUTER_PREFIX = '/builds'
 LIBRARY_ROUTER_PREFIX = '/library'
 
+
 # Tags
 
 
@@ -57,6 +58,7 @@ tags_metadata = [
     {'name': Tags.COMPANIES, 'description': 'Describes an API to manage companies'},
     {'name': Tags.LIBRARY, 'description': 'Describes an API to manage library records'},
 ]
+
 
 # Types
 
@@ -83,4 +85,13 @@ class AgeType(Enum):
     PEGI_18 = 'PEGI 18'
 
 
-PLATFORMS = ["windows", "linux"]
+# From https://docs.python.org/3/library/sys.html
+PLATFORMS = [
+    'aix',
+    'emscripten',
+    'linux',
+    'wasi',
+    'win32',
+    'cygwin',
+    'darwin'
+]
