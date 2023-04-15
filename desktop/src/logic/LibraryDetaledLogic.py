@@ -1,5 +1,6 @@
 import gzip
 import json
+import subprocess
 import sys
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -103,9 +104,9 @@ class LibraryDetailedLogic(QObject):
 
     def _check_game_installed(self, game_id: int) -> bool:
         with open("../app_config.json", "r") as app_config_file:
-            config = json.load(app_config_file)['config']
+            config = json.load(app_config_file)
             for app in config["apps"]:
-                if game_id == app['id']:
+                if game_id == app['game_id']:
                     return True
             return False
 
@@ -170,7 +171,7 @@ class LibraryDetailedLogic(QObject):
                                 f.write(chunk)
 
                 app_config_file = open("../app_config.json", "r")
-                config = json.load(app_config_file)['config']
+                config = json.load(app_config_file)
                 app_config_file.close()
 
                 game_running_config = {
@@ -187,6 +188,16 @@ class LibraryDetailedLogic(QObject):
                 json.dump(config, app_config_file)
                 app_config_file.close()
 
+                self.is_game_installed = True
+
     @Slot()
     def run(self):
-        pass
+        with open("../app_config.json", "r") as app_config_file:
+            config = json.load(app_config_file)
+            apps = config["apps"]
+
+            for app in apps:
+                if self._game_id == app['game_id']:
+                    process = Path(config["default_games_installation_path"][sys.platform]).joinpath(config["default_library_path_name"], app['path'], app['call'])
+                    app = subprocess.Popen(process, stdout=subprocess.PIPE)
+                    break

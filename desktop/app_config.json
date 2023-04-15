@@ -1,1 +1,9 @@
-{"default_library_path_name": "FoogieLibrary", "default_games_installation_path": {"win32": "C:\\", "linux": "/home/"}, "apps": [{"game_id": 1, "path": "TrackMania Sunrise", "call": "vkcube.exe"}]}
+{
+  "default_library_path_name": "FoogieLibrary",
+  "default_games_installation_path": {
+    "win32": "C:\\", "linux": "/home/"
+  },
+  "apps": [
+    {"game_id": 1, "path": "TrackMania Sunrise", "call": "vkcube.exe"}
+  ]
+}
