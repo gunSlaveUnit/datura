@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from starlette import status
 from starlette.responses import Response
 
-from server.src.schemas.companie import CompanyCreateSchema, CompanyDBSchema, CompanyApprovingSchema
+from server.src.schemas.company import CompanyCreateSchema, CompanyDBSchema, CompanyApprovingSchema
 from server.src.settings import COMPANIES_ROUTER_PREFIX, Tags
 
 router = APIRouter(prefix=COMPANIES_ROUTER_PREFIX, tags=[Tags.COMPANIES])
