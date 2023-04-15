@@ -1,11 +1,14 @@
+import gzip
 import json
+import sys
 from datetime import datetime, timedelta
+from pathlib import Path
 
 import requests
 from PySide6.QtCore import QObject, Signal, Slot, Property, QUrl
 
 from desktop.src.services.AuthService import AuthService
-from desktop.src.settings import LIBRARY_URL
+from desktop.src.settings import LIBRARY_URL, GAMES_URL, BUILDS_URL_PART, ASSETS_URL_PART
 
 
 class LibraryDetailedLogic(QObject):
@@ -20,6 +23,7 @@ class LibraryDetailedLogic(QObject):
 
         self._auth_service = auth_service
 
+        self._game_id = -1
         self._game_title = ''
         self._is_game_installed = False
         self._last_launched = False
@@ -114,6 +118,7 @@ class LibraryDetailedLogic(QObject):
         if reply.status_code == requests.codes.ok:
             data = reply.json()[0]
 
+            self._game_id = data["game"]["id"]
             self.game_title = data["game"]["title"]
 
             self.is_game_installed = self._check_game_installed(data["game"]["id"])
@@ -139,7 +144,25 @@ class LibraryDetailedLogic(QObject):
 
     @Slot()
     def download(self):
-        print(QUrl(self.installation_path).toLocalFile())
+        get_builds_url = ''.join([GAMES_URL, str(self._game_id), '/', ASSETS_URL_PART, BUILDS_URL_PART])
+        builds = requests.get(get_builds_url).json()
+
+        for build in builds:
+            if build['platform']['title'] == sys.platform:
+                get_build_filenames = get_builds_url + str(build["id"])
+                filenames = requests.get(get_build_filenames).json()["filenames"]
+                for filename in filenames:
+                    file_url = get_build_filenames + f'?filename={filename}'
+                    response = requests.get(file_url, stream=True)
+                    file_name = response.headers.get("Content-Disposition").split('=')[1]
+                    directory = QUrl(self.installation_path).toLocalFile()
+                    with open(Path(directory).joinpath(file_name), "wb") as f:
+                        with gzip.GzipFile(fileobj=response.raw, mode="rb") as gz:
+                            while True:
+                                chunk = gz.read(8192)
+                                if not chunk:
+                                    break
+                                f.write(chunk)
 
     @Slot()
     def run(self):
