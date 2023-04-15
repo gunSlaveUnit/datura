@@ -22,7 +22,6 @@ router = APIRouter(prefix=BUILDS_ROUTER_PREFIX)
 async def every(game_id: int,
                 include_platforms: bool = False,
                 db: Session = Depends(get_db)):
-
     items_query = db.query(Build).filter(Build.game_id == game_id)
 
     if include_platforms:
@@ -72,12 +71,25 @@ async def delete(build_id: int):
 
 
 @router.get('/{build_id}/')
-async def build_info(filename: str | None = None):
+async def build_info(game_id: int,
+                     build_id: int,
+                     filename: str | None = None,
+                     db: Session = Depends(get_db)):
     """
     Returns the names of the build files.
     If "filename" query param was provided, returns a file.
     """
-    pass
+
+    game = db.query(Game).filter(Game.id == game_id).one()
+    build = db.query(Build).filter(Build.id == build_id).one()
+
+    if filename:
+        pass
+    else:
+        path = Path(GAMES_ASSETS_PATH).joinpath(game.directory,
+                                                GAMES_ASSETS_BUILDS_DIR,
+                                                build.directory)
+        return {"filenames": [f.name for f in path.iterdir() if f.is_file()]}
 
 
 @router.post('/{build_id}/')
