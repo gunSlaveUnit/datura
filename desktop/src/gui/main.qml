@@ -304,8 +304,22 @@ Window {
 	            hoverEnabled: true
 	            onEntered: parent.color = "#36373a"
 	            onExited: parent.color = "transparent"
-	            onClicked: {}
+	            onClicked: {
+	              store_detailed_logic.load(id)
+	              storeStackLayout.currentIndex = storeStackLayout.storeDetailedGameIndex
+	            }
 	          }
+	        }
+	      }
+
+	      ColumnLayout {
+	        Text {
+		        text: store_detailed_logic.game_title
+		        color: "white"
+	        }
+
+	        Button {
+	          text: "Buy"
 	        }
 	      }
 		  }
