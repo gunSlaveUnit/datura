@@ -309,6 +309,47 @@ Window {
 	          onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : installation_path_dialog.open()
 	        }
 	      }
+
+	      GridView {
+	        id: store_games_grid_view
+
+	        property int capsuleImageWidth: 12 * 10
+	        property int capsuleImageHeight: 17 * 10
+
+	        Layout.preferredWidth: window.width
+	        Layout.preferredHeight: window.height
+
+	        cellWidth: capsuleImageWidth + defaultMargin * 2
+	        cellHeight: capsuleImageHeight + defaultMargin * 2.5
+
+	        clip: true
+
+	        model: game_list_model
+
+	        delegate: Rectangle {
+	          width: store_games_grid_view.cellWidth
+	          height: store_games_grid_view.cellHeight
+	          color: "transparent"
+	          radius: defaultMargin / 2
+
+	          Image {
+	            anchors.centerIn: parent
+	            width: store_games_grid_view.capsuleImageWidth
+	            height: store_games_grid_view.capsuleImageHeight
+	            source: `http://localhost:8000/games/${id}/assets/capsule/`
+	            mipmap: true
+	          }
+
+	          MouseArea {
+	            id: cell_mouse_area
+	            anchors.fill: parent
+	            hoverEnabled: true
+	            onEntered: parent.color = "#36373a"
+	            onExited: parent.color = "transparent"
+	            onClicked: {}
+	          }
+	        }
+	      }
 		  }
 		}
   }
