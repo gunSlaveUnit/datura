@@ -181,10 +181,24 @@ Window {
 		}
 
 		ColumnLayout {
-			Button {
-	      text: qsTr("Logout")
-	      onClicked: auth_logic.sign_out()
-	    }
+			RowLayout {
+				Button {
+		      text: qsTr("Library")
+		    }
+
+		    Button {
+		      text: qsTr("Store")
+		    }
+
+		    Item {
+		      Layout.fillWidth: true
+		    }
+
+		    Button {
+		      text: qsTr("Logout")
+		      onClicked: auth_logic.sign_out()
+		    }
+			}
 
 	    StackLayout {
 				id: storeStackLayout
