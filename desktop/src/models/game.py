@@ -6,7 +6,7 @@ from PySide6.QtCore import QAbstractListModel, QModelIndex, QByteArray, Qt, Slot
 
 from desktop.src.models.entity import Entity
 from desktop.src.services.AuthService import AuthService
-from desktop.src.settings import LIBRARY_URL
+from desktop.src.settings import LIBRARY_URL, GAMES_URL
 
 
 @dataclass(slots=True)
@@ -33,7 +33,7 @@ class GameList(QAbstractListModel):
         self._games = []
 
     @Slot()
-    def load(self):
+    def load_library(self):
         current_user_id = self._auth_service.current_user["id"]
         headers = {"Authorization": self._auth_service.session_id}
 
@@ -43,6 +43,17 @@ class GameList(QAbstractListModel):
         for record in library_records:
             game_data = record["game"]
             self._games.append(Game(**game_data))
+        self.endResetModel()
+
+    @Slot()
+    def load_store(self):
+        headers = {"Authorization": self._auth_service.session_id}
+
+        games = requests.get(GAMES_URL, headers=headers).json()
+        self.beginResetModel()
+        self._games = []
+        for game in games:
+            self._games.append(Game(**game))
         self.endResetModel()
 
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
