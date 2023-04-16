@@ -184,10 +184,18 @@ Window {
 			RowLayout {
 				Button {
 		      text: qsTr("Library")
+		      onClicked: {
+		        game_list_model.load_library()
+		        storeStackLayout.currentIndex = storeStackLayout.libraryGamesIndex
+	        }
 		    }
 
 		    Button {
 		      text: qsTr("Store")
+		      onClicked: {
+		        game_list_model.load_store()
+		        storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+	        }
 		    }
 
 		    Item {
@@ -208,11 +216,11 @@ Window {
 
 					function onRegistered() {
 						storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
-						game_list_model.load()
+						game_list_model.load_store()
 					}
 
 			    function onLogin() {
-						game_list_model.load()
+						game_list_model.load_library()
 			    }
 
 			    function onLogout() {
