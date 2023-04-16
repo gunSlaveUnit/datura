@@ -213,6 +213,7 @@ Window {
 			    }
 
 			    function onLogout() {
+		        authStackLayout.currentIndex = authStackLayout.signInFormIndex
 						mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
 			    }
 				}
