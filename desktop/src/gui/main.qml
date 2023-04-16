@@ -234,7 +234,27 @@ Window {
 		    property int storeGamesIndex: 2
 		    property int storeDetailedGameIndex: 3
 
-	      ListView {}
+	      ListView {
+	        model: game_list_model
+
+          delegate: RowLayout {
+            Text {
+              text: title
+              color: "white"
+              font.underline: true
+
+              MouseArea {
+		            anchors.fill: parent
+		            cursorShape: Qt.PointingHandCursor
+		            hoverEnabled: true
+		            onClicked: {
+		              library_detailed_logic.load(id)
+		              storeStackLayout.currentIndex = storeStackLayout.libraryDetailedGameIndex
+		            }
+		          }
+            }
+          }
+	      }
 
 	      ColumnLayout {
 	        Text {
