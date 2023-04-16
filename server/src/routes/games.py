@@ -29,6 +29,17 @@ async def every(db: Session = Depends(get_db)) -> list[Type[Game]]:
     return db.query(Game).all()
 
 
+@router.get('/{game_id}/', response_model=GameDBSchema)
+async def instance(game_id: int,
+                   db: Session = Depends(get_db)) -> Type[Game]:
+    """
+    List of all games according to the given filters.
+    Returns a list of GameDBScheme with game data.
+    """
+
+    return db.query(Game).filter(Game.id == game_id).one()
+
+
 @router.post('/', response_model=GameDBSchema)
 async def create(game_create_data: GameCreateSchema,
                  db: Session = Depends(get_db),
