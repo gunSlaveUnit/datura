@@ -206,7 +206,10 @@ Window {
 				Connections {
 					target: auth_logic
 
-					function onRegistered() {}
+					function onRegistered() {
+						storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+						game_list_model.load()
+					}
 
 			    function onLogin() {
 						game_list_model.load()
