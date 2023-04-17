@@ -50,7 +50,7 @@ async def create(game_create_data: GameCreateSchema,
     """
 
     game = Game(**vars(game_create_data))
-    game.author = current_user
+    game.company = current_user.company
 
     assets_directory = Path(GAMES_ASSETS_PATH)
     new_directory_uuid = str(uuid.uuid4())
