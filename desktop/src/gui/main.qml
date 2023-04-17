@@ -365,6 +365,74 @@ Window {
 		        color: "white"
 	        }
 
+	        SwipeView {
+	          id: game_screenshots_swipe_view
+
+	          Layout.preferredWidth: 400
+	          Layout.preferredHeight: width * 9 / 16
+
+	          clip: true
+
+	          Repeater {
+	            model: 6
+
+	            Image {
+	              source: "../../resources/images/16x9_placeholder.jpg"
+	              mipmap: true
+
+	              MouseArea {
+                  id: image_mouse_area
+                  anchors.fill: parent
+                  hoverEnabled: true
+
+                  RowLayout {
+                    anchors.fill: parent
+
+                    Button {
+                      Layout.fillHeight: true
+                      Layout.preferredWidth: 30
+                      text: "<"
+                      flat: true
+                      font.bold: true
+                      font.pointSize: 16
+                      visible: image_mouse_area.containsMouse
+                      enabled: game_screenshots_swipe_view.currentIndex > 0
+                      onClicked: game_screenshots_swipe_view.decrementCurrentIndex()
+                      background: Rectangle {
+                        gradient: Gradient {
+                          orientation: Gradient.Horizontal
+                          GradientStop { position: -1.0; color: "black" }
+                          GradientStop { position: 1.0; color: "transparent" }
+                        }
+                      }
+                    }
+
+                    Item {Layout.fillWidth: true}
+
+                    Button {
+                      Layout.fillHeight: true
+                      Layout.preferredWidth: 30
+                      text: ">"
+                      flat: true
+                      font.bold: true
+                      font.pointSize: 16
+                      visible: image_mouse_area.containsMouse
+                      enabled: game_screenshots_swipe_view.currentIndex < game_screenshots_swipe_view.count - 1
+                      onClicked: game_screenshots_swipe_view.incrementCurrentIndex()
+                      background: Rectangle {
+                        gradient: Gradient {
+                          orientation: Gradient.Horizontal
+                          GradientStop { position: 0.0; color: "transparent" }
+                          GradientStop { position: 2.0; color: "black" }
+                        }
+                      }
+                    }
+                  }
+                }
+	            }
+	          }
+	        }
+
 	        Button {
 	          text: "Buy"
 	        }
