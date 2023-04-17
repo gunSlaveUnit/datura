@@ -183,8 +183,21 @@ Window {
 		ColumnLayout {
 			RowLayout {
 				Button {
+          text: qsTr("<")
+          onClicked: navigation_logic.back()
+          enabled: navigation_logic.current_index > 0
+        }
+
+        Button {
+          text: qsTr(">")
+          onClicked: navigation_logic.forward()
+          enabled: navigation_logic.current_index < navigation_logic.current_history_length - 1
+        }
+
+				Button {
 		      text: qsTr("Library")
 		      onClicked: {
+		        navigation_logic.add(storeStackLayout.libraryGamesIndex)
 		        game_list_model.load_library()
 		        storeStackLayout.currentIndex = storeStackLayout.libraryGamesIndex
 	        }
@@ -193,6 +206,7 @@ Window {
 		    Button {
 		      text: qsTr("Store")
 		      onClicked: {
+		        navigation_logic.add(storeStackLayout.storeGamesIndex)
 		        game_list_model.load_store()
 		        storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
 	        }
@@ -211,11 +225,18 @@ Window {
 	    StackLayout {
 				id: storeStackLayout
 
+				currentIndex: navigation_logic.current_page
+
 				Connections {
 					target: auth_logic
 
 					function onRegistered() {
 						storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+
+						navigation_logic.clear()
+						navigation_logic.add(storeStackLayout.storeGamesIndex)
+						navigation_logic.currentIndex = 0
+
 						game_list_model.load_store()
 					}
 
@@ -226,6 +247,10 @@ Window {
 			    function onLogout() {
 		        authStackLayout.currentIndex = authStackLayout.signInFormIndex
 						mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
+
+						navigation_logic.clear()
+						navigation_logic.add(storeStackLayout.libraryGamesIndex)
+						navigation_logic.currentIndex = 0
 			    }
 				}
 
@@ -248,6 +273,7 @@ Window {
 		            cursorShape: Qt.PointingHandCursor
 		            hoverEnabled: true
 		            onClicked: {
+		              navigation_logic.add(storeStackLayout.libraryDetailedGameIndex)
 		              library_detailed_logic.load(id)
 		              storeStackLayout.currentIndex = storeStackLayout.libraryDetailedGameIndex
 		            }
@@ -325,6 +351,7 @@ Window {
 	            onEntered: parent.color = "#36373a"
 	            onExited: parent.color = "transparent"
 	            onClicked: {
+	              navigation_logic.add(storeStackLayout.storeDetailedGameIndex)
 	              store_detailed_logic.load(id)
 	              storeStackLayout.currentIndex = storeStackLayout.storeDetailedGameIndex
 	            }
