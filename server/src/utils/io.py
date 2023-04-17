@@ -19,12 +19,18 @@ async def store(directory: str, files: List[UploadFile]):
             document.write(data)
 
 
-def read_chunks(file_object: BinaryIO, chunk_size: int) -> bytes:
+def _read_chunks(file_object: BinaryIO, chunk_size: int) -> bytes:
     while chunk := file_object.read(chunk_size):
         yield chunk
 
 
+def read_uncompressed_chunks(file_path: str, chunk_size: int) -> bytes:
+    with open(file_path, "rb") as file:
+        for chunk in _read_chunks(file, chunk_size):
+            yield chunk
+
+
 def read_compressed_chunks(file_path: str, chunk_size: int) -> bytes:
     with open(file_path, "rb") as file:
-        for chunk in read_chunks(file, chunk_size):
+        for chunk in _read_chunks(file, chunk_size):
             yield gzip.compress(chunk)
