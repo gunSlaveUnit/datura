@@ -20,6 +20,6 @@ class User(Entity):
     role_id = Column(Integer, ForeignKey('roles.id', ondelete="RESTRICT"), index=True, nullable=False)
     role = relationship("Role", back_populates="users")
 
-    games = relationship("Game", back_populates="author")
+    company = relationship("Company", uselist=False, back_populates="master")
 
     reviews = relationship("Review", back_populates="user")
