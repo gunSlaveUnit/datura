@@ -21,7 +21,7 @@ class GameCreateSchema(BaseModel):
 
 class GameDBSchema(GameCreateSchema, EntityDBSchema):
     directory: str
-    author_id: int
+    company_id: int
 
     class Config:
         orm_mode = True
