@@ -125,12 +125,18 @@ async def screenshots_info(game_id: int,
 
 
 @router.post('/screenshots/')
-async def upload_screenshots(files: List[UploadFile]):
+async def upload_screenshots(game_id: int,
+                             files: List[UploadFile],
+                             db: Session = Depends(get_db)):
     """
     Uploads screenshots to the server.
     If something of them exists, won't be overwritten.
     """
-    pass
+    game = db.query(Game).filter(Game.id == game_id).one()
+
+    store_files_directory = Path(GAMES_ASSETS_PATH).joinpath(game.directory, GAMES_ASSETS_SCREENSHOTS_DIR)
+
+    return await store(store_files_directory, files)
 
 
 @router.put('/screenshots/')
