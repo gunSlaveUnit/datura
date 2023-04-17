@@ -7,6 +7,7 @@ from server.src.models.build import Build
 from server.src.models.age_category import AgeCategory
 from server.src.models.language import GameLanguage
 from server.src.models.review import Review
+from server.src.models.company import Company
 
 
 class Game(Entity):
@@ -27,8 +28,8 @@ class Game(Entity):
 
     languages = relationship("GameLanguage", back_populates="game")
 
-    author_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
-    author = relationship("User", back_populates="games")
+    company_id = Column(Integer, ForeignKey("companies.id", ondelete="CASCADE"), index=True, nullable=False)
+    company = relationship("Company", back_populates="games")
 
     status_id = Column(Integer, ForeignKey("game_statuses.id", ondelete="RESTRICT"), index=True, nullable=False)
     status = relationship("GameStatus", back_populates="games")
