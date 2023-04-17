@@ -228,6 +228,14 @@ Window {
 				currentIndex: navigation_logic.current_page
 
 				Connections {
+					target: navigation_logic
+
+					function onCurrent_page_changed() {
+						storeStackLayout.currentIndex = navigation_logic.current_page
+					}
+				}
+
+				Connections {
 					target: auth_logic
 
 					function onRegistered() {
