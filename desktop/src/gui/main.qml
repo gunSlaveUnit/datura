@@ -198,7 +198,7 @@ Window {
 		      text: qsTr("Library")
 		      onClicked: {
 		        navigation_logic.add(storeStackLayout.libraryGamesIndex)
-		        game_list_model.load_library()
+		        library_game_list_model.load_library()
 		        storeStackLayout.currentIndex = storeStackLayout.libraryGamesIndex
 	        }
 		    }
@@ -207,7 +207,7 @@ Window {
 		      text: qsTr("Store")
 		      onClicked: {
 		        navigation_logic.add(storeStackLayout.storeGamesIndex)
-		        game_list_model.load_store()
+		        store_game_list_model.load_store()
 		        storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
 	        }
 		    }
@@ -245,16 +245,17 @@ Window {
 						navigation_logic.add(storeStackLayout.storeGamesIndex)
 						navigation_logic.currentIndex = 0
 
-						game_list_model.load_store()
+						store_game_list_model.load_store()
 					}
 
 			    function onLogin() {
-						game_list_model.load_library()
+						library_game_list_model.load_library()
 			    }
 
 			    function onLogout() {
 		        authStackLayout.currentIndex = authStackLayout.signInFormIndex
 						mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
+						storeStackLayout.currentIndex = storeStackLayout.libraryGamesIndex
 
 						navigation_logic.clear()
 						navigation_logic.add(storeStackLayout.libraryGamesIndex)
@@ -268,7 +269,7 @@ Window {
 		    property int storeDetailedGameIndex: 3
 
 	      ListView {
-	        model: game_list_model
+	        model: library_game_list_model
 
           delegate: RowLayout {
             Text {
@@ -336,7 +337,7 @@ Window {
 
 	        clip: true
 
-	        model: game_list_model
+	        model: store_game_list_model
 
 	        delegate: Rectangle {
 	          width: store_games_grid_view.cellWidth
