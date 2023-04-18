@@ -256,6 +256,8 @@ Window {
 
           function onRegistered() {
             navigation_logic.add(storeStackLayout.workshopAppsListIndex)
+            navigation_logic.remove(store_section_stack_layout.workshopRegisterCompanyInfoIndex)
+            navigation_logic.remove(store_section_stack_layout.workshopRegisterPaymentInfoIndex)
           }
 				}
 
