@@ -255,6 +255,8 @@ Window {
           }
 
           function onRegistered() {
+            own_releases_game_list_model.load_personal()
+
             navigation_logic.add(storeStackLayout.workshopAppsListIndex)
             navigation_logic.remove(store_section_stack_layout.workshopRegisterCompanyInfoIndex)
             navigation_logic.remove(store_section_stack_layout.workshopRegisterPaymentInfoIndex)
@@ -619,6 +621,27 @@ Window {
             text: qsTr("Draft new")
             enabled: company_logic.is_drafted_new_button_enabled
           }
+
+          ListView {
+            Layout.fillHeight: true
+
+		        model: own_releases_game_list_model
+
+	          delegate: RowLayout {
+	            Text {
+	              text: title
+	              color: "white"
+	              font.underline: true
+
+	              MouseArea {
+			            anchors.fill: parent
+			            cursorShape: Qt.PointingHandCursor
+			            hoverEnabled: true
+			            onClicked: {}
+			          }
+	            }
+	          }
+		      }
         }
 		  }
 		}
