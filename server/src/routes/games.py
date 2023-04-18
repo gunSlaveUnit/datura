@@ -20,13 +20,17 @@ router.include_router(assets_router)
 
 
 @router.get('/', response_model=List[GameDBSchema])
-async def every(db: Session = Depends(get_db)) -> list[Type[Game]]:
+async def every(company_id: int | None = None,
+                db: Session = Depends(get_db)) -> list[Type[Game]]:
     """
     List of all games according to the given filters.
     Returns a list of GameDBScheme with game data.
     """
 
-    return db.query(Game).all()
+    games = db.query(Game)
+    if company_id:
+        games = games.filter(Game.company_id == company_id)
+    return games.all()
 
 
 @router.get('/{game_id}/', response_model=GameDBSchema)
