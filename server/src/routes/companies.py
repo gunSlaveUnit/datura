@@ -1,26 +1,34 @@
-from typing import List
+from typing import List, Any, Type
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 from starlette import status
 from starlette.responses import Response
 
-from server.src.schemas.company import CompanyCreateSchema, CompanyDBSchema, CompanyApprovingSchema
+from server.src.models.company import Company
+from server.src.schemas.company import CompanyCreateSchema, CompanyDBSchema, ApprovingSchema
 from server.src.settings import COMPANIES_ROUTER_PREFIX, Tags
+from server.src.utils.db import get_db
 
 router = APIRouter(prefix=COMPANIES_ROUTER_PREFIX, tags=[Tags.COMPANIES])
 
 
 @router.get('/', response_model=List[CompanyDBSchema])
-async def every() -> List[CompanyDBSchema]:
+async def every(owner_id: int | None = None,
+                db: Session = Depends(get_db)) -> list[Type[Company]]:
     """
     List of all companies according to the given filters.
     Returns a list of CompanyDBScheme with company data.
     """
 
-    return [
-        CompanyDBSchema(title="Test company juridical name 1"),
-        CompanyDBSchema(title="Test company juridical name 2"),
-    ]
+    companies = db.query(Company)
+    if owner_id:
+        company = companies.filter(Company.owner_id == owner_id).first()
+        if company:
+            return [company]
+        else:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Company with this owner not found")
+    return companies.all()
 
 
 @router.post('/', response_model=CompanyDBSchema)
@@ -50,7 +58,7 @@ async def delete(company_id: int) -> Response:
 
 
 @router.patch('/{company_id}/approve/')
-async def approve(company_id: int, approving: CompanyApprovingSchema) -> Response:
+async def approve(company_id: int, approving: ApprovingSchema) -> Response:
     """
     Confirms / denies information about the company.
     If it denies, all games of the company become
