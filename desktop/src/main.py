@@ -34,11 +34,14 @@ if __name__ == '__main__':
     store_detailed_logic = StoreDetailedLogic(auth_service)
     engine.rootContext().setContextProperty("store_detailed_logic", store_detailed_logic)
 
-    library_game_list_model = GameList(auth_service)
+    library_game_list_model = GameList(auth_service, company_service)
     engine.rootContext().setContextProperty("library_game_list_model", library_game_list_model)
 
-    store_game_list_model = GameList(auth_service)
+    store_game_list_model = GameList(auth_service, company_service)
     engine.rootContext().setContextProperty("store_game_list_model", store_game_list_model)
+
+    own_releases_game_list_model = GameList(auth_service, company_service)
+    engine.rootContext().setContextProperty("own_releases_game_list_model", own_releases_game_list_model)
 
     navigation_logic = NavigationLogic()
     engine.rootContext().setContextProperty("navigation_logic", navigation_logic)
