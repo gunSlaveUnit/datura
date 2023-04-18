@@ -212,6 +212,13 @@ Window {
 	        }
 		    }
 
+		    Button {
+		      text: qsTr("Workroom")
+		      onClicked: {
+		        storeStackLayout.checkCompanyRegistration()
+	        }
+		    }
+
 		    Item {
 		      Layout.fillWidth: true
 		    }
@@ -227,7 +234,16 @@ Window {
 
 				currentIndex: navigation_logic.current_page
 
-				Connections {
+				property int storeGamesIndex: 0
+		    property int storeDetailedGameIndex: storeGamesIndex + 1
+		    property int libraryGamesIndex: storeDetailedGameIndex + 1
+		    property int libraryDetailedGameIndex: libraryGamesIndex + 1
+		    property int workshopRegisterCompanyInfoIndex: libraryDetailedGameIndex + 1
+        property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
+        property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
+        property int workshopAppControlIndex: workshopAppsListIndex + 1
+
+        Connections {
 					target: navigation_logic
 
 					function onCurrent_page_changed() {
@@ -254,15 +270,6 @@ Window {
 						navigation_logic.clear()
 			    }
 				}
-
-				property int storeGamesIndex: 0
-		    property int storeDetailedGameIndex: storeGamesIndex + 1
-		    property int libraryGamesIndex: storeDetailedGameIndex + 1
-		    property int libraryDetailedGameIndex: libraryGamesIndex + 1
-		    property int workshopRegisterCompanyInfoIndex: libraryDetailedGameIndex + 1
-        property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
-        property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
-        property int workshopAppControlIndex: workshopAppsListIndex + 1
 
 	      GridView {
 	        id: store_games_grid_view
