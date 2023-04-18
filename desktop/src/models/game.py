@@ -21,7 +21,7 @@ class Game(Entity):
     status_id: int
     age_category_id: int
     directory: str
-    author_id: int
+    company_id: int
 
 
 class GameList(QAbstractListModel):
