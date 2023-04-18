@@ -544,6 +544,40 @@ Window {
             onClicked: navigation_logic.add(storeStackLayout.workshopRegisterPaymentInfoIndex)
           }
         }
+
+        ColumnLayout {
+          Text {text: qsTr("BIC")}
+
+          TextField {
+            id: bic_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.bic
+            onTextChanged: company_logic.bic = text
+          }
+
+          Text {text: qsTr("Bank address")}
+
+          TextField {
+            id: bank_address_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.bank_address
+            onTextChanged: company_logic.bank_address = text
+          }
+
+          Text {text: qsTr("Bank account number")}
+
+          TextField {
+            id: bank_account_number_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.bank_account_number
+            onTextChanged: company_logic.bank_account_number = text
+          }
+
+          Button {
+            text: qsTr("Finish")
+            onClicked: company_logic.new()
+          }
+        }
 		  }
 		}
   }
