@@ -20,7 +20,7 @@ class NavigationLogic(QObject):
 
     @Slot(int)
     def add(self, added_index: int):
-        if self._pages_history and self._pages_history[-1] != added_index:
+        if self._pages_history[-1] != added_index:
             self._pages_history.append(added_index)
 
             self._current_index = len(self._pages_history) - 1
@@ -44,7 +44,15 @@ class NavigationLogic(QObject):
 
     @Slot()
     def clear(self):
-        self._pages_history = []
+        self._pages_history = [0]
+
+        self.current_index = 0
+        self.current_page = self._pages_history[self._current_index]
+        self.current_history_length = len(self._pages_history)
+
+        self.current_index_changed.emit()
+        self.current_page_changed.emit()
+        self.current_history_length_changed.emit()
 
     @Slot()
     def back(self):
