@@ -259,6 +259,10 @@ Window {
 		    property int storeDetailedGameIndex: storeGamesIndex + 1
 		    property int libraryGamesIndex: storeDetailedGameIndex + 1
 		    property int libraryDetailedGameIndex: libraryGamesIndex + 1
+		    property int workshopRegisterCompanyInfoIndex: libraryDetailedGameIndex + 1
+        property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
+        property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
+        property int workshopAppControlIndex: workshopAppsListIndex + 1
 
 	      GridView {
 	        id: store_games_grid_view
