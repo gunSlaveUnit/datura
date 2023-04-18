@@ -449,6 +449,85 @@ Window {
 	          onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : installation_path_dialog.open()
 	        }
 	      }
+
+	      ColumnLayout {
+          Text {text: qsTr("Juridical name")}
+
+          TextField {
+            id: juridical_name_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.juridical_name
+            onTextChanged: company_logic.juridical_name = text
+          }
+
+          Text {text: qsTr("Company form")}
+
+          TextField {
+            id: company_form_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.company_form
+            onTextChanged: company_logic.company_form = text
+          }
+
+          Text {text: qsTr("Street, house and apartment/office number")}
+
+          TextField {
+            id: street_house_apartment_address_part_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.street_house_apartment
+            onTextChanged: company_logic.street_house_apartment = text
+          }
+
+          Text {text: qsTr("City")}
+
+          TextField {
+            id: city_address_part_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.city
+            onTextChanged: company_logic.city = text
+          }
+
+          Text {text: qsTr("Region")}
+
+          TextField {
+            id: region_address_part_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.region
+            onTextChanged: company_logic.region = text
+          }
+
+          Text {text: qsTr("Country")}
+
+          TextField {
+            id: country_address_part_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.country
+            onTextChanged: company_logic.country = text
+          }
+
+          Text {text: qsTr("Postal code")}
+
+          TextField {
+            id: postal_code_address_part_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.postal_code
+            onTextChanged: company_logic.postal_code = text
+          }
+
+          Text {text: qsTr("Notification email")}
+
+          TextField {
+            id: notification_email_field
+            Layout.preferredWidth: textFieldWidth
+            text: company_logic.notification_email
+            onTextChanged: company_logic.notification_email = text
+          }
+
+          Button {
+            text: qsTr("Next")
+            onClicked: navigation_logic.add(storeStackLayout.workshopRegisterPaymentInfoIndex)
+          }
+        }
 		  }
 		}
   }
