@@ -469,7 +469,10 @@ Window {
 	      }
 
 	      ColumnLayout {
-          Text {text: qsTr("Juridical name")}
+          Text {
+            text: qsTr("Juridical name")
+            color: "white"
+          }
 
           TextField {
             id: juridical_name_field
@@ -478,7 +481,10 @@ Window {
             onTextChanged: company_logic.juridical_name = text
           }
 
-          Text {text: qsTr("Company form")}
+          Text {
+            text: qsTr("Company form")
+            color: "white"
+          }
 
           TextField {
             id: company_form_field
@@ -487,7 +493,10 @@ Window {
             onTextChanged: company_logic.company_form = text
           }
 
-          Text {text: qsTr("Street, house and apartment/office number")}
+          Text {
+            text: qsTr("Street, house and apartment/office number")
+            color: "white"
+          }
 
           TextField {
             id: street_house_apartment_address_part_field
@@ -496,7 +505,10 @@ Window {
             onTextChanged: company_logic.street_house_apartment = text
           }
 
-          Text {text: qsTr("City")}
+          Text {
+            text: qsTr("City")
+            color: "white"
+          }
 
           TextField {
             id: city_address_part_field
@@ -505,7 +517,10 @@ Window {
             onTextChanged: company_logic.city = text
           }
 
-          Text {text: qsTr("Region")}
+          Text {
+            text: qsTr("Region")
+            color: "white"
+          }
 
           TextField {
             id: region_address_part_field
@@ -514,7 +529,10 @@ Window {
             onTextChanged: company_logic.region = text
           }
 
-          Text {text: qsTr("Country")}
+          Text {
+            text: qsTr("Country")
+            color: "white"
+          }
 
           TextField {
             id: country_address_part_field
@@ -523,7 +541,10 @@ Window {
             onTextChanged: company_logic.country = text
           }
 
-          Text {text: qsTr("Postal code")}
+          Text {
+            text: qsTr("Postal code")
+            color: "white"
+          }
 
           TextField {
             id: postal_code_address_part_field
@@ -532,7 +553,10 @@ Window {
             onTextChanged: company_logic.postal_code = text
           }
 
-          Text {text: qsTr("Notification email")}
+          Text {
+            text: qsTr("Notification email")
+            color: "white"
+          }
 
           TextField {
             id: notification_email_field
@@ -548,7 +572,10 @@ Window {
         }
 
         ColumnLayout {
-          Text {text: qsTr("BIC")}
+          Text {
+            text: qsTr("BIC")
+            color: "white"
+          }
 
           TextField {
             id: bic_field
@@ -557,7 +584,10 @@ Window {
             onTextChanged: company_logic.bic = text
           }
 
-          Text {text: qsTr("Bank address")}
+          Text {
+            text: qsTr("Bank address")
+            color: "white"
+          }
 
           TextField {
             id: bank_address_field
@@ -566,7 +596,10 @@ Window {
             onTextChanged: company_logic.bank_address = text
           }
 
-          Text {text: qsTr("Bank account number")}
+          Text {
+            text: qsTr("Bank account number")
+            color: "white"
+          }
 
           TextField {
             id: bank_account_number_field
