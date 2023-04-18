@@ -243,6 +243,22 @@ Window {
         property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
         property int workshopAppControlIndex: workshopAppsListIndex + 1
 
+        function checkCompanyRegistration() {
+          company_logic.check()
+        }
+
+        Connections {
+					target: company_logic
+
+					function onNotRegistered() {
+            navigation_logic.add(storeStackLayout.workshopRegisterCompanyInfoIndex)
+          }
+
+          function onRegistered() {
+            navigation_logic.add(storeStackLayout.workshopAppsListIndex)
+          }
+				}
+
         Connections {
 					target: navigation_logic
 
