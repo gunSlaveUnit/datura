@@ -3,10 +3,12 @@ import sys
 from PySide6.QtGui import QGuiApplication, QColor
 from PySide6.QtQml import QQmlApplicationEngine
 
+from desktop.src.logic.CompanyLogic import CompanyLogic
 from desktop.src.logic.LibraryDetaledLogic import LibraryDetailedLogic
 from desktop.src.logic.NavigationLogic import NavigationLogic
 from desktop.src.logic.StoreDetaledLogic import StoreDetailedLogic
 from desktop.src.models.game import GameList
+from desktop.src.services.CompanyService import CompanyService
 from desktop.src.settings import LAYOUTS_DIR
 from desktop.src.logic.AuthLogic import AuthLogic
 from services.AuthService import AuthService
@@ -21,6 +23,10 @@ if __name__ == '__main__':
 
     auth_logic = AuthLogic(auth_service)
     engine.rootContext().setContextProperty("auth_logic", auth_logic)
+
+    company_service = CompanyService(auth_service)
+    company_logic = CompanyLogic(company_service)
+    engine.rootContext().setContextProperty("company_logic", company_logic)
 
     library_detailed_logic = LibraryDetailedLogic(auth_service)
     engine.rootContext().setContextProperty("library_detailed_logic", library_detailed_logic)
