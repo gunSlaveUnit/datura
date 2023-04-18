@@ -18,10 +18,11 @@ LOGIN_URL = AUTH_URL + "sign-in/"
 LOGOUT_URL = AUTH_URL + "sign-out/"
 ME_URL = AUTH_URL + "me/"
 
-# Games
+# Entities
 GAMES_URL = SERVER_URL + 'games/'
 ASSETS_URL_PART = 'assets/'
 BUILDS_URL_PART = 'builds/'
 
-# Library
+COMPANIES_URL = SERVER_URL + 'companies/'
+
 LIBRARY_URL = SERVER_URL + 'library/'
