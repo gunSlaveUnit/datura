@@ -578,6 +578,13 @@ Window {
             onClicked: company_logic.new()
           }
         }
+
+        ColumnLayout {
+          Button {
+            text: qsTr("Draft new")
+            enabled: company_logic.is_drafted_new_button_enabled
+          }
+        }
 		  }
 		}
   }
