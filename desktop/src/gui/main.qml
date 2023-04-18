@@ -194,21 +194,21 @@ Window {
           enabled: navigation_logic.current_index < navigation_logic.current_history_length - 1
         }
 
+        Button {
+		      text: qsTr("Store")
+		      onClicked: {
+		        navigation_logic.add(storeStackLayout.storeGamesIndex)
+		        store_game_list_model.load_store()
+		        storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+	        }
+		    }
+
 				Button {
 		      text: qsTr("Library")
 		      onClicked: {
 		        navigation_logic.add(storeStackLayout.libraryGamesIndex)
 		        library_game_list_model.load_library()
 		        storeStackLayout.currentIndex = storeStackLayout.libraryGamesIndex
-	        }
-		    }
-
-		    Button {
-		      text: qsTr("Store")
-		      onClicked: {
-		        navigation_logic.add(storeStackLayout.storeGamesIndex)
-		        store_game_list_model.load_store()
-		        storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
 	        }
 		    }
 
@@ -239,89 +239,26 @@ Window {
 					target: auth_logic
 
 					function onRegistered() {
-						storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
-
-						navigation_logic.clear()
-						navigation_logic.add(storeStackLayout.storeGamesIndex)
-						navigation_logic.currentIndex = 0
-
 						store_game_list_model.load_store()
 					}
 
 			    function onLogin() {
-						library_game_list_model.load_library()
+						store_game_list_model.load_store()
 			    }
 
 			    function onLogout() {
 		        authStackLayout.currentIndex = authStackLayout.signInFormIndex
 						mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
-						storeStackLayout.currentIndex = storeStackLayout.libraryGamesIndex
+						storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
 
 						navigation_logic.clear()
-						navigation_logic.add(storeStackLayout.libraryGamesIndex)
-						navigation_logic.currentIndex = 0
 			    }
 				}
 
-		    property int libraryGamesIndex: 0
-		    property int libraryDetailedGameIndex: 1
-		    property int storeGamesIndex: 2
-		    property int storeDetailedGameIndex: 3
-
-	      ListView {
-	        model: library_game_list_model
-
-          delegate: RowLayout {
-            Text {
-              text: title
-              color: "white"
-              font.underline: true
-
-              MouseArea {
-		            anchors.fill: parent
-		            cursorShape: Qt.PointingHandCursor
-		            hoverEnabled: true
-		            onClicked: {
-		              navigation_logic.add(storeStackLayout.libraryDetailedGameIndex)
-		              library_detailed_logic.load(id)
-		              storeStackLayout.currentIndex = storeStackLayout.libraryDetailedGameIndex
-		            }
-		          }
-            }
-          }
-	      }
-
-	      ColumnLayout {
-	        Text {
-		        text: library_detailed_logic.game_title
-		        color: "white"
-	        }
-
-	        Text {
-		        text: library_detailed_logic.last_launched
-		        color: "white"
-	        }
-
-	        Text {
-	          visible: library_detailed_logic.play_time !== "0"
-		        text: library_detailed_logic.play_time
-		        color: "white"
-	        }
-
-	        FolderDialog {
-            id: installation_path_dialog
-
-            onAccepted: {
-              library_detailed_logic.installation_path = folder
-              library_detailed_logic.download()
-            }
-          }
-
-	        Button {
-	          text: library_detailed_logic.is_game_installed ? "Launch" : "Install"
-	          onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : installation_path_dialog.open()
-	        }
-	      }
+				property int storeGamesIndex: 0
+		    property int storeDetailedGameIndex: storeGamesIndex + 1
+		    property int libraryGamesIndex: storeDetailedGameIndex + 1
+		    property int libraryDetailedGameIndex: libraryGamesIndex + 1
 
 	      GridView {
 	        id: store_games_grid_view
@@ -444,6 +381,61 @@ Window {
 
 	        Button {
 	          text: "Buy"
+	        }
+	      }
+
+	      ListView {
+	        model: library_game_list_model
+
+          delegate: RowLayout {
+            Text {
+              text: title
+              color: "white"
+              font.underline: true
+
+              MouseArea {
+		            anchors.fill: parent
+		            cursorShape: Qt.PointingHandCursor
+		            hoverEnabled: true
+		            onClicked: {
+		              navigation_logic.add(storeStackLayout.libraryDetailedGameIndex)
+		              library_detailed_logic.load(id)
+		              storeStackLayout.currentIndex = storeStackLayout.libraryDetailedGameIndex
+		            }
+		          }
+            }
+          }
+	      }
+
+	      ColumnLayout {
+	        Text {
+		        text: library_detailed_logic.game_title
+		        color: "white"
+	        }
+
+	        Text {
+		        text: library_detailed_logic.last_launched
+		        color: "white"
+	        }
+
+	        Text {
+	          visible: library_detailed_logic.play_time !== "0"
+		        text: library_detailed_logic.play_time
+		        color: "white"
+	        }
+
+	        FolderDialog {
+            id: installation_path_dialog
+
+            onAccepted: {
+              library_detailed_logic.installation_path = folder
+              library_detailed_logic.download()
+            }
+          }
+
+	        Button {
+	          text: library_detailed_logic.is_game_installed ? "Launch" : "Install"
+	          onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : installation_path_dialog.open()
 	        }
 	      }
 		  }
