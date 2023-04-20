@@ -688,7 +688,7 @@ Window {
 	          }
 
 	          Button {
-	            text: qsTr("Build")
+	            text: qsTr("Builds")
 	            onClicked: gameControlStackLayout.currentIndex = gameControlStackLayout.buildsPageIndex
 	          }
 
@@ -817,6 +817,72 @@ Window {
                 wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                 text: app_logic.long_description
                 onTextChanged: app_logic.long_description = text
+              }
+            }
+
+            ColumnLayout {
+              RowLayout {
+                Text {
+	                text: qsTr("Header image:")
+	                color: "white"
+                }
+
+                Text {
+	                text: qsTr("File not selected")
+	                color: "white"
+                }
+              }
+
+              Button {
+                text: qsTr("Attach")
+              }
+
+              RowLayout {
+                Text {
+	                text: qsTr("Capsule image:")
+	                color: "white"
+                }
+
+                Text {
+	                text: qsTr("File not selected")
+	                color: "white"
+                }
+              }
+
+              Button {
+                text: qsTr("Attach")
+              }
+
+              RowLayout {
+                Text {
+	                text: qsTr("Screenshots:")
+	                color: "white"
+                }
+
+                Text {
+	                text: qsTr("Files not selected")
+	                color: "white"
+                }
+              }
+
+              Button {
+                text: qsTr("Attach")
+              }
+
+							RowLayout {
+                Text {
+	                text: qsTr("Trailers:")
+	                color: "white"
+                }
+
+                Text {
+	                text: qsTr("Files not selected")
+	                color: "white"
+                }
+              }
+
+              Button {
+                text: qsTr("Attach")
               }
             }
 					}
