@@ -209,6 +209,7 @@ class AppLogic(QObject):
     def draft_new(self):
         self.reset_form()
 
+        # TODO: need to get available age categories
         data = {
             "title": self._title,
             "developer": self._developer,
@@ -216,7 +217,8 @@ class AppLogic(QObject):
             "short_description": self._short_description,
             "long_description": self._long_description,
             "price": float(self._price),
-            "release_date": None
+            "release_date": None,
+            "age_category_id": 1
         }
 
         reply = requests.post(
