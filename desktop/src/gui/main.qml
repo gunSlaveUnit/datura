@@ -657,6 +657,20 @@ Window {
         }
 
         ColumnLayout {
+          Text {
+	          text: qsTr("To the list")
+	          font.underline: true
+	          font.bold: true
+	          color: "white"
+
+	          MouseArea {
+	            anchors.fill: parent
+	            cursorShape: Qt.PointingHandCursor
+	            hoverEnabled: true
+	            onClicked: storeStackLayout.currentIndex = storeStackLayout.workshopAppsListIndex
+	          }
+	        }
+
           RowLayout {
 	          Button {
 	            text: qsTr("Basic Info")
