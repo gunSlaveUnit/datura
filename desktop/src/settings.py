@@ -16,12 +16,15 @@ AUTH_URL = SERVER_URL + "auth/"
 REGISTER_URL = AUTH_URL + "sign-up/"
 LOGIN_URL = AUTH_URL + "sign-in/"
 LOGOUT_URL = AUTH_URL + "sign-out/"
-ME_URL = AUTH_URL + "me/"
+
 
 # Entities
 GAMES_URL = SERVER_URL + 'games/'
 ASSETS_URL_PART = 'assets/'
 BUILDS_URL_PART = 'builds/'
+
+USERS_URL = SERVER_URL + 'users/'
+ME_URL = USERS_URL + "me/"
 
 COMPANIES_URL = SERVER_URL + 'companies/'
 
