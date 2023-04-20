@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from server.src.models.entity import Entity
 from server.src.models.game import Game
+from server.src.settings import DEFAULT_AVATAR_FILENAME
 
 
 class User(Entity):
@@ -16,6 +17,7 @@ class User(Entity):
     last_login_at = Column(Integer)
     is_staff = Column(Boolean, nullable=False, default=False)
     is_superuser = Column(Boolean, nullable=False, default=False)
+    avatar = Column(String, nullable=False, default=DEFAULT_AVATAR_FILENAME)
 
     role_id = Column(Integer, ForeignKey('roles.id', ondelete="RESTRICT"), index=True, nullable=False)
     role = relationship("Role", back_populates="users")

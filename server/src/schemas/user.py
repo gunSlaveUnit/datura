@@ -13,6 +13,7 @@ class UserDBSchema(EntityDBSchema):
     is_staff: bool = False
     is_superuser: bool = False
     role_id: int
+    avatar: str
 
     class Config:
         orm_mode = True
