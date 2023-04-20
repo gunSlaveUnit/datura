@@ -8,6 +8,7 @@ DEBUG = False
 BASE_PATH = Path(__file__).resolve().parent.parent
 ENVS_PATH = BASE_PATH / 'envs'
 MEDIA_PATH = BASE_PATH.parent / 'media'
+AVATARS_PATH = MEDIA_PATH / 'avatars'
 GAMES_ASSETS_PATH = MEDIA_PATH / 'assets'
 GAMES_ASSETS_CAPSULE_DIR = 'capsule'
 GAMES_ASSETS_SCREENSHOTS_DIR = 'screenshots'
@@ -98,3 +99,5 @@ PLATFORMS = [
     'cygwin',
     'darwin'
 ]
+
+DEFAULT_AVATAR_FILENAME = 'default.webp'
