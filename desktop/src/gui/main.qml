@@ -906,7 +906,7 @@ Window {
                 }
 
                 Text {
-	                text: qsTr("Trailers:")
+	                text: qsTr("Trailers (*.webm):")
 	                color: "white"
                 }
 
