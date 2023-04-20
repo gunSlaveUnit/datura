@@ -617,8 +617,17 @@ Window {
         }
 
         ColumnLayout {
+          Connections {
+            target: app_logic
+
+            function onDrafted() {
+              navigation_logic.add(storeStackLayout.workshopAppControlIndex)
+            }
+          }
+
           Button {
             text: qsTr("Draft new")
+            onClicked: app_logic.draft_new()
             enabled: company_logic.is_drafted_new_button_enabled
           }
 
