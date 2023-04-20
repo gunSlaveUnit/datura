@@ -83,7 +83,7 @@ class AppLogic(QObject):
 
     @Slot(int)
     def map(self, game_id: int):
-        reply = requests.get(GAMES_URL + f'own/{str(game_id)}/',
+        reply = requests.get(GAMES_URL + f'{str(game_id)}/',
                              headers={"Authorization": self._auth_service.session_id})
 
         if reply.status_code == requests.codes.ok:
