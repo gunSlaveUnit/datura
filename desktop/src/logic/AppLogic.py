@@ -134,7 +134,7 @@ class AppLogic(QObject):
             "short_description": self._short_description,
             "long_description": self._long_description,
             "price": float(self._price),
-            "is_published": True
+            "age_category_id": 1
         }
 
         if not self._coming_soon:
