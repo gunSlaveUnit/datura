@@ -652,6 +652,131 @@ Window {
 	          }
 		      }
         }
+
+        ColumnLayout {
+          RowLayout {
+	          Button {
+	            text: qsTr("Basic Info")
+	          }
+
+	          Button {
+	            text: qsTr("Description")
+	          }
+
+	          Button {
+	            text: qsTr("Assets")
+	          }
+
+	          Button {
+	            text: qsTr("Trailers")
+	          }
+
+	          Button {
+	            text: qsTr("Build")
+	          }
+
+	          Button {
+	            text: qsTr("Save")
+	            onClicked: app_logic.update()
+	          }
+		      }
+
+		      StackLayout {
+						id: gameControlStackLayout
+
+	          property int basicInfoPageIndex: 0
+	          property int descriptionPageIndex: basicInfoPageIndex + 1
+	          property int assetsPageIndex: descriptionPageIndex + 1
+	          property int trailersPageIndex: assetsPageIndex + 1
+	          property int buildsPageIndex: trailersPageIndex + 1
+
+						ColumnLayout {
+	            Text {
+                text: qsTr("Title")
+                color: "white"
+	            }
+
+	            TextField {
+                Layout.preferredWidth: textFieldWidth
+                text: app_logic.title
+                onTextChanged: app_logic.title = text
+	            }
+
+	            CheckBox {
+                id: is_coming_soon
+                text: qsTr("Coming soon")
+                checked: app_logic.coming_soon
+                onClicked: app_logic.coming_soon = checked
+	            }
+
+	            Text {
+                text: qsTr("Release date")
+                visible: !is_coming_soon.checked
+                color: "white"
+	            }
+
+	            RowLayout {
+                id: dateSection
+
+                visible: !is_coming_soon.checked
+
+                ComboBox {
+                  implicitWidth: textFieldWidth / 3
+                  model: app_logic.possible_days
+                  currentIndex: app_logic.day_index
+                  onCurrentIndexChanged: app_logic.day_index = currentIndex
+                }
+
+                ComboBox {
+                  implicitWidth: textFieldWidth / 3
+                  model: app_logic.possible_months
+                  currentIndex: app_logic.month_index
+                  onCurrentIndexChanged: release_logic.month_index = currentIndex
+                }
+
+                ComboBox {
+                  implicitWidth: textFieldWidth / 3
+                  model: app_logic.possible_years
+                  currentIndex: app_logic.year_index
+                  onCurrentIndexChanged: app_logic.year_index = currentIndex
+                }
+	            }
+
+	            Text {
+	              text: qsTr("Developer")
+	              color: "white"
+	            }
+
+	            TextField {
+	              Layout.preferredWidth: textFieldWidth
+	              text: app_logic.developer
+	              onTextChanged: app_logic.developer = text
+	            }
+
+	            Text {
+	              text: qsTr("Publisher")
+	              color: "white"
+	            }
+
+	            TextField {
+	              Layout.preferredWidth: textFieldWidth
+	              text: app_logic.publisher
+	              onTextChanged: app_logic.publisher = text
+	            }
+
+	            Text {
+	              text: qsTr("Price")
+	              color: "white"
+	            }
+
+	            TextField {
+	              Layout.preferredWidth: textFieldWidth
+	              text: app_logic.price
+	              onTextChanged: app_logic.price = text
+	            }
+	          }
+					}
+        }
 		  }
 		}
   }
