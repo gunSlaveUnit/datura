@@ -668,10 +668,6 @@ Window {
 	          }
 
 	          Button {
-	            text: qsTr("Trailers")
-	          }
-
-	          Button {
 	            text: qsTr("Build")
 	          }
 
