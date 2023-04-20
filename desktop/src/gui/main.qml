@@ -822,67 +822,103 @@ Window {
 
             ColumnLayout {
               RowLayout {
+                FileDialog {
+                  id: attach_header_image_file_dialog
+                  fileMode: FileDialog.OpenFile
+                  nameFilters: ["Images (*.webp)"]
+                  onAccepted: app_logic.header = file
+                  folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                }
+
                 Text {
-	                text: qsTr("Header image:")
+	                text: qsTr("Header image (*.webp):")
 	                color: "white"
                 }
 
                 Text {
-	                text: qsTr("File not selected")
+	                text: app_logic.header
 	                color: "white"
                 }
               }
 
               Button {
                 text: qsTr("Attach")
+                onClicked: attach_header_image_file_dialog.open()
               }
 
               RowLayout {
+                FileDialog {
+                  id: attach_capsule_image_file_dialog
+                  fileMode: FileDialog.OpenFile
+                  nameFilters: ["Images (*.webp)"]
+                  onAccepted: app_logic.capsule = file
+                  folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                }
+
                 Text {
-	                text: qsTr("Capsule image:")
+	                text: qsTr("Capsule image (*.webp):")
 	                color: "white"
                 }
 
                 Text {
-	                text: qsTr("File not selected")
+	                text: app_logic.capsule
 	                color: "white"
                 }
               }
 
               Button {
                 text: qsTr("Attach")
+                onClicked: attach_capsule_image_file_dialog.open()
               }
 
               RowLayout {
+                FileDialog {
+                  id: attach_screenshots_file_dialog
+                  fileMode: FileDialog.OpenFiles
+                  nameFilters: ["Images (*.webp)"]
+                  onAccepted: app_logic.screenshots = files
+                  folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                }
+
                 Text {
-	                text: qsTr("Screenshots:")
+	                text: qsTr("Screenshots (*webp):")
 	                color: "white"
                 }
 
                 Text {
-	                text: qsTr("Files not selected")
+	                text: app_logic.displayed_screenshots_name
 	                color: "white"
                 }
               }
 
               Button {
                 text: qsTr("Attach")
+                onClicked: attach_screenshots_file_dialog.open()
               }
 
 							RowLayout {
+								FileDialog {
+                  id: attach_trailers_file_dialog
+                  fileMode: FileDialog.OpenFiles
+                  nameFilters: ["Videos (*.webm)"]
+                  onAccepted: app_logic.trailers = files
+                  folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                }
+
                 Text {
 	                text: qsTr("Trailers:")
 	                color: "white"
                 }
 
                 Text {
-	                text: qsTr("Files not selected")
+	                text: app_logic.displayed_trailers_name
 	                color: "white"
                 }
               }
 
               Button {
                 text: qsTr("Attach")
+                onClicked: attach_trailers_file_dialog.open()
               }
             }
 					}

@@ -75,8 +75,8 @@ class AppLogic(QObject):
         self.price = "0"
 
     def reset_files(self):
-        self.screenshots = []
         self.header = ''
+        self.screenshots = []
         self.capsule = ''
         self.trailers = []
         self.project_files = []
