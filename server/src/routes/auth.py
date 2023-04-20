@@ -8,7 +8,6 @@ from starlette.responses import JSONResponse
 from server.src.models.role import Role
 from server.src.schemas.auth import SignInSchema, SignUpSchema
 from server.src.models.user import User
-from server.src.schemas.user import UserDBSchema
 from server.src.settings import Tags, SESSION_TTL, RoleType
 from server.src.utils.db import get_db, get_session_storage
 from server.src.utils.auth import authenticate_user, get_current_user
@@ -86,11 +85,3 @@ async def sign_out(authorization: str = Header(None),
     session_storage.delete(authorization)
     response = JSONResponse({"detail": f"Session {authorization} was removed"})
     return response
-
-
-@router.get("/me/", response_model=UserDBSchema)
-async def me(current_user: User = Depends(get_current_user)):
-    """
-    Returns current user data as a UserDBScheme
-    """
-    return current_user
