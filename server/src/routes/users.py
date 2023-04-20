@@ -37,8 +37,6 @@ async def upload_avatar(user_id: int,
     requested_user = requested_user_query.one()
     current_avatar_filename = requested_user.avatar
 
-    requested_user.avatar = file.filename
-
     requested_user_query.update({"avatar": file.filename}, synchronize_session=False)
     db.commit()
 

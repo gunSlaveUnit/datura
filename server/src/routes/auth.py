@@ -1,3 +1,4 @@
+import datetime
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Header
@@ -72,6 +73,11 @@ async def sign_in(login_data: SignInSchema,
 
     response = JSONResponse({"detail": "Logged in successfully"})
     response.set_cookie("session_id", session_id, max_age=SESSION_TTL)
+
+    user_query = db.query(User).filter(User.id == user.id)
+    user_query.update({"last_login_at": datetime.datetime.now().timestamp()}, synchronize_session=False)
+    db.commit()
+
     return response
 
 
