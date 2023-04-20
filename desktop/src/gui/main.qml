@@ -657,18 +657,22 @@ Window {
           RowLayout {
 	          Button {
 	            text: qsTr("Basic Info")
+	            onClicked: gameControlStackLayout.currentIndex = gameControlStackLayout.basicInfoPageIndex
 	          }
 
 	          Button {
 	            text: qsTr("Description")
+	            onClicked: gameControlStackLayout.currentIndex = gameControlStackLayout.descriptionPageIndex
 	          }
 
 	          Button {
 	            text: qsTr("Assets")
+	            onClicked: gameControlStackLayout.currentIndex = gameControlStackLayout.assetsPageIndex
 	          }
 
 	          Button {
 	            text: qsTr("Build")
+	            onClicked: gameControlStackLayout.currentIndex = gameControlStackLayout.buildsPageIndex
 	          }
 
 	          Button {
@@ -683,8 +687,7 @@ Window {
 	          property int basicInfoPageIndex: 0
 	          property int descriptionPageIndex: basicInfoPageIndex + 1
 	          property int assetsPageIndex: descriptionPageIndex + 1
-	          property int trailersPageIndex: assetsPageIndex + 1
-	          property int buildsPageIndex: trailersPageIndex + 1
+	          property int buildsPageIndex: assetsPageIndex + 1
 
 						ColumnLayout {
 	            Text {
@@ -771,6 +774,36 @@ Window {
 	              onTextChanged: app_logic.price = text
 	            }
 	          }
+
+	          ColumnLayout {
+              Text {
+                text: qsTr("Short description")
+                color: "white"
+              }
+
+              TextArea {
+                font.pointSize: 12
+                Layout.preferredWidth: 300
+                Layout.preferredHeight: 150
+                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                text: app_logic.short_description
+                onTextChanged: app_logic.short_description = text
+              }
+
+              Text {
+                text: qsTr("Long description")
+                color: "white"
+              }
+
+              TextArea {
+                font.pointSize: 12
+                Layout.preferredWidth: 500
+                Layout.preferredHeight: 250
+                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                text: app_logic.long_description
+                onTextChanged: app_logic.long_description = text
+              }
+            }
 					}
         }
 		  }
