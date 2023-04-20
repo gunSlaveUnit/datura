@@ -1,5 +1,6 @@
 import gzip
 import os
+from pathlib import Path
 from typing import List, BinaryIO
 
 from fastapi import UploadFile
@@ -17,6 +18,11 @@ async def store(directory: str, files: List[UploadFile]):
         with open(os.path.join(directory, file.filename), 'wb') as document:
             data = await file.read()
             document.write(data)
+
+
+async def remove(directory: str, files: List[str]):
+    for file in files:
+        os.remove(Path(directory).joinpath(file.filename))
 
 
 def _read_chunks(file_object: BinaryIO, chunk_size: int) -> bytes:
