@@ -21,8 +21,6 @@ class AppLogic(QObject):
     month_index_changed = Signal()
     year_index_changed = Signal()
     coming_soon_changed = Signal()
-    is_approved_changed = Signal()
-    is_published_changed = Signal()
 
     possible_days_changed = Signal()
     possible_months_changed = Signal()
@@ -55,7 +53,6 @@ class AppLogic(QObject):
         self._month_index = datetime.datetime.now().month - 1
         self._year_index = datetime.datetime.now().year - AppLogic.BASE_YEAR
         self._coming_soon = True
-        self._is_published = False
 
         self._screenshots = []
         self._header = ''
@@ -65,14 +62,12 @@ class AppLogic(QObject):
 
     def reset_form(self):
         self.id = -1
-        self.is_approved = None
 
         self.title = 'Unnamed'
         self.day_index = datetime.datetime.now().day - 1
         self.month_index = datetime.datetime.now().month - 1
         self.year_index = datetime.datetime.now().year - AppLogic.BASE_YEAR
         self.coming_soon = True
-        self.is_published = False
         self.developer = ''
         self.publisher = ''
         self.short_description = ''
@@ -84,7 +79,7 @@ class AppLogic(QObject):
         self.header = ''
         self.capsule = ''
         self.trailers = []
-        self.project_files_directory = ''
+        self.project_files = []
 
     @Slot(int)
     def map(self, game_id: int):
@@ -95,7 +90,6 @@ class AppLogic(QObject):
             data = reply.json()
 
             self.id = data['id']
-            self.is_approved = data['is_approved']
 
             self.title = data['title']
             self.developer = data['developer']
@@ -123,7 +117,6 @@ class AppLogic(QObject):
             self.month_index_changed.emit()
             self.year_index_changed.emit()
             self.coming_soon_changed.emit()
-            self.is_approved_changed.emit()
 
     @Slot()
     def update(self):
@@ -293,15 +286,6 @@ class AppLogic(QObject):
                            lambda self: self._coming_soon,
                            lambda self, value: setattr(self, '_coming_soon', value),
                            notify=coming_soon_changed)
-    approved = Property(bool,
-                        lambda self: self.is_approved,
-                        lambda self, value: setattr(self, '_is_approved', value),
-                        notify=is_approved_changed)
-
-    is_published = Property(bool,
-                        lambda self: self._is_published,
-                        lambda self, value: setattr(self, '_is_published', value),
-                        notify=is_published_changed)
 
     possible_days = Property(list, lambda self: [_ for _ in range(1, 32)], constant=True)
     possible_months = Property(list, lambda self: [_ for _ in range(1, 13)], constant=True)
