@@ -646,7 +646,10 @@ Window {
 			            anchors.fill: parent
 			            cursorShape: Qt.PointingHandCursor
 			            hoverEnabled: true
-			            onClicked: {}
+			            onClicked: {
+										app_logic.map(id)
+                    storeStackLayout.currentIndex = storeStackLayout.workshopAppControlIndex
+			            }
 			          }
 	            }
 	          }
