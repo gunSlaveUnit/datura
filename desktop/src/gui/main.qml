@@ -799,7 +799,6 @@ Window {
               }
 
               TextArea {
-                font.pointSize: 12
                 Layout.preferredWidth: 300
                 Layout.preferredHeight: 150
                 wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
@@ -813,7 +812,6 @@ Window {
               }
 
               TextArea {
-                font.pointSize: 12
                 Layout.preferredWidth: 500
                 Layout.preferredHeight: 250
                 wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
