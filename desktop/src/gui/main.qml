@@ -223,6 +223,13 @@ Window {
 		      Layout.fillWidth: true
 		    }
 
+		    Image {
+		      Layout.fillHeight: true
+		      Layout.preferredWidth: height
+		      mipmap: true
+		      source: "../../resources/images/avatar.jpg"
+		    }
+
 		    Button {
 		      text: qsTr("Logout")
 		      onClicked: auth_logic.sign_out()
