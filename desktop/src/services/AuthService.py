@@ -1,5 +1,6 @@
 import requests
 
+from desktop.src.models.user import User
 from desktop.src.settings import REGISTER_URL, LOGIN_URL, ME_URL, LOGOUT_URL
 
 
@@ -39,4 +40,4 @@ class AuthService:
         reply = requests.get(ME_URL, headers=headers)
 
         if reply.status_code == requests.codes.ok:
-            self.current_user = reply.json()
+            self.current_user = User(**reply.json())

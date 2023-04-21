@@ -37,7 +37,7 @@ class GameList(QAbstractListModel):
 
     @Slot()
     def load_library(self):
-        current_user_id = self._auth_service.current_user["id"]
+        current_user_id = self._auth_service.current_user.id
         headers = {"Authorization": self._auth_service.session_id}
 
         library_records = requests.get(LIBRARY_URL + f"?user_id={current_user_id}&include_games=true",

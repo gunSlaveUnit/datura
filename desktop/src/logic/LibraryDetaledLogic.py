@@ -113,7 +113,7 @@ class LibraryDetailedLogic(QObject):
     @Slot(int)
     def load(self, game_id: int):
         headers = {"Authorization": self._auth_service.session_id}
-        current_user_id = self._auth_service.current_user["id"]
+        current_user_id = self._auth_service.current_user.id
 
         reply = requests.get(LIBRARY_URL + f"?user_id={current_user_id}&game_id={game_id}", headers=headers)
         if reply.status_code == requests.codes.ok:

@@ -15,7 +15,7 @@ class CompanyService():
 
     def load_personal(self):
         headers = {"Authorization": self._auth_service.session_id}
-        params = {"owner_id": self._auth_service.current_user["id"]}
+        params = {"owner_id": self._auth_service.current_user.id}
         reply = requests.get(COMPANIES_URL, headers=headers, params=params)
         if reply.status_code == requests.codes.ok:
             self.company = reply.json()[0]
