@@ -223,16 +223,56 @@ Window {
 		      Layout.fillWidth: true
 		    }
 
-		    Image {
+		    Rectangle {
 		      Layout.fillHeight: true
-		      Layout.preferredWidth: height
-		      mipmap: true
-		      source: "../../resources/images/avatar.jpg"
-		    }
+		      Layout.preferredWidth: 150
+		      color: "lightgray"
 
-		    Button {
-		      text: qsTr("Logout")
-		      onClicked: auth_logic.sign_out()
+		      RowLayout {
+		        anchors.fill: parent
+
+		        Image {
+		          id: avatar
+				      Layout.preferredHeight: parent.height
+				      Layout.preferredWidth: height
+				      mipmap: true
+				      source: "../../resources/images/avatar.jpg"
+				    }
+
+				    Text {
+				      text: qsTr("gunSlaveUnit | 5.35$")
+				      color: "black"
+				    }
+			    }
+
+			    MouseArea {
+			      anchors.fill: parent
+			      hoverEnabled: true
+			      onEntered: parent.color = "gray"
+			      onExited: parent.color = "lightgray"
+			      onClicked: userProfileMenu.open()
+			    }
+
+			    Menu {
+			      id: userProfileMenu
+
+						MenuItem {
+			        text: qsTr("Profile")
+			      }
+
+						MenuItem {
+			        text: qsTr("Wallet")
+			      }
+
+						MenuItem {
+			        text: qsTr("Settings")
+			      }
+
+			      MenuItem {
+			        text: qsTr("Logout")
+			        onTriggered: auth_logic.sign_out()
+			      }
+			    }
 		    }
 			}
 
