@@ -6,4 +6,4 @@ from dataclasses import dataclass
 class Entity:
     id: int
     created_at: datetime.datetime
-    last_updated_at: datetime.datetime
+    last_updated_at: datetime.datetime | None
