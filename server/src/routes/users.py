@@ -22,8 +22,7 @@ async def me(current_user: User = Depends(get_current_user)):
 
 @router.get('/{user_id}/avatar/')
 async def download_avatar(user_id: int,
-                          db: Session = Depends(get_db),
-                          _: User = Depends(get_current_user)):
+                          db: Session = Depends(get_db)):
     avatar_filename = db.query(User).filter(User.id == user_id).one().avatar
     return FileResponse(AVATARS_PATH.joinpath(avatar_filename))
 
