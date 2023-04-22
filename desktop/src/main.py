@@ -21,6 +21,7 @@ if __name__ == '__main__':
     engine = QQmlApplicationEngine()
 
     auth_service = AuthService()
+    engine.rootContext().setContextProperty("auth_service", auth_service)
 
     auth_logic = AuthLogic(auth_service)
     engine.rootContext().setContextProperty("auth_logic", auth_logic)
