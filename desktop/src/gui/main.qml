@@ -197,18 +197,16 @@ Window {
         Button {
 		      text: qsTr("Store")
 		      onClicked: {
-		        navigation_logic.add(storeStackLayout.storeGamesIndex)
 		        store_game_list_model.load_store()
-		        storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+		        navigation_logic.add(storeStackLayout.storeGamesIndex)
 	        }
 		    }
 
 				Button {
 		      text: qsTr("Library")
 		      onClicked: {
-		        navigation_logic.add(storeStackLayout.libraryGamesIndex)
 		        library_game_list_model.load_library()
-		        storeStackLayout.currentIndex = storeStackLayout.libraryGamesIndex
+		        navigation_logic.add(storeStackLayout.libraryGamesIndex)
 	        }
 		    }
 
@@ -264,6 +262,11 @@ Window {
 			        text: qsTr("Wallet")
 			      }
 
+			      MenuItem {
+			        text: qsTr("Cart")
+			        onTriggered: navigation_logic.add(storeStackLayout.cartIndex)
+			      }
+
 						MenuItem {
 			        text: qsTr("Settings")
 			      }
@@ -285,7 +288,8 @@ Window {
 		    property int storeDetailedGameIndex: storeGamesIndex + 1
 		    property int libraryGamesIndex: storeDetailedGameIndex + 1
 		    property int libraryDetailedGameIndex: libraryGamesIndex + 1
-		    property int workshopRegisterCompanyInfoIndex: libraryDetailedGameIndex + 1
+		    property int cartIndex: libraryDetailedGameIndex + 1
+		    property int workshopRegisterCompanyInfoIndex: cartIndex + 1
         property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
         property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
         property int workshopAppControlIndex: workshopAppsListIndex + 1
@@ -527,6 +531,12 @@ Window {
 	        Button {
 	          text: library_detailed_logic.is_game_installed ? "Launch" : "Install"
 	          onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : installation_path_dialog.open()
+	        }
+	      }
+
+	      ColumnLayout {
+	        Button {
+	          text: qsTr("Pay")
 	        }
 	      }
 
