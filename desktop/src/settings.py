@@ -29,3 +29,5 @@ ME_URL = USERS_URL + "me/"
 COMPANIES_URL = SERVER_URL + 'companies/'
 
 LIBRARY_URL = SERVER_URL + 'library/'
+
+CART_URL = SERVER_URL + 'cart/'
