@@ -16,9 +16,15 @@ router = APIRouter(prefix=CART_ROUTER_PREFIX, tags=[Tags.CART])
 
 
 @router.get('/', response_model=List[CartJoinedSchema | CartDBSchema])
-async def every(db: Session = Depends(get_db),
+async def every(game_id: int | None = None,
+        db: Session = Depends(get_db),
                 current_user: User = Depends(get_current_user)) -> list[Type[Cart]]:
-    return db.query(Cart).filter(Cart.buyer_id == current_user.id).all()
+    records_query = db.query(Cart).filter(Cart.buyer_id == current_user.id)
+
+    if game_id:
+        records_query = records_query.filter(Cart.game_id == game_id)
+
+    return records_query.all()
 
 
 @router.post('/', response_model=CartJoinedSchema | CartDBSchema)
