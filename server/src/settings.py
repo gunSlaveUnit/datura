@@ -42,6 +42,7 @@ COMPANIES_ROUTER_PREFIX = '/companies'
 ASSETS_ROUTER_PREFIX = '/{game_id}/assets'
 BUILDS_ROUTER_PREFIX = '/builds'
 LIBRARY_ROUTER_PREFIX = '/library'
+CART_ROUTER_PREFIX = '/cart'
 
 
 # Tags
@@ -53,6 +54,7 @@ class Tags(str, Enum):
     COMPANIES = 'Companies'
     LIBRARY = 'Library'
     USERS = 'Users'
+    CART = 'Cart'
 
 
 tags_metadata = [
@@ -61,6 +63,7 @@ tags_metadata = [
     {'name': Tags.COMPANIES, 'description': 'Describes an API to manage companies'},
     {'name': Tags.LIBRARY, 'description': 'Describes an API to manage library records'},
     {'name': Tags.USERS, 'description': 'Describes an API to manage users'},
+    {'name': Tags.CART, 'description': 'Describes an API to manage cart records'},
 ]
 
 
