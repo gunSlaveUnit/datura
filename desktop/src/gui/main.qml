@@ -225,7 +225,7 @@ Window {
 
 		    Rectangle {
 		      Layout.fillHeight: true
-		      Layout.preferredWidth: 150
+		      Layout.preferredWidth: 100
 		      color: "lightgray"
 
 		      RowLayout {
@@ -236,11 +236,11 @@ Window {
 				      Layout.preferredHeight: parent.height
 				      Layout.preferredWidth: height
 				      mipmap: true
-				      source: "../../resources/images/avatar.jpg"
+				      source: `http://localhost:8000/users/${auth_service.current_user.id}/avatar/`
 				    }
 
 				    Text {
-				      text: qsTr("gunSlaveUnit | 5.35$")
+				      text: auth_service.current_user.displayed_name
 				      color: "black"
 				    }
 			    }
