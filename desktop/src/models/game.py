@@ -1,3 +1,5 @@
+import datetime
+import inspect
 from dataclasses import fields, dataclass
 from typing import Any
 
@@ -10,19 +12,36 @@ from desktop.src.services.CompanyService import CompanyService
 from desktop.src.settings import LIBRARY_URL, GAMES_URL
 
 
-@dataclass(slots=True)
 class Game(Entity):
-    title: str
-    release_date: int | None
-    developer: str
-    publisher: str
-    short_description: str
-    long_description: str
-    price: float
-    status_id: int
-    age_category_id: int
-    directory: str
-    company_id: int
+    def __init__(self,
+                 id: int = -1,
+                 created_at: datetime.datetime = -1,
+                 last_updated_at: datetime.datetime | None = None,
+                 title: str = '',
+                 release_date: int | None = None,
+                 developer: str = '',
+                 publisher: str = '',
+                 short_description: str = '',
+                 long_description: str = '',
+                 price: float = 0.0,
+                 status_id: int = -1,
+                 age_category_id: int = -1,
+                 directory: str = '',
+                 company_id: int = -1
+                 ):
+        super().__init__(id, created_at, last_updated_at)
+
+        self._title = title
+        self._release_date = release_date
+        self._developer = developer
+        self._publisher = publisher
+        self._short_description = short_description
+        self._long_description = long_description
+        self._price = price
+        self._status_id = status_id
+        self._age_category_id = age_category_id
+        self._directory = directory
+        self._company_id = company_id
 
 
 class GameList(QAbstractListModel):
@@ -79,8 +98,13 @@ class GameList(QAbstractListModel):
 
     def roleNames(self) -> dict[int, QByteArray]:
         d = {}
-        for i, field in enumerate(fields(Game)):
-            d[Qt.DisplayRole + i] = field.name.encode()
+
+        attributes = inspect.getmembers(Game, lambda a: not (inspect.isroutine(a)))
+        attributes = [a for a in attributes if not (a[0].startswith('__') and a[0].endswith('__'))]
+
+        for i, field in enumerate(attributes):
+            d[Qt.DisplayRole + i] = field[0].encode()
+
         return d
 
     def rowCount(self, index: QModelIndex = QModelIndex()) -> int:

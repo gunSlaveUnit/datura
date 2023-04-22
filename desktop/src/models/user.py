@@ -6,8 +6,6 @@ from desktop.src.models.entity import Entity
 
 
 class User(Entity):
-    loaded = Signal()
-
     def __init__(self,
                  id: int = -1,
                  created_at: datetime.datetime = -1,
