@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel
 
 from server.src.schemas.entity import EntityDBSchema
@@ -5,6 +7,17 @@ from server.src.schemas.entity import EntityDBSchema
 
 class GameApprovingSchema(BaseModel):
     is_approved: bool
+
+
+class GameFilterSchema(BaseModel):
+    title: str = None
+    start_date: int = None
+    end_date: int = None
+    start_price: float = None
+    end_price: float = None
+    tag_id: List[int] = None
+    status_id: List[int] = None
+    age_category_id: List[int] = None
 
 
 class GameCreateSchema(BaseModel):
