@@ -536,8 +536,29 @@ Window {
 	      }
 
 	      ColumnLayout {
-	        Button {
-	          text: qsTr("Pay")
+	        property int total: 0
+
+	        function updateTotal() {
+		        var sum = 0
+		        for (var i = 0; i < cart_game_list_model.count; i++) {
+	            if (cart_game_list_model.get(i).enabled) {
+                sum += cart_game_list_model.get(i).price
+	            }
+		        }
+		        total = sum
+			    }
+
+	        RowLayout {
+	          Layout.fillWidth: true
+
+	          Text {
+			        color: "white"
+			        text: "Total Price: " + total
+				    }
+
+            Button {
+		          text: qsTr("Pay")
+		        }
 	        }
 
 	        ListView {
@@ -551,6 +572,10 @@ Window {
 	              color: "white"
 	              font.underline: true
 
+	              onTextChanged: {
+	                updateTotalSum()
+		            }
+
 	              MouseArea {
 			            anchors.fill: parent
 			            cursorShape: Qt.PointingHandCursor
@@ -560,6 +585,10 @@ Window {
 			              store_detailed_logic.load(id)
 			            }
 			          }
+	            }
+
+	            CheckBox {
+	              checked: true
 	            }
 	          }
 		      }
