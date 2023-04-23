@@ -10,7 +10,7 @@ class Entity(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     created_at = Column(Integer, default=datetime.datetime.now().timestamp(), nullable=False)
-    last_updated_at = Column(Integer, onupdate=datetime.datetime.now().timestamp())
+    updated_at = Column(Integer, onupdate=datetime.datetime.now().timestamp())
 
     def dict(self) -> dict:
         """
