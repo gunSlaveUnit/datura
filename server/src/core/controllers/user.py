@@ -1,9 +1,12 @@
-from server.src.schemas.auth import SignUpSchema
+from server.src.schemas.auth import SignUpSchema, SignInSchema
 
 
 class UserController:
-    def __init__(self):
+    async def sign_up(self, user_data: SignUpSchema):
         pass
 
-    def sign_up(self, user_data: SignUpSchema):
+    async def sign_in(self, user_data: SignInSchema):
+        pass
+
+    async def sign_out(self, session: str):
         pass
