@@ -1,5 +1,6 @@
 from typing import Optional
 
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import Session, Query
 
 from server.src.core.models.user import User
@@ -23,3 +24,17 @@ class UserLogic:
         self.db.commit()
         self.db.refresh(item)
         return item
+
+    async def update(self, item_id: int, new_data: dict) -> User:
+        update_user_query = self.db.query(User).filter(User.id == item_id)
+
+        try:
+            updatable_user = update_user_query.one()
+        except NoResultFound:
+            raise ValueError(f"Item with {item_id} id not found")
+
+        update_user_query.update(new_data, synchronize_session=False)
+        self.db.commit()
+        self.db.refresh(updatable_user)
+
+        return updatable_user
