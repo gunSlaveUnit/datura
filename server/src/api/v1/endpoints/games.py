@@ -6,7 +6,8 @@ from server.src.schemas.game import GameFilterSchema
 router = APIRouter(prefix=GAMES_ROUTER_PREFIX, tags=[Tags.GAMES])
 
 
-@router.post('/')
+# TODO: permissions
+@router.get('/')
 async def items(game_filter: GameFilterSchema = Body(None)):
     if game_filter is None:
         game_filter = GameFilterSchema(status_id=[GameStatusType.PUBLISHED])
