@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Header, Depends
+from fastapi import HTTPException, Depends, Cookie
 from sqlalchemy.orm import Session
 from starlette import status
 
@@ -18,16 +18,16 @@ async def authenticate_user(account_name: str, password: str, db):
     return None
 
 
-async def get_current_user(authorization: str = Header(None),
+async def get_current_user(session: str = Cookie(None),
                            db: Session = Depends(get_db),
                            session_storage=Depends(get_session_storage)):
-    if authorization is None:
+    if session is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Session ID not provided"
         )
 
-    user_id = session_storage.get(authorization)
+    user_id = session_storage.get(session)
     if user_id is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
