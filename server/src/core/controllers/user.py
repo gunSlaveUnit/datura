@@ -83,6 +83,10 @@ class UserController:
         return response
 
     async def sign_out(self, session: str):
+        """
+        Deletes a user session.
+        """
+
         if session in self.session_storage:
             self.session_storage.delete(session)
 
