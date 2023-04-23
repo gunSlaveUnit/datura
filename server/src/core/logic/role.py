@@ -1,6 +1,6 @@
 from typing import Type, Any
 
-from sqlalchemy.orm import Session, Query
+from sqlalchemy.orm import Session
 
 from server.src.core.logic.logic import Logic
 from server.src.core.models.role import Role
