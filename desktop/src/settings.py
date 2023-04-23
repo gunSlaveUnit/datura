@@ -2,9 +2,13 @@ from pathlib import Path
 
 # TODO: rename URL URI URN, may be it will be better than ...URL_PART
 
+APP_ID = 'Rundsoft.foogie.desktop.2023.4.4-dev'
+
 # Paths
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+RESOURCES_DIR = BASE_DIR / 'resources'
+ICONS_DIR = RESOURCES_DIR / 'icons'
 SOURCES_DIR = BASE_DIR / 'src'
 LAYOUTS_DIR = SOURCES_DIR / 'gui'
 
