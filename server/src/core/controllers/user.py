@@ -83,4 +83,15 @@ class UserController:
         return response
 
     async def sign_out(self, session: str):
-        pass
+        if session in self.session_storage:
+            self.session_storage.delete(session)
+
+            response = JSONResponse({"detail": f"Session {session} was removed"})
+            response.delete_cookie('session')
+
+            return response
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={"detail": f"Session {session} not found"}
+            )
