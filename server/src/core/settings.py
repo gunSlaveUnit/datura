@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 from pathlib import Path
 
 from dotenv import dotenv_values
@@ -80,13 +80,13 @@ class RoleType(Enum):
     USER = "user"
 
 
-class GameStatusType(Enum):
-    NOT_SEND = 'Not send'
-    SEND = 'Send'
-    NOT_APPROVED = 'Not approved'
-    APPROVED = 'Approved'
-    NOT_PUBLISHED = 'Not published'
-    PUBLISHED = 'Published'
+class GameStatusType(int, Enum):
+    NOT_SEND = 0
+    SEND = auto()
+    NOT_APPROVED = auto()
+    APPROVED = auto()
+    NOT_PUBLISHED = auto()
+    PUBLISHED = auto()
 
 
 class AgeType(Enum):
