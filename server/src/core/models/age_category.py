@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Text, Enum
 
 from server.src.core.models.entity import Entity
-from server.src.settings import AgeType
+from server.src.core.settings import AgeType
 
 
 class AgeCategory(Entity):

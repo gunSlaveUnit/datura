@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from server.src.core.schemas.entity import EntityDBSchema
-from server.src.core.schemas.game import GameDBSchema
+from server.src.schemas.entity import EntityDBSchema
+from server.src.schemas.game import GameDBSchema
 
 
 class CartCreateSchema(BaseModel):

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Enum
 
 from server.src.core.models.entity import Entity
-from server.src.settings import RoleType
+from server.src.core.settings import RoleType
 
 
 class Role(Entity):

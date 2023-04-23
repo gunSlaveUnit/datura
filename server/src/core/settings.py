@@ -5,7 +5,7 @@ from dotenv import dotenv_values
 
 DEBUG = False
 
-BASE_PATH = Path(__file__).resolve().parent.parent
+BASE_PATH = Path(__file__).resolve().parent.parent.parent
 ENVS_PATH = BASE_PATH / 'envs'
 MEDIA_PATH = BASE_PATH.parent / 'media'
 AVATARS_PATH = MEDIA_PATH / 'avatars'

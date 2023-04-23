@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from starlette.responses import FileResponse
 
 from server.src.core.models import User
-from server.src.core.schemas.user import UserDBSchema
-from server.src.settings import Tags, AVATARS_PATH, DEFAULT_AVATAR_FILENAME
+from server.src.schemas import UserDBSchema
+from server.src.core.settings import Tags, AVATARS_PATH, DEFAULT_AVATAR_FILENAME
 from server.src.core.utils import get_current_user
 from server.src.core.utils import get_db
 from server.src.core.utils.io import remove, store

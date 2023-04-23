@@ -2,7 +2,7 @@ import redis as redis
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-from server.src.settings import CONNECTION_STRING, redis_config
+from server.src.core.settings import CONNECTION_STRING, redis_config
 
 engine = create_engine(CONNECTION_STRING)
 session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)

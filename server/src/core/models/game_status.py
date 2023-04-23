@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Enum
 
 from server.src.core.models.entity import Entity
-from server.src.settings import GameStatusType
+from server.src.core.settings import GameStatusType
 
 
 class GameStatus(Entity):

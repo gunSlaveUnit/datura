@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 
 from server.src.core.models.entity import Entity
-from server.src.settings import DEFAULT_AVATAR_FILENAME
+from server.src.core.settings import DEFAULT_AVATAR_FILENAME
 
 
 class User(Entity):

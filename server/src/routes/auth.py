@@ -7,9 +7,9 @@ from starlette import status
 from starlette.responses import JSONResponse
 
 from server.src.core.models.role import Role
-from server.src.core.schemas.auth import SignInSchema, SignUpSchema
+from server.src.schemas.auth import SignInSchema, SignUpSchema
 from server.src.core.models import User
-from server.src.settings import Tags, SESSION_TTL, RoleType
+from server.src.core.settings import Tags, SESSION_TTL, RoleType
 from server.src.core.utils import get_db, get_session_storage
 from server.src.core.utils import authenticate_user, get_current_user
 from server.src.core.utils import get_password_hash
