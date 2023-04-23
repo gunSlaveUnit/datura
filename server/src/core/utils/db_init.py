@@ -1,11 +1,11 @@
-from server.src.models.age_category import AgeCategory
-from server.src.models.game_status import GameStatus
-from server.src.models.platform import Platform
-from server.src.models.role import Role
-from server.src.models.user import User
+from server.src.core.models.age_category import AgeCategory
+from server.src.core.models.game_status import GameStatus
+from server.src.core.models.platform import Platform
+from server.src.core.models.role import Role
+from server.src.core.models.user import User
 from server.src.settings import admin_config, RoleType, GameStatusType, AgeType, PLATFORMS
-from server.src.utils.crypt import get_password_hash
-from server.src.utils.db import get_db
+from server.src.core.utils.crypt import get_password_hash
+from server.src.core.utils.db import get_db
 
 
 def init_db():

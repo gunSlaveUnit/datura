@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
 
-from server.src.models.entity import Entity
+from server.src.core.models.entity import Entity
 
 
 class Company(Entity):
@@ -21,6 +20,3 @@ class Company(Entity):
     is_approved = Column(Boolean, nullable=False, default=False)
 
     owner_id = Column(Integer, ForeignKey("users.id"), index=True, nullable=False)
-    master = relationship("User", uselist=False, back_populates="company")
-
-    games = relationship("Game", back_populates="company")

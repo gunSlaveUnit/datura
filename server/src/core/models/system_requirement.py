@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Text, Integer, ForeignKey
 
-from server.src.models.entity import Entity
+from server.src.core.models.entity import Entity
 
 
 class SystemRequirement(Entity):

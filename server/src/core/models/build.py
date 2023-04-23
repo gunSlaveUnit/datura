@@ -1,9 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, String
-from sqlalchemy.orm import relationship
 
-from server.src.models.entity import Entity
-from server.src.models.platform import Platform
-from server.src.models.system_requirement import SystemRequirement
+from server.src.core.models.entity import Entity
 
 
 class Build(Entity):
@@ -14,9 +11,4 @@ class Build(Entity):
     params = Column(String)
 
     game_id = Column(Integer, ForeignKey("games.id", ondelete="CASCADE"), index=True, nullable=False)
-    game = relationship("Game", back_populates="builds")
-
     platform_id = Column(Integer, ForeignKey("platforms.id", ondelete="RESTRICT"), index=True, nullable=False)
-    platform = relationship("Platform", backref="platforms")
-
-    requirements = relationship("SystemRequirement", backref="system_requirements")

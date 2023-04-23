@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from starlette.responses import JSONResponse
 
+from server.src.core.utils.db import Base, engine
+from server.src.core.utils.db_init import init_db
 from server.src.settings import DEBUG, Tags
-from server.src.utils.db import Base, engine
-from server.src.utils.db_init import init_db
 
 app = FastAPI(debug=DEBUG)
 

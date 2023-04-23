@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends, UploadFile
 from sqlalchemy.orm import Session
 from starlette.responses import FileResponse
 
-from server.src.models.user import User
-from server.src.schemas.user import UserDBSchema
+from server.src.core.models import User
+from server.src.core.schemas.user import UserDBSchema
 from server.src.settings import Tags, AVATARS_PATH, DEFAULT_AVATAR_FILENAME
-from server.src.utils.auth import get_current_user
-from server.src.utils.db import get_db
-from server.src.utils.io import remove, store
+from server.src.core.utils import get_current_user
+from server.src.core.utils import get_db
+from server.src.core.utils.io import remove, store
 
 router = APIRouter(prefix='/users', tags=[Tags.USERS])
 

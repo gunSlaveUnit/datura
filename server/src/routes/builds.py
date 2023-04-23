@@ -1,21 +1,20 @@
-import gzip
 import uuid
 from pathlib import Path
-from typing import List, BinaryIO
+from typing import List
 
 from fastapi import APIRouter, UploadFile, Depends
 from sqlalchemy.orm import Session, joinedload
 from starlette.responses import StreamingResponse
 
-from server.src.models.build import Build
-from server.src.models.game import Game
-from server.src.models.platform import Platform
-from server.src.models.user import User
-from server.src.schemas.build import BuildDBSchema, BuildCreateSchema
+from server.src.core.models import Build
+from server.src.core.models import Game
+from server.src.core.models import Platform
+from server.src.core.models import User
+from server.src.core.schemas.build import BuildDBSchema, BuildCreateSchema
 from server.src.settings import BUILDS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_BUILDS_DIR
-from server.src.utils.auth import get_current_user
-from server.src.utils.db import get_db
-from server.src.utils.io import MEDIA_TYPE, read_compressed_chunks, CHUNK_SIZE, store
+from server.src.core.utils import get_current_user
+from server.src.core.utils import get_db
+from server.src.core.utils.io import MEDIA_TYPE, read_compressed_chunks, CHUNK_SIZE, store
 
 router = APIRouter(prefix=BUILDS_ROUTER_PREFIX)
 

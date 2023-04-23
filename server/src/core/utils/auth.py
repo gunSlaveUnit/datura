@@ -2,9 +2,9 @@ from fastapi import HTTPException, Header, Depends
 from sqlalchemy.orm import Session
 from starlette import status
 
-from server.src.models.user import User
-from server.src.utils.crypt import crypt_context
-from server.src.utils.db import get_db, get_session_storage
+from server.src.core.models.user import User
+from server.src.core.utils.crypt import crypt_context
+from server.src.core.utils.db import get_db, get_session_storage
 
 
 async def verify_password(plain_password, hashed_password):

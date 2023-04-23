@@ -6,13 +6,13 @@ from sqlalchemy.orm import Session
 from starlette import status
 from starlette.responses import JSONResponse
 
-from server.src.models.role import Role
-from server.src.schemas.auth import SignInSchema, SignUpSchema
-from server.src.models.user import User
+from server.src.core.models.role import Role
+from server.src.core.schemas.auth import SignInSchema, SignUpSchema
+from server.src.core.models import User
 from server.src.settings import Tags, SESSION_TTL, RoleType
-from server.src.utils.db import get_db, get_session_storage
-from server.src.utils.auth import authenticate_user, get_current_user
-from server.src.utils.crypt import get_password_hash
+from server.src.core.utils import get_db, get_session_storage
+from server.src.core.utils import authenticate_user, get_current_user
+from server.src.core.utils import get_password_hash
 
 router = APIRouter(prefix='/auth', tags=[Tags.AUTH])
 

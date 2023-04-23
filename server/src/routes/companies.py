@@ -1,16 +1,16 @@
-from typing import List, Any, Type
+from typing import List, Type
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
 from starlette.responses import Response
 
-from server.src.models.company import Company
-from server.src.models.user import User
-from server.src.schemas.company import CompanyCreateSchema, CompanyDBSchema, ApprovingSchema
+from server.src.core.models.company import Company
+from server.src.core.models import User
+from server.src.core.schemas.company import CompanyCreateSchema, CompanyDBSchema, ApprovingSchema
 from server.src.settings import COMPANIES_ROUTER_PREFIX, Tags
-from server.src.utils.auth import get_current_user
-from server.src.utils.db import get_db
+from server.src.core.utils import get_current_user
+from server.src.core.utils import get_db
 
 router = APIRouter(prefix=COMPANIES_ROUTER_PREFIX, tags=[Tags.COMPANIES])
 

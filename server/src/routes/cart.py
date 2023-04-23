@@ -4,13 +4,13 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse
 
-from server.src.models.cart import Cart
-from server.src.models.library import Library
-from server.src.models.user import User
-from server.src.schemas.cart import CartDBSchema, CartJoinedSchema, CartCreateSchema
+from server.src.core.models.cart import Cart
+from server.src.core.models import Library
+from server.src.core.models import User
+from server.src.core.schemas.cart import CartDBSchema, CartJoinedSchema, CartCreateSchema
 from server.src.settings import CART_ROUTER_PREFIX, Tags
-from server.src.utils.auth import get_current_user
-from server.src.utils.db import get_db
+from server.src.core.utils import get_current_user
+from server.src.core.utils import get_db
 
 router = APIRouter(prefix=CART_ROUTER_PREFIX, tags=[Tags.CART])
 
