@@ -536,15 +536,15 @@ Window {
 	      }
 
 	      ColumnLayout {
-	        property int total: 0
+	        id: cart
+
+	        property double total: 0.0
 
 	        function updateTotal() {
 		        var sum = 0
-		        for (var i = 0; i < cart_game_list_model.count; i++) {
-	            if (cart_game_list_model.get(i).enabled) {
-                sum += cart_game_list_model.get(i).price
-	            }
-		        }
+		        for (var i = 0; i < cart_game_list_model.rowCount(); i++) {
+                total += cart_game_list_model.get(i).price
+            }
 		        total = sum
 			    }
 
@@ -553,7 +553,7 @@ Window {
 
 	          Text {
 			        color: "white"
-			        text: "Total Price: " + total
+			        text: "Total Price: " + cart.total
 				    }
 
             Button {
@@ -572,10 +572,6 @@ Window {
 	              color: "white"
 	              font.underline: true
 
-	              onTextChanged: {
-	                updateTotalSum()
-		            }
-
 	              MouseArea {
 			            anchors.fill: parent
 			            cursorShape: Qt.PointingHandCursor
@@ -589,6 +585,7 @@ Window {
 
 	            CheckBox {
 	              checked: true
+	              onCheckedChanged: cart.updateTotal()
 	            }
 	          }
 		      }
