@@ -1,6 +1,7 @@
 import sys
+import ctypes
 
-from PySide6.QtGui import QGuiApplication, QColor
+from PySide6.QtGui import QGuiApplication, QColor, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 
 from desktop.src.logic.AppLogic import AppLogic
@@ -10,13 +11,18 @@ from desktop.src.logic.NavigationLogic import NavigationLogic
 from desktop.src.logic.StoreDetaledLogic import StoreDetailedLogic
 from desktop.src.models.game import GameList
 from desktop.src.services.CompanyService import CompanyService
-from desktop.src.settings import LAYOUTS_DIR
+from desktop.src.settings import LAYOUTS_DIR, APP_ID, ICONS_DIR
 from desktop.src.logic.AuthLogic import AuthLogic
 from services.AuthService import AuthService
 
 if __name__ == '__main__':
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(APP_ID)
+
     app = QGuiApplication(sys.argv)
     app.setPalette(QColor("black"))
+
+    icon_file_path = ICONS_DIR / "icon.png"
+    app.setWindowIcon(QIcon(str(icon_file_path)))
 
     engine = QQmlApplicationEngine()
 
