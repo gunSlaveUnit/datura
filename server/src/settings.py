@@ -33,7 +33,7 @@ else:
 
 # Versions
 
-API_VERSION = '0.1.0'
+API_VERSION_1_PREFIX = '/v1'
 SESSION_TTL = 3 * 24 * 60 * 60
 
 # Strings
@@ -50,6 +50,7 @@ CART_ROUTER_PREFIX = '/cart'
 
 class Tags(str, Enum):
     HOME = 'Home'
+    V1 = 'V1'
     AUTH = 'Auth'
     GAMES = 'Games'
     COMPANIES = 'Companies'
@@ -60,6 +61,7 @@ class Tags(str, Enum):
 
 tags_metadata = [
     {'name': Tags.HOME, 'description': 'General information describing the API'},
+    {'name': Tags.V1, 'description': 'API version 1'},
     {'name': Tags.AUTH, 'description': 'Describes an authentication API'},
     {'name': Tags.GAMES, 'description': 'Describes an API to manage games'},
     {'name': Tags.COMPANIES, 'description': 'Describes an API to manage companies'},
