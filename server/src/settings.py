@@ -49,6 +49,7 @@ CART_ROUTER_PREFIX = '/cart'
 
 
 class Tags(str, Enum):
+    HOME = 'Home'
     AUTH = 'Auth'
     GAMES = 'Games'
     COMPANIES = 'Companies'
@@ -58,6 +59,7 @@ class Tags(str, Enum):
 
 
 tags_metadata = [
+    {'name': Tags.HOME, 'description': 'General information describing the API'},
     {'name': Tags.AUTH, 'description': 'Describes an authentication API'},
     {'name': Tags.GAMES, 'description': 'Describes an API to manage games'},
     {'name': Tags.COMPANIES, 'description': 'Describes an API to manage companies'},
