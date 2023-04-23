@@ -36,11 +36,11 @@ class Logic(ABC):
         item_query = self.db.query(self.entity).filter(self.entity.id == item_id)
 
         try:
-            updatable_item = item_query.one()
+            item = item_query.one()
         except NoResultFound:
             raise ValueError(f"Item with {item_id} id not found")
 
-        return updatable_item
+        return item
 
     async def create(self, entity: Entity) -> Entity:
         """Allows to create a new object
