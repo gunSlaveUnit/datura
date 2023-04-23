@@ -264,7 +264,10 @@ Window {
 
 			      MenuItem {
 			        text: qsTr("Cart")
-			        onTriggered: navigation_logic.add(storeStackLayout.cartIndex)
+			        onTriggered: {
+			          cart_game_list_model.load_cart()
+			          navigation_logic.add(storeStackLayout.cartIndex)
+		          }
 			      }
 
 						MenuItem {
@@ -381,7 +384,6 @@ Window {
 	            onClicked: {
 	              navigation_logic.add(storeStackLayout.storeDetailedGameIndex)
 	              store_detailed_logic.load(id)
-	              storeStackLayout.currentIndex = storeStackLayout.storeDetailedGameIndex
 	            }
 	          }
 	        }
@@ -495,7 +497,6 @@ Window {
 		            onClicked: {
 		              navigation_logic.add(storeStackLayout.libraryDetailedGameIndex)
 		              library_detailed_logic.load(id)
-		              storeStackLayout.currentIndex = storeStackLayout.libraryDetailedGameIndex
 		            }
 		          }
             }
@@ -538,6 +539,30 @@ Window {
 	        Button {
 	          text: qsTr("Pay")
 	        }
+
+	        ListView {
+		        Layout.fillHeight: true
+
+		        model: cart_game_list_model
+
+	          delegate: RowLayout {
+	            Text {
+	              text: title
+	              color: "white"
+	              font.underline: true
+
+	              MouseArea {
+			            anchors.fill: parent
+			            cursorShape: Qt.PointingHandCursor
+			            hoverEnabled: true
+			            onClicked: {
+			              navigation_logic.add(storeStackLayout.storeDetailedGameIndex)
+			              store_detailed_logic.load(id)
+			            }
+			          }
+	            }
+	          }
+		      }
 	      }
 
 	      ColumnLayout {
