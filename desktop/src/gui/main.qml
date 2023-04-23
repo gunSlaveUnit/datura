@@ -10,7 +10,7 @@ Window {
   height: 500
   visible: true
   title: qsTr("foggie")
-  color: "#222A36"
+  color: "#212834"
 
   property int defaultMargin: 8
   property int textFieldWidth: 240
