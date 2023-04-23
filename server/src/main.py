@@ -4,8 +4,11 @@ from starlette.responses import JSONResponse
 from server.src.core.utils.db import Base, engine
 from server.src.core.utils.db_init import init_db
 from server.src.settings import DEBUG, Tags
+from server.src.api.v1.api import router as api_v1_router
 
 app = FastAPI(debug=DEBUG)
+
+app.include_router(api_v1_router)
 
 
 @app.on_event("startup")
