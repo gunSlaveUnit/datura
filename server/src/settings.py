@@ -37,6 +37,7 @@ API_VERSION_1_PREFIX = '/v1'
 SESSION_TTL = 3 * 24 * 60 * 60
 
 # Strings
+AUTH_ROUTER_PREFIX = '/auth'
 GAMES_ROUTER_PREFIX = '/games'
 COMPANIES_ROUTER_PREFIX = '/companies'
 ASSETS_ROUTER_PREFIX = '/{game_id}/assets'
