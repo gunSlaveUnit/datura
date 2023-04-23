@@ -15,6 +15,9 @@ class UserLogic:
     async def item_by_email(self, email: str) -> Optional[User]:
         return self.db.query(User).filter(User.email == email).first()
 
+    async def item_by_account_name(self, email: str) -> Optional[User]:
+        return self.db.query(User).filter(User.account_name == email).first()
+
     async def create(self, item: User) -> User:
         self.db.add(item)
         self.db.commit()
