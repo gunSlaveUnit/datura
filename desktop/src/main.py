@@ -54,6 +54,9 @@ if __name__ == '__main__':
     own_releases_game_list_model = GameList(auth_service, company_service)
     engine.rootContext().setContextProperty("own_releases_game_list_model", own_releases_game_list_model)
 
+    cart_game_list_model = GameList(auth_service, company_service)
+    engine.rootContext().setContextProperty("cart_game_list_model", cart_game_list_model)
+
     navigation_logic = NavigationLogic()
     engine.rootContext().setContextProperty("navigation_logic", navigation_logic)
 
