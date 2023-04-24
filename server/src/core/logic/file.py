@@ -13,3 +13,16 @@ class FileLogic:
             headers={"Content-Disposition": f"filename={filename}"},
             media_type=media_type
         )
+
+    @staticmethod
+    async def stream(directory: Path, filename: str, media_type: str, compress=False):
+        filepath = directory.joinpath(filename)
+
+        handler = read_compressed_chunks(filepath, CHUNK_SIZE) if compress else read_uncompressed_chunks(filepath,
+                                                                                                         CHUNK_SIZE)
+
+        return StreamingResponse(
+            handler,
+            headers={"Content-Disposition": f"filename={filename}"},
+            media_type=media_type
+        )
