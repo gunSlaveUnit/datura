@@ -6,7 +6,8 @@ from server.src.core.controllers.game import GameController
 from server.src.core.models.user import User
 from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX, GameStatusType
 from server.src.core.utils.auth import get_current_user
-from server.src.schemas.game import GameFilterSchema, GameCreateSchema, GameApprovingSchema, GameSendingSchema
+from server.src.schemas.game import GameFilterSchema, GameCreateSchema, GameApprovingSchema, GameSendingSchema, \
+    GamePublishingSchema
 
 router = APIRouter(prefix=GAMES_ROUTER_PREFIX, tags=[Tags.GAMES])
 
@@ -40,8 +41,22 @@ async def verify(game_id: int,
 async def approve(game_id: int,
                   approving: GameApprovingSchema,
                   game_controller: GameController = Depends(GameController)) -> Response:
-    """If it denies, the game becomes unpublished and not sent for verification."""
+    """If it denies, the game becomes not sent for verification."""
 
     await game_controller.manage_approving(game_id, approving)
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.patch('/{game_id}/publish/')
+async def publish(game_id: int,
+                  publishing: GamePublishingSchema,
+                  game_controller: GameController = Depends(GameController)) -> Response:
+    """
+    Publishes the game.
+    After that, it is available for downloading.
+    """
+
+    await game_controller.manage_publishing(game_id, publishing)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)

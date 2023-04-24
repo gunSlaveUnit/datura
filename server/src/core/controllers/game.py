@@ -10,7 +10,7 @@ from server.src.core.models.game import Game
 from server.src.core.models.user import User
 from server.src.core.settings import GAMES_ASSETS_PATH, GameStatusType
 from server.src.core.utils.db import get_db
-from server.src.schemas.game import GameCreateSchema, GameFilterSchema, GameApprovingSchema
+from server.src.schemas.game import GameCreateSchema, GameFilterSchema, GameApprovingSchema, GamePublishingSchema
 
 
 class GameController:
@@ -88,3 +88,26 @@ class GameController:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Game with this id not found"
             )
+
+    async def manage_publishing(self, game_id: int, publishing: GamePublishingSchema):
+        try:
+            game = await self.game_logic.item_by_id(game_id)
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Game with this id not found"
+            )
+
+        not_published_status = await self.game_status_logic.item_by_title(GameStatusType.NOT_PUBLISHED)
+        if game.status_id != not_published_status.id and publishing.is_published:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="The game cannot be published because it was not previously published or was not previously "
+                       "submitted for review"
+            )
+
+        new_game_status = await self.game_status_logic.item_by_title(
+            GameStatusType.PUBLISHED if publishing.is_published else GameStatusType.NOT_PUBLISHED
+        )
+
+        await self.game_logic.update(game_id, {"status_id": new_game_status.id})
