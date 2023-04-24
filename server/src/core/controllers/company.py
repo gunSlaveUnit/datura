@@ -37,10 +37,10 @@ class CompanyController:
 
         return await self.company_logic.create(company)
 
-    def manage_approving(self, company_id: int, approving: ApprovingSchema):
+    async def manage_approving(self, company_id: int, approving: ApprovingSchema):
         company_owner = await self.user_logic.item_by_company(company_id)
 
         if not approving.is_approved:
             self.game_logic.items().filter(Game.owner_id == company_owner).update({"status_id": GameStatusType.NOT_SEND})
 
-        self.company_logic.update(company_id, {"is_approved": approving.is_approved})
+        await self.company_logic.update(company_id, {"is_approved": approving.is_approved})
