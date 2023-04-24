@@ -1,4 +1,6 @@
 from fastapi import APIRouter, Depends
+from starlette import status
+from starlette.responses import Response
 
 from server.src.core.controllers.company import CompanyController
 from server.src.core.models.user import User
@@ -30,4 +32,6 @@ async def approve(company_id: int,
     unconfirmed and are not shown in the store.
     """
 
-    return await company_controller.manage_approving(company_id, approving)
+    await company_controller.manage_approving(company_id, approving)
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
