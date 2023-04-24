@@ -63,6 +63,19 @@ class GameController:
 
         return await self.game_logic.create(game)
 
+    async def manage_verification(self, game_id, sending):
+        new_game_status = await self.game_status_logic.item_by_title(
+            GameStatusType.SEND if sending.is_send else GameStatusType.NOT_SEND
+        )
+
+        try:
+            await self.game_logic.update(game_id, {"status_id": new_game_status.id})
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Game with this id not found"
+            )
+
     async def manage_approving(self, game_id: int, approving: GameApprovingSchema):
         new_game_status = await self.game_status_logic.item_by_title(
             GameStatusType.APPROVED if approving.is_approved else GameStatusType.NOT_APPROVED
