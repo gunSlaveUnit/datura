@@ -15,6 +15,3 @@ class UserLogic(Logic):
 
     async def item_by_account_name(self, email: str) -> Optional[User]:
         return self.db.query(User).filter(User.account_name == email).first()
-
-    async def item_by_company(self, company_id: int) -> Optional[User]:
-        return self.db.query(User).filter(self.entity.id == company_id).first()
