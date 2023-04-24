@@ -4,12 +4,14 @@ from starlette.responses import Response
 
 from server.src.core.controllers.game import GameController
 from server.src.core.models.user import User
-from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX, GameStatusType
+from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX
 from server.src.core.utils.auth import get_current_user
 from server.src.schemas.game import GameFilterSchema, GameCreateSchema, GameApprovingSchema, GameSendingSchema, \
     GamePublishingSchema
+from server.src.api.v1.endpoints.assets import router as assets_router
 
 router = APIRouter(prefix=GAMES_ROUTER_PREFIX, tags=[Tags.GAMES])
+router.include_router(assets_router)
 
 
 # TODO: permissions
