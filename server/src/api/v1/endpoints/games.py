@@ -27,8 +27,8 @@ async def create(new_game_data: GameCreateSchema,
 
 @router.patch('/{game_id}/verify/')
 async def verify(game_id: int,
-                  sending: GameSendingSchema,
-                  game_controller: GameController = Depends(GameController)) -> Response:
+                 sending: GameSendingSchema,
+                 game_controller: GameController = Depends(GameController)) -> Response:
     """Sends a game for verification."""
 
     await game_controller.manage_verification(game_id, sending)

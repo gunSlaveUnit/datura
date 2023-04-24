@@ -78,7 +78,7 @@ class GameController:
 
     async def manage_approving(self, game_id: int, approving: GameApprovingSchema):
         new_game_status = await self.game_status_logic.item_by_title(
-            GameStatusType.APPROVED if approving.is_approved else GameStatusType.NOT_APPROVED
+            GameStatusType.NOT_PUBLISHED if approving.is_approved else GameStatusType.NOT_SEND
         )
 
         try:

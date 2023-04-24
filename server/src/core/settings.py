@@ -83,8 +83,6 @@ class RoleType(Enum):
 class GameStatusType(str, Enum):
     NOT_SEND = "Not send"
     SEND = "Send"
-    NOT_APPROVED = "Not approved"
-    APPROVED = "Approved"
     NOT_PUBLISHED = "Not published"
     PUBLISHED = "Published"
 
