@@ -25,7 +25,7 @@ class AssetsController:
 
         files = list(searching_directory.glob('*'))
 
-        if len(files) != 1:
+        if files and len(files) != 1:
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="Multiple files found but one is required"
@@ -37,4 +37,4 @@ class AssetsController:
                 detail="File not found"
             )
 
-        return FileLogic.file(searching_directory, files[0].name, "image/webp")
+        return await FileLogic.file(searching_directory, files[0].name, "image/webp")
