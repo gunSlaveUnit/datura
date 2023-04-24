@@ -1,6 +1,8 @@
 from typing import List
 
 from fastapi import APIRouter, UploadFile, Depends
+from starlette import status
+from starlette.responses import Response
 
 from server.src.core.controllers.assets import AssetsController
 from server.src.core.settings import ASSETS_ROUTER_PREFIX, GAMES_ASSETS_HEADER_DIR
@@ -17,13 +19,17 @@ async def download_header(game_id: int,
 
 
 @router.post('/header/')
-async def upload_header(file: UploadFile):
+async def upload_header(game_id: int,
+                        file: UploadFile,
+                        assets_controller: AssetsController = Depends(AssetsController)):
     """Uploads a header game section file to the server.
     If exists, will be overwritten.
     Associated game will become unpublished.
     """
 
-    pass
+    await assets_controller.upload_header(game_id, file)
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.get('/capsule/')

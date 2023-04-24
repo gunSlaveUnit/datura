@@ -1,3 +1,6 @@
+import shutil
+from pathlib import Path
+
 from fastapi import Depends, HTTPException, UploadFile
 from starlette import status
 
@@ -38,3 +41,17 @@ class AssetsController:
             )
 
         return await FileLogic.file(searching_directory, files[0].name, "image/webp")
+
+    async def upload_header(self, game_id: int, file: UploadFile):
+        try:
+            game = await self.game_logic.item_by_id(game_id)
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Game with this id not found"
+            )
+
+        store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_HEADER_DIR)
+        await FileLogic.clear(store_files_directory)
+
+        return await FileLogic.save(store_files_directory, [file])
