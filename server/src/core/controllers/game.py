@@ -10,7 +10,7 @@ from server.src.core.models.game import Game
 from server.src.core.models.user import User
 from server.src.core.settings import GAMES_ASSETS_PATH, GameStatusType
 from server.src.core.utils.db import get_db
-from server.src.schemas.game import GameCreateSchema, GameFilterSchema
+from server.src.schemas.game import GameCreateSchema, GameFilterSchema, GameApprovingSchema
 
 
 class GameController:
@@ -62,3 +62,16 @@ class GameController:
         game.directory = new_directory_uuid
 
         return await self.game_logic.create(game)
+
+    async def manage_approving(self, game_id: int, approving: GameApprovingSchema):
+        new_game_status = await self.game_status_logic.item_by_title(
+            GameStatusType.APPROVED if approving.is_approved else GameStatusType.NOT_APPROVED
+        )
+
+        try:
+            await self.game_logic.update(game_id, {"status_id": new_game_status.id})
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Game with this id not found"
+            )
