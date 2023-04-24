@@ -1,37 +1,9 @@
 from pathlib import Path
 
-# TODO: rename URL URI URN, may be it will be better than ...URL_PART
-
 APP_ID = 'Rundsoft.foogie.desktop.2023.4.4-dev'
-
-# Paths
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 RESOURCES_DIR = BASE_DIR / 'resources'
 ICONS_DIR = RESOURCES_DIR / 'icons'
 SOURCES_DIR = BASE_DIR / 'src'
 LAYOUTS_DIR = SOURCES_DIR / 'gui'
-
-# URLs
-SERVER_URL = "http://127.0.0.1:8000/"
-
-# Auth
-AUTH_URL = SERVER_URL + "auth/"
-REGISTER_URL = AUTH_URL + "sign-up/"
-LOGIN_URL = AUTH_URL + "sign-in/"
-LOGOUT_URL = AUTH_URL + "sign-out/"
-
-
-# Entities
-GAMES_URL = SERVER_URL + 'games/'
-ASSETS_URL_PART = 'assets/'
-BUILDS_URL_PART = 'builds/'
-
-USERS_URL = SERVER_URL + 'users/'
-ME_URL = USERS_URL + "me/"
-
-COMPANIES_URL = SERVER_URL + 'companies/'
-
-LIBRARY_URL = SERVER_URL + 'library/'
-
-CART_URL = SERVER_URL + 'cart/'
