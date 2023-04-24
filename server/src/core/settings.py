@@ -80,13 +80,13 @@ class RoleType(Enum):
     USER = "user"
 
 
-class GameStatusType(int, Enum):
-    NOT_SEND = 0
-    SEND = auto()
-    NOT_APPROVED = auto()
-    APPROVED = auto()
-    NOT_PUBLISHED = auto()
-    PUBLISHED = auto()
+class GameStatusType(str, Enum):
+    NOT_SEND = "Not send"
+    SEND = "Send"
+    NOT_APPROVED = "Not approved"
+    APPROVED = "Approved"
+    NOT_PUBLISHED = "Not published"
+    PUBLISHED = "Published"
 
 
 class AgeType(Enum):
