@@ -8,7 +8,8 @@ from server.src.core.logic.game import GameLogic
 from server.src.core.logic.game_status import GameStatusLogic
 from server.src.core.models.game import Game
 from server.src.core.models.user import User
-from server.src.core.settings import GAMES_ASSETS_PATH, GameStatusType
+from server.src.core.settings import GAMES_ASSETS_PATH, GameStatusType, GAMES_ASSETS_CAPSULE_DIR, \
+    GAMES_ASSETS_SCREENSHOTS_DIR, GAMES_ASSETS_BUILDS_DIR, GAMES_ASSETS_HEADER_DIR, GAMES_ASSETS_TRAILERS_DIR
 from server.src.core.utils.db import get_db
 from server.src.schemas.game import GameCreateSchema, GameFilterSchema, GameApprovingSchema, GamePublishingSchema
 
@@ -59,6 +60,11 @@ class GameController:
         new_directory_uuid = str(uuid.uuid4())
         assets_directory = GAMES_ASSETS_PATH.joinpath(new_directory_uuid)
         assets_directory.mkdir(parents=True)
+        assets_directory.joinpath(GAMES_ASSETS_HEADER_DIR).mkdir()
+        assets_directory.joinpath(GAMES_ASSETS_CAPSULE_DIR).mkdir()
+        assets_directory.joinpath(GAMES_ASSETS_TRAILERS_DIR).mkdir()
+        assets_directory.joinpath(GAMES_ASSETS_SCREENSHOTS_DIR).mkdir()
+        assets_directory.joinpath(GAMES_ASSETS_BUILDS_DIR).mkdir()
         game.directory = new_directory_uuid
 
         return await self.game_logic.create(game)
