@@ -9,6 +9,14 @@ class GameApprovingSchema(BaseModel):
     is_approved: bool
 
 
+class GameSendingSchema(BaseModel):
+    is_send: bool
+
+
+class GamePublishingSchema(BaseModel):
+    is_published: bool
+
+
 class GameFilterSchema(BaseModel):
     title: str = None
     start_date: int = None
