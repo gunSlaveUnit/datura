@@ -11,11 +11,9 @@ router = APIRouter(prefix=GAMES_ROUTER_PREFIX, tags=[Tags.GAMES])
 
 # TODO: permissions
 @router.get('/')
-async def items(game_filter: GameFilterSchema = Body(None)):
-    if game_filter is None:
-        game_filter = GameFilterSchema(status_id=[GameStatusType.PUBLISHED])
-
-    return game_filter
+async def items(game_filter: GameFilterSchema = Body(None),
+                game_controller: GameController = Depends(GameController)):
+    return await game_controller.items(game_filter)
 
 
 @router.post('/')
