@@ -10,7 +10,7 @@ from server.src.core.models.game import Game
 from server.src.core.models.user import User
 from server.src.core.settings import GAMES_ASSETS_PATH, GameStatusType
 from server.src.core.utils.db import get_db
-from server.src.schemas.game import GameCreateSchema
+from server.src.schemas.game import GameCreateSchema, GameFilterSchema
 
 
 class GameController:
@@ -20,8 +20,19 @@ class GameController:
         self.company_logic = CompanyLogic(db)
         self.game_status_logic = GameStatusLogic(db)
 
-    async def items(self):
+    async def items(self, game_filter: GameFilterSchema):
+        published_status = await self.game_status_logic.item_by_title(GameStatusType.PUBLISHED)
+
+        if game_filter is None:
+            game_filter = GameFilterSchema(status_id=[published_status.id])
+
+        if game_filter.status_id is None:
+            game_filter.status_id = [published_status.id]
+
         items = await self.game_logic.items()
+
+        items = items.filter(Game.status_id.in_(game_filter.status_id))
+
         return items.all()
 
     async def create(self, game_data: GameCreateSchema, current_user: User):
