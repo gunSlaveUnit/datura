@@ -16,7 +16,8 @@ from desktop.src.logic.AuthLogic import AuthLogic
 from services.AuthService import AuthService
 
 if __name__ == '__main__':
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(APP_ID)
+    if sys.platform == 'win32':
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(APP_ID)
 
     app = QGuiApplication(sys.argv)
     app.setPalette(QColor("black"))
