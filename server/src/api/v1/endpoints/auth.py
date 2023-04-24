@@ -32,7 +32,7 @@ async def sign_up(registration_data: SignUpSchema,
     if potentially_existing_user:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail={"detail": "User with the same email address or account name already exists"}
+            detail="User with the same email address or account name already exists"
         )
 
     default_user_role = db.query(Role).filter(Role.title == RoleType.USER).one()
@@ -66,7 +66,7 @@ async def sign_in(login_data: SignInSchema,
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail={"detail": "Incorrect account name or password"}
+            detail="Incorrect account name or password"
         )
 
     session_id = str(uuid.uuid4())
