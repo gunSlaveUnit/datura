@@ -31,6 +31,18 @@ Window {
 			anchors.fill: parent
 			anchors.margins: 8
 
+			Connections {
+				target: auth_logic
+
+				function onRegistered() {
+					mainStackLayout.currentIndex = mainStackLayout.storeSectionIndex
+				}
+
+		    function onLogin() {
+					mainStackLayout.currentIndex = mainStackLayout.storeSectionIndex
+		    }
+			}
+
 	    property int signInFormIndex: 0
 	    property int signUpFormIndex: 1
 
@@ -45,18 +57,28 @@ Window {
 				FormInput {
 				  id: signInAccountNameInput
           focus: true
+          text: auth_logic.account_name
+	        onTextChanged: auth_logic.account_name = text
         }
 
 				Indent {}
 
 				FormInputLabel {text: qsTr("PASSWORD")}
-				FormInput {}
+				FormInput {
+				  echoMode: TextInput.Password
+				  text: auth_logic.password
+	        onTextChanged: auth_logic.password = text
+				}
 
         Indent {}
 
 				ActionButton {
 					Layout.alignment: Qt.AlignHCenter
 					text: qsTr("Sign in")
+
+					function handler() {
+					  auth_logic.sign_in()
+					}
 				}
 
 				Indent {}
@@ -70,6 +92,7 @@ Window {
             message: qsTr("Sign up")
 
             function handler() {
+              auth_logic.reset()
               signUpEmailInput.focus = true
               authStackLayout.currentIndex = authStackLayout.signUpFormIndex
             }
@@ -84,23 +107,36 @@ Window {
         FormInputLabel {text: qsTr("EMAIL")}
 				FormInput {
 				  id: signUpEmailInput
+				  text: auth_logic.email
+	        onTextChanged: auth_logic.email = text
 				}
 
 				Indent {}
 
 				FormInputLabel {text: qsTr("ACCOUNT NAME")}
-				FormInput {}
+				FormInput {
+				  text: auth_logic.account_name
+	        onTextChanged: auth_logic.account_name = text
+				}
 
 				Indent {}
 
 				FormInputLabel {text: qsTr("PASSWORD")}
-				FormInput {}
+				FormInput {
+				  echoMode: TextInput.Password
+				  text: auth_logic.password
+	        onTextChanged: auth_logic.password = text
+				}
 
         Indent {}
 
 				ActionButton {
 					Layout.alignment: Qt.AlignHCenter
 					text: qsTr("Sign up")
+
+					function handler() {
+					  auth_logic.sign_up()
+					}
 				}
 
 				Indent {}
@@ -114,11 +150,18 @@ Window {
             message: qsTr("Sign in")
 
             function handler() {
+              auth_logic.reset()
               signInAccountNameInput.focus = true
               authStackLayout.currentIndex = authStackLayout.signInFormIndex
             }
           }
         }
+      }
+    }
+
+    ColumnLayout {
+      Text {
+        text: ""
       }
     }
   }
