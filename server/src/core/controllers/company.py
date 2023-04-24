@@ -3,6 +3,7 @@ from starlette import status
 
 from server.src.core.logic.company import CompanyLogic
 from server.src.core.logic.game import GameLogic
+from server.src.core.logic.game_status import GameStatusLogic
 from server.src.core.logic.user import UserLogic
 from server.src.core.models.company import Company
 from server.src.core.models.game import Game
@@ -18,6 +19,7 @@ class CompanyController:
         self.user_logic = UserLogic(db)
         self.company_logic = CompanyLogic(db)
         self.game_logic = GameLogic(db)
+        self.game_status_logic = GameStatusLogic(db)
 
     async def items(self):
         items = await self.company_logic.items()
@@ -40,7 +42,9 @@ class CompanyController:
     async def manage_approving(self, company_id: int, approving: ApprovingSchema):
         company_owner = await self.user_logic.item_by_company(company_id)
 
+        not_send_status = await self.game_status_logic.item_by_title(GameStatusType.NOT_SEND)
+
         if not approving.is_approved:
-            self.game_logic.items().filter(Game.owner_id == company_owner).update({"status_id": GameStatusType.NOT_SEND})
+            self.game_logic.items().filter(Game.owner_id == company_owner).update({"status_id": not_send_status.id})
 
         await self.company_logic.update(company_id, {"is_approved": approving.is_approved})
