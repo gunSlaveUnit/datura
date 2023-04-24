@@ -5,7 +5,7 @@ from starlette import status
 from starlette.responses import Response
 
 from server.src.core.controllers.assets import AssetsController
-from server.src.core.settings import ASSETS_ROUTER_PREFIX, GAMES_ASSETS_HEADER_DIR
+from server.src.core.settings import ASSETS_ROUTER_PREFIX
 
 router = APIRouter(prefix=ASSETS_ROUTER_PREFIX)
 
