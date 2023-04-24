@@ -77,10 +77,14 @@ async def trailers_info(filename: str | None = None):
 
 
 @router.post('/trailers/')
-async def upload_trailers(files: List[UploadFile]):
+async def upload_trailers(game_id: int,
+                          files: List[UploadFile],
+                          assets_controller: AssetsController = Depends(AssetsController)):
     """Uploads trailers to the server.
     All will be overwritten.
     Associated game will become unpublished.
     """
 
-    pass
+    await assets_controller.upload_trailers(game_id, files)
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

@@ -1,5 +1,4 @@
-import shutil
-from pathlib import Path
+from typing import List
 
 from fastapi import Depends, HTTPException, UploadFile
 from starlette import status
@@ -7,7 +6,8 @@ from starlette import status
 from server.src.core.logic.file import FileLogic
 from server.src.core.logic.game import GameLogic
 from server.src.core.logic.game_status import GameStatusLogic
-from server.src.core.settings import GAMES_ASSETS_PATH, GAMES_ASSETS_HEADER_DIR, GameStatusType
+from server.src.core.settings import GAMES_ASSETS_PATH, GAMES_ASSETS_HEADER_DIR, GameStatusType, \
+    GAMES_ASSETS_TRAILERS_DIR
 from server.src.core.utils.db import get_db
 
 
@@ -60,3 +60,20 @@ class AssetsController:
         await self.game_logic.update(game_id, {"status_id": not_send_status.id})
 
         return await FileLogic.save(store_files_directory, [file])
+
+    async def upload_trailers(self, game_id: int, files: List[UploadFile]):
+        try:
+            game = await self.game_logic.item_by_id(game_id)
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Game with this id not found"
+            )
+
+        store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_TRAILERS_DIR)
+        await FileLogic.clear(store_files_directory)
+
+        not_send_status = await self.game_status_logic.item_by_title(GameStatusType.NOT_SEND)
+        await self.game_logic.update(game_id, {"status_id": not_send_status.id})
+
+        return await FileLogic.save(store_files_directory, files)
