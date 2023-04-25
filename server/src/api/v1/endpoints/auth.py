@@ -6,7 +6,6 @@ from fastapi import APIRouter, Depends, Cookie, HTTPException
 from starlette import status
 from starlette.responses import JSONResponse
 
-from server.src.core.controllers.user import UserController
 from server.src.core.models.role import Role
 from server.src.core.models.user import User
 from server.src.core.utils.auth import get_current_user, authenticate_user
@@ -82,8 +81,21 @@ async def sign_in(login_data: SignInSchema,
 
 @router.post('/sign-out/')
 async def sign_out(session: str = Cookie(),
-                   user_controller: UserController = Depends(UserController)):
-    return await user_controller.sign_out(session)
+                   session_storage=Depends(get_session_storage)):
+    """Deletes a user session."""
+
+    if session in session_storage:
+        session_storage.delete(session)
+
+        response = JSONResponse({"detail": f"Session {session} was removed"})
+        response.delete_cookie('session')
+
+        return response
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Session {session} not found"
+        )
 
 
 @router.get('/me/')
