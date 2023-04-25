@@ -113,12 +113,20 @@ async def trailers_info(filename: str | None = None):
 @router.post('/trailers/')
 async def upload_trailers(game_id: int,
                           files: List[UploadFile],
-                          assets_controller: AssetsController = Depends(AssetsController)):
+                          db=Depends(get_db)):
     """Uploads trailers to the server.
     All will be overwritten.
     Associated game will become unpublished.
     """
 
-    await assets_controller.upload_trailers(game_id, files)
+    game = await Game.by_id(db, game_id)
+
+    store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_TRAILERS_DIR)
+    await clear(store_files_directory)
+
+    not_send_status = await GameStatus.by_title(db, GameStatusType.NOT_SEND)
+    game.update(db, {"status_id": not_send_status.id})
+
+    await save(store_files_directory, files)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
