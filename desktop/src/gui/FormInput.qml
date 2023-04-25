@@ -7,6 +7,8 @@ TextField {
   implicitWidth: 240
   font.pointSize: 12
 
+  selectionColor: "#0053A6"
+
   property var notHoveredColor: Qt.darker("#212834", 2)
   property var hoveredColor: Qt.darker("#212834", 1.5)
 
