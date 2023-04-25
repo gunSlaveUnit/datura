@@ -26,16 +26,17 @@ async def sign_up(registration_data: SignUpSchema,
     Login immediately.
     """
 
-    potentially_existing_user: Optional[User] = db.query(User).filter(
-        User.email == registration_data.email or User.account_name == registration_data.account_name).first()
+    same_email_user = await User.by_email(db, registration_data.email)
+    same_account_name_user = await User.by_account_name(db, registration_data.account_name)
 
-    if potentially_existing_user:
+    if same_email_user or same_account_name_user:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User with the same email address or account name already exists"
         )
 
-    default_user_role = db.query(Role).filter(Role.title == RoleType.USER).one()
+    default_user_role = await Role.by_title(db, RoleType.USER)
+
     user = User(
         email=registration_data.email,
         account_name=registration_data.account_name,
@@ -44,9 +45,7 @@ async def sign_up(registration_data: SignUpSchema,
         role_id=default_user_role.id
     )
 
-    db.add(user)
-    db.commit()
-    db.refresh(user)
+    _ = await User.create(db, user)
 
     return await sign_in(
         SignInSchema(
@@ -76,9 +75,7 @@ async def sign_in(login_data: SignInSchema,
     response = JSONResponse({"detail": "Logged in successfully"})
     response.set_cookie("session", session_id, max_age=SESSION_TTL)
 
-    user_query = db.query(User).filter(User.id == user.id)
-    user_query.update({"login_at": datetime.datetime.now().timestamp()}, synchronize_session=False)
-    db.commit()
+    await user.update(db, {"login_at": datetime.datetime.now().timestamp()})
 
     return response
 
