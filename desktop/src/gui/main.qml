@@ -163,6 +163,7 @@ Window {
       id: storeStackLayout
 
       property int storeGamesIndex: 0
+      property int storeDetailedGameIndex: storeGamesIndex + 1
 
       Connections {
         target: auth_logic
@@ -221,8 +222,33 @@ Window {
             hoverEnabled: true
             onEntered: parent.color = "#36373a"
             onExited: parent.color = "transparent"
-            onClicked: {}
+            onClicked: {
+              store_detailed_logic.load(id)
+              storeStackLayout.currentIndex = storeStackLayout.storeDetailedGameIndex
+            }
           }
+        }
+      }
+
+      Scroll {
+        ColumnLayout {
+          anchors.fill: parent
+          anchors.margins: defaultMargin
+
+          Link {
+            message: qsTr("To the store")
+
+            function handler() {
+              game_list_model.load_store()
+              storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+            }
+          }
+
+          Header {text: store_detailed_logic.game_title}
+
+          ActionButton {
+	          text: qsTr("Buy")
+	        }
         }
       }
     }
