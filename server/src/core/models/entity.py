@@ -17,7 +17,9 @@ class Entity(Base):
     updated_at = Column(Integer, onupdate=datetime.datetime.now().timestamp())
 
     @classmethod
-    def by_id(cls, db: Session, item_id: int):
+    async def by_id(cls, db: Session, item_id: int):
+        """Returns a concrete object by its ID"""
+
         item_query = db.query(cls).filter(cls.id == item_id)
         try:
             item = item_query.one()
@@ -28,6 +30,22 @@ class Entity(Base):
             )
 
         return item
+
+    async def update(self, db: Session, new_data: dict):
+        """Allows to update information about an object
+        :return updated entity
+        """
+
+        for attribute, value in new_data.items():
+            if hasattr(self, attribute):
+                setattr(self, attribute, value)
+            else:
+                raise AttributeError("The attribute to update does not exist in the source object")
+
+        db.commit()
+        db.refresh(self)
+
+        return self
 
     def dict(self) -> dict:
         """
