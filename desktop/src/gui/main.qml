@@ -196,7 +196,7 @@ Window {
 
         clip: true
 
-        model: store_game_list_model
+        model: game_list_model
 
         delegate: Rectangle {
           width: storeGamesGridView.cellWidth
@@ -208,7 +208,7 @@ Window {
             anchors.centerIn: parent
             width: storeGamesGridView.capsuleImageWidth
             height: storeGamesGridView.capsuleImageHeight
-            source: `http://localhost:8000/games/${id}/capsule/`
+            source: `http://127.0.0.1:8000/api/v1/games/${id}/capsule/`
             mipmap: true
           }
 
