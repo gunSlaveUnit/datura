@@ -185,14 +185,16 @@ Window {
       GridView {
         id: storeGamesGridView
 
+        anchors.fill: parent
+        anchors.margins: defaultMargin
+
+        boundsBehavior: Flickable.StopAtBounds
+
         property int capsuleImageWidth: 12 * 10
         property int capsuleImageHeight: 17 * 10
 
-        Layout.preferredWidth: window.width
-        Layout.preferredHeight: window.height
-
         cellWidth: capsuleImageWidth + defaultMargin * 2
-        cellHeight: capsuleImageHeight + defaultMargin * 2.5
+        cellHeight: capsuleImageHeight + defaultMargin * 2
 
         clip: true
 
@@ -215,6 +217,7 @@ Window {
           MouseArea {
             id: cell_mouse_area
             anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
             hoverEnabled: true
             onEntered: parent.color = "#36373a"
             onExited: parent.color = "transparent"
