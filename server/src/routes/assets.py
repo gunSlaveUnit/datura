@@ -17,24 +17,6 @@ router = APIRouter(prefix=ASSETS_ROUTER_PREFIX)
 router.include_router(builds_router)
 
 
-@router.get('/capsule/')
-async def download_capsule(game_id: int,
-                           db: Session = Depends(get_db)):
-    """
-    Returns an image for the capsule section of the game.
-    """
-
-    game = db.query(Game).filter(Game.id == game_id).one()
-
-    capsule_directory = Path(GAMES_ASSETS_PATH)
-    capsule_directory = capsule_directory.joinpath(game.directory, GAMES_ASSETS_CAPSULE_DIR)
-
-    # TODO: I don't like this
-    capsule_filename = [f for f in os.listdir(capsule_directory) if
-                        os.path.isfile(capsule_directory.joinpath(f))][0]
-
-    return FileResponse(capsule_directory.joinpath(capsule_filename))
-
 
 @router.get('/screenshots/')
 async def screenshots_info(game_id: int,

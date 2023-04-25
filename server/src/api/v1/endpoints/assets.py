@@ -67,10 +67,33 @@ async def upload_header(game_id: int,
 
 
 @router.get('/capsule/')
-async def download_capsule(game_id: int):
+async def download_capsule(game_id: int,
+                           db=Depends(get_db)):
     """Returns an image for the capsule section of the game."""
 
-    pass
+    game = await Game.by_id(db, game_id)
+
+    searching_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_CAPSULE_DIR)
+
+    files = list(searching_directory.glob('*'))
+
+    if files and len(files) != 1:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Multiple files found but one is required"
+        )
+
+    if not files or not files[0].is_file():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="File not found"
+        )
+
+    return FileResponse(
+        searching_directory.joinpath(files[0].name),
+        headers={"Content-Disposition": f"filename={files[0].name}"},
+        media_type="image/webp"
+    )
 
 
 @router.post('/capsule/')
