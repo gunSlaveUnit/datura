@@ -38,21 +38,3 @@ class CompanyController:
         company.owner_id = current_user.id
 
         return await self.company_logic.create(company)
-
-    async def manage_approving(self, company_id: int, approving: ApprovingSchema):
-        try:
-            company = await self.company_logic.item_by_id(company_id)
-        except ValueError:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Company with this id not found"
-            )
-        company_owner_id = company.owner_id
-
-        not_send_status = await self.game_status_logic.item_by_title(GameStatusType.NOT_SEND)
-
-        items = await self.game_logic.items()
-        if not approving.is_approved:
-            items.filter(Game.owner_id == company_owner_id).update({"status_id": not_send_status.id})
-
-        await self.company_logic.update(company_id, {"is_approved": approving.is_approved})
