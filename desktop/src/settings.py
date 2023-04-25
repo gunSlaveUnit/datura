@@ -10,7 +10,7 @@ LAYOUTS_DIR = SOURCES_DIR / 'gui'
 
 API_VERSION = 1
 
-SERVER_URL = f"http://localhost:8000/v{API_VERSION}/"
+SERVER_URL = f"http://127.0.0.1:8000/v{API_VERSION}/"
 AUTH_URL = SERVER_URL + "auth/"
 REGISTER_URL = AUTH_URL + "sign-up/"
 LOGIN_URL = AUTH_URL + "sign-in/"
