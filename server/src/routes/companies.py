@@ -7,7 +7,7 @@ from starlette.responses import Response
 
 from server.src.core.models.company import Company
 from server.src.core.models import User
-from server.src.schemas import CompanyCreateSchema, CompanyDBSchema, ApprovingSchema
+from server.src.api.v1.schemas import CompanyCreateSchema, CompanyDBSchema, ApprovingSchema
 from server.src.core.settings import COMPANIES_ROUTER_PREFIX, Tags
 from server.src.core.utils import get_current_user
 from server.src.core.utils import get_db

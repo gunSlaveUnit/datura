@@ -7,7 +7,7 @@ from starlette.responses import JSONResponse
 from server.src.core.models.cart import Cart
 from server.src.core.models import Library
 from server.src.core.models import User
-from server.src.schemas import CartDBSchema, CartJoinedSchema, CartCreateSchema
+from server.src.api.v1.schemas import CartDBSchema, CartJoinedSchema, CartCreateSchema
 from server.src.core.settings import CART_ROUTER_PREFIX, Tags
 from server.src.core.utils import get_current_user
 from server.src.core.utils import get_db

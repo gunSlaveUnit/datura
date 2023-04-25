@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-from server.src.schemas.entity import EntityDBSchema
-from server.src.schemas.platform import PlatformDBSchema
+from server.src.api.v1.schemas.entity import EntityDBSchema
+from server.src.api.v1.schemas.platform import PlatformDBSchema
 
 
 class BuildCreateSchema(BaseModel):

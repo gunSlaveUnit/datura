@@ -12,7 +12,7 @@ from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX, GameStatusType, 
     GAMES_ASSETS_BUILDS_DIR
 from server.src.core.utils.auth import get_current_user
 from server.src.core.utils.db import get_db
-from server.src.schemas.game import GameFilterSchema, GameCreateSchema, GameApprovingSchema, GameSendingSchema, \
+from server.src.api.v1.schemas.game import GameFilterSchema, GameCreateSchema, GameApprovingSchema, GameSendingSchema, \
     GamePublishingSchema
 from server.src.api.v1.endpoints.assets import router as assets_router
 

@@ -1,5 +1,5 @@
-from server.src.schemas.entity import EntityDBSchema
-from server.src.schemas.game import GameDBSchema
+from server.src.api.v1.schemas.entity import EntityDBSchema
+from server.src.api.v1.schemas.game import GameDBSchema
 
 
 class LibraryDBSchema(EntityDBSchema):

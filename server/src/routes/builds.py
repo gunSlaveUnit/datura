@@ -10,7 +10,7 @@ from server.src.core.models import Build
 from server.src.core.models import Game
 from server.src.core.models import Platform
 from server.src.core.models import User
-from server.src.schemas import BuildDBSchema, BuildCreateSchema
+from server.src.api.v1.schemas import BuildDBSchema, BuildCreateSchema
 from server.src.core.settings import BUILDS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_BUILDS_DIR
 from server.src.core.utils import get_current_user
 from server.src.core.utils import get_db

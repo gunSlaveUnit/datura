@@ -8,7 +8,7 @@ from server.src.core.models.user import User
 from server.src.core.settings import Tags, COMPANIES_ROUTER_PREFIX, GameStatusType
 from server.src.core.utils.auth import get_current_user
 from server.src.core.utils.db import get_db
-from server.src.schemas.company import CompanyCreateSchema, ApprovingSchema
+from server.src.api.v1.schemas.company import CompanyCreateSchema, ApprovingSchema
 
 router = APIRouter(prefix=COMPANIES_ROUTER_PREFIX, tags=[Tags.COMPANIES])
 

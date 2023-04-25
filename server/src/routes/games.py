@@ -12,7 +12,7 @@ from starlette.responses import Response
 from server.src.core.models.company import Company
 from server.src.core.models import Game
 from server.src.core.models import User
-from server.src.schemas.game import GameCreateSchema, GameDBSchema, GameApprovingSchema
+from server.src.api.v1.schemas.game import GameCreateSchema, GameDBSchema, GameApprovingSchema
 from server.src.core.settings import GAMES_ROUTER_PREFIX, Tags, GAMES_ASSETS_PATH
 from server.src.routes.assets import router as assets_router
 from server.src.core.utils import get_current_user
