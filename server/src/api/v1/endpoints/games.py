@@ -91,12 +91,14 @@ async def verify(game_id: int,
 @router.patch('/{game_id}/approve/')
 async def approve(game_id: int,
                   approving: GameApprovingSchema,
-                  game_controller: GameController = Depends(GameController)) -> Response:
+                  db=Depends(get_db)):
     """If it denies, the game becomes not sent for verification."""
 
-    await game_controller.manage_approving(game_id, approving)
+    new_game_status = await GameStatus.by_title(db, GameStatusType.NOT_PUBLISHED if approving.is_approved else GameStatusType.NOT_SEND)
 
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    game = await Game.by_id(db, game_id)
+
+    game.update(db, {"status_id": new_game_status.id})
 
 
 @router.patch('/{game_id}/publish/')

@@ -21,19 +21,6 @@ class GameController:
         self.company_logic = CompanyLogic(db)
         self.game_status_logic = GameStatusLogic(db)
 
-    async def manage_approving(self, game_id: int, approving: GameApprovingSchema):
-        new_game_status = await self.game_status_logic.item_by_title(
-            GameStatusType.NOT_PUBLISHED if approving.is_approved else GameStatusType.NOT_SEND
-        )
-
-        try:
-            await self.game_logic.update(game_id, {"status_id": new_game_status.id})
-        except ValueError:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Game with this id not found"
-            )
-
     async def manage_publishing(self, game_id: int, publishing: GamePublishingSchema):
         try:
             game = await self.game_logic.item_by_id(game_id)
