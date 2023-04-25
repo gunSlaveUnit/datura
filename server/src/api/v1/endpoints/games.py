@@ -3,9 +3,12 @@ from starlette import status
 from starlette.responses import Response
 
 from server.src.core.controllers.game import GameController
+from server.src.core.models.game import Game
+from server.src.core.models.game_status import GameStatus
 from server.src.core.models.user import User
-from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX
+from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX, GameStatusType
 from server.src.core.utils.auth import get_current_user
+from server.src.core.utils.db import get_db
 from server.src.schemas.game import GameFilterSchema, GameCreateSchema, GameApprovingSchema, GameSendingSchema, \
     GamePublishingSchema
 from server.src.api.v1.endpoints.assets import router as assets_router
@@ -14,11 +17,20 @@ router = APIRouter(prefix=GAMES_ROUTER_PREFIX, tags=[Tags.GAMES])
 router.include_router(assets_router)
 
 
-# TODO: permissions
 @router.get('/')
 async def items(game_filter: GameFilterSchema = Body(None),
-                game_controller: GameController = Depends(GameController)):
-    return await game_controller.items(game_filter)
+                db=Depends(get_db)):
+    published_status = await GameStatus.by_title(db, GameStatusType.PUBLISHED)
+
+    if game_filter is None:
+        game_filter = GameFilterSchema(status_id=[published_status.id])
+
+    if game_filter.status_id is None:
+        game_filter.status_id = [published_status.id]
+
+    games = db.query(Game).filter(Game.status_id.in_(game_filter.status_id))
+
+    return games.all()
 
 
 @router.post('/')
