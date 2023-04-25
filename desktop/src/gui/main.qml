@@ -246,6 +246,90 @@ Window {
 
           Header {text: store_detailed_logic.game_title}
 
+          SwipeView {
+	          id: game_screenshots_swipe_view
+
+	          Layout.preferredWidth: 500
+	          Layout.preferredHeight: width * 9 / 16
+
+	          clip: true
+
+	          Repeater {
+	            model: 6
+
+	            Image {
+	              source: "../../resources/images/elden-ring.webp"
+	              mipmap: true
+
+	              MouseArea {
+                  id: image_mouse_area
+                  anchors.fill: parent
+                  hoverEnabled: true
+
+                  RowLayout {
+                    anchors.fill: parent
+
+                    Rectangle {
+                      Layout.fillHeight: true
+                      Layout.preferredWidth: 40
+                      visible: image_mouse_area.containsMouse
+
+                      Image {
+                        width: parent.width - 2 * defaultMargin
+                        height: width
+                        anchors.centerIn: parent
+                        source: "../../resources/icons/left_arrow.png"
+
+                        MouseArea {
+                          anchors.fill: parent
+                          enabled: game_screenshots_swipe_view.currentIndex > 0
+                          cursorShape: Qt.PointingHandCursor
+                          hoverEnabled: true
+                          onClicked: game_screenshots_swipe_view.decrementCurrentIndex()
+                        }
+                      }
+
+                      gradient: Gradient {
+                        orientation: Gradient.Horizontal
+                        GradientStop { position: -2.0; color: "black" }
+                        GradientStop { position: 1.0; color: "transparent" }
+                      }
+                    }
+
+                    Item {Layout.fillWidth: true}
+
+                    Rectangle {
+                      Layout.fillHeight: true
+                      Layout.preferredWidth: 40
+                      visible: image_mouse_area.containsMouse
+
+                      Image {
+                        width: parent.width - 2 * defaultMargin
+                        height: width
+                        anchors.centerIn: parent
+                        source: "../../resources/icons/right_arrow.png"
+
+                        MouseArea {
+                          anchors.fill: parent
+                          enabled: game_screenshots_swipe_view.currentIndex < game_screenshots_swipe_view.count - 1
+                          cursorShape: Qt.PointingHandCursor
+                          hoverEnabled: true
+                          onClicked: game_screenshots_swipe_view.incrementCurrentIndex()
+                        }
+                      }
+
+                      gradient: Gradient {
+                        orientation: Gradient.Horizontal
+                        GradientStop { position: 0.0; color: "transparent" }
+                        GradientStop { position: 3.0; color: "black" }
+                      }
+                    }
+                  }
+                }
+	            }
+	          }
+	        }
+
           ActionButton {
 	          text: qsTr("Buy")
 	        }
