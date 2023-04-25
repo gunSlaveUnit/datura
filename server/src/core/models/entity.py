@@ -31,6 +31,17 @@ class Entity(Base):
 
         return item
 
+    @staticmethod
+    async def create(db: Session, item):
+        """Allows to create a new object
+        :return created entity
+        """
+
+        db.add(item)
+        db.commit()
+        db.refresh(item)
+        return item
+
     async def update(self, db: Session, new_data: dict):
         """Allows to update information about an object
         :return updated entity
