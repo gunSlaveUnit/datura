@@ -114,7 +114,7 @@ async def upload_capsule(game_id: int,
     await clear(store_files_directory)
 
     not_send_status = await GameStatus.by_title(db, GameStatusType.NOT_SEND)
-    game.update(db, {"status_id": not_send_status.id})
+    await game.update(db, {"status_id": not_send_status.id})
 
     await save(store_files_directory, [file])
 
