@@ -18,10 +18,10 @@ class Game(Entity):
     short_description: str
     long_description: str
     price: float
+    owner_id: int
     status_id: int
     age_category_id: int
     directory: str
-    company_id: int
 
 
 class GameList(QAbstractListModel):
