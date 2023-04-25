@@ -1,4 +1,3 @@
-import requests
 from PySide6.QtCore import QObject, Signal, Slot, Property
 
 from desktop.src.schemas.auth import SignUpSchema, SignInSchema
@@ -74,9 +73,7 @@ class AuthLogic(QObject):
             password=self._password
         )
 
-        reply = self._auth_service.sign_up(data)
-
-        if reply.status_code == requests.codes.ok:
+        if self._auth_service.sign_up(data).ok:
             self.registered.emit()
             self.reset()
 
@@ -87,17 +84,13 @@ class AuthLogic(QObject):
             password=self._password
         )
 
-        reply = self._auth_service.sign_in(data)
-
-        if reply.status_code == requests.codes.ok:
+        if self._auth_service.sign_in(data).ok:
             self.login.emit()
             self.reset()
 
     @Slot()
     def sign_out(self):
-        reply = self._auth_service.sign_out()
-
-        if reply.status_code == requests.codes.ok:
+        if self._auth_service.sign_out().ok:
             self.logout.emit()
 
     @Slot()

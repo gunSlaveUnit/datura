@@ -56,9 +56,9 @@ class StoreDetailedLogic(QObject):
 
     @Slot(int)
     def load(self, game_id: int):
-        reply = self._auth_service.authorized_session.get(GAMES_URL + f'{game_id}/')
-        if reply.status_code == requests.codes.ok:
-            data = reply.json()
+        response = self._auth_service.authorized_session.get(GAMES_URL + f'{game_id}/')
+        if response.ok:
+            data = response.json()
 
             self._game_id = data["id"]
             self.game_title = data["title"]
@@ -75,11 +75,11 @@ class StoreDetailedLogic(QObject):
 
     def _check_game_in_library(self):
         user_id = self._auth_service.current_user.id
-        reply = self._auth_service.authorized_session.get(
+        response = self._auth_service.authorized_session.get(
             LIBRARY_URL + f"?user_id={user_id}&game_id={self._game_id}"
         )
-        return reply.ok and reply.json()
+        return response.ok and response.json()
 
     def _check_game_in_cart(self):
-        reply = self._auth_service.authorized_session.get(CART_URL + f'?game_id={self._game_id}')
-        return reply.ok and reply.json()
+        response = self._auth_service.authorized_session.get(CART_URL + f'?game_id={self._game_id}')
+        return response.ok and response.json()

@@ -28,14 +28,14 @@ class AuthService(QObject):
             self.current_user_changed.emit()
 
     def _user_access(self, url: str, data: Union[SignUpSchema, SignInSchema]):
-        reply = requests.post(url, json=data.dict())
+        response = requests.post(url, json=data.dict())
 
-        if reply.status_code == requests.codes.ok:
+        if response.ok:
             self.authorized_session = requests.session()
-            self.authorized_session.cookies.set('session', reply.cookies['session'])
+            self.authorized_session.cookies.set('session', response.cookies['session'])
             self.load_personal_user_data()
 
-        return reply
+        return response
 
     def sign_up(self, data: SignUpSchema):
         return self._user_access(REGISTER_URL, data)
@@ -44,16 +44,16 @@ class AuthService(QObject):
         return self._user_access(LOGIN_URL, data)
 
     def sign_out(self):
-        reply = self.authorized_session.post(LOGOUT_URL)
+        response = self.authorized_session.post(LOGOUT_URL)
 
-        if reply.status_code == requests.codes.ok:
+        if response.ok:
             self.authorized_session = None
             self.current_user = None
 
-        return reply
+        return response
 
     def load_personal_user_data(self):
-        reply = self.authorized_session.get(ME_URL)
+        response = self.authorized_session.get(ME_URL)
 
-        if reply.status_code == requests.codes.ok:
-            self.current_user = User(**reply.json())
+        if response.ok:
+            self.current_user = User(**response.json())
