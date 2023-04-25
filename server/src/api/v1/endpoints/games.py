@@ -1,6 +1,7 @@
 import uuid
 
 from fastapi import APIRouter, Body, Depends, HTTPException
+from sqlalchemy.orm import Session
 from starlette import status
 
 from server.src.core.models.company import Company
@@ -71,6 +72,20 @@ async def create(new_game_data: GameCreateSchema,
     game.directory = new_directory_uuid
 
     return await Game.create(db, game)
+
+
+@router.put('/{game_id}/')
+async def update(game_id: int,
+                 updated_game_data: GameCreateSchema,
+                 db: Session = Depends(get_db),
+                 current_user: User = Depends(get_current_user)):
+    """
+    Updates game fields not related to publish/admin functions.
+    Returns a GameDBScheme with updated entity data.
+    """
+
+    game = await Game.by_id(db, game_id)
+    return await game.update(db, **vars(updated_game_data))
 
 
 @router.patch('/{game_id}/verify/')

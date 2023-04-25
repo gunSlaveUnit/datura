@@ -47,32 +47,6 @@ async def instance(game_id: int,
     return db.query(Game).filter(Game.id == game_id).one()
 
 
-@router.post('/', response_model=GameDBSchema)
-async def create(game_create_data: GameCreateSchema,
-                 db: Session = Depends(get_db),
-                 current_user: User = Depends(get_current_user)) -> GameDBSchema:
-    """
-    Creating a new game.
-    Return a GameDBScheme with created entity data.
-    """
-
-    game = Game(**vars(game_create_data))
-    game.company = current_user.company
-    game.status_id = 1 # TODO: make like a query to NOT_SEND
-
-    assets_directory = Path(GAMES_ASSETS_PATH)
-    new_directory_uuid = str(uuid.uuid4())
-    assets_directory = assets_directory.joinpath(new_directory_uuid)
-    assets_directory.mkdir(parents=True)
-    game.directory = new_directory_uuid
-
-    db.add(game)
-    db.commit()
-    db.refresh(game)
-
-    return game
-
-
 @router.put('/{game_id}/', response_model=GameDBSchema)
 async def update(game_id: int,
                  updated_game_data: GameCreateSchema,
@@ -106,37 +80,3 @@ async def update(game_id: int,
     db.refresh(updated_game)
 
     return updated_game
-
-
-@router.delete('/{game_id}/')
-async def delete(game_id: int) -> Response:
-    """
-    Removes a game with the specified ID.
-    """
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-@router.patch('/{game_id}/approve/')
-async def approve(game_id: int, approving: GameApprovingSchema) -> Response:
-    """
-    If it denies, the game becomes unpublished and not sent for verification.
-    """
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-@router.patch('/{game_id}/verify/')
-async def verify(game_id: int) -> Response:
-    """
-    Sends a game for verification.
-    """
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-
-@router.patch('/{game_id}/publish/')
-async def publish(game_id: int) -> Response:
-    """
-    Publishes the game.
-    After that, it is shown in the store,
-    available for viewing and downloading.
-    """
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
