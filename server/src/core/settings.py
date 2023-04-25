@@ -35,7 +35,8 @@ else:
 
 # Versions
 
-API_VERSION_1_PREFIX = '/v1'
+API_PREFIX = '/api'
+API_VERSION_1_PREFIX = API_PREFIX + '/v1'
 SESSION_TTL = 3 * 24 * 60 * 60
 
 # Strings
