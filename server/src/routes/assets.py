@@ -18,29 +18,6 @@ router.include_router(builds_router)
 
 
 
-@router.get('/screenshots/')
-async def screenshots_info(game_id: int,
-                           db: Session = Depends(get_db),
-                           filename: str | None = None):
-    """
-    Returns the names of the screenshot files.
-    If "filename" query param was provided, returns a file.
-    """
-    game = db.query(Game).filter(Game.id == game_id).one()
-
-    path = Path(GAMES_ASSETS_PATH).joinpath(game.directory, GAMES_ASSETS_SCREENSHOTS_DIR)
-
-    if filename:
-        headers = {"Content-Disposition": f"filename={filename}"}
-
-        return StreamingResponse(
-            read_uncompressed_chunks(path.joinpath(filename), CHUNK_SIZE),
-            headers=headers,
-            media_type="image/webp"
-        )
-    else:
-        return {"filenames": [f.name for f in path.iterdir() if f.is_file()]}
-
 
 @router.get('/trailers/')
 async def trailers_info(filename: str | None = None):

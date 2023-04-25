@@ -1,15 +1,15 @@
 from typing import List
 
-from fastapi import APIRouter, UploadFile, Depends, HTTPException
+from fastapi import APIRouter, UploadFile, Depends, HTTPException, Query
 from starlette import status
-from starlette.responses import Response, FileResponse
+from starlette.responses import Response, FileResponse, StreamingResponse
 
 from server.src.core.models.game import Game
 from server.src.core.models.game_status import GameStatus
 from server.src.core.settings import ASSETS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_HEADER_DIR, GameStatusType, \
     GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, GAMES_ASSETS_CAPSULE_DIR
 from server.src.core.utils.db import get_db
-from server.src.core.utils.io import clear, save
+from server.src.core.utils.io import clear, save, read_uncompressed_chunks, CHUNK_SIZE
 
 router = APIRouter(prefix=ASSETS_ROUTER_PREFIX)
 
@@ -119,12 +119,27 @@ async def upload_capsule(game_id: int,
 
 
 @router.get('/screenshots/')
-async def screenshots_info(game_id: int):
+async def screenshots_info(game_id: int,
+                           db=Depends(get_db),
+                           filename: str = Query(None)):
     """Returns the names of the screenshot files.
     If "filename" query param was provided, returns a file.
     """
 
-    pass
+    game = await Game.by_id(db, game_id)
+
+    path = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_SCREENSHOTS_DIR)
+
+    if filename:
+        headers = {"Content-Disposition": f"filename={filename}"}
+
+        return StreamingResponse(
+            read_uncompressed_chunks(path.joinpath(filename), CHUNK_SIZE),
+            headers=headers,
+            media_type="image/webp"
+        )
+    else:
+        return {"filenames": [f.name for f in path.iterdir() if f.is_file()]}
 
 
 @router.post('/screenshots/')
