@@ -165,11 +165,27 @@ async def upload_screenshots(game_id: int,
 
 
 @router.get('/trailers/')
-async def trailers_info(filename: str | None = None):
+async def trailers_info(game_id: int,
+                        db=Depends(get_db),
+                        filename: str = Query(None)):
     """Returns the names of the trailers files.
     If "filename" query param was provided, returns a file.
     """
-    pass
+
+    game = await Game.by_id(db, game_id)
+
+    path = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_TRAILERS_DIR)
+
+    if filename:
+        headers = {"Content-Disposition": f"filename={filename}"}
+
+        return StreamingResponse(
+            read_uncompressed_chunks(path.joinpath(filename), CHUNK_SIZE),
+            headers=headers,
+            media_type="video/webm"
+        )
+    else:
+        return {"filenames": [f.name for f in path.iterdir() if f.is_file()]}
 
 
 @router.post('/trailers/')
