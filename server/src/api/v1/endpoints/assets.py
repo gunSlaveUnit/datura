@@ -1,21 +1,45 @@
 from typing import List
 
-from fastapi import APIRouter, UploadFile, Depends
+from fastapi import APIRouter, UploadFile, Depends, HTTPException
 from starlette import status
-from starlette.responses import Response
+from starlette.responses import Response, FileResponse
 
 from server.src.core.controllers.assets import AssetsController
-from server.src.core.settings import ASSETS_ROUTER_PREFIX
+from server.src.core.models.game import Game
+from server.src.core.settings import ASSETS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_HEADER_DIR
+from server.src.core.utils.db import get_db
 
 router = APIRouter(prefix=ASSETS_ROUTER_PREFIX)
 
 
 @router.get('/header/')
 async def download_header(game_id: int,
-                          assets_controller: AssetsController = Depends(AssetsController)):
+                          db=Depends(get_db)):
     """Returns an image for the header section of the game."""
 
-    return await assets_controller.header(game_id)
+    game = await Game.by_id(db, game_id)
+
+    searching_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_HEADER_DIR)
+
+    files = list(searching_directory.glob('*'))
+
+    if files and len(files) != 1:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Multiple files found but one is required"
+        )
+
+    if not files or not files[0].is_file():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="File not found"
+        )
+
+    return FileResponse(
+        searching_directory.joinpath(files[0].name),
+        headers={"Content-Disposition": f"filename={files[0].name}"},
+        media_type="image/webp"
+    )
 
 
 @router.post('/header/')
