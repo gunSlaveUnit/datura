@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from starlette import status
 
 from server.src.core.models.company import Company
@@ -14,8 +14,26 @@ router = APIRouter(prefix=COMPANIES_ROUTER_PREFIX, tags=[Tags.COMPANIES])
 
 
 @router.get('/')
-async def items(db=Depends(get_db)):
-    return db.query(Game).all()
+async def items(owner_id: int = Query(None),
+                db=Depends(get_db),
+                current_user: User = Depends(get_current_user)):
+    """List of all companies according to the given filters."""
+
+    if owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Permission denied: you cannot receive this information"
+        )
+
+    companies = db.query(Company)
+    if owner_id:
+        company = companies.filter(Company.owner_id == owner_id).first()
+        if company:
+            return [company]
+        else:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Company with this owner not found")
+
+    return companies.all()
 
 
 @router.post('/')
