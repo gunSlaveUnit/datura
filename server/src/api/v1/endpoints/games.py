@@ -37,7 +37,7 @@ async def items(game_filter: GameFilterSchema = Body(None),
     return games.all()
 
 
-@router.get('/{game_id}')
+@router.get('/{game_id}/')
 async def item(game_id: int,
                db=Depends(get_db)):
     return await Game.by_id(db, game_id)
