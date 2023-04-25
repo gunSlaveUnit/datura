@@ -58,6 +58,15 @@ class Entity(Base):
 
         return self
 
+    @classmethod
+    async def delete(cls, db: Session, item_id: int):
+        """Deletes an object"""
+
+        item = await cls.by_id(db, item_id)
+
+        db.delete(item)
+        db.commit()
+
     def dict(self) -> dict:
         """
         Model attributes excluding SQLAlchemy attributes
