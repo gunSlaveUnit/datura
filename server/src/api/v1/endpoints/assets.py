@@ -7,7 +7,7 @@ from starlette.responses import Response, FileResponse
 from server.src.core.models.game import Game
 from server.src.core.models.game_status import GameStatus
 from server.src.core.settings import ASSETS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_HEADER_DIR, GameStatusType, \
-    GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR
+    GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, GAMES_ASSETS_CAPSULE_DIR
 from server.src.core.utils.db import get_db
 from server.src.core.utils.io import clear, save
 
@@ -74,13 +74,25 @@ async def download_capsule(game_id: int):
 
 
 @router.post('/capsule/')
-async def upload_capsule(file: UploadFile):
+async def upload_capsule(game_id: int,
+                         file: UploadFile,
+                         db=Depends(get_db)):
     """Uploads a capsule game section file to the server.
     If exists, will be overwritten.
     Associated game will become unpublished.
     """
 
-    pass
+    game = await Game.by_id(db, game_id)
+
+    store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_CAPSULE_DIR)
+    await clear(store_files_directory)
+
+    not_send_status = await GameStatus.by_title(db, GameStatusType.NOT_SEND)
+    game.update(db, {"status_id": not_send_status.id})
+
+    await save(store_files_directory, [file])
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.get('/screenshots/')

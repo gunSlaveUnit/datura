@@ -36,15 +36,6 @@ async def download_capsule(game_id: int,
     return FileResponse(capsule_directory.joinpath(capsule_filename))
 
 
-@router.post('/capsule/')
-async def upload_capsule(file: UploadFile):
-    """
-    Uploads a capsule game section file to the server.
-    If exists, won't be overwritten or created on more.
-    """
-    pass
-
-
 @router.get('/screenshots/')
 async def screenshots_info(game_id: int,
                            db: Session = Depends(get_db),
