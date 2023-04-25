@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
+from starlette import status
 
-from server.src.core.controllers.company import CompanyController
 from server.src.core.models.company import Company
 from server.src.core.models.game import Game
 from server.src.core.models.game_status import GameStatus
@@ -21,8 +21,19 @@ async def items(db=Depends(get_db)):
 @router.post('/')
 async def create(new_company_data: CompanyCreateSchema,
                  current_user: User = Depends(get_current_user),
-                 company_controller: CompanyController = Depends(CompanyController)):
-    return await company_controller.create(new_company_data, current_user)
+                 db=Depends(get_db)):
+    potentially_existing_company = await Company.by_owner(db, current_user.id)
+
+    if potentially_existing_company:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This user already has a registered company"
+        )
+
+    company = Company(**vars(new_company_data))
+    company.owner_id = current_user.id
+
+    return await Company.create(db, company)
 
 
 @router.patch('/{company_id}/approve/')
