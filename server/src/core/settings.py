@@ -59,6 +59,7 @@ class Tags(str, Enum):
     AUTH = 'Auth'
     GAMES = 'Games'
     ASSETS = 'Assets'
+    BUILDS = 'Assets'
     COMPANIES = 'Companies'
     LIBRARY = 'Library'
     USERS = 'Users'
@@ -71,6 +72,7 @@ tags_metadata = [
     {'name': Tags.AUTH, 'description': 'Describes an authentication API'},
     {'name': Tags.GAMES, 'description': 'Describes an API to manage games'},
     {'name': Tags.ASSETS, 'description': 'Describes an API to manage assets'},
+    {'name': Tags.BUILDS, 'description': 'Describes an API to manage builds'},
     {'name': Tags.COMPANIES, 'description': 'Describes an API to manage companies'},
     {'name': Tags.LIBRARY, 'description': 'Describes an API to manage library records'},
     {'name': Tags.USERS, 'description': 'Describes an API to manage users'},

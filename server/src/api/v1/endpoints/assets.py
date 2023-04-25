@@ -10,8 +10,11 @@ from server.src.core.settings import ASSETS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GA
     GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, GAMES_ASSETS_CAPSULE_DIR, Tags
 from server.src.core.utils.db import get_db
 from server.src.core.utils.io import clear, save, read_uncompressed_chunks, CHUNK_SIZE
+from server.src.api.v1.endpoints.builds import router as builds_router
+
 
 router = APIRouter(prefix=ASSETS_ROUTER_PREFIX, tags=[Tags.ASSETS])
+router.include_router(builds_router)
 
 
 @router.get('/header/')
