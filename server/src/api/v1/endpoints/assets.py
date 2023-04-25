@@ -7,7 +7,7 @@ from starlette.responses import Response, FileResponse
 from server.src.core.models.game import Game
 from server.src.core.models.game_status import GameStatus
 from server.src.core.settings import ASSETS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_HEADER_DIR, GameStatusType, \
-    GAMES_ASSETS_TRAILERS_DIR
+    GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR
 from server.src.core.utils.db import get_db
 from server.src.core.utils.io import clear, save
 
@@ -93,13 +93,25 @@ async def screenshots_info(game_id: int):
 
 
 @router.post('/screenshots/')
-async def upload_screenshots(game_id: int):
+async def upload_screenshots(game_id: int,
+                             files: List[UploadFile],
+                             db=Depends(get_db)):
     """Uploads screenshots to the server.
     All will be overwritten.
     Associated game will become unpublished.
     """
 
-    pass
+    game = await Game.by_id(db, game_id)
+
+    store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_SCREENSHOTS_DIR)
+    await clear(store_files_directory)
+
+    not_send_status = await GameStatus.by_title(db, GameStatusType.NOT_SEND)
+    game.update(db, {"status_id": not_send_status.id})
+
+    await save(store_files_directory, files)
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.get('/trailers/')
