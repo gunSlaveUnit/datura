@@ -3,19 +3,19 @@ from typing import List, Type
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session, joinedload
 
-from server.src.core.models import Game
-from server.src.core.models import Library
-from server.src.core.models import User
-from server.src.api.v1.schemas import LibraryDBSchema, LibraryJoinedSchema
+from server.src.api.v1.schemas.library import LibraryJoinedSchema, LibraryDBSchema
+from server.src.core.models.game import Game
+from server.src.core.models.library import Library
+from server.src.core.models.user import User
 from server.src.core.settings import LIBRARY_ROUTER_PREFIX, Tags
-from server.src.core.utils import get_current_user
-from server.src.core.utils import get_db
+from server.src.core.utils.auth import get_current_user
+from server.src.core.utils.db import get_db
 
 router = APIRouter(prefix=LIBRARY_ROUTER_PREFIX, tags=[Tags.LIBRARY])
 
 
 @router.get('/', response_model=List[LibraryJoinedSchema | LibraryDBSchema])
-async def every(user_id: int | None = None,
+async def items(user_id: int | None = None,
                 game_id: int | None = None,
                 include_games: bool = False,
                 db: Session = Depends(get_db),
