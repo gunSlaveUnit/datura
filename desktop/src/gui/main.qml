@@ -159,9 +159,68 @@ Window {
       }
     }
 
-    ColumnLayout {
-      Text {
-        text: ""
+    StackLayout {
+      id: storeStackLayout
+
+      property int storeGamesIndex: 0
+
+      Connections {
+        target: auth_logic
+
+        function onRegistered() {
+          game_list_model.load_store()
+        }
+
+        function onLogin() {
+          game_list_model.load_store()
+        }
+
+        function onLogout() {
+          authStackLayout.currentIndex = authStackLayout.signInFormIndex
+          mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
+          storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+        }
+      }
+
+      GridView {
+        id: storeGamesGridView
+
+        property int capsuleImageWidth: 12 * 10
+        property int capsuleImageHeight: 17 * 10
+
+        Layout.preferredWidth: window.width
+        Layout.preferredHeight: window.height
+
+        cellWidth: capsuleImageWidth + defaultMargin * 2
+        cellHeight: capsuleImageHeight + defaultMargin * 2.5
+
+        clip: true
+
+        model: store_game_list_model
+
+        delegate: Rectangle {
+          width: storeGamesGridView.cellWidth
+          height: storeGamesGridView.cellHeight
+          color: "transparent"
+          radius: defaultMargin / 2
+
+          Image {
+            anchors.centerIn: parent
+            width: storeGamesGridView.capsuleImageWidth
+            height: storeGamesGridView.capsuleImageHeight
+            source: `http://localhost:8000/games/${id}/capsule/`
+            mipmap: true
+          }
+
+          MouseArea {
+            id: cell_mouse_area
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: parent.color = "#36373a"
+            onExited: parent.color = "transparent"
+            onClicked: {}
+          }
+        }
       }
     }
   }
