@@ -2,9 +2,7 @@ import uuid
 
 from fastapi import APIRouter, Body, Depends, HTTPException
 from starlette import status
-from starlette.responses import Response
 
-from server.src.core.controllers.game import GameController
 from server.src.core.models.company import Company
 from server.src.core.models.game import Game
 from server.src.core.models.game_status import GameStatus
@@ -81,11 +79,14 @@ async def verify(game_id: int,
                  db=Depends(get_db)):
     """Sends a game for verification."""
 
-    new_game_status = await GameStatus.by_title(db, GameStatusType.SEND if sending.is_send else GameStatusType.NOT_SEND)
+    new_game_status = await GameStatus.by_title(
+        db,
+        GameStatusType.SEND if sending.is_send else GameStatusType.NOT_SEND
+    )
 
     game = await Game.by_id(db, game_id)
 
-    game.update(db, {"status_id": new_game_status.id})
+    await game.update(db, {"status_id": new_game_status.id})
 
 
 @router.patch('/{game_id}/approve/')
@@ -94,22 +95,39 @@ async def approve(game_id: int,
                   db=Depends(get_db)):
     """If it denies, the game becomes not sent for verification."""
 
-    new_game_status = await GameStatus.by_title(db, GameStatusType.NOT_PUBLISHED if approving.is_approved else GameStatusType.NOT_SEND)
+    new_game_status = await GameStatus.by_title(
+        db,
+        GameStatusType.NOT_PUBLISHED if approving.is_approved else GameStatusType.NOT_SEND
+    )
 
     game = await Game.by_id(db, game_id)
 
-    game.update(db, {"status_id": new_game_status.id})
+    await game.update(db, {"status_id": new_game_status.id})
 
 
 @router.patch('/{game_id}/publish/')
 async def publish(game_id: int,
                   publishing: GamePublishingSchema,
-                  game_controller: GameController = Depends(GameController)) -> Response:
+                  db=Depends(get_db)):
     """
     Publishes the game.
     After that, it is available for downloading.
     """
 
-    await game_controller.manage_publishing(game_id, publishing)
+    game = await Game.by_id(db, game_id)
 
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    not_published_status = await GameStatus.by_title(db, GameStatusType.NOT_PUBLISHED)
+
+    if game.status_id != not_published_status.id and publishing.is_published:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The game cannot be published because it was not previously published or was not previously "
+                   "submitted for review"
+        )
+
+    new_game_status = await GameStatus.by_title(
+        db,
+        GameStatusType.PUBLISHED if publishing.is_published else GameStatusType.NOT_PUBLISHED
+    )
+
+    await game.update(db, {"status_id": new_game_status.id})
