@@ -1,6 +1,4 @@
 from fastapi import APIRouter, Depends
-from starlette import status
-from starlette.responses import Response
 
 from server.src.core.controllers.company import CompanyController
 from server.src.core.models.company import Company
@@ -16,8 +14,8 @@ router = APIRouter(prefix=COMPANIES_ROUTER_PREFIX, tags=[Tags.COMPANIES])
 
 
 @router.get('/')
-async def items(company_controller: CompanyController = Depends(CompanyController)):
-    return await company_controller.items()
+async def items(db=Depends(get_db)):
+    return db.query(Game).all()
 
 
 @router.post('/')

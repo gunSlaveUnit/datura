@@ -21,10 +21,6 @@ class CompanyController:
         self.game_logic = GameLogic(db)
         self.game_status_logic = GameStatusLogic(db)
 
-    async def items(self):
-        items = await self.company_logic.items()
-        return items.all()
-
     async def create(self, company_data: CompanyCreateSchema, current_user: User):
         potentially_existing_company = await self.company_logic.item_by_owner(current_user.id)
 
