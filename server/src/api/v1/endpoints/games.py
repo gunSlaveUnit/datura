@@ -78,12 +78,14 @@ async def create(new_game_data: GameCreateSchema,
 @router.patch('/{game_id}/verify/')
 async def verify(game_id: int,
                  sending: GameSendingSchema,
-                 game_controller: GameController = Depends(GameController)) -> Response:
+                 db=Depends(get_db)):
     """Sends a game for verification."""
 
-    await game_controller.manage_verification(game_id, sending)
+    new_game_status = await GameStatus.by_title(db, GameStatusType.SEND if sending.is_send else GameStatusType.NOT_SEND)
 
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+    game = await Game.by_id(db, game_id)
+
+    game.update(db, {"status_id": new_game_status.id})
 
 
 @router.patch('/{game_id}/approve/')
