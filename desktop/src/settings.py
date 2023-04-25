@@ -18,3 +18,4 @@ LOGOUT_URL = AUTH_URL + "sign-out/"
 ME_URL = AUTH_URL + "me/"
 GAMES_URL = SERVER_URL + 'games/'
 LIBRARY_URL = SERVER_URL + 'library/'
+CART_URL = SERVER_URL + 'cart/'
