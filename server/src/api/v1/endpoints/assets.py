@@ -7,11 +7,11 @@ from starlette.responses import Response, FileResponse, StreamingResponse
 from server.src.core.models.game import Game
 from server.src.core.models.game_status import GameStatus
 from server.src.core.settings import ASSETS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_HEADER_DIR, GameStatusType, \
-    GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, GAMES_ASSETS_CAPSULE_DIR
+    GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, GAMES_ASSETS_CAPSULE_DIR, Tags
 from server.src.core.utils.db import get_db
 from server.src.core.utils.io import clear, save, read_uncompressed_chunks, CHUNK_SIZE
 
-router = APIRouter(prefix=ASSETS_ROUTER_PREFIX)
+router = APIRouter(prefix=ASSETS_ROUTER_PREFIX, tags=[Tags.ASSETS])
 
 
 @router.get('/header/')
