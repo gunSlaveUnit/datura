@@ -25,5 +25,5 @@ class User(Entity):
         return db.query(User).filter(User.email == email).first()
 
     @staticmethod
-    async def by_account_name(db: Session, email: str):
-        return db.query(User).filter(User.account_name == email).first()
+    async def by_account_name(db: Session, account_name: str):
+        return db.query(User).filter(User.account_name == account_name).first()
