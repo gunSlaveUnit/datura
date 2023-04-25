@@ -1,23 +1,31 @@
 import gzip
 import os
+import shutil
 from pathlib import Path
 from typing import List, BinaryIO
 
 from fastapi import UploadFile
 
-
 CHUNK_SIZE = 8192
 MEDIA_TYPE = "application/gzip"
 
 
-async def store(directory: str, files: List[UploadFile]):
-    if not os.path.exists(directory):
-        os.makedirs(directory, exist_ok=True)
+async def save(directory: Path, files: List[UploadFile]):
+    if not directory.exists():
+        directory.mkdir(parents=True, exist_ok=True)
 
     for file in files:
-        with open(os.path.join(directory, file.filename), 'wb') as document:
+        with open(directory.joinpath(file.filename), 'wb') as document:
             data = await file.read()
             document.write(data)
+
+
+async def clear(directory: Path):
+    for path in directory.glob("**/*"):
+        if path.is_file():
+            path.unlink()
+        elif path.is_dir():
+            shutil.rmtree(path)
 
 
 async def remove(directory: str, files: List[str]):
