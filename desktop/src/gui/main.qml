@@ -7,7 +7,7 @@ import Qt.labs.platform as Platform
 ApplicationWindow {
   id: window
   width: 1000
-  height: 800
+  height: 500
   visible: true
   title: windowTitle
   color: backgroundWindowColor
@@ -18,6 +18,37 @@ ApplicationWindow {
   property int defaultMargin: 8
 
   menuBar: MenuBar {
+    id: menu
+    visible: false
+
+    background: Rectangle {
+      color: "transparent"
+    }
+
+    Menu {
+      title: qsTr('Store')
+      Action {text: qsTr("All")}
+    }
+
+    Menu {
+      title: qsTr('Library')
+    }
+
+    Menu {
+      title: qsTr('Workroom')
+    }
+
+    Menu {
+      title: qsTr('Nickname')
+      Action {text: qsTr("Profile")}
+      Action {text: qsTr("Wallet")}
+      Action {text: qsTr("Cart")}
+      Action {text: qsTr("Settings")}
+      Action {
+        text: qsTr("Logout")
+        onTriggered: auth_logic.sign_out()
+      }
+    }
   }
 
   StackLayout {
@@ -39,10 +70,12 @@ ApplicationWindow {
 
 				function onRegistered() {
 					mainStackLayout.currentIndex = mainStackLayout.storeSectionIndex
+					menu.visible = true
 				}
 
 		    function onLogin() {
 					mainStackLayout.currentIndex = mainStackLayout.storeSectionIndex
+					menu.visible = true
 		    }
 			}
 
