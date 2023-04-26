@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 2.15
 import Qt.labs.platform
 
-Window {
+ApplicationWindow {
   id: window
   width: 1000
   height: 800
@@ -16,6 +16,9 @@ Window {
   property string highlightedTextColor: "#0079F2"
   property string windowTitle: qsTr("foggie")
   property int defaultMargin: 8
+
+  menuBar: MenuBar {
+  }
 
   StackLayout {
     id: mainStackLayout
