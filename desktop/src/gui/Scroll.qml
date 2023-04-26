@@ -6,4 +6,5 @@ ScrollView {
     Material.theme: Material.Dark
     ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
     ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+    clip: true
 }

@@ -62,7 +62,6 @@ ApplicationWindow {
     StackLayout {
 			id: authStackLayout
 
-			anchors.fill: parent
 			anchors.margins: 8
 
 			Connections {
@@ -268,43 +267,38 @@ ApplicationWindow {
       }
 
       Scroll {
-        ColumnLayout {
-          anchors.fill: parent
-          anchors.margins: defaultMargin
+        contentHeight: 2 * defaultMargin + gameTitle.height + gameAssetsSwipeView.height + editionBackground.height
 
-          Link {
-            message: qsTr("To the store")
-
-            function handler() {
-              game_list_model.load_store()
-              storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
-            }
-          }
+        Item {
+          id: wrapper
+          anchors.horizontalCenter: parent.horizontalCenter
+          width: parent.width - (parent.width / 4)
 
           Header {
+            id: gameTitle
             text: store_detailed_logic.title
-            Layout.preferredWidth: parent.width
+            width: parent.width
             wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
           }
 
-          Indent {}
-
           SwipeView {
-	          id: game_screenshots_swipe_view
+            id: gameAssetsSwipeView
 
-	          Layout.preferredWidth: 500
-	          Layout.preferredHeight: width * 9 / 16
+            anchors.top: gameTitle.bottom
+            anchors.left: parent.left
+            anchors.right: gameInfo.left
+            height: width * 9 / 16
+            clip: true
 
-	          clip: true
+            Repeater {
+              model: 6
 
-	          Repeater {
-	            model: 6
+              Image {
+                source: "../../resources/images/elden-ring.webp"
+                mipmap: true
+                fillMode: Image.PreserveAspectFit
 
-	            Image {
-	              source: "../../resources/images/elden-ring.webp"
-	              mipmap: true
-
-	              MouseArea {
+                MouseArea {
                   id: image_mouse_area
                   anchors.fill: parent
                   hoverEnabled: true
@@ -328,7 +322,7 @@ ApplicationWindow {
                           enabled: game_screenshots_swipe_view.currentIndex > 0
                           cursorShape: Qt.PointingHandCursor
                           hoverEnabled: true
-                          onClicked: game_screenshots_swipe_view.decrementCurrentIndex()
+                          onClicked: gameAssetsSwipeView.decrementCurrentIndex()
                         }
                       }
 
@@ -357,7 +351,7 @@ ApplicationWindow {
                           enabled: game_screenshots_swipe_view.currentIndex < game_screenshots_swipe_view.count - 1
                           cursorShape: Qt.PointingHandCursor
                           hoverEnabled: true
-                          onClicked: game_screenshots_swipe_view.incrementCurrentIndex()
+                          onClicked: gameAssetsSwipeView.incrementCurrentIndex()
                         }
                       }
 
@@ -369,37 +363,55 @@ ApplicationWindow {
                     }
                   }
                 }
-	            }
-	          }
-	        }
+              }
+            }
+          }
 
-	        Indent {}
+          Item {
+            id: gameInfo
+            width: 200
+            anchors.top: gameTitle.bottom
+            anchors.right: parent.right
 
-	        ColumnLayout {
-            id: edition
+            Span {
+              text: qsTr("Release date: ")
+            }
+          }
 
-            Rectangle {
-              id: editionBackground
+          Rectangle {
+            id: editionBackground
+            anchors.top: gameAssetsSwipeView.bottom
+            anchors.left: gameAssetsSwipeView.left
+            anchors.right: gameAssetsSwipeView.right
+            radius: defaultMargin
+            height: 2 * defaultMargin + buyLabel.height + addCartButton.height
+            color: "#2E3E4B"
+
+            Item {
               anchors.fill: parent
-              radius: defaultMargin
-              color: "#2E3E4B"
-            }
+              anchors.margins: defaultMargin
 
-            SubHeader {
-              text: qsTr("Buy ") + store_detailed_logic.title
-              Layout.preferredWidth: edition.width
-            }
-
-            RowLayout {
-              Item {
-                Layout.fillWidth: true
+              SubHeader {
+                id: buyLabel
+                anchors.margins: defaultMargin
+                anchors.left: parent.left
+                text: qsTr("Buy ") + store_detailed_logic.title
+                width: parent.width - 2 * defaultMargin
+                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
               }
 
               Price {
+                id: price
+                anchors.margins: defaultMargin
+                anchors.top: buyLabel.bottom
+                anchors.right: addCartButton.left
                 text: store_detailed_logic.price + "$"
               }
 
               ActionButton {
+                id: addCartButton
+                anchors.top: buyLabel.bottom
+                anchors.right: parent.right
                 notHoveredColor: "#008E31"
                 hoveredColor: "#00BC3E"
                 text: qsTr("Add to cart")
