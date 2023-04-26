@@ -290,6 +290,71 @@ Window {
 
             NeutralButton {
               text: qsTr("Next")
+              function handler() {
+                storeStackLayout.currentIndex = storeStackLayout.workshopRegisterPaymentInfoIndex
+              }
+            }
+          }
+        }
+      }
+
+      Scroll {
+        contentHeight: companyPayInfoForm.height
+
+        Item {
+          width: parent.width * 0.8
+          anchors.horizontalCenter: parent.horizontalCenter
+
+          ColumnLayout {
+            id: companyPayInfoForm
+
+            Link {
+              message: qsTr("To company information")
+
+              function handler() {
+                storeStackLayout.currentIndex = storeStackLayout.workshopRegisterCompanyInfoIndex
+              }
+            }
+
+            Indent {}
+
+            FormInputLabel {
+              text: qsTr("BIC")
+            }
+            FormInput {
+              id: bicInput
+              focus: true
+              text: company_logic.bic
+              onTextChanged: company_logic.bic = text
+            }
+
+            Indent {}
+
+            FormInputLabel {
+              text: qsTr("Bank address")
+            }
+            FormInput {
+              text: company_logic.bank_address
+              onTextChanged: company_logic.bank_address = text
+            }
+
+            Indent {}
+
+            FormInputLabel {
+              text: qsTr("Bank account number")
+            }
+            FormInput {
+              text: company_logic.bank_account_number
+              onTextChanged: company_logic.bank_account_number = text
+            }
+
+            Indent {}
+
+            ActionButton {
+              text: qsTr("Finish")
+              function handler() {
+                company_logic.new()
+              }
             }
           }
         }
