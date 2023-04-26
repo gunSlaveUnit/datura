@@ -170,190 +170,242 @@ Window {
       }
     }
 
-    StackLayout {
-      id: storeStackLayout
-
-      property int workshopRegisterCompanyInfoIndex: 0
-      property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
-      property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
-      property int workshopAppControlIndex: workshopAppsListIndex + 1
-
-      Connections {
-        target: auth_logic
-
-        function onRegistered() {
-          game_list_model.load_store()
-        }
-
-        function onLogin() {
-          game_list_model.load_store()
-        }
-
-        function onLogout() {
-          authStackLayout.currentIndex = authStackLayout.signInFormIndex
-          mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
-          storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+    ColumnLayout {
+      NeutralButton {
+        text: qsTr("Fowork")
+        function handler() {
+          storeStackLayout.checkCompanyRegistration()
         }
       }
 
-      Scroll {
-        contentHeight: companyInfoForm.height
+      StackLayout {
+        id: storeStackLayout
 
-        Item {
-          width: parent.width * 0.8
-          anchors.horizontalCenter: parent.horizontalCenter
+        property int workshopRegisterCompanyInfoIndex: 0
+        property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
+        property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
+        property int workshopAppControlIndex: workshopAppsListIndex + 1
 
-          ColumnLayout {
-            id: companyInfoForm
+        function checkCompanyRegistration() {
+          company_logic.check()
+        }
 
-            FormInputLabel {
-              text: qsTr("Juridical name")
-            }
-            FormInput {
-              id: juridicalNameInput
-              focus: true
-              text: company_logic.juridical_name
-              onTextChanged: company_logic.juridical_name = text
-            }
+        Connections {
+          target: company_logic
 
-            Indent {}
+          function onNotRegistered() {
+            storeStackLayout.currentIndex = storeStackLayout.workshopRegisterCompanyInfoIndex
+          }
 
-            FormInputLabel {
-              text: qsTr("Company form")
-            }
-            FormInput {
-              text: company_logic.company_form
-              onTextChanged: company_logic.company_form = text
-            }
+          function onRegistered() {
+            storeStackLayout.currentIndex = storeStackLayout.workshopAppsListIndex
+          }
+        }
 
-            Indent {}
+        Connections {
+          target: auth_logic
 
-            FormInputLabel {
-              text: qsTr("Street, house and apartment/office number")
-            }
-            FormInput {
-              text: company_logic.street_house_apartment
-              onTextChanged: company_logic.street_house_apartment = text
-            }
+          function onRegistered() {
+            game_list_model.load_store()
+          }
 
-            Indent {}
+          function onLogin() {
+            game_list_model.load_store()
+          }
 
-            FormInputLabel {
-              text: qsTr("City")
-            }
-            FormInput {
-              text: company_logic.city
-              onTextChanged: company_logic.city = text
-            }
+          function onLogout() {
+            authStackLayout.currentIndex = authStackLayout.signInFormIndex
+            mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
+            storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+          }
+        }
 
-            Indent {}
+        Scroll {
+          contentHeight: companyInfoForm.height
 
-            FormInputLabel {
-              text: qsTr("Region")
-            }
-            FormInput {
-              text: company_logic.region
-              onTextChanged: company_logic.region = text
-            }
+          Item {
+            width: parent.width * 0.8
+            anchors.horizontalCenter: parent.horizontalCenter
 
-            Indent {}
+            ColumnLayout {
+              id: companyInfoForm
 
-            FormInputLabel {
-              text: qsTr("Country")
-            }
-            FormInput {
-              text: company_logic.country
-              onTextChanged: company_logic.country = text
-            }
+              Indent {}
 
-            Indent {}
-
-            FormInputLabel {
-              text: qsTr("Postal code")
-            }
-            FormInput {
-              text: company_logic.postal_code
-              onTextChanged: company_logic.postal_code = text
-            }
-
-            Indent {}
-
-            FormInputLabel {
-              text: qsTr("Notification email")
-            }
-            FormInput {
-              text: company_logic.notification_email
-              onTextChanged: company_logic.notification_email = text
-            }
-
-            Indent {}
-
-            NeutralButton {
-              text: qsTr("Next")
-              function handler() {
-                storeStackLayout.currentIndex = storeStackLayout.workshopRegisterPaymentInfoIndex
+              FormInputLabel {
+                text: qsTr("Juridical name")
               }
+              FormInput {
+                id: juridicalNameInput
+                focus: true
+                text: company_logic.juridical_name
+                onTextChanged: company_logic.juridical_name = text
+              }
+
+              Indent {}
+
+              FormInputLabel {
+                text: qsTr("Company form")
+              }
+              FormInput {
+                text: company_logic.company_form
+                onTextChanged: company_logic.company_form = text
+              }
+
+              Indent {}
+
+              FormInputLabel {
+                text: qsTr("Street, house and apartment/office number")
+              }
+              FormInput {
+                text: company_logic.street_house_apartment
+                onTextChanged: company_logic.street_house_apartment = text
+              }
+
+              Indent {}
+
+              FormInputLabel {
+                text: qsTr("City")
+              }
+              FormInput {
+                text: company_logic.city
+                onTextChanged: company_logic.city = text
+              }
+
+              Indent {}
+
+              FormInputLabel {
+                text: qsTr("Region")
+              }
+              FormInput {
+                text: company_logic.region
+                onTextChanged: company_logic.region = text
+              }
+
+              Indent {}
+
+              FormInputLabel {
+                text: qsTr("Country")
+              }
+              FormInput {
+                text: company_logic.country
+                onTextChanged: company_logic.country = text
+              }
+
+              Indent {}
+
+              FormInputLabel {
+                text: qsTr("Postal code")
+              }
+              FormInput {
+                text: company_logic.postal_code
+                onTextChanged: company_logic.postal_code = text
+              }
+
+              Indent {}
+
+              FormInputLabel {
+                text: qsTr("Notification email")
+              }
+              FormInput {
+                text: company_logic.notification_email
+                onTextChanged: company_logic.notification_email = text
+              }
+
+              Indent {}
+
+              NeutralButton {
+                text: qsTr("Next")
+                function handler() {
+                  bicInput.focus = true
+                  storeStackLayout.currentIndex = storeStackLayout.workshopRegisterPaymentInfoIndex
+                }
+              }
+
+              Indent {}
             }
           }
         }
-      }
 
-      Scroll {
-        contentHeight: companyPayInfoForm.height
+        Scroll {
+          contentHeight: companyPayInfoForm.height
 
-        Item {
-          width: parent.width * 0.8
-          anchors.horizontalCenter: parent.horizontalCenter
+          Item {
+            width: parent.width * 0.8
+            anchors.horizontalCenter: parent.horizontalCenter
 
-          ColumnLayout {
-            id: companyPayInfoForm
+            ColumnLayout {
+              id: companyPayInfoForm
 
-            Link {
-              message: qsTr("To company information")
+              Indent {}
 
-              function handler() {
-                storeStackLayout.currentIndex = storeStackLayout.workshopRegisterCompanyInfoIndex
+              Link {
+                message: qsTr("To company information")
+
+                function handler() {
+                  juridicalNameInput.focus = true
+                  storeStackLayout.currentIndex = storeStackLayout.workshopRegisterCompanyInfoIndex
+                }
               }
+
+              Indent {}
+
+              FormInputLabel {
+                text: qsTr("BIC")
+              }
+              FormInput {
+                id: bicInput
+                focus: true
+                text: company_logic.bic
+                onTextChanged: company_logic.bic = text
+              }
+
+              Indent {}
+
+              FormInputLabel {
+                text: qsTr("Bank address")
+              }
+              FormInput {
+                text: company_logic.bank_address
+                onTextChanged: company_logic.bank_address = text
+              }
+
+              Indent {}
+
+              FormInputLabel {
+                text: qsTr("Bank account number")
+              }
+              FormInput {
+                text: company_logic.bank_account_number
+                onTextChanged: company_logic.bank_account_number = text
+              }
+
+              Indent {}
+
+              ActionButton {
+                text: qsTr("Finish")
+                function handler() {
+                  company_logic.new()
+                }
+              }
+
+              Indent {}
             }
+          }
+        }
 
-            Indent {}
+        Scroll {
+          contentHeight: releasesAppsList.height
 
-            FormInputLabel {
-              text: qsTr("BIC")
-            }
-            FormInput {
-              id: bicInput
-              focus: true
-              text: company_logic.bic
-              onTextChanged: company_logic.bic = text
-            }
+          Item {
+            width: parent.width * 0.8
+            anchors.horizontalCenter: parent.horizontalCenter
 
-            Indent {}
+            ColumnLayout {
+              id: releasesAppsList
 
-            FormInputLabel {
-              text: qsTr("Bank address")
-            }
-            FormInput {
-              text: company_logic.bank_address
-              onTextChanged: company_logic.bank_address = text
-            }
-
-            Indent {}
-
-            FormInputLabel {
-              text: qsTr("Bank account number")
-            }
-            FormInput {
-              text: company_logic.bank_account_number
-              onTextChanged: company_logic.bank_account_number = text
-            }
-
-            Indent {}
-
-            ActionButton {
-              text: qsTr("Finish")
-              function handler() {
-                company_logic.new()
+              Header {
+                text: "Bruh"
               }
             }
           }

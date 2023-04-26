@@ -5,9 +5,11 @@ from PySide6.QtGui import QGuiApplication, QColor, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 
 from desktop.src.logic.AuthLogic import AuthLogic
+from desktop.src.logic.CompanyLogic import CompanyLogic
 from desktop.src.logic.StoreDetailedLogic import StoreDetailedLogic
 from desktop.src.models.game import GameList
 from desktop.src.services.AuthService import AuthService
+from desktop.src.services.CompanyService import CompanyService
 from desktop.src.settings import ICONS_DIR, LAYOUTS_DIR, APP_ID
 
 if __name__ == '__main__':
@@ -29,6 +31,10 @@ if __name__ == '__main__':
 
     store_detailed_logic = StoreDetailedLogic(auth_service)
     engine.rootContext().setContextProperty("store_detailed_logic", store_detailed_logic)
+
+    company_service = CompanyService(auth_service)
+    company_logic = CompanyLogic(company_service)
+    engine.rootContext().setContextProperty("company_logic", company_logic)
 
     game_list_model = GameList(auth_service)
     engine.rootContext().setContextProperty("game_list_model", game_list_model)
