@@ -6,6 +6,7 @@ from PySide6.QtCore import QAbstractListModel, QModelIndex, QByteArray, Qt, Slot
 
 from desktop.src.models.entity import Entity
 from desktop.src.services.AuthService import AuthService
+from desktop.src.services.CompanyService import CompanyService
 from desktop.src.settings import GAMES_URL
 
 
@@ -23,10 +24,13 @@ class Game(Entity):
 
 
 class GameList(QAbstractListModel):
-    def __init__(self, auth_service: AuthService):
+    def __init__(self,
+                 auth_service: AuthService,
+                 company_service: CompanyService):
         super().__init__()
 
         self._auth_service = auth_service
+        self._company_service = company_service
 
         self._games = []
 
@@ -41,6 +45,16 @@ class GameList(QAbstractListModel):
             self._games = []
             for game in games:
                 self._games.append(Game(**game))
+            self.endResetModel()
+
+    @Slot()
+    def load_personal(self):
+        self._company_service.load_personal()
+        if self._company_service.company is not None:
+            url = GAMES_URL + f'?company_id={self._company_service.company["id"]}'
+            data = self._auth_service.authorized_session.get(url).json()
+            self.beginResetModel()
+            self._games = [Game(**detailed_game_data) for detailed_game_data in data]
             self.endResetModel()
 
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
