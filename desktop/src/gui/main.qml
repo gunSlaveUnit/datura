@@ -7,7 +7,7 @@ import Qt.labs.platform
 Window {
   id: window
   width: 1000
-  height: 500
+  height: 800
   visible: true
   title: windowTitle
   color: backgroundWindowColor
@@ -244,7 +244,13 @@ Window {
             }
           }
 
-          Header {text: store_detailed_logic.game_title}
+          Header {
+            text: store_detailed_logic.title
+            Layout.preferredWidth: parent.width
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+          }
+
+          Indent {}
 
           SwipeView {
 	          id: game_screenshots_swipe_view
@@ -330,11 +336,39 @@ Window {
 	          }
 	        }
 
-          ActionButton {
-            notHoveredColor: "#008E31"
-            hoveredColor: "#00BC3E"
-	          text: qsTr("Add to cart")
-	        }
+	        Indent {}
+
+	        ColumnLayout {
+            id: edition
+
+            Rectangle {
+              id: editionBackground
+              anchors.fill: parent
+              radius: defaultMargin
+              color: "#2E3E4B"
+            }
+
+            SubHeader {
+              text: qsTr("Buy ") + store_detailed_logic.title
+              Layout.preferredWidth: edition.width
+            }
+
+            RowLayout {
+              Item {
+                Layout.fillWidth: true
+              }
+
+              Price {
+                text: store_detailed_logic.price + "$"
+              }
+
+              ActionButton {
+                notHoveredColor: "#008E31"
+                hoveredColor: "#00BC3E"
+                text: qsTr("Add to cart")
+              }
+            }
+          }
         }
       }
     }
