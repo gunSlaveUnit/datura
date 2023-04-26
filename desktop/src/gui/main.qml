@@ -331,7 +331,9 @@ Window {
 	        }
 
           ActionButton {
-	          text: qsTr("Buy")
+            notHoveredColor: "#008E31"
+            hoveredColor: "#00BC3E"
+	          text: qsTr("Add to cart")
 	        }
         }
       }

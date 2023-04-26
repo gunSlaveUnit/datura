@@ -10,12 +10,18 @@ Button {
 
   font.bold: true
 
-  property var notHoveredColor: "#0053A6"
-  property var hoveredColor: "#0079F2"
+  property string notHoveredColor: "#0053A6"
+  property string hoveredColor: "#0079F2"
 
   onClicked: handler()
   Keys.onReturnPressed: handler()
   Keys.onEnterPressed: handler()
+
+  MouseArea {
+    anchors.fill: parent
+    cursorShape: Qt.PointingHandCursor
+    onPressed:  mouse.accepted = false
+  }
 
   background: Rectangle {
     color: parent.visualFocus ? button.hoveredColor : button.notHoveredColor
