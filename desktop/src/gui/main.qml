@@ -213,6 +213,7 @@ ApplicationWindow {
         }
 
         function onLogout() {
+          menu.visible = false
           authStackLayout.currentIndex = authStackLayout.signInFormIndex
           mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
           storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
