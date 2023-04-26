@@ -4,6 +4,7 @@ import ctypes
 from PySide6.QtGui import QGuiApplication, QColor, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 
+from desktop.src.logic.AppLogic import AppLogic
 from desktop.src.logic.AuthLogic import AuthLogic
 from desktop.src.logic.CompanyLogic import CompanyLogic
 from desktop.src.logic.StoreDetailedLogic import StoreDetailedLogic
@@ -36,7 +37,10 @@ if __name__ == '__main__':
     company_logic = CompanyLogic(company_service)
     engine.rootContext().setContextProperty("company_logic", company_logic)
 
-    game_list_model = GameList(auth_service)
+    app_logic = AppLogic(auth_service)
+    engine.rootContext().setContextProperty("app_logic", app_logic)
+
+    game_list_model = GameList(auth_service, company_service)
     engine.rootContext().setContextProperty("game_list_model", game_list_model)
 
     start_file_location = LAYOUTS_DIR / "main.qml"
