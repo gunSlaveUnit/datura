@@ -6,8 +6,8 @@ import Qt.labs.platform as Platform
 
 ApplicationWindow {
   id: window
-  width: 1000
-  height: 500
+  width: storeGamesGridView.cellWidth * 7 + 2 * defaultMargin
+  height: storeGamesGridView.cellHeight * 1.8 + 4 * defaultMargin
   visible: true
   title: windowTitle
   color: backgroundWindowColor
@@ -269,9 +269,12 @@ ApplicationWindow {
         boundsBehavior: Flickable.StopAtBounds
 
         property int capsuleImageWidth: 12 * 10
-        property int capsuleImageHeight: 17 * 10
+        property int capsuleImageHeight: capsuleImageWidth * 16 / 9
 
-        cellWidth: capsuleImageWidth + defaultMargin * 2
+        property int idealWidth: capsuleImageWidth + defaultMargin * 2
+        property int itemsPerRow: storeGamesGridView.width / idealWidth
+        property double additionalCellWidth: (storeGamesGridView.width - itemsPerRow * idealWidth) / itemsPerRow
+        cellWidth: idealWidth + additionalCellWidth
         cellHeight: capsuleImageHeight + defaultMargin * 2
 
         clip: true
