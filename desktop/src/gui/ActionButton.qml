@@ -17,12 +17,6 @@ Button {
   Keys.onReturnPressed: handler()
   Keys.onEnterPressed: handler()
 
-  MouseArea {
-    anchors.fill: parent
-    cursorShape: Qt.PointingHandCursor
-    onPressed:  mouse.accepted = false
-  }
-
   background: Rectangle {
     color: parent.visualFocus ? button.hoveredColor : button.notHoveredColor
 
@@ -34,6 +28,7 @@ Button {
     MouseArea {
       anchors.fill: parent
       hoverEnabled: true
+      cursorShape: Qt.PointingHandCursor
       onEntered: parent.color = button.hoveredColor
       onExited: parent.color = button.notHoveredColor
     }
