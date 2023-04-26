@@ -123,7 +123,6 @@ ApplicationWindow {
           ActionButton {
             Layout.alignment: Qt.AlignHCenter
             text: qsTr("Sign in")
-
             function handler() {
               auth_logic.sign_in()
             }
@@ -236,6 +235,7 @@ ApplicationWindow {
         }
 
         function onRegistered() {
+          game_list_model.load_personal()
           storeStackLayout.currentIndex = storeStackLayout.workshopAppsListIndex
         }
       }
@@ -513,8 +513,44 @@ ApplicationWindow {
           ColumnLayout {
             id: releasesAppsList
 
-            Header {
-              text: "Bruh"
+            Connections {
+              target: app_logic
+
+              function onDrafted() {
+                storeStackLayout.currentIndex = storeStackLayout.workshopAppControlIndex
+              }
+            }
+
+            ActionButton {
+              text: qsTr("Draft new")
+              function handler() {
+                app_logic.draft_new()
+              }
+              visible: company_logic.is_drafted_new_button_enabled
+            }
+
+            ListView {
+              Layout.fillHeight: true
+
+              model: game_list_model
+
+              delegate: RowLayout {
+                Text {
+                  text: title
+                  color: "white"
+                  font.underline: true
+
+                  MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onClicked: {
+                      app_logic.map(id)
+                      storeStackLayout.currentIndex = storeStackLayout.workshopAppControlIndex
+                    }
+                  }
+                }
+              }
             }
           }
         }
