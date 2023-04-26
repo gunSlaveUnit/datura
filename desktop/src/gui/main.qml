@@ -30,6 +30,10 @@ ApplicationWindow {
 
       Action {
         text: qsTr("Store")
+        onTriggered: {
+          game_list_model.load_store()
+          storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+        }
       }
 
       Action {
@@ -213,7 +217,9 @@ ApplicationWindow {
     StackLayout {
       id: storeStackLayout
 
-      property int workshopRegisterCompanyInfoIndex: 0
+      property int storeGamesIndex: 0
+      property int storeDetailedGameIndex: storeGamesIndex + 1
+      property int workshopRegisterCompanyInfoIndex: storeDetailedGameIndex + 1
       property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
       property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
       property int workshopAppControlIndex: workshopAppsListIndex + 1
@@ -251,6 +257,75 @@ ApplicationWindow {
           authStackLayout.currentIndex = authStackLayout.signInFormIndex
           mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
           storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+        }
+      }
+
+      GridView {
+        id: storeGamesGridView
+
+        anchors.fill: parent
+        anchors.margins: defaultMargin
+
+        boundsBehavior: Flickable.StopAtBounds
+
+        property int capsuleImageWidth: 12 * 10
+        property int capsuleImageHeight: 17 * 10
+
+        cellWidth: capsuleImageWidth + defaultMargin * 2
+        cellHeight: capsuleImageHeight + defaultMargin * 2
+
+        clip: true
+
+        model: game_list_model
+
+        delegate: Rectangle {
+          width: storeGamesGridView.cellWidth
+          height: storeGamesGridView.cellHeight
+          color: "transparent"
+          radius: defaultMargin / 2
+
+          Image {
+            anchors.centerIn: parent
+            width: storeGamesGridView.capsuleImageWidth
+            height: storeGamesGridView.capsuleImageHeight
+            source: `http://127.0.0.1:8000/api/v1/games/${id}/capsule/`
+            mipmap: true
+          }
+
+          MouseArea {
+            id: cell_mouse_area
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            hoverEnabled: true
+            onEntered: parent.color = "#36373a"
+            onExited: parent.color = "transparent"
+            onClicked: {
+              store_detailed_logic.load(id)
+              storeStackLayout.currentIndex = storeStackLayout.storeDetailedGameIndex
+            }
+          }
+        }
+      }
+
+      Scroll {
+        contentHeight: storeGameDetailedPage.height
+
+        Item {
+          width: parent.width * 0.8
+          anchors.horizontalCenter: parent.horizontalCenter
+
+          ColumnLayout {
+            id: storeGameDetailedPage
+
+            Link {
+              message: qsTr("To the store")
+
+              function handler() {
+                game_list_model.load_store()
+                storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+              }
+            }
+          }
         }
       }
 
