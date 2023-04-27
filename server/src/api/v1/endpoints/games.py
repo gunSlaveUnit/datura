@@ -64,8 +64,8 @@ async def create(new_game_data: GameCreateSchema,
     game = Game(**vars(new_game_data))
     game.owner_id = current_user.id
 
-    not_send_status = await GameStatus.by_title(db, GameStatusType.NOT_SEND)
-    game.status_id = not_send_status.id
+    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
+    game.status_id = not_approved_status.id
 
     new_directory_uuid = str(uuid.uuid4())
     assets_directory = GAMES_ASSETS_PATH.joinpath(new_directory_uuid)
