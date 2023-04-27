@@ -49,6 +49,7 @@ BUILDS_ROUTER_PREFIX = '/builds'
 LIBRARY_ROUTER_PREFIX = '/library'
 CART_ROUTER_PREFIX = '/cart'
 AGE_CATEGORIES_ROUTER_PREFIX = '/age-categories'
+PLATFORMS_ROUTER_PREFIX = '/platforms'
 
 
 # Tags
