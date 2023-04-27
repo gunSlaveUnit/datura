@@ -24,6 +24,14 @@ async def download_header(game_id: int,
 
     game = await Game.by_id(db, game_id)
 
+    part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
+    full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
+    if game.status_id not in [part_published_status, full_published_status]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Asset not approved"
+        )
+
     searching_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_HEADER_DIR)
 
     files = list(searching_directory.glob('*'))
@@ -75,6 +83,14 @@ async def download_capsule(game_id: int,
     """Returns an image for the capsule section of the game."""
 
     game = await Game.by_id(db, game_id)
+
+    part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
+    full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
+    if game.status_id not in [part_published_status, full_published_status]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Asset not approved"
+        )
 
     searching_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_CAPSULE_DIR)
 
@@ -131,6 +147,14 @@ async def screenshots_info(game_id: int,
 
     game = await Game.by_id(db, game_id)
 
+    part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
+    full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
+    if game.status_id not in [part_published_status, full_published_status]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Asset not approved"
+        )
+
     path = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_SCREENSHOTS_DIR)
 
     if filename:
@@ -176,6 +200,14 @@ async def trailers_info(game_id: int,
     """
 
     game = await Game.by_id(db, game_id)
+
+    part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
+    full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
+    if game.status_id not in [part_published_status, full_published_status]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Asset not approved"
+        )
 
     path = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_TRAILERS_DIR)
 
