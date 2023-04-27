@@ -57,29 +57,52 @@ AGE_CATEGORIES_ROUTER_PREFIX = '/age-categories'
 class Tags(str, Enum):
     HOME = 'Home'
     V1 = 'V1'
+
     AUTH = 'Auth'
-    GAMES = 'Games'
-    ASSETS = 'Assets'
-    AGE_CATEGORIES = 'Age categories'
-    BUILDS = 'Builds'
-    COMPANIES = 'Companies'
-    LIBRARY = 'Library'
     USERS = 'Users'
+    ROLES = 'Roles'
+
+    COMPANIES = 'Companies'
+
+    LIBRARY = 'Library'
+
     CART = 'Cart'
+    PAYMENTS = 'Payments'
+
+    GAMES = 'Games'
+    AGE_CATEGORIES = 'Age categories'
+    STATUSES = 'Statuses'
+    TAGS = 'Tags'
+    ASSETS = 'Assets'
+    BUILDS = 'Builds'
+    PLATFORMS = 'Platforms'
+    SYSTEM_REQUIREMENTS = 'System requirements'
+    GAME_LANGUAGES = 'Game languages'
+    LANGUAGES = 'Languages'
+    REVIEWS = 'Reviews'
 
 
 tags_metadata = [
     {'name': Tags.HOME, 'description': 'General information describing the API'},
     {'name': Tags.V1, 'description': 'API version 1'},
-    {'name': Tags.AUTH, 'description': 'Describes an authentication API'},
-    {'name': Tags.GAMES, 'description': 'Describes an API to manage games'},
-    {'name': Tags.ASSETS, 'description': 'Describes an API to manage assets'},
-    {'name': Tags.AGE_CATEGORIES, 'description': 'Describes an API to manage we need to rewrite descriptions'},
-    {'name': Tags.BUILDS, 'description': 'Describes an API to manage builds'},
-    {'name': Tags.COMPANIES, 'description': 'Describes an API to manage companies'},
-    {'name': Tags.LIBRARY, 'description': 'Describes an API to manage library records'},
-    {'name': Tags.USERS, 'description': 'Describes an API to manage users'},
-    {'name': Tags.CART, 'description': 'Describes an API to manage cart records'},
+    {'name': Tags.AUTH, 'description': ''},
+    {'name': Tags.USERS, 'description': ''},
+    {'name': Tags.ROLES, 'description': ''},
+    {'name': Tags.COMPANIES, 'description': ''},
+    {'name': Tags.LIBRARY, 'description': ''},
+    {'name': Tags.CART, 'description': ''},
+    {'name': Tags.PAYMENTS, 'description': ''},
+    {'name': Tags.GAMES, 'description': ''},
+    {'name': Tags.AGE_CATEGORIES, 'description': ''},
+    {'name': Tags.STATUSES, 'description': ''},
+    {'name': Tags.TAGS, 'description': ''},
+    {'name': Tags.ASSETS, 'description': ''},
+    {'name': Tags.BUILDS, 'description': ''},
+    {'name': Tags.PLATFORMS, 'description': ''},
+    {'name': Tags.SYSTEM_REQUIREMENTS, 'description': ''},
+    {'name': Tags.GAME_LANGUAGES, 'description': ''},
+    {'name': Tags.LANGUAGES, 'description': ''},
+    {'name': Tags.REVIEWS, 'description': ''},
 ]
 
 
