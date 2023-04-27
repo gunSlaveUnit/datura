@@ -4,6 +4,7 @@ import shutil
 from pathlib import Path
 from typing import List, BinaryIO
 
+import aiofiles as aiofiles
 from fastapi import UploadFile
 
 CHUNK_SIZE = 8192
@@ -15,9 +16,9 @@ async def save(directory: Path, files: List[UploadFile]):
         directory.mkdir(parents=True, exist_ok=True)
 
     for file in files:
-        with open(directory.joinpath(file.filename), 'wb') as document:
-            data = await file.read()
-            document.write(data)
+        async with aiofiles.open(directory.joinpath(file.filename), 'wb') as f:
+            while chunk := await file.read(CHUNK_SIZE):
+                await f.write(chunk)
 
 
 async def clear(directory: Path):
