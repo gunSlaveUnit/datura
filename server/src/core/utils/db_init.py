@@ -2,8 +2,9 @@ from server.src.core.models.age_category import AgeCategory
 from server.src.core.models.game_status import GameStatus
 from server.src.core.models.platform import Platform
 from server.src.core.models.role import Role
+from server.src.core.models.tag import Tag
 from server.src.core.models.user import User
-from server.src.core.settings import admin_config, RoleType, GameStatusType, AgeType, PlatformType
+from server.src.core.settings import admin_config, RoleType, GameStatusType, AgeType, PlatformType, Tags, DEFAULT_TAGS
 from server.src.core.utils.crypt import get_password_hash
 from server.src.core.utils.db import get_db
 
@@ -25,6 +26,9 @@ def init_db():
 
     if len(db.query(Platform).all()) == 0:
         _add_platforms(db)
+
+    if len(db.query(Tag).all()) == 0:
+        _add_tags(db)
 
 
 def _add_admin(session):
@@ -91,5 +95,14 @@ def _add_platforms(session):
         platform = Platform(title=platform_title)
 
         session.add(platform)
+
+    session.commit()
+
+
+def _add_tags(session):
+    for tag in DEFAULT_TAGS:
+        tag = Tag(title=tag)
+
+        session.add(tag)
 
     session.commit()
