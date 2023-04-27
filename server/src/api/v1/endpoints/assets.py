@@ -26,7 +26,7 @@ async def download_header(game_id: int,
 
     part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
     full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
-    if game.status_id not in [part_published_status, full_published_status]:
+    if game.status_id not in [part_published_status.id, full_published_status.id]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Asset not approved"
@@ -86,7 +86,7 @@ async def download_capsule(game_id: int,
 
     part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
     full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
-    if game.status_id not in [part_published_status, full_published_status]:
+    if game.status_id not in [part_published_status.id, full_published_status.id]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Asset not approved"
@@ -149,7 +149,7 @@ async def screenshots_info(game_id: int,
 
     part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
     full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
-    if game.status_id not in [part_published_status, full_published_status]:
+    if game.status_id not in [part_published_status.id, full_published_status.id]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Asset not approved"
@@ -203,7 +203,7 @@ async def trailers_info(game_id: int,
 
     part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
     full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
-    if game.status_id not in [part_published_status, full_published_status]:
+    if game.status_id not in [part_published_status.id, full_published_status.id]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Asset not approved"
