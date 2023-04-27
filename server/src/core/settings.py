@@ -91,11 +91,13 @@ class RoleType(Enum):
     USER = "user"
 
 
-class GameStatusType(str, Enum):
-    NOT_SEND = "Not send"
+class GameStatusType(Enum):
+    NOT_APPROVED = "Not approved"
     SEND = "Send"
-    NOT_PUBLISHED = "Not published"
-    PUBLISHED = "Published"
+    PART_APPROVED = "Part approved"
+    FULL_APPROVED = "Full approved"
+    PART_PUBLISHED = "Part published"
+    FULL_PUBLISHED = "Full published"
 
 
 class AgeType(Enum):
@@ -107,14 +109,9 @@ class AgeType(Enum):
 
 
 # From https://docs.python.org/3/library/sys.html
-PLATFORMS = [
-    'aix',
-    'emscripten',
-    'linux',
-    'wasi',
-    'win32',
-    'cygwin',
-    'darwin'
-]
+class PlatformType(Enum):
+    LINUX = 'linux'
+    WINDOWS = 'win32'
+
 
 DEFAULT_AVATAR_FILENAME = 'default.webp'

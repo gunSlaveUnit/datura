@@ -1,9 +1,10 @@
-from sqlalchemy import Column, String
+from sqlalchemy import Column, Enum
 
 from server.src.core.models.entity import Entity
+from server.src.core.settings import PlatformType
 
 
 class Platform(Entity):
     __tablename__ = "platforms"
 
-    title = Column(String, index=True, nullable=False)
+    title = Column(Enum(PlatformType), unique=True, index=True, nullable=False)

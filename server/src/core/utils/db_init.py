@@ -3,7 +3,7 @@ from server.src.core.models.game_status import GameStatus
 from server.src.core.models.platform import Platform
 from server.src.core.models.role import Role
 from server.src.core.models.user import User
-from server.src.core.settings import admin_config, RoleType, GameStatusType, AgeType, PLATFORMS
+from server.src.core.settings import admin_config, RoleType, GameStatusType, AgeType, PlatformType
 from server.src.core.utils.crypt import get_password_hash
 from server.src.core.utils.db import get_db
 
@@ -87,7 +87,7 @@ def _add_ages(session):
 
 
 def _add_platforms(session):
-    for platform_title in PLATFORMS:
+    for platform_title in PlatformType:
         platform = Platform(title=platform_title)
 
         session.add(platform)
