@@ -48,6 +48,7 @@ ASSETS_ROUTER_PREFIX = '/{game_id}'
 BUILDS_ROUTER_PREFIX = '/builds'
 LIBRARY_ROUTER_PREFIX = '/library'
 CART_ROUTER_PREFIX = '/cart'
+AGE_CATEGORIES_ROUTER_PREFIX = '/age-categories'
 
 
 # Tags
@@ -59,7 +60,8 @@ class Tags(str, Enum):
     AUTH = 'Auth'
     GAMES = 'Games'
     ASSETS = 'Assets'
-    BUILDS = 'Assets'
+    AGE_CATEGORIES = 'Age categories'
+    BUILDS = 'Builds'
     COMPANIES = 'Companies'
     LIBRARY = 'Library'
     USERS = 'Users'
@@ -72,6 +74,7 @@ tags_metadata = [
     {'name': Tags.AUTH, 'description': 'Describes an authentication API'},
     {'name': Tags.GAMES, 'description': 'Describes an API to manage games'},
     {'name': Tags.ASSETS, 'description': 'Describes an API to manage assets'},
+    {'name': Tags.AGE_CATEGORIES, 'description': 'Describes an API to manage we need to rewrite descriptions'},
     {'name': Tags.BUILDS, 'description': 'Describes an API to manage builds'},
     {'name': Tags.COMPANIES, 'description': 'Describes an API to manage companies'},
     {'name': Tags.LIBRARY, 'description': 'Describes an API to manage library records'},
