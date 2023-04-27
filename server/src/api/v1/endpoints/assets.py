@@ -69,8 +69,8 @@ async def upload_header(game_id: int,
     store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_HEADER_DIR)
     await clear(store_files_directory)
 
-    not_send_status = await GameStatus.by_title(db, GameStatusType.NOT_SEND)
-    game.update(db, {"status_id": not_send_status.id})
+    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
+    await game.update(db, {"status_id": not_approved_status.id})
 
     await save(store_files_directory, [file])
 
@@ -129,8 +129,8 @@ async def upload_capsule(game_id: int,
     store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_CAPSULE_DIR)
     await clear(store_files_directory)
 
-    not_send_status = await GameStatus.by_title(db, GameStatusType.NOT_SEND)
-    await game.update(db, {"status_id": not_send_status.id})
+    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
+    await game.update(db, {"status_id": not_approved_status.id})
 
     await save(store_files_directory, [file])
 
@@ -183,8 +183,8 @@ async def upload_screenshots(game_id: int,
     store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_SCREENSHOTS_DIR)
     await clear(store_files_directory)
 
-    not_send_status = await GameStatus.by_title(db, GameStatusType.NOT_SEND)
-    game.update(db, {"status_id": not_send_status.id})
+    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
+    await game.update(db, {"status_id": not_approved_status.id})
 
     await save(store_files_directory, files)
 
@@ -237,8 +237,8 @@ async def upload_trailers(game_id: int,
     store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_TRAILERS_DIR)
     await clear(store_files_directory)
 
-    not_send_status = await GameStatus.by_title(db, GameStatusType.NOT_SEND)
-    game.update(db, {"status_id": not_send_status.id})
+    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
+    await game.update(db, {"status_id": not_approved_status.id})
 
     await save(store_files_directory, files)
 
