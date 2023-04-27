@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Text, Integer, ForeignKey
+from sqlalchemy import Column, String, Integer, ForeignKey
 
 from server.src.core.models.entity import Entity
 
@@ -14,4 +14,3 @@ class Tag(Entity):
     __tablename__ = "tags"
 
     title = Column(String, unique=True, nullable=False)
-    description = Column(Text, nullable=False)
