@@ -6,8 +6,8 @@ import Qt.labs.platform as Platform
 
 ApplicationWindow {
   id: window
-  width: storeGamesGridView.cellWidth * 7 + 2 * defaultMargin
-  height: storeGamesGridView.cellHeight * 1.8 + 4 * defaultMargin
+  minimumWidth: 1000
+  minimumHeight: 540
   visible: true
   title: windowTitle
   color: backgroundWindowColor
