@@ -72,6 +72,7 @@ class Tags(str, Enum):
     GAMES = 'Games'
     AGE_CATEGORIES = 'Age categories'
     STATUSES = 'Statuses'
+    GAME_TAGS = 'Game tags'
     TAGS = 'Tags'
     ASSETS = 'Assets'
     BUILDS = 'Builds'
@@ -95,6 +96,7 @@ tags_metadata = [
     {'name': Tags.GAMES, 'description': ''},
     {'name': Tags.AGE_CATEGORIES, 'description': ''},
     {'name': Tags.STATUSES, 'description': ''},
+    {'name': Tags.GAME_TAGS, 'description': ''},
     {'name': Tags.TAGS, 'description': ''},
     {'name': Tags.ASSETS, 'description': ''},
     {'name': Tags.BUILDS, 'description': ''},
