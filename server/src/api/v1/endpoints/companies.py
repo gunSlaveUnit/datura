@@ -67,10 +67,10 @@ async def approve(company_id: int,
 
     company_owner_id = company.owner_id
 
-    not_send_status = await GameStatus.by_title(db, GameStatusType.NOT_SEND)
+    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
 
     company_games = db.query(Game).filter(Game.owner_id == company_owner_id)
     if not approving.is_approved:
-        company_games.update({"status_id": not_send_status.id})
+        company_games.update({"status_id": not_approved_status.id})
 
     await company.update(db, {"is_approved": approving.is_approved})
