@@ -140,3 +140,30 @@ class PlatformType(Enum):
 
 
 DEFAULT_AVATAR_FILENAME = 'default.webp'
+
+DEFAULT_TAGS = [
+    'Indie',
+    'Strategy',
+    'Cyberpunk',
+    'Shooter',
+    '2D',
+    '3D',
+    'First person',
+    'Third party',
+    'Action',
+    'Complex',
+    'Bagel',
+    'Great soundtrack',
+    'Simulator',
+    'Pixel graphic',
+    'Anime',
+    'Role-playing',
+    'Adventure',
+    'Atmosphere',
+    'For two',
+    'Cooperative',
+    'Multiplayer',
+    'Battle royal',
+    'Tactics',
+    'Puzzle',
+]
