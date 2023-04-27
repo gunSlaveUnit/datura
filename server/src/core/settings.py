@@ -169,3 +169,16 @@ DEFAULT_TAGS = [
     'Tactics',
     'Puzzle',
 ]
+
+DEFAULT_LANGUAGES = [
+    'Chinese',
+    'Spanish',
+    'English',
+    'Hindi',
+    'Arab',
+    'Bengal',
+    'Portuguese',
+    'Russian',
+    'Japanese',
+    'Javanese',
+]
