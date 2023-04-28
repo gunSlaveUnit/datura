@@ -35,8 +35,6 @@ def init_db():
     if len(db.query(Language).all()) == 0:
         _add_languages(db)
 
-    db.commit()
-
 
 def _add_admin(session):
     admin_role = session.query(Role).filter(Role.title == RoleType.ADMIN).one()
@@ -52,18 +50,21 @@ def _add_admin(session):
     )
 
     session.add(user)
+    session.commit()
 
 
 def _add_roles(session):
     for role_type in RoleType:
         role = Role(title=role_type)
         session.add(role)
+    session.commit()
 
 
 def _add_game_statuses(session):
     for game_status_type in GameStatusType:
         game_status = GameStatus(title=game_status_type)
         session.add(game_status)
+    session.commit()
 
 
 def _add_ages(session):
@@ -90,21 +91,25 @@ def _add_ages(session):
     session.add(pegi_12)
     session.add(pegi_16)
     session.add(pegi_18)
+    session.commit()
 
 
 def _add_platforms(session):
     for platform_title in PlatformType:
         platform = Platform(title=platform_title)
         session.add(platform)
+    session.commit()
 
 
 def _add_tags(session):
     for tag in DEFAULT_TAGS:
         tag = Tag(title=tag)
         session.add(tag)
+    session.commit()
 
 
 def _add_languages(session):
     for language in DEFAULT_LANGUAGES:
         language = Language(title=language)
         session.add(language)
+    session.commit()
