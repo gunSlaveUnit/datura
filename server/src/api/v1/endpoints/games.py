@@ -26,19 +26,9 @@ router.include_router(reviews_router)
 
 
 @router.get('/')
-async def items(game_filter: GameFilterSchema = Body(None),
+async def items(_: GameFilterSchema = Body(None),
                 db=Depends(get_db)):
-    published_status = await GameStatus.by_title(db, GameStatusType.PUBLISHED)
-
-    if game_filter is None:
-        game_filter = GameFilterSchema(status_id=[published_status.id])
-
-    if game_filter.status_id is None:
-        game_filter.status_id = [published_status.id]
-
-    games = db.query(Game).filter(Game.status_id.in_(game_filter.status_id))
-
-    return games.all()
+    return db.query(Game).all()
 
 
 @router.get('/{game_id}/')
