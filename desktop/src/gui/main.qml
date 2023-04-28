@@ -404,10 +404,10 @@ ApplicationWindow {
       }
 
       Scroll {
-        contentHeight: companyPayInfoForm.height
+        contentHeight: companyInfoForm.height + 2 * defaultMargin
 
         Item {
-          width: parent.width * 0.8
+          width: layoutWidth
           anchors.horizontalCenter: parent.horizontalCenter
 
           ColumnLayout {
