@@ -17,7 +17,7 @@ ApplicationWindow {
   property string windowTitle: qsTr("foggie")
   property int defaultMargin: 8
 
-  menuBar: Menu {
+  menuBar: TopMenuBar {
     id: menu
     visible: false
   }
