@@ -54,6 +54,7 @@ SYSTEM_REQUIREMENTS_ROUTER_PREFIX = '/{build_id}/requirements'
 LANGUAGES_ROUTER_PREFIX = '/languages'
 GAME_TAGS_ROUTER_PREFIX = '/{game_id}/tags'
 TAGS_ROUTER_PREFIX = '/tags'
+REVIEWS_ROUTER_PREFIX = '/{game_id}/reviews'
 
 
 # Tags
