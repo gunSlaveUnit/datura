@@ -52,6 +52,7 @@ AGE_CATEGORIES_ROUTER_PREFIX = '/age-categories'
 PLATFORMS_ROUTER_PREFIX = '/platforms'
 SYSTEM_REQUIREMENTS_ROUTER_PREFIX = '/{build_id}/requirements'
 LANGUAGES_ROUTER_PREFIX = '/languages'
+TAGS_ROUTER_PREFIX = '/tags'
 
 
 # Tags
