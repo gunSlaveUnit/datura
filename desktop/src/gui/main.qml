@@ -6,8 +6,11 @@ import Qt.labs.platform as Platform
 
 ApplicationWindow {
   id: window
-  minimumWidth: 1000
-  minimumHeight: 540
+  property int layoutWidth: 960
+  property int layoutHeight: 500
+  minimumWidth: layoutWidth + 2 * defaultMargin
+  minimumHeight: layoutHeight
+
   visible: true
   title: windowTitle
   color: backgroundWindowColor
@@ -296,10 +299,10 @@ ApplicationWindow {
       }
 
       Scroll {
-        contentHeight: companyInfoForm.height
+        contentHeight: companyInfoForm.height + 2 * defaultMargin
 
         Item {
-          width: parent.width * 0.8
+          width: layoutWidth
           anchors.horizontalCenter: parent.horizontalCenter
 
           ColumnLayout {
@@ -396,8 +399,6 @@ ApplicationWindow {
                 storeStackLayout.currentIndex = storeStackLayout.workshopRegisterPaymentInfoIndex
               }
             }
-
-            Indent {}
           }
         }
       }
