@@ -17,10 +17,12 @@ from server.src.api.v1.schemas.game import GameFilterSchema, GameCreateSchema, G
     GamePublishingSchema
 from server.src.api.v1.endpoints.assets import router as assets_router
 from server.src.api.v1.endpoints.game_tags import router as tags_router
+from server.src.api.v1.endpoints.reviews import router as reviews_router
 
 router = APIRouter(prefix=GAMES_ROUTER_PREFIX, tags=[Tags.GAMES])
 router.include_router(assets_router)
 router.include_router(tags_router)
+router.include_router(reviews_router)
 
 
 @router.get('/')
