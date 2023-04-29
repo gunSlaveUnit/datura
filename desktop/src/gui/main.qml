@@ -671,10 +671,10 @@ ApplicationWindow {
       }
 
       Scroll {
-        contentHeight: releasesAppsList.height
+        contentHeight: companyInfoForm.height + 2 * defaultMargin
 
         Item {
-          width: parent.width * 0.8
+          width: layoutWidth
           anchors.horizontalCenter: parent.horizontalCenter
 
           ColumnLayout {
@@ -694,6 +694,18 @@ ApplicationWindow {
                 app_logic.draft_new()
               }
               visible: company_logic.is_drafted_new_button_enabled
+            }
+
+            Span {
+              text: qsTr("Until your company data is not approved, you cannot make new releases")
+              color: "orange"
+              visible: !company_logic.is_drafted_new_button_enabled
+            }
+
+            Span {
+              text: qsTr("You currently have no releases")
+              color: highlightedTextColor
+              visible: game_list_model.rowCount() === 0
             }
 
             ListView {
