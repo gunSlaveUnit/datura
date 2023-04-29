@@ -2,6 +2,7 @@ from enum import Enum, auto
 from pathlib import Path
 
 from dotenv import dotenv_values
+from starlette.templating import Jinja2Templates
 
 DEBUG = False
 
@@ -16,6 +17,8 @@ GAMES_ASSETS_TRAILERS_DIR = 'trailers'
 GAMES_ASSETS_SCREENSHOTS_DIR = 'screenshots'
 GAMES_ASSETS_BUILDS_DIR = 'builds'
 TEMPLATES_DIR = BASE_PATH / 'templates'
+
+templates = Jinja2Templates(directory=TEMPLATES_DIR)
 
 if DEBUG:
     ENVS_PATH = ENVS_PATH / 'dev'
