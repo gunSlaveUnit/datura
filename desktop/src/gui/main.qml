@@ -424,24 +424,110 @@ ApplicationWindow {
 
             Indent {}
 
-            FormInputLabel {
-              text: qsTr("Juridical name")
-            }
-            FormInput {
-              id: juridicalNameInput
-              focus: true
-              text: company_logic.juridical_name
-              onTextChanged: company_logic.juridical_name = text
+            Rectangle {
+              width: layoutWidth - 2 * defaultMargin
+              height: legalNameExplanationLayout.height + 2 * defaultMargin
+              radius: defaultMargin
+              border.color: "orange"
+              border.width: 1
+              color: "transparent"
+
+              Item {
+                width: parent.width - 2 * defaultMargin
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                ColumnLayout {
+                  id: legalNameExplanationLayout
+
+                  Indent {}
+
+                  SubHeader {text: "Legal name"}
+
+                  Indent {}
+
+                  Span {
+                    color: "orange"
+                    lineHeight: 0.5
+                    text: "The organization whose name you enter below must be the legal entity that will sign the required license agreements. The company name entered here must match the name on
+\nofficial bank documents and documents provided to the tax office, or foreign tax documents, if any. If you later add bank account information, you will need to re-enter that
+\nnameas the account holder and legal entity with the appropriate tax identification number."
+                  }
+
+                  Indent {}
+
+                  Span {
+                    color: "orange"
+                    lineHeight: 0.5
+                    text: "If you do not have a company name and are the sole owner of the content you wish to post, please enter your full name and mailing address in the \"Legal Name\" and \"Street,
+\nHouse and Apartment/Office Number\" fields. If you co-own the game along with other people, you will need to register a legal entity that will own the content and accept
+\npayments for it."
+                  }
+
+                  Indent {}
+
+                  Span {
+                    color: "orange"
+                    lineHeight: 0.5
+                    text: "The legal name specified here is used internally by the system. If you have a commercial or informal name that you want to use in your store, you can specify it separately when
+\nyou create your store page."
+                  }
+
+                  Indent {}
+
+                  FormInputLabel {
+                    text: qsTr("Juridical name")
+                  }
+                  FormInput {
+                    id: juridicalNameInput
+                    focus: true
+                    text: company_logic.juridical_name
+                    onTextChanged: company_logic.juridical_name = text
+                  }
+                }
+              }
             }
 
             Indent {}
 
-            FormInputLabel {
-              text: qsTr("Company form")
-            }
-            FormInput {
-              text: company_logic.company_form
-              onTextChanged: company_logic.company_form = text
+            Rectangle {
+              width: layoutWidth - 2 * defaultMargin
+              height: companyFormExplanationLayout.height + 2 * defaultMargin
+              radius: defaultMargin
+              border.color: "orange"
+              border.width: 1
+              color: "transparent"
+
+              Item {
+                width: parent.width - 2 * defaultMargin
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                ColumnLayout {
+                  id: companyFormExplanationLayout
+
+                  Indent {}
+
+                  SubHeader {text: "Company form"}
+
+                  Indent {}
+
+                  Span {
+                    color: "orange"
+                    lineHeight: 0.5
+                    text: "The legal form of the company must match the one indicated in the documentation of your company. Examples of what should be entered in this field: \"A Quebec limited liability
+\npartnership\"; \"A Washington State corporation\"; \"A Sole Proprietorship\". If you are the sole owner of the game, please use \"Sole Proprietorship\"."
+                  }
+
+                  Indent {}
+
+                  FormInputLabel {
+                    text: qsTr("Company form")
+                  }
+                  FormInput {
+                    text: company_logic.company_form
+                    onTextChanged: company_logic.company_form = text
+                  }
+                }
+              }
             }
 
             Indent {}
