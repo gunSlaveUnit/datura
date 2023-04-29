@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from starlette import status
 
@@ -5,7 +7,7 @@ from server.src.core.models.company import Company
 from server.src.core.models.game import Game
 from server.src.core.models.game_status import GameStatus
 from server.src.core.models.user import User
-from server.src.core.settings import Tags, COMPANIES_ROUTER_PREFIX, GameStatusType
+from server.src.core.settings import Tags, COMPANIES_ROUTER_PREFIX, GameStatusType, RoleType
 from server.src.core.utils.auth import get_current_user
 from server.src.core.utils.db import get_db
 from server.src.api.v1.schemas.company import CompanyCreateSchema, ApprovingSchema
@@ -19,7 +21,7 @@ async def items(owner_id: int = Query(None),
                 current_user: User = Depends(get_current_user)):
     """List of all companies according to the given filters."""
 
-    if owner_id != current_user.id:
+    if owner_id and owner_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Permission denied: you cannot receive this information"
