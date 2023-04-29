@@ -5,7 +5,7 @@ from starlette.responses import FileResponse
 
 from server.src.core.models.user import User
 from server.src.core.settings import Tags, AVATARS_PATH, DEFAULT_AVATAR_FILENAME, USERS_ROUTER_PREFIX
-from server.src.core.utils.auth import get_current_user
+from server.src.core.utils.auth import _get_current_user, GetCurrentUser
 from server.src.core.utils.db import get_db
 from server.src.core.utils.io import remove, save
 
@@ -23,7 +23,7 @@ async def download_avatar(user_id: int,
 async def upload_avatar(user_id: int,
                         file: UploadFile,
                         db: Session = Depends(get_db),
-                        current_user: User = Depends(get_current_user)):
+                        current_user: User = Depends(GetCurrentUser)):
     if user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

@@ -1,8 +1,12 @@
-from fastapi import HTTPException, Depends, Cookie
+from typing import Tuple
+
+from fastapi import HTTPException, Depends, Cookie, Path
 from sqlalchemy.orm import Session
 from starlette import status
 
+from server.src.core.models.role import Role
 from server.src.core.models.user import User
+from server.src.core.settings import RoleType
 from server.src.core.utils.crypt import crypt_context
 from server.src.core.utils.db import get_db, get_session_storage
 
@@ -18,9 +22,15 @@ async def authenticate_user(account_name: str, password: str, db):
     return None
 
 
-async def get_current_user(session: str = Cookie(None),
-                           db: Session = Depends(get_db),
-                           session_storage=Depends(get_session_storage)):
+async def _get_current_user(scopes: Tuple[RoleType],
+                            session: str = Cookie(None),
+                            db: Session = Depends(get_db),
+                            session_storage=Depends(get_session_storage)):
+    possible_roles = []
+    for scope in scopes:
+        role = await Role.by_title(db, scope)
+        possible_roles.append(role.id)
+
     if session is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -34,4 +44,26 @@ async def get_current_user(session: str = Cookie(None),
             detail="The session has expired. Please re-login"
         )
 
-    return db.query(User).filter(User.id == int(user_id)).one()
+    user = await User.by_id(db, int(user_id))
+
+    if user.role_id not in possible_roles:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Permission denied: you do not have sufficient rights to perform this operation"
+        )
+
+    return user
+
+
+class GetCurrentUser:
+    def __init__(self, scopes: Tuple[RoleType] = None):
+        self.scopes = scopes
+
+    async def __call__(self,
+                       session: str = Cookie(None),
+                       db: Session = Depends(get_db),
+                       session_storage=Depends(get_session_storage)):
+        if self.scopes is None:
+            self.scopes = RoleType.USER, RoleType.ADMIN
+
+        return await _get_current_user(self.scopes, session, db, session_storage)

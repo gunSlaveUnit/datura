@@ -11,7 +11,7 @@ from server.src.core.models.user import User
 from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX, GameStatusType, GAMES_ASSETS_PATH, \
     GAMES_ASSETS_HEADER_DIR, GAMES_ASSETS_CAPSULE_DIR, GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, \
     GAMES_ASSETS_BUILDS_DIR
-from server.src.core.utils.auth import get_current_user
+from server.src.core.utils.auth import _get_current_user, GetCurrentUser
 from server.src.core.utils.db import get_db
 from server.src.api.v1.schemas.game import GameFilterSchema, GameCreateSchema, GameApprovingSchema, GameSendingSchema, \
     GamePublishingSchema
@@ -40,7 +40,7 @@ async def item(game_id: int,
 @router.post('/')
 async def create(new_game_data: GameCreateSchema,
                  db=Depends(get_db),
-                 current_user: User = Depends(get_current_user)):
+                 current_user: User = Depends(GetCurrentUser)):
     potentially_not_existing_company = await Company.by_owner(db, current_user.id)
 
     if potentially_not_existing_company is None:
@@ -78,7 +78,7 @@ async def create(new_game_data: GameCreateSchema,
 async def update(game_id: int,
                  updated_game_data: GameCreateSchema,
                  db: Session = Depends(get_db),
-                 current_user: User = Depends(get_current_user)):
+                 current_user: User = Depends(GetCurrentUser)):
     """
     Updates game fields not related to publish/admin functions.
     Returns a GameDBScheme with updated entity data.

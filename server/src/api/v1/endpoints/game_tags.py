@@ -5,7 +5,7 @@ from server.src.api.v1.schemas.tag import GameTagAssociationCreateSchema
 from server.src.core.models.tag import GameTagAssociation
 from server.src.core.models.user import User
 from server.src.core.settings import Tags, GAME_TAGS_ROUTER_PREFIX
-from server.src.core.utils.auth import get_current_user
+from server.src.core.utils.auth import _get_current_user, GetCurrentUser
 from server.src.core.utils.db import get_db
 
 router = APIRouter(prefix=GAME_TAGS_ROUTER_PREFIX, tags=[Tags.TAGS])
@@ -21,7 +21,7 @@ async def items(game_id: int,
 async def create(game_id: int,
                  new_game_tag_association_data: GameTagAssociationCreateSchema,
                  db: Session = Depends(get_db),
-                 _: User = Depends(get_current_user)):
+                 _: User = Depends(GetCurrentUser)):
     tag_association = GameTagAssociation(**vars(new_game_tag_association_data))
     tag_association.game_id = game_id
 

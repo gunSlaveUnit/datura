@@ -8,7 +8,7 @@ from starlette.responses import JSONResponse
 
 from server.src.core.models.role import Role
 from server.src.core.models.user import User
-from server.src.core.utils.auth import get_current_user, authenticate_user
+from server.src.core.utils.auth import _get_current_user, authenticate_user, GetCurrentUser
 from server.src.core.utils.crypt import get_password_hash
 from server.src.core.utils.db import get_session_storage, get_db
 from server.src.api.v1.schemas.auth import SignUpSchema, SignInSchema
@@ -99,5 +99,5 @@ async def sign_out(session: str = Cookie(),
 
 
 @router.get('/me/')
-async def me(current_user: User = Depends(get_current_user)):
+async def me(current_user: User = Depends(GetCurrentUser)):
     return current_user

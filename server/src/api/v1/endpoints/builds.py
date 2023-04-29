@@ -12,8 +12,8 @@ from server.src.core.models.game import Game
 from server.src.core.models.platform import Platform
 from server.src.core.models.user import User
 from server.src.core.settings import BUILDS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_BUILDS_DIR, Tags
-from server.src.core.utils.auth import get_current_user
-from server.src.api.v1.endpoints.requirements import  router as requirements_router
+from server.src.core.utils.auth import GetCurrentUser
+from server.src.api.v1.endpoints.requirements import router as requirements_router
 from server.src.core.utils.db import get_db
 from server.src.core.utils.io import MEDIA_TYPE, read_compressed_chunks, CHUNK_SIZE, save, clear
 
@@ -38,7 +38,7 @@ async def items(game_id: int,
 async def create(game_id: int,
                  build_create_data: BuildCreateSchema,
                  db: Session = Depends(get_db),
-                 current_user: User = Depends(get_current_user)) -> BuildDBSchema:
+                 current_user: User = Depends(GetCurrentUser)) -> BuildDBSchema:
     """
     Creating a new build for specified game.
     Return a BuildDBSchema with created entity data.
