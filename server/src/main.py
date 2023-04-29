@@ -5,10 +5,12 @@ from server.src.core.utils.db import Base, engine
 from server.src.core.utils.db_init import init_db
 from server.src.core.settings import DEBUG, Tags
 from server.src.api.v1.api import router as api_v1_router
+from server.src.admin.api import router as admin_router
 
 app = FastAPI(debug=DEBUG)
 
 app.include_router(api_v1_router)
+app.include_router(admin_router)
 
 
 @app.on_event("startup")
