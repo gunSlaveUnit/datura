@@ -1,12 +1,15 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from starlette.requests import Request
 from starlette.responses import HTMLResponse
 
-from server.src.core.settings import templates
+from server.src.core.models.user import User
+from server.src.core.settings import templates, RoleType
+from server.src.core.utils.auth import GetCurrentUser
 
 router = APIRouter()
 
 
 @router.get('/', response_class=HTMLResponse)
-async def home(request: Request):
+async def home(request: Request,
+               current_user: User = Depends(GetCurrentUser((RoleType.ADMIN,)))):
     return templates.TemplateResponse("home.html", {"request": request})
