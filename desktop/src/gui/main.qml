@@ -184,7 +184,8 @@ ApplicationWindow {
 
       property int storeGamesIndex: 0
       property int storeDetailedGameIndex: storeGamesIndex + 1
-      property int workshopRegisterCompanyInfoIndex: storeDetailedGameIndex + 1
+      property int workshopIntroductionIndex: storeDetailedGameIndex + 1
+      property int workshopRegisterCompanyInfoIndex: workshopIntroductionIndex + 1
       property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
       property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
       property int workshopAppControlIndex: workshopAppsListIndex + 1
@@ -197,7 +198,7 @@ ApplicationWindow {
         target: company_logic
 
         function onNotRegistered() {
-          storeStackLayout.currentIndex = storeStackLayout.workshopRegisterCompanyInfoIndex
+          storeStackLayout.currentIndex = storeStackLayout.workshopIntroductionIndex
         }
 
         function onRegistered() {
@@ -299,6 +300,108 @@ ApplicationWindow {
       }
 
       Scroll {
+        contentHeight: introduction.height + 2 * defaultMargin
+
+        Item {
+          width: layoutWidth
+          anchors.horizontalCenter: parent.horizontalCenter
+
+          ColumnLayout {
+            id: introduction
+
+            Indent {}
+
+            Header {text: "Foggie Workshop"}
+
+            Indent {}
+
+            Span {text: "Are you a developer and want to use our platform to distribute your games and software? This is great, let's get started."}
+
+            Indent {}
+
+            SubHeader {text: "What to expect"}
+
+            Divider {}
+
+            Span {text: "General procedure for publishing products:"}
+            Span {text: "1. Fill in electronic documents:"}
+            Span {text: " - Information about the legal entity"}
+            Span {text: " - Banking / tax information"}
+            Span {
+              text: "2. Once you have access to the Workshop, start preparing your product for release. You will need to create a store page, upload product builds, and enter your desired price."
+            }
+            Span {
+              text: "3. Prior to the final launch of your build of the game and the store page, we will run a test run of the game and check the page to make sure there are no errors or malicious elements.\nThe verification usually takes 1 to 5 days."
+            }
+
+            Indent {}
+
+            SubHeader {text: "Information to keep handy:"}
+
+            Divider {}
+
+            Span {text: "- Legal details and name"}
+            Span {text: "Accurate legal information about the person or company signing the agreement so we understand who you are and who you represent. This is information about your company."}
+
+            Span {text: "- Payment Information"}
+            Span {text: "Accurate banking information on where to transfer the proceeds from the sales of your application: bank code, bank account number and bank address."}
+
+            Indent {}
+
+            SubHeader {text: "Rules and regulations"}
+
+            Divider {}
+
+            Span {text: "What should not be distributed using our platform:"}
+
+            Span {text: "- Advocacy of hatred, violence or discrimination against groups of people based on ethnicity, religion, gender, age, disability or sexual orientation."}
+            Span {text: "- Images of a sexual nature with real people."}
+            Span {text: "- Adult content that is not labeled as such and contains no age rating information."}
+            Span {text: "- Slanderous statements or statements that offend honor and dignity. Content to which you do not own the rights."}
+            Span {text: "- Content to which you do not own the rights."}
+            Span {text: "- Content that violates the laws of the countries in which it will be distributed."}
+            Span {text: "- Content that is blatantly offensive or intentionally shocks or disgusts the public."}
+            Span {text: "- Content that is in any way related to the exploitation of minors."}
+            Span {text: "- Applications that change the user's computer in ways they do not expect or that cause harm, such as viruses or malware."}
+            Span {text: "- Applications that attempt to fraudulently obtain sensitive information (such as login details) or financial data (such as credit card information)."}
+            Span {text: "- Video content that is not directly related to the product released on platform."}
+            Span {text: "- Non-interactive panoramic virtual reality videos."}
+            Span {text: "- Applications created using blockchain technology that issue or exchange cryptocurrencies or NFTs (non-fungible tokens)."}
+
+            Indent {}
+
+            Span {text: "Allowed types of content"}
+
+            Span {text: "First of all, we accept games. Non-gaming software may be accepted if it falls into one of the following categories:"}
+
+            Span {text: "- animation and modeling;"}
+            Span {text: "- work with sound and video;"}
+            Span {text: "- design and illustration;"}
+            Span {text: "- photo processing;"}
+            Span {text: "- education and training;"}
+            Span {text: "- finance and accounting;"}
+            Span {text: "- tools for players;"}
+
+            Indent {}
+
+            SubHeader {text: "Let's get started"}
+
+            Divider {}
+
+            Span {text: "Click the Continue button to proceed to enter your legal name and contact information."}
+
+            NeutralButton {
+              text: qsTr("Continue")
+              function handler() {
+                bicInput.focus = true
+                storeStackLayout.currentIndex = storeStackLayout.workshopRegisterCompanyInfoIndex
+              }
+            }
+          }
+        }
+      }
+
+      Scroll {
         contentHeight: companyInfoForm.height + 2 * defaultMargin
 
         Item {
@@ -307,6 +410,17 @@ ApplicationWindow {
 
           ColumnLayout {
             id: companyInfoForm
+
+            Indent {}
+
+            Link {
+              message: qsTr("To introduction")
+
+              function handler() {
+                juridicalNameInput.focus = true
+                storeStackLayout.currentIndex = storeStackLayout.workshopIntroductionIndex
+              }
+            }
 
             Indent {}
 
@@ -393,7 +507,7 @@ ApplicationWindow {
             Indent {}
 
             NeutralButton {
-              text: qsTr("Next")
+              text: qsTr("Continue")
               function handler() {
                 bicInput.focus = true
                 storeStackLayout.currentIndex = storeStackLayout.workshopRegisterPaymentInfoIndex
