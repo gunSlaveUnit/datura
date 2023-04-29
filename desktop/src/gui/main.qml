@@ -704,7 +704,7 @@ ApplicationWindow {
 
             Span {
               text: qsTr("You currently have no releases")
-              color: highlightedTextColor
+              color: "orange"
               visible: game_list_model.rowCount() === 0
             }
 
