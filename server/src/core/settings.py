@@ -90,6 +90,8 @@ class Tags(str, Enum):
     LANGUAGES = 'Languages'
     REVIEWS = 'Reviews'
 
+    ADMIN = 'Admin'
+
 
 tags_metadata = [
     {'name': Tags.HOME, 'description': 'General information describing the API'},
@@ -113,6 +115,7 @@ tags_metadata = [
     {'name': Tags.GAME_LANGUAGES, 'description': ''},
     {'name': Tags.LANGUAGES, 'description': ''},
     {'name': Tags.REVIEWS, 'description': ''},
+    {'name': Tags.ADMIN, 'description': ''},
 ]
 
 
