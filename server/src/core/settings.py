@@ -55,6 +55,7 @@ LANGUAGES_ROUTER_PREFIX = '/languages'
 GAME_TAGS_ROUTER_PREFIX = '/{game_id}/tags'
 TAGS_ROUTER_PREFIX = '/tags'
 REVIEWS_ROUTER_PREFIX = '/{game_id}/reviews'
+ADMIN_ROUTER_PREFIX = '/admin'
 
 
 # Tags
