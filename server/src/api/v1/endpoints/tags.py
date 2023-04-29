@@ -19,6 +19,6 @@ async def items(db=Depends(get_db)):
 @router.post('/')
 async def create(new_tag_data: TagCreateSchema,
                  db: Session = Depends(get_db),
-                 _: User = Depends(GetCurrentUser)):
+                 _: User = Depends(GetCurrentUser())):
     tag = Tag(**vars(new_tag_data))
     return await Tag.create(db, tag)

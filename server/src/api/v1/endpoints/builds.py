@@ -38,7 +38,7 @@ async def items(game_id: int,
 async def create(game_id: int,
                  build_create_data: BuildCreateSchema,
                  db: Session = Depends(get_db),
-                 current_user: User = Depends(GetCurrentUser)) -> BuildDBSchema:
+                 current_user: User = Depends(GetCurrentUser())) -> BuildDBSchema:
     """
     Creating a new build for specified game.
     Return a BuildDBSchema with created entity data.

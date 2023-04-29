@@ -23,7 +23,7 @@ async def create(game_id: int,
                  build_id: int,
                  new_requirements_data: RequirementsCreateSchema,
                  db: Session = Depends(get_db),
-                 current_user: User = Depends(GetCurrentUser)):
+                 current_user: User = Depends(GetCurrentUser())):
     requirements = SystemRequirement(**vars(new_requirements_data))
     requirements.build_id = build_id
     return await SystemRequirement.create(db, requirements)

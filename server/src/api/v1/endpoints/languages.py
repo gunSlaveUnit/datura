@@ -19,6 +19,6 @@ async def items(db: Session = Depends(get_db)):
 @router.post('/')
 async def create(new_language_data: LanguageCreateSchema,
                  db: Session = Depends(get_db),
-                 _: User = Depends(GetCurrentUser)):
+                 _: User = Depends(GetCurrentUser())):
     language = Language(**vars(new_language_data))
     return await Language.create(db, language)

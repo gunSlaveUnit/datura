@@ -21,7 +21,7 @@ async def items(game_id: int,
 async def create(game_id: int,
                  new_game_tag_association_data: GameTagAssociationCreateSchema,
                  db: Session = Depends(get_db),
-                 _: User = Depends(GetCurrentUser)):
+                 _: User = Depends(GetCurrentUser())):
     tag_association = GameTagAssociation(**vars(new_game_tag_association_data))
     tag_association.game_id = game_id
 

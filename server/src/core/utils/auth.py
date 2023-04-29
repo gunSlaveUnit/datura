@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from fastapi import HTTPException, Depends, Cookie, Path
+from fastapi import HTTPException, Depends, Cookie
 from sqlalchemy.orm import Session
 from starlette import status
 

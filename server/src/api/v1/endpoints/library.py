@@ -8,7 +8,7 @@ from server.src.core.models.game import Game
 from server.src.core.models.library import Library
 from server.src.core.models.user import User
 from server.src.core.settings import LIBRARY_ROUTER_PREFIX, Tags
-from server.src.core.utils.auth import _get_current_user, GetCurrentUser
+from server.src.core.utils.auth import GetCurrentUser
 from server.src.core.utils.db import get_db
 
 router = APIRouter(prefix=LIBRARY_ROUTER_PREFIX, tags=[Tags.LIBRARY])
@@ -19,7 +19,7 @@ async def items(user_id: int | None = None,
                 game_id: int | None = None,
                 include_games: bool = False,
                 db: Session = Depends(get_db),
-                current_user: User = Depends(GetCurrentUser)) -> list[Type[Library]]:
+                current_user: User = Depends(GetCurrentUser())) -> list[Type[Library]]:
     """
     List of all library records according to the given filters.
     Returns a list of LibraryDBSchema with library record data.

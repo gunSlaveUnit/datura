@@ -23,7 +23,7 @@ async def download_avatar(user_id: int,
 async def upload_avatar(user_id: int,
                         file: UploadFile,
                         db: Session = Depends(get_db),
-                        current_user: User = Depends(GetCurrentUser)):
+                        current_user: User = Depends(GetCurrentUser())):
     if user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

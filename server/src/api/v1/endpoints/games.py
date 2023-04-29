@@ -40,7 +40,7 @@ async def item(game_id: int,
 @router.post('/')
 async def create(new_game_data: GameCreateSchema,
                  db=Depends(get_db),
-                 current_user: User = Depends(GetCurrentUser)):
+                 current_user: User = Depends(GetCurrentUser())):
     potentially_not_existing_company = await Company.by_owner(db, current_user.id)
 
     if potentially_not_existing_company is None:
