@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% block content %}
 <div>
-  {% for company in games %}
+  {% for game in games %}
   <div>
     <h2 style="display: inline-block; margin-right: 8px;">
-      <a href="/admin/companies/{{company.id}}/">{{ game.title }}</a>
+      <a href="/admin/games/{{game.id}}/">{{ game.title }}</a>
     </h2>
   </div>
   {% endfor %}
