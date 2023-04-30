@@ -906,6 +906,124 @@ ApplicationWindow {
                   onTextChanged: app_logic.long_description = text
                 }
               }
+
+              ColumnLayout {
+                Indent {}
+
+                RowLayout {
+                  Platform.FileDialog {
+                    id: attach_header_image_file_dialog
+                    fileMode: Platform.FileDialog.OpenFile
+                    nameFilters: ["Images (*.webp)"]
+                    onAccepted: app_logic.header = file
+                    folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                  }
+
+                  Text {
+                    text: qsTr("Header image (*.webp):")
+                    color: "white"
+                  }
+
+                  Text {
+                    text: app_logic.displayed_header
+                    color: "orange"
+                  }
+                }
+
+                NeutralButton {
+                  text: qsTr("Attach")
+                  function handler() {
+                   attach_header_image_file_dialog.open()
+                  }
+                }
+
+                Indent {}
+
+                RowLayout {
+                  Platform.FileDialog {
+                    id: attach_capsule_image_file_dialog
+                    fileMode: Platform.FileDialog.OpenFile
+                    nameFilters: ["Images (*.webp)"]
+                    onAccepted: app_logic.capsule = file
+                    folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                  }
+
+                  Text {
+                    text: qsTr("Capsule image (*.webp):")
+                    color: "white"
+                  }
+
+                  Text {
+                    text: app_logic.displayed_capsule
+                    color: "orange"
+                  }
+                }
+
+                NeutralButton {
+                  text: qsTr("Attach")
+                  function handler() {
+                   attach_capsule_image_file_dialog.open()
+                  }
+                }
+
+                Indent {}
+
+                RowLayout {
+                  Platform.FileDialog {
+                    id: attach_screenshots_file_dialog
+                    fileMode: Platform.FileDialog.OpenFiles
+                    nameFilters: ["Images (*.webp)"]
+                    onAccepted: app_logic.screenshots = files
+                    folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                  }
+
+                  Text {
+                    text: qsTr("Screenshots (*webp):")
+                    color: "white"
+                  }
+
+                  Text {
+                    text: app_logic.displayed_screenshots
+                    color: "orange"
+                  }
+                }
+
+                NeutralButton {
+                  text: qsTr("Attach")
+                  function handler() {
+                   attach_screenshots_file_dialog.open()
+                  }
+                }
+
+                Indent {}
+
+                RowLayout {
+                  Platform.FileDialog {
+                    id: attach_trailers_file_dialog
+                    fileMode: Platform.FileDialog.OpenFiles
+                    nameFilters: ["Videos (*.webm)"]
+                    onAccepted: app_logic.trailers = files
+                    folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                  }
+
+                  Text {
+                    text: qsTr("Trailers (*.webm):")
+                    color: "white"
+                  }
+
+                  Text {
+                    text: app_logic.displayed_trailers
+                    color: "orange"
+                  }
+                }
+
+                NeutralButton {
+                  text: qsTr("Attach")
+                  function handler() {
+                   attach_trailers_file_dialog.open()
+                  }
+                }
+              }
             }
           }
         }
