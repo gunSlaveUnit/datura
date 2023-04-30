@@ -671,7 +671,7 @@ ApplicationWindow {
       }
 
       Scroll {
-        contentHeight: companyInfoForm.height + 2 * defaultMargin
+        contentHeight: releasesAppsList.height + 2 * defaultMargin
 
         Item {
           width: layoutWidth
@@ -702,12 +702,6 @@ ApplicationWindow {
               visible: !company_logic.is_drafted_new_button_enabled
             }
 
-            Span {
-              text: qsTr("You currently have no releases")
-              color: "orange"
-              visible: game_list_model.rowCount() === 0
-            }
-
             ListView {
               Layout.fillHeight: true
 
@@ -728,6 +722,128 @@ ApplicationWindow {
                       storeStackLayout.currentIndex = storeStackLayout.workshopAppControlIndex
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      Scroll {
+        contentHeight: appControl.height + 2 * defaultMargin
+
+        Item {
+          width: layoutWidth
+          anchors.horizontalCenter: parent.horizontalCenter
+
+          ColumnLayout {
+            id: appControl
+
+            RowLayout {
+              NeutralButton {
+                 text: qsTr("Basic Info")
+                function handler() {
+                  gameControlStackLayout.currentIndex = gameControlStackLayout.basicInfoPageIndex
+                }
+              }
+
+              NeutralButton {
+                text: qsTr("Descriptions")
+                function handler() {
+                  gameControlStackLayout.currentIndex = gameControlStackLayout.descriptionPageIndex
+                }
+              }
+
+              NeutralButton {
+                text: qsTr("Assets")
+                function handler() {
+                  gameControlStackLayout.currentIndex = gameControlStackLayout.assetsPageIndex
+                }
+              }
+
+              NeutralButton {
+                text: qsTr("Builds")
+                function handler() {
+                 gameControlStackLayout.currentIndex = gameControlStackLayout.buildsPageIndex
+                }
+              }
+
+              ActionButton {
+                text: qsTr("Save")
+                function handler() {
+                  app_logic.update()
+                }
+              }
+            }
+
+            StackLayout {
+              id: gameControlStackLayout
+
+              property int basicInfoPageIndex: 0
+              property int descriptionPageIndex: basicInfoPageIndex + 1
+              property int assetsPageIndex: descriptionPageIndex + 1
+              property int buildsPageIndex: assetsPageIndex + 1
+
+              ColumnLayout {
+                Indent {}
+
+                FormInputLabel {
+                  text: qsTr("Title")
+                }
+                FormInput {
+                  text: app_logic.title
+                  onTextChanged: app_logic.title = text
+                }
+
+                Checking {
+                  id: is_coming_soon
+                  text: qsTr("Coming soon")
+                  checked: app_logic.coming_soon
+                  onClicked: app_logic.coming_soon = checked
+                }
+
+                FormInputLabel {
+                  text: qsTr("Release date")
+                  visible: !is_coming_soon.checked
+                }
+
+                RowLayout {
+                  id: dateSection
+
+                  visible: !is_coming_soon.checked
+
+                  Combo {
+                    implicitWidth: 76
+                    model: app_logic.possible_days
+                    currentIndex: app_logic.day_index
+                    onCurrentIndexChanged: app_logic.day_index = currentIndex
+                  }
+
+                  Combo {
+                    implicitWidth: 76
+                    model: app_logic.possible_months
+                    currentIndex: app_logic.month_index
+                    onCurrentIndexChanged: release_logic.month_index = currentIndex
+                  }
+
+                  Combo {
+                    implicitWidth: 76
+                    model: app_logic.possible_years
+                    currentIndex: app_logic.year_index
+                    onCurrentIndexChanged: app_logic.year_index = currentIndex
+                  }
+                }
+
+                Indent {
+                  visible: !is_coming_soon.checked
+                }
+
+                FormInputLabel {
+                  text: qsTr("Price")
+                }
+                FormInput {
+                  text: app_logic.price
+                  onTextChanged: app_logic.price = text
                 }
               }
             }
