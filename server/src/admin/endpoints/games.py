@@ -25,7 +25,7 @@ async def items(request: Request,
     games = db.query(Game).order_by(Game.status_id == send_status.id, desc(Game.created_at)).all()
     games = [g.dict() for g in games]
 
-    return templates.TemplateResponse("companies.html", {"request": request, "games": games})
+    return templates.TemplateResponse("games.html", {"request": request, "games": games})
 
 
 @router.get('/{game_id}/', response_class=HTMLResponse)
