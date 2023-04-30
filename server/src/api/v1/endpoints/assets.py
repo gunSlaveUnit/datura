@@ -1,17 +1,19 @@
 from typing import List
 
-from fastapi import APIRouter, UploadFile, Depends, HTTPException, Query
+from fastapi import APIRouter, UploadFile, Depends, HTTPException, Query, Cookie
 from starlette import status
 from starlette.responses import Response, FileResponse, StreamingResponse
 
 from server.src.core.models.game import Game
 from server.src.core.models.game_status import GameStatus
+from server.src.core.models.role import Role
+from server.src.core.models.user import User
 from server.src.core.settings import ASSETS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_HEADER_DIR, GameStatusType, \
-    GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, GAMES_ASSETS_CAPSULE_DIR, Tags
+    GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, GAMES_ASSETS_CAPSULE_DIR, Tags, RoleType
+from server.src.core.utils.auth import GetCurrentUser
 from server.src.core.utils.db import get_db
 from server.src.core.utils.io import clear, save, read_uncompressed_chunks, CHUNK_SIZE
 from server.src.api.v1.endpoints.builds import router as builds_router
-
 
 router = APIRouter(prefix=ASSETS_ROUTER_PREFIX, tags=[Tags.ASSETS])
 router.include_router(builds_router)
@@ -19,18 +21,22 @@ router.include_router(builds_router)
 
 @router.get('/header/')
 async def download_header(game_id: int,
-                          db=Depends(get_db)):
+                          db=Depends(get_db),
+                          current_user: User | None = Depends(GetCurrentUser(is_required=False))):
     """Returns an image for the header section of the game."""
 
     game = await Game.by_id(db, game_id)
 
-    part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
-    full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
-    if game.status_id not in [part_published_status.id, full_published_status.id]:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Asset not approved"
-        )
+    admin_role = await Role.by_title(db, RoleType.ADMIN)
+
+    if not current_user or current_user.role_id != admin_role.id:
+        part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
+        full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
+        if game.status_id not in [part_published_status.id, full_published_status.id]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Asset not approved"
+            )
 
     searching_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_HEADER_DIR)
 
@@ -79,18 +85,22 @@ async def upload_header(game_id: int,
 
 @router.get('/capsule/')
 async def download_capsule(game_id: int,
-                           db=Depends(get_db)):
+                           db=Depends(get_db),
+                           current_user: User | None = Depends(GetCurrentUser(is_required=False))):
     """Returns an image for the capsule section of the game."""
 
     game = await Game.by_id(db, game_id)
 
-    part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
-    full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
-    if game.status_id not in [part_published_status.id, full_published_status.id]:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Asset not approved"
-        )
+    admin_role = await Role.by_title(db, RoleType.ADMIN)
+
+    if not current_user or current_user.role_id != admin_role.id:
+        part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
+        full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
+        if game.status_id not in [part_published_status.id, full_published_status.id]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Asset not approved"
+            )
 
     searching_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_CAPSULE_DIR)
 
@@ -140,20 +150,24 @@ async def upload_capsule(game_id: int,
 @router.get('/screenshots/')
 async def screenshots_info(game_id: int,
                            db=Depends(get_db),
-                           filename: str = Query(None)):
+                           filename: str = Query(None),
+                           current_user: User | None = Depends(GetCurrentUser(is_required=False))):
     """Returns the names of the screenshot files.
     If "filename" query param was provided, returns a file.
     """
 
     game = await Game.by_id(db, game_id)
 
-    part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
-    full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
-    if game.status_id not in [part_published_status.id, full_published_status.id]:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Asset not approved"
-        )
+    admin_role = await Role.by_title(db, RoleType.ADMIN)
+
+    if not current_user or current_user.role_id != admin_role.id:
+        part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
+        full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
+        if game.status_id not in [part_published_status.id, full_published_status.id]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Asset not approved"
+            )
 
     path = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_SCREENSHOTS_DIR)
 
@@ -194,20 +208,24 @@ async def upload_screenshots(game_id: int,
 @router.get('/trailers/')
 async def trailers_info(game_id: int,
                         db=Depends(get_db),
-                        filename: str = Query(None)):
+                        filename: str = Query(None),
+                        current_user: User | None = Depends(GetCurrentUser(is_required=False))):
     """Returns the names of the trailers files.
     If "filename" query param was provided, returns a file.
     """
 
     game = await Game.by_id(db, game_id)
 
-    part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
-    full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
-    if game.status_id not in [part_published_status.id, full_published_status.id]:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Asset not approved"
-        )
+    admin_role = await Role.by_title(db, RoleType.ADMIN)
+
+    if not current_user or current_user.role_id != admin_role.id:
+        part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
+        full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
+        if game.status_id not in [part_published_status.id, full_published_status.id]:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Asset not approved"
+            )
 
     path = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_TRAILERS_DIR)
 
