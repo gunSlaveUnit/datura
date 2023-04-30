@@ -11,6 +11,7 @@ from server.src.api.v1.endpoints.platforms import router as platforms_router
 from server.src.api.v1.endpoints.age_caterogies import router as users_router
 from server.src.api.v1.endpoints.library import router as library_router
 from server.src.api.v1.endpoints.cart import router as cart_router
+from server.src.api.v1.endpoints.game_statuses import router as statuses_router
 
 router = APIRouter(prefix=API_VERSION_1_PREFIX, tags=[Tags.V1])
 
@@ -24,3 +25,4 @@ router.include_router(age_categories_router)
 router.include_router(platforms_router)
 router.include_router(library_router)
 router.include_router(cart_router)
+router.include_router(statuses_router)
