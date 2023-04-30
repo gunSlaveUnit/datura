@@ -6,11 +6,13 @@ from server.src.core.models.user import User
 from server.src.core.settings import ADMIN_ROUTER_PREFIX, Tags, templates, RoleType
 from server.src.admin.endpoints.login import router as login_router
 from server.src.admin.endpoints.companies import router as companies_router
+from server.src.admin.endpoints.games import router as games_router
 from server.src.core.utils.auth import GetCurrentUser
 
 router = APIRouter(prefix=ADMIN_ROUTER_PREFIX, tags=[Tags.ADMIN])
 router.include_router(login_router)
 router.include_router(companies_router)
+router.include_router(games_router)
 
 
 @router.get('/', response_class=HTMLResponse)
