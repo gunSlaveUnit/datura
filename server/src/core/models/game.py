@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, Text, Float, ForeignKey
+from sqlalchemy.orm import relationship
 
 from server.src.core.models.entity import Entity
 
@@ -15,4 +16,5 @@ class Game(Entity):
 
     owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False)
     status_id = Column(Integer, ForeignKey("game_statuses.id", ondelete="RESTRICT"), index=True, nullable=False)
+    status = relationship("GameStatus", back_populates="games")
     age_category_id = Column(Integer, ForeignKey("age_categories.id", ondelete="RESTRICT"), index=True, nullable=False)

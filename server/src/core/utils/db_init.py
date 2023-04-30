@@ -62,7 +62,7 @@ def _add_roles(session):
 
 def _add_game_statuses(session):
     for game_status_type in GameStatusType:
-        game_status = GameStatus(title=game_status_type)
+        game_status = GameStatus(type=game_status_type, title=game_status_type.value)
         session.add(game_status)
     session.commit()
 

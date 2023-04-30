@@ -24,8 +24,8 @@ async def download_header(game_id: int,
 
     game = await Game.by_id(db, game_id)
 
-    part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
-    full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
+    part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
+    full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
     if game.status_id not in [part_published_status.id, full_published_status.id]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -69,7 +69,7 @@ async def upload_header(game_id: int,
     store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_HEADER_DIR)
     await clear(store_files_directory)
 
-    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
+    not_approved_status = await GameStatus.by_type(db, GameStatusType.NOT_APPROVED)
     await game.update(db, {"status_id": not_approved_status.id})
 
     await save(store_files_directory, [file])
@@ -84,8 +84,8 @@ async def download_capsule(game_id: int,
 
     game = await Game.by_id(db, game_id)
 
-    part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
-    full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
+    part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
+    full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
     if game.status_id not in [part_published_status.id, full_published_status.id]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -129,7 +129,7 @@ async def upload_capsule(game_id: int,
     store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_CAPSULE_DIR)
     await clear(store_files_directory)
 
-    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
+    not_approved_status = await GameStatus.by_type(db, GameStatusType.NOT_APPROVED)
     await game.update(db, {"status_id": not_approved_status.id})
 
     await save(store_files_directory, [file])
@@ -147,8 +147,8 @@ async def screenshots_info(game_id: int,
 
     game = await Game.by_id(db, game_id)
 
-    part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
-    full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
+    part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
+    full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
     if game.status_id not in [part_published_status.id, full_published_status.id]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -183,7 +183,7 @@ async def upload_screenshots(game_id: int,
     store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_SCREENSHOTS_DIR)
     await clear(store_files_directory)
 
-    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
+    not_approved_status = await GameStatus.by_type(db, GameStatusType.NOT_APPROVED)
     await game.update(db, {"status_id": not_approved_status.id})
 
     await save(store_files_directory, files)
@@ -201,8 +201,8 @@ async def trailers_info(game_id: int,
 
     game = await Game.by_id(db, game_id)
 
-    part_published_status = await GameStatus.by_title(db, GameStatusType.PART_PUBLISHED)
-    full_published_status = await GameStatus.by_title(db, GameStatusType.FULL_PUBLISHED)
+    part_published_status = await GameStatus.by_type(db, GameStatusType.PART_PUBLISHED)
+    full_published_status = await GameStatus.by_type(db, GameStatusType.FULL_PUBLISHED)
     if game.status_id not in [part_published_status.id, full_published_status.id]:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -237,7 +237,7 @@ async def upload_trailers(game_id: int,
     store_files_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_TRAILERS_DIR)
     await clear(store_files_directory)
 
-    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
+    not_approved_status = await GameStatus.by_type(db, GameStatusType.NOT_APPROVED)
     await game.update(db, {"status_id": not_approved_status.id})
 
     await save(store_files_directory, files)

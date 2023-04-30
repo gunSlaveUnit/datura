@@ -58,7 +58,7 @@ async def create(new_game_data: GameCreateSchema,
     game = Game(**vars(new_game_data))
     game.owner_id = current_user.id
 
-    not_approved_status = await GameStatus.by_title(db, GameStatusType.NOT_APPROVED)
+    not_approved_status = await GameStatus.by_type(db, GameStatusType.NOT_APPROVED)
     game.status_id = not_approved_status.id
 
     new_directory_uuid = str(uuid.uuid4())
@@ -94,7 +94,7 @@ async def verify(game_id: int,
                  db=Depends(get_db)):
     """Sends a game for verification."""
 
-    new_game_status = await GameStatus.by_title(
+    new_game_status = await GameStatus.by_type(
         db,
         GameStatusType.SEND if sending.is_send else GameStatusType.NOT_SEND
     )
@@ -110,7 +110,7 @@ async def approve(game_id: int,
                   db=Depends(get_db)):
     """If it denies, the game becomes not sent for verification."""
 
-    new_game_status = await GameStatus.by_title(
+    new_game_status = await GameStatus.by_type(
         db,
         GameStatusType.NOT_PUBLISHED if approving.is_approved else GameStatusType.NOT_SEND
     )
@@ -131,7 +131,7 @@ async def publish(game_id: int,
 
     game = await Game.by_id(db, game_id)
 
-    not_published_status = await GameStatus.by_title(db, GameStatusType.NOT_PUBLISHED)
+    not_published_status = await GameStatus.by_type(db, GameStatusType.NOT_PUBLISHED)
 
     if game.status_id != not_published_status.id and publishing.is_published:
         raise HTTPException(
@@ -140,7 +140,7 @@ async def publish(game_id: int,
                    "submitted for review"
         )
 
-    new_game_status = await GameStatus.by_title(
+    new_game_status = await GameStatus.by_type(
         db,
         GameStatusType.PUBLISHED if publishing.is_published else GameStatusType.NOT_PUBLISHED
     )
