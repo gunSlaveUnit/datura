@@ -14,7 +14,7 @@ router = APIRouter(prefix=COMPANIES_ROUTER_PREFIX, tags=[Tags.COMPANIES])
 
 
 @router.get('/')
-async def items(owner_id: int = Query(None),
+async def items(owner_id: int | None = Query(None),
                 db=Depends(get_db),
                 current_user: User = Depends(GetCurrentUser())):
     """List of all companies according to the given filters."""
