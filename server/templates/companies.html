@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+  {% for company in companies %}
+  <div>
+    <h2 style="display: inline-block; margin-right: 8px;">
+      <a href="/admin/companies/{{company.id}}">{{ company.juridical_name }}</a>
+    </h2>
+
+    {% if company.is_approved %}
+      <h3 style="color: gray; display: inline-block;">Approved</h3>
+    {% else %}
+      <h3 style="color: orange; display: inline-block;">Not approved</h3>
+    {%endif%}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
