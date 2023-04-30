@@ -1001,13 +1001,13 @@ ApplicationWindow {
                   Platform.FileDialog {
                     id: attach_trailers_file_dialog
                     fileMode: Platform.FileDialog.OpenFiles
-                    nameFilters: ["Videos (*.webm)"]
+                    nameFilters: ["Videos (*.webm *.mp4)"]
                     onAccepted: app_logic.trailers = files
                     folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
                   }
 
                   Text {
-                    text: qsTr("Trailers (*.webm):")
+                    text: qsTr("Trailers (*.webm *.mp4):")
                     color: "white"
                   }
 
