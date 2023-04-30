@@ -36,6 +36,12 @@ async def items(owner_id: int | None = Query(None),
     return companies.all()
 
 
+@router.get('/{company_id}/')
+async def item(company_id: int,
+               db=Depends(get_db)):
+    return await Company.by_id(db, company_id)
+
+
 @router.post('/')
 async def create(new_company_data: CompanyCreateSchema,
                  current_user: User = Depends(GetCurrentUser()),
