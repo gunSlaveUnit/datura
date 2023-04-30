@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{game.title}}</h1>
+<h2 style="display: inline-block">Status:</h2>
+
+<h3 style="color: gray; display: inline-block;">{{ game.status.title }}</h3>
+
+<input id="id" value="{{game.id}}" hidden="hidden"/>
+<input id="author" value="{{game.author}}" hidden="hidden"/>
+
+<h2>Common information</h2>
+
+<div>
+  <label>
+    Title
+    <div>
+      <input value="{{game.title}}" disabled>
+    </div>
+  </label>
+</div>
+
+<div>
+  <label>
+    Release date
+    {% if game.release_date %}
+    <div>
+      <input value="{{game.release_date.strftime('%d-%m-%Y')}}" disabled>
+    </div>
+    {% else %}
+    <div>Coming soon</div>
+    {% endif %}
+  </label>
+</div>
+
+<div>
+  <label>
+    Price
+    <div>
+      <input value="{{game.price}}" disabled>
+    </div>
+  </label>
+</div>
+
+<h2>Descriptions</h2>
+
+<div>
+  <label>
+    Short description
+    <div>
+      <textarea placeholder="{{game.short_description}}" disabled></textarea>
+    </div>
+  </label>
+</div>
+
+<div>
+  <label>
+    Long description
+    <div>
+      <textarea placeholder="{{game.long_description}}" disabled></textarea>
+    </div>
+  </label>
+</div>
+
+<h2>Assets</h2>
+
+<h3>Header</h3>
+<img id="header" src="" alt="No header image">
+
+<h3>Capsule</h3>
+<img id="capsule" src="" alt="No capsule image">
+
+<h2>Manage</h2>
+
+<script>
+    const id = document.getElementById("id").value
+    let imageUrl = `http://127.0.0.1:8000/api/v1/games/${id}/header/`
+
+    fetch(imageUrl, {credentials: 'include'})
+      .then(response => response.blob())
+      .then(blob => {
+        const objectUrl = URL.createObjectURL(blob);
+        let header = document.getElementById('header');
+        header.src = objectUrl
+        header.width = 400;
+        header.height = header.width * 9 / 16;
+      })
+      .catch(error => console.error(error));
+
+    imageUrl = `http://127.0.0.1:8000/api/v1/games/${id}/capsule/`
+
+    fetch(imageUrl, {credentials: 'include'})
+      .then(response => response.blob())
+      .then(blob => {
+        const objectUrl = URL.createObjectURL(blob);
+        let capsule = document.getElementById('capsule');
+        capsule.src = objectUrl
+        capsule.width = 400;
+        capsule.height = capsule.width * 16 / 10;
+      })
+      .catch(error => console.error(error));
+
+    function approving(value) {
+        fetch(`http://localhost:8000/admin/games/${id}/approve/`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                is_approved: value,
+            }),
+        }).then(async response => location.reload())
+    }
+</script>
+{% endblock %}
