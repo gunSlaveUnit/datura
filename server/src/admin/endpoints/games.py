@@ -36,7 +36,7 @@ async def items(request: Request,
 async def item(request: Request,
                game_id: int,
                db: Session = Depends(get_db),
-               current_user: User = Depends(GetCurrentUser(scopes=(RoleType.ADMIN,)))):
+               _: User = Depends(GetCurrentUser(scopes=(RoleType.ADMIN,)))):
     return templates.TemplateResponse("detailed_game.html", {
         "request": request,
         "game": await games.item(game_id, db)
