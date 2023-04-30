@@ -23,19 +23,18 @@ async def authenticate_user(account_name: str, password: str, db):
 
 
 async def _get_current_user(scopes: Tuple[RoleType],
+                            is_required=True,
                             session: str = Cookie(None),
                             db: Session = Depends(get_db),
                             session_storage=Depends(get_session_storage)):
-    possible_roles = []
-    for scope in scopes:
-        role = await Role.by_title(db, scope)
-        possible_roles.append(role.id)
-
     if session is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Session ID not provided"
-        )
+        if is_required:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Session ID not provided"
+            )
+        else:
+            return None
 
     user_id = session_storage.get(session)
     if user_id is None:
@@ -45,6 +44,11 @@ async def _get_current_user(scopes: Tuple[RoleType],
         )
 
     user = await User.by_id(db, int(user_id))
+
+    possible_roles = []
+    for scope in scopes:
+        role = await Role.by_title(db, scope)
+        possible_roles.append(role.id)
 
     if user.role_id not in possible_roles:
         raise HTTPException(
@@ -56,8 +60,9 @@ async def _get_current_user(scopes: Tuple[RoleType],
 
 
 class GetCurrentUser:
-    def __init__(self, scopes: Tuple[RoleType] = None):
+    def __init__(self, scopes: Tuple[RoleType] = None, is_required: bool = True):
         self.scopes = scopes
+        self.is_required = is_required
 
     async def __call__(self,
                        session: str = Cookie(None),
@@ -66,4 +71,4 @@ class GetCurrentUser:
         if self.scopes is None:
             self.scopes = RoleType.USER, RoleType.ADMIN
 
-        return await _get_current_user(self.scopes, session, db, session_storage)
+        return await _get_current_user(self.scopes, self.is_required, session, db, session_storage)
