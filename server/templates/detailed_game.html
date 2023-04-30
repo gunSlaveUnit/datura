@@ -72,6 +72,9 @@
 <h3>Screenshots</h3>
 <div id="screenshots"></div>
 
+<h3>Trailers</h3>
+<div id="trailers"></div>
+
 <h2>Manage</h2>
 
 <script>
@@ -116,6 +119,22 @@
           img.style.margin = "8px";
           img.height = 400 * 9 / 16;
           screenshotsDiv.appendChild(img)
+        })
+      })
+
+    const trailersUrl = `http://127.0.0.1:8000/api/v1/games/${id}/trailers/`
+
+    fetch(trailersUrl, {credentials: 'include'})
+      .then(response => response.json())
+      .then(data => {
+        const trailersDiv = document.getElementById("trailers")
+        data.filenames.forEach(screenshot => {
+          const video  = document.createElement("video")
+          video.src = `http://127.0.0.1:8000/api/v1/games/${id}/trailers/?filename=${screenshot}`
+          video.style.margin = "8px";
+          video.height = 400 * 9 / 16;
+          video.controls = true;
+          trailersDiv.appendChild(video)
         })
       })
 
