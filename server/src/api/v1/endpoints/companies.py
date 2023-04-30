@@ -5,7 +5,7 @@ from server.src.core.models.company import Company
 from server.src.core.models.game import Game
 from server.src.core.models.game_status import GameStatus
 from server.src.core.models.user import User
-from server.src.core.settings import Tags, COMPANIES_ROUTER_PREFIX, GameStatusType
+from server.src.core.settings import Tags, COMPANIES_ROUTER_PREFIX, GameStatusType, RoleType
 from server.src.core.utils.auth import GetCurrentUser
 from server.src.core.utils.db import get_db
 from server.src.api.v1.schemas.company import CompanyCreateSchema, ApprovingSchema
@@ -63,7 +63,8 @@ async def create(new_company_data: CompanyCreateSchema,
 @router.patch('/{company_id}/approve/')
 async def approve(company_id: int,
                   approving: ApprovingSchema,
-                  db=Depends(get_db)):
+                  db=Depends(get_db),
+                  current_user: User = Depends(GetCurrentUser(scopes=(RoleType.ADMIN,)))):
     """Confirms / denies information about the company.
     If it denies, all games of the company become
     unconfirmed and are not shown in the store.
