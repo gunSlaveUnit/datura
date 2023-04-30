@@ -1,5 +1,6 @@
 import datetime
 import os
+from pathlib import Path
 
 import requests
 from PySide6.QtCore import QObject, Signal, Slot, Property, QUrl
@@ -25,10 +26,15 @@ class AppLogic(QObject):
     possible_years_changed = Signal()
 
     screenshots_changed = Signal()
+    displayed_screenshots_changed = Signal()
     header_changed = Signal()
+    displayed_header_changed = Signal()
     capsule_changed = Signal()
+    displayed_capsule_changed = Signal()
     trailers_changed = Signal()
+    displayed_trailers_changed = Signal()
     project_files_changed = Signal()
+    displayed_project_files_changed = Signal()
 
     drafted = Signal()
 
@@ -135,14 +141,14 @@ class AppLogic(QObject):
             filename = QUrl(self._header).toLocalFile()
             with open(filename, 'rb') as header_file:
                 files = [('file', (os.path.basename(filename), header_file))]
-                url = GAMES_URL + f"{reply.json()['id']}" + '/assets/header/'
+                url = GAMES_URL + f"{reply.json()['id']}" + '/header/'
                 self._auth_service.authorized_session.post(url, files=files)
 
         if self._capsule != '':
             filename = QUrl(self._capsule).toLocalFile()
             with open(filename, 'rb') as capsule_file:
                 files = [('file', (os.path.basename(filename), capsule_file))]
-                url = GAMES_URL + f"{reply.json()['id']}" + '/assets/capsule/'
+                url = GAMES_URL + f"{reply.json()['id']}" + '/capsule/'
                 self._auth_service.authorized_session.post(url, files=files)
 
         if self._screenshots:
@@ -154,7 +160,7 @@ class AppLogic(QObject):
                         'files', (os.path.basename(filename), open(filename, 'rb'))
                     )
                 )
-            url = GAMES_URL + f"{reply.json()['id']}" + '/assets/screenshots/'
+            url = GAMES_URL + f"{reply.json()['id']}" + '/screenshots/'
             self._auth_service.authorized_session.post(url, files=files)
 
         if self._trailers:
@@ -166,7 +172,7 @@ class AppLogic(QObject):
                         'files', (os.path.basename(filename), open(filename, 'rb'))
                     )
                 )
-            url = GAMES_URL + f"{reply.json()['id']}" + '/assets/trailers/'
+            url = GAMES_URL + f"{reply.json()['id']}" + '/trailers/'
             self._auth_service.authorized_session.post(url, files=files)
 
         if self._project_files:
@@ -178,7 +184,7 @@ class AppLogic(QObject):
                         'files', (os.path.basename(filename), open(filename, 'rb'))
                     )
                 )
-            url = GAMES_URL + f"{reply.json()['id']}" + '/assets/build/'
+            url = GAMES_URL + f"{reply.json()['id']}" + '/builds/'
             self._auth_service.authorized_session.post(url, files=files)
 
         if reply.status_code == requests.codes.ok:
@@ -251,22 +257,80 @@ class AppLogic(QObject):
     possible_months = Property(list, lambda self: [_ for _ in range(1, 13)], constant=True)
     possible_years = Property(list, lambda self: self.get_possible_years(), constant=True)
 
-    screenshots = Property(list,
-                           lambda self: self._screenshots,
-                           lambda self, value: setattr(self, '_screenshots', value),
-                           notify=screenshots_changed)
-    header = Property(str,
-                      lambda self: self._header,
-                      lambda self, value: setattr(self, '_header', value),
-                      notify=header_changed)
-    capsule = Property(str,
-                       lambda self: self._capsule,
-                       lambda self, value: setattr(self, '_capsule', value),
-                       notify=capsule_changed)
-    trailers = Property(list,
-                        lambda self: self._trailers,
-                        lambda self, value: setattr(self, '_trailers', value),
-                        notify=trailers_changed)
+    @Property(str, notify=displayed_header_changed)
+    def displayed_header(self):
+        return Path(QUrl(self._header).toLocalFile()).name
+
+    @Property(str, notify=header_changed)
+    def header(self):
+        return self._header
+
+    @header.setter
+    def header(self, new_value: str):
+        if self._header != new_value:
+            self._header = new_value
+            self.header_changed.emit()
+            self.displayed_header_changed.emit()
+
+    @Property(str, notify=displayed_capsule_changed)
+    def displayed_capsule(self):
+        return Path(QUrl(self._capsule).toLocalFile()).name
+
+    @Property(str, notify=capsule_changed)
+    def capsule(self):
+        return self._capsule
+
+    @capsule.setter
+    def capsule(self, new_value: str):
+        if self._capsule != new_value:
+            self._capsule = new_value
+            self.capsule_changed.emit()
+            self.displayed_capsule_changed.emit()
+
+    @Property(str, notify=displayed_screenshots_changed)
+    def displayed_screenshots(self):
+        if self._screenshots:
+            first_file = Path(QUrl(self._screenshots[0]).toLocalFile()).name
+            amount = len(self._screenshots) - 1
+
+            if amount:
+                return f'{first_file} and {amount} more'
+            else:
+                return f'{first_file}'
+
+    @Property(list, notify=screenshots_changed)
+    def screenshots(self):
+        return self._screenshots
+
+    @screenshots.setter
+    def screenshots(self, new_value: list):
+        if self._screenshots != new_value:
+            self._screenshots = new_value
+            self.screenshots_changed.emit()
+            self.displayed_screenshots_changed.emit()
+
+    @Property(str, notify=displayed_trailers_changed)
+    def displayed_trailers(self):
+        if self._trailers:
+            first_file = Path(QUrl(self._trailers[0]).toLocalFile()).name
+            amount = len(self._trailers) - 1
+
+            if amount:
+                return f'{first_file} and {amount} more'
+            else:
+                return f'{first_file}'
+
+    @Property(list, notify=trailers_changed)
+    def trailers(self):
+        return self._trailers
+
+    @trailers.setter
+    def trailers(self, new_value: list):
+        if self._trailers != new_value:
+            self._trailers = new_value
+            self.trailers_changed.emit()
+            self.displayed_trailers_changed.emit()
+
     project_files = Property(list,
                              lambda self: self._project_files,
                              lambda self, value: setattr(self, '_project_files', value),
