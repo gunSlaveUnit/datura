@@ -78,14 +78,14 @@ async def create(new_game_data: GameCreateSchema,
 async def update(game_id: int,
                  updated_game_data: GameCreateSchema,
                  db: Session = Depends(get_db),
-                 current_user: User = Depends(GetCurrentUser)):
+                 current_user: User = Depends(GetCurrentUser())):
     """
     Updates game fields not related to publish/admin functions.
     Returns a GameDBScheme with updated entity data.
     """
 
     game = await Game.by_id(db, game_id)
-    return await game.update(db, **vars(updated_game_data))
+    return await game.update(db, updated_game_data.dict())
 
 
 @router.patch('/{game_id}/verify/')
