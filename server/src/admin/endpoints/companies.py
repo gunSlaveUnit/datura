@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from starlette.requests import Request
 from starlette.responses import HTMLResponse
 
+from server.src.api.v1.endpoints import companies
 from server.src.core.models.company import Company
 from server.src.core.models.user import User
 from server.src.core.settings import RoleType, templates
@@ -21,3 +22,14 @@ async def items(request: Request,
     companies = [c.dict() for c in companies]
 
     return templates.TemplateResponse("companies.html", {"request": request, "companies": companies})
+
+
+@router.get('/{company_id}/', response_class=HTMLResponse)
+async def item(request: Request,
+               company_id: int,
+               db: Session = Depends(get_db),
+               current_user: User = Depends(GetCurrentUser(scopes=(RoleType.ADMIN,)))):
+    return templates.TemplateResponse("detailed_company.html", {
+        "request": request,
+        "company": await companies.item(company_id, db)
+    })
