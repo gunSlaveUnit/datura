@@ -688,6 +688,8 @@ ApplicationWindow {
               }
             }
 
+            Indent {}
+
             ActionButton {
               text: qsTr("Draft new")
               function handler() {
@@ -738,6 +740,8 @@ ApplicationWindow {
 
           ColumnLayout {
             id: appControl
+
+            Indent {}
 
             RowLayout {
               NeutralButton {
@@ -844,6 +848,62 @@ ApplicationWindow {
                 FormInput {
                   text: app_logic.price
                   onTextChanged: app_logic.price = text
+                }
+              }
+
+              ColumnLayout {
+                Indent {}
+
+                FormInputLabel {
+                  text: qsTr("Short description")
+                }
+                TextArea {
+                  background: Rectangle {
+                    color: Qt.darker("#212834", 1.2)
+
+                    radius: 4
+
+                    MouseArea {
+                      anchors.fill: parent
+                      hoverEnabled: true
+                      cursorShape: Qt.IBeamCursor
+                      onEntered: parent.color = Qt.darker("#212834", 1.5)
+                      onExited: parent.color = Qt.darker("#212834", 2)
+                    }
+                  }
+                  font.pointSize: 12
+                  Layout.preferredWidth: layoutWidth / 4
+                  Layout.preferredHeight: 150
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                  text: app_logic.short_description
+                  onTextChanged: app_logic.short_description = text
+                }
+
+                Indent {}
+
+                FormInputLabel {
+                  text: qsTr("Long description")
+                }
+                TextArea {
+                  background: Rectangle {
+                    color: Qt.darker("#212834", 1.2)
+
+                    radius: 4
+
+                    MouseArea {
+                      anchors.fill: parent
+                      hoverEnabled: true
+                      cursorShape: Qt.IBeamCursor
+                      onEntered: parent.color = Qt.darker("#212834", 1.5)
+                      onExited: parent.color = Qt.darker("#212834", 2)
+                    }
+                  }
+                  font.pointSize: 12
+                  Layout.preferredWidth: layoutWidth / 2
+                  Layout.preferredHeight: 250
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                  text: app_logic.long_description
+                  onTextChanged: app_logic.long_description = text
                 }
               }
             }
