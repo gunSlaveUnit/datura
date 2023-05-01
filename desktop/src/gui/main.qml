@@ -1042,7 +1042,7 @@ ApplicationWindow {
                 ActionButton {
                   text: qsTr("Draft new")
                   function handler() {
-                    build_logic.map(app_logic.id)
+                    build_logic.draft_new(app_logic.id)
                   }
                 }
 
@@ -1062,6 +1062,8 @@ ApplicationWindow {
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
                         onClicked: {
+                          build_logic.map(app_logic.id, id)
+                          storeStackLayout.currentIndex = storeStackLayout.workshopAppControlIndex
                         }
                       }
                     }
