@@ -17,6 +17,7 @@ LOGIN_URL = AUTH_URL + "sign-in/"
 LOGOUT_URL = AUTH_URL + "sign-out/"
 ME_URL = AUTH_URL + "me/"
 GAMES_URL = SERVER_URL + 'games/'
+BUILDS_URL = SERVER_URL + 'builds/'
 COMPANIES_URL = SERVER_URL + 'companies/'
 LIBRARY_URL = SERVER_URL + 'library/'
 CART_URL = SERVER_URL + 'cart/'
