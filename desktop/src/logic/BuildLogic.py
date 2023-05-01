@@ -16,11 +16,13 @@ class BuildLogic(QObject):
         self._platform_id = -1
 
         self._platforms = []
+        self._selected_platform_index = 1
 
     id_changed = Signal()
     call_changed = Signal()
     params_changed = Signal()
     platform_id_changed = Signal()
+    selected_platform_index_changed = Signal()
 
     @Property(int, notify=id_changed)
     def id(self):
@@ -61,6 +63,17 @@ class BuildLogic(QObject):
         if self._platform_id != new_value:
             self._platform_id = new_value
             self.platform_id_changed.emit()
+
+    @Property(int, notify=selected_platform_index_changed)
+    def selected_platform_index(self):
+        return self._selected_platform_index
+
+    @selected_platform_index.setter
+    def selected_platform_index(self, new_value: int):
+        if self._selected_platform_index != new_value:
+            print(new_value)
+            self._selected_platform_index = new_value
+            self.selected_platform_index_changed.emit()
 
     def reset_form(self):
         self.id = -1

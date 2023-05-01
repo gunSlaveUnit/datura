@@ -1119,6 +1119,8 @@ ApplicationWindow {
                   FormInputLabel {text: qsTr("Target platform")}
                   Combo {
                     model: build_logic.displayed_platforms
+                    currentIndex: build_logic.selected_platform_index
+                    onCurrentIndexChanged: build_logic.selected_platform_index = currentIndex
                   }
                 }
               }
