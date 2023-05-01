@@ -2,8 +2,9 @@ import uuid
 from pathlib import Path
 from typing import List
 
-from fastapi import APIRouter, UploadFile, Depends, Query
+from fastapi import APIRouter, UploadFile, Depends, Query, HTTPException
 from sqlalchemy.orm import Session, joinedload
+from starlette import status
 from starlette.responses import StreamingResponse
 
 from server.src.api.v1.schemas.build import BuildDBSchema, BuildCreateSchema
@@ -36,8 +37,7 @@ async def items(game_id: int = Query(None),
 
 
 @router.post('/', response_model=BuildDBSchema)
-async def create(game_id: int,
-                 build_create_data: BuildCreateSchema,
+async def create(build_create_data: BuildCreateSchema,
                  db: Session = Depends(get_db),
                  current_user: User = Depends(GetCurrentUser())) -> BuildDBSchema:
     """
@@ -45,10 +45,15 @@ async def create(game_id: int,
     Return a BuildDBSchema with created entity data.
     """
 
-    build = Build(**vars(build_create_data))
-    build.game_id = game_id
+    game = await Game.by_id(db, build_create_data.game_id)
+    if game.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You are not the owner of this game"
+        )
 
-    game = await Game.by_id(db, game_id)
+    build = Build(**vars(build_create_data))
+
     related_game_directory = game.directory
 
     new_directory_uuid = str(uuid.uuid4())
