@@ -11,9 +11,13 @@ class BuildLogic(QObject):
 
         self._id = -1
         self._call = ''
+        self._params = ''
+        self._platform_id = -1
 
     id_changed = Signal()
     call_changed = Signal()
+    params_changed = Signal()
+    platform_id_changed = Signal()
 
     @Property(int, notify=id_changed)
     def id(self):
@@ -35,9 +39,31 @@ class BuildLogic(QObject):
             self._call = new_value
             self.call_changed.emit()
 
+    @Property(str, notify=params_changed)
+    def params(self):
+        return self._params
+
+    @params.setter
+    def params(self, new_value: str):
+        if self._params != new_value:
+            self._params = new_value
+            self.params_changed.emit()
+
+    @Property(int, notify=platform_id_changed)
+    def platform_id(self):
+        return self._platform_id
+
+    @platform_id.setter
+    def platform_id(self, new_value: int):
+        if self._platform_id != new_value:
+            self._platform_id = new_value
+            self.platform_id_changed.emit()
+
     def reset_form(self):
         self.id = -1
         self.call = ''
+        self.params = ''
+        self.platform_id = 1
 
     drafted = Signal()
 
@@ -69,3 +95,5 @@ class BuildLogic(QObject):
 
             self.id = data['id']
             self.call = data['call']
+            self.params = data['params']
+            self.platform_id = data['platform_id']

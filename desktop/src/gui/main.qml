@@ -1104,6 +1104,12 @@ ApplicationWindow {
                     text: build_logic.call
                     onTextChanged: build_logic.call = text
                   }
+
+                  FormInputLabel {text: qsTr("Parameters")}
+                  FormInput {
+                    text: build_logic.params
+                    onTextChanged: build_logic.params = text
+                  }
                 }
               }
             }
