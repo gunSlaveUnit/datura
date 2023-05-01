@@ -778,6 +778,7 @@ ApplicationWindow {
               NeutralButton {
                 text: qsTr("Builds")
                 function handler() {
+                 build_list_model.load_for_game(app_logic.id)
                  gameControlStackLayout.currentIndex = gameControlStackLayout.buildsPageIndex
                 }
               }
