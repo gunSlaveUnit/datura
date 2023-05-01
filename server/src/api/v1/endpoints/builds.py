@@ -20,20 +20,26 @@ from server.src.core.utils.io import MEDIA_TYPE, read_compressed_chunks, CHUNK_S
 router = APIRouter(prefix=BUILDS_ROUTER_PREFIX, tags=[Tags.BUILDS])
 
 
-@router.get('/', response_model=List[BuildDBSchema])
+@router.get('/')
 async def items(game_id: int = Query(None),
-                include_platforms: bool = False,
+                include_platform: bool = False,
                 db: Session = Depends(get_db)):
     items_query = db.query(Build)
 
     if game_id:
         items_query = items_query.filter(Build.game_id == game_id)
 
-    if include_platforms:
+    if include_platform:
         items_query = items_query.join(Platform)
         items_query = items_query.options(joinedload(Build.platform))
 
     return items_query.all()
+
+
+@router.get('/{build_id}/')
+async def item(build_id: int,
+               db: Session = Depends(get_db)):
+    return await Build.by_id(db, build_id)
 
 
 @router.post('/', response_model=BuildDBSchema)
@@ -66,7 +72,7 @@ async def create(build_create_data: BuildCreateSchema,
     return build
 
 
-@router.put('/', response_model=BuildDBSchema)
+@router.put('/{build_id}/', response_model=BuildDBSchema)
 async def update(build_updated_data: BuildCreateSchema,
                  db: Session = Depends(get_db),
                  current_user: User = Depends(GetCurrentUser())) -> BuildDBSchema:
@@ -83,7 +89,7 @@ async def update(build_updated_data: BuildCreateSchema,
     return await build.update(db, build_updated_data.dict())
 
 
-@router.get('/{build_id}/')
+@router.get('/{build_id}/files/')
 async def build_info(game_id: int,
                      build_id: int,
                      filename: str | None = None,
@@ -110,7 +116,7 @@ async def build_info(game_id: int,
         return {"filenames": [f.name for f in path.iterdir() if f.is_file()]}
 
 
-@router.post('/{build_id}/')
+@router.post('/{build_id}/files/')
 async def upload_build(game_id: int,
                        build_id: int,
                        files: List[UploadFile],
