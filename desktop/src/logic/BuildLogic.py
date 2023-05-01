@@ -1,6 +1,6 @@
 from PySide6.QtCore import QObject, Slot, Signal, Property
 
-from desktop.src.settings import GAMES_URL
+from desktop.src.settings import GAMES_URL, BUILDS_URL
 
 
 class BuildLogic(QObject):
@@ -60,15 +60,12 @@ class BuildLogic(QObject):
             self.id = response.json()["id"]
             self.drafted.emit()
 
-    @Slot(int, int)
-    def map(self, game_id: int, build_id: int):
-        response = self._auth_service.authorized_session.get(GAMES_URL + f'{game_id}/builds/')
+    @Slot(int)
+    def map(self, build_id: int):
+        response = self._auth_service.authorized_session.get(BUILDS_URL + f'{build_id}/')
 
         if response.ok:
             data = response.json()
 
-            for build in data:
-                if build_id == build['id']:
-                    self.id = build['id']
-                    self.call = build['call']
-                    break
+            self.id = data['id']
+            self.call = data['call']
