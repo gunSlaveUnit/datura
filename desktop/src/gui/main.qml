@@ -743,9 +743,19 @@ ApplicationWindow {
 
             Indent {}
 
+            Link {
+              message: qsTr("To apps list")
+
+              function handler() {
+                storeStackLayout.currentIndex = storeStackLayout.workshopAppsListIndex
+              }
+            }
+
+            Indent {}
+
             RowLayout {
               NeutralButton {
-                 text: qsTr("Basic Info")
+                text: qsTr("Basic Info")
                 function handler() {
                   gameControlStackLayout.currentIndex = gameControlStackLayout.basicInfoPageIndex
                 }
