@@ -13,7 +13,6 @@ class BuildCreateSchema(BaseModel):
 class BuildDBSchema(BuildCreateSchema, EntityDBSchema):
     game_id: int
     directory: str
-    platform: PlatformDBSchema | None
 
     class Config:
         orm_mode = True
