@@ -1088,6 +1088,17 @@ ApplicationWindow {
                 ColumnLayout {
                   Indent {}
 
+                  Link {
+                    message: qsTr("To the builds")
+
+                    function handler() {
+                      build_list_model.load_for_game(app_logic.id)
+                      buildsStackLayout.currentIndex = buildsStackLayout.buildsListIndex
+                    }
+                  }
+
+                  Indent {}
+
                   FormInputLabel {text: qsTr("Call")}
                   FormInput {
                     text: build_logic.call
