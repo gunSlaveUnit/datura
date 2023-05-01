@@ -2,7 +2,7 @@ import uuid
 from pathlib import Path
 from typing import List
 
-from fastapi import APIRouter, UploadFile, Depends
+from fastapi import APIRouter, UploadFile, Depends, Query
 from sqlalchemy.orm import Session, joinedload
 from starlette.responses import StreamingResponse
 
@@ -20,10 +20,13 @@ router = APIRouter(prefix=BUILDS_ROUTER_PREFIX, tags=[Tags.BUILDS])
 
 
 @router.get('/', response_model=List[BuildDBSchema])
-async def items(game_id: int,
+async def items(game_id: int = Query(None),
                 include_platforms: bool = False,
                 db: Session = Depends(get_db)):
-    items_query = db.query(Build).filter(Build.game_id == game_id)
+    items_query = db.query(Build)
+
+    if game_id:
+        items_query = items_query.filter(Build.game_id == game_id)
 
     if include_platforms:
         items_query = items_query.join(Platform)
