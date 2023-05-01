@@ -12,6 +12,19 @@ class BuildLogic(QObject):
         self._id = -1
         self._call = ''
 
+    id_changed = Signal()
+    call_changed = Signal()
+
+    @Property(int, notify=id_changed)
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, new_value: int):
+        if self._id != new_value:
+            self._id = new_value
+            self.id_changed.emit()
+
     call_changed = Signal()
 
     @Property(str, notify=call_changed)
