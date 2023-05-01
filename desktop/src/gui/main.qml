@@ -778,8 +778,9 @@ ApplicationWindow {
               NeutralButton {
                 text: qsTr("Builds")
                 function handler() {
-                 build_list_model.load_for_game(app_logic.id)
-                 gameControlStackLayout.currentIndex = gameControlStackLayout.buildsPageIndex
+                  build_logic.load_platforms()
+                  build_list_model.load_for_game(app_logic.id)
+                  gameControlStackLayout.currentIndex = gameControlStackLayout.buildsPageIndex
                 }
               }
 
@@ -1105,10 +1106,19 @@ ApplicationWindow {
                     onTextChanged: build_logic.call = text
                   }
 
+                  Indent {}
+
                   FormInputLabel {text: qsTr("Parameters")}
                   FormInput {
                     text: build_logic.params
                     onTextChanged: build_logic.params = text
+                  }
+
+                  Indent {}
+
+                  FormInputLabel {text: qsTr("Target platform")}
+                  Combo {
+                    model: build_logic.displayed_platforms
                   }
                 }
               }

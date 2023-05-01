@@ -1,6 +1,7 @@
 from PySide6.QtCore import QObject, Slot, Signal, Property
 
-from desktop.src.settings import GAMES_URL, BUILDS_URL
+from desktop.src.settings import GAMES_URL, BUILDS_URL, PLATFORMS_URL
+from server.src.core.models.platform import Platform
 
 
 class BuildLogic(QObject):
@@ -13,6 +14,8 @@ class BuildLogic(QObject):
         self._call = ''
         self._params = ''
         self._platform_id = -1
+
+        self._platforms = []
 
     id_changed = Signal()
     call_changed = Signal()
@@ -66,6 +69,20 @@ class BuildLogic(QObject):
         self.platform_id = 1
 
     drafted = Signal()
+
+    @Slot()
+    def load_platforms(self):
+        response = self._auth_service.authorized_session.get(PLATFORMS_URL)
+        if response.ok:
+            platforms = response.json()
+            self._platforms = [Platform(**platform) for platform in platforms]
+            self.platforms_changed.emit()
+
+    platforms_changed = Signal()
+
+    @Property(list, notify=platforms_changed)
+    def displayed_platforms(self):
+        return [platform.title for platform in self._platforms]
 
     @Slot(int)
     def draft_new(self, game_id: int):
