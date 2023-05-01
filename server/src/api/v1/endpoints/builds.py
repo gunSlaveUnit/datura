@@ -66,6 +66,23 @@ async def create(build_create_data: BuildCreateSchema,
     return build
 
 
+@router.put('/', response_model=BuildDBSchema)
+async def update(build_updated_data: BuildCreateSchema,
+                 db: Session = Depends(get_db),
+                 current_user: User = Depends(GetCurrentUser())) -> BuildDBSchema:
+    game = await Game.by_id(db, build_updated_data.game_id)
+
+    if game.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You are not the owner of this game"
+        )
+
+    build = Build(**vars(build_updated_data))
+
+    return await build.update(db, build_updated_data.dict())
+
+
 @router.get('/{build_id}/')
 async def build_info(game_id: int,
                      build_id: int,
