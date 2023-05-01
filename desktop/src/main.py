@@ -9,6 +9,7 @@ from desktop.src.logic.AuthLogic import AuthLogic
 from desktop.src.logic.BuildLogic import BuildLogic
 from desktop.src.logic.CompanyLogic import CompanyLogic
 from desktop.src.logic.StoreDetailedLogic import StoreDetailedLogic
+from desktop.src.models.build import BuildList
 from desktop.src.models.game import GameList
 from desktop.src.services.AuthService import AuthService
 from desktop.src.services.CompanyService import CompanyService
@@ -46,6 +47,9 @@ if __name__ == '__main__':
 
     game_list_model = GameList(auth_service, company_service)
     engine.rootContext().setContextProperty("game_list_model", game_list_model)
+
+    build_list_model = BuildList(auth_service)
+    engine.rootContext().setContextProperty("build_list_model", build_list_model)
 
     start_file_location = LAYOUTS_DIR / "main.qml"
     engine.load(start_file_location)
