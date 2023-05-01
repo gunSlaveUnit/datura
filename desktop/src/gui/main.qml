@@ -1067,7 +1067,7 @@ ApplicationWindow {
 
                     delegate: RowLayout {
                       Text {
-                        text: call
+                        text: directory
                         color: "white"
                         font.underline: true
 
@@ -1077,7 +1077,7 @@ ApplicationWindow {
                           hoverEnabled: true
                           onClicked: {
                             build_logic.map(app_logic.id, id)
-                            storeStackLayout.currentIndex = storeStackLayout.workshopAppControlIndex
+                            buildsStackLayout.currentIndex = buildsStackLayout.buildControlIndex
                           }
                         }
                       }

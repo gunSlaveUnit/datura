@@ -60,12 +60,15 @@ class BuildLogic(QObject):
             self.id = response.json()["id"]
             self.drafted.emit()
 
-    @Slot(int)
-    def map(self, game_id, build_id: int):
-        response = self._auth_service.authorized_session.get(GAMES_URL + f'{game_id}/builds/{build_id}/')
+    @Slot(int, int)
+    def map(self, game_id: int, build_id: int):
+        response = self._auth_service.authorized_session.get(GAMES_URL + f'{game_id}/builds/')
 
         if response.ok:
             data = response.json()
 
-            self.id = data['id']
-            self.call = data['call']
+            for build in data:
+                if build_id == build['id']:
+                    self.id = build['id']
+                    self.call = build['call']
+                    break
