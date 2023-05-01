@@ -1034,6 +1034,17 @@ ApplicationWindow {
                   }
                 }
               }
+
+              ColumnLayout {
+                Indent {}
+
+                ActionButton {
+                  text: qsTr("Draft new")
+                  function handler() {
+
+                  }
+                }
+              }
             }
           }
         }
