@@ -13,12 +13,10 @@ from server.src.core.models.platform import Platform
 from server.src.core.models.user import User
 from server.src.core.settings import BUILDS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_BUILDS_DIR, Tags
 from server.src.core.utils.auth import GetCurrentUser
-from server.src.api.v1.endpoints.requirements import router as requirements_router
 from server.src.core.utils.db import get_db
 from server.src.core.utils.io import MEDIA_TYPE, read_compressed_chunks, CHUNK_SIZE, save, clear
 
 router = APIRouter(prefix=BUILDS_ROUTER_PREFIX, tags=[Tags.BUILDS])
-router.include_router(requirements_router)
 
 
 @router.get('/', response_model=List[BuildDBSchema])
