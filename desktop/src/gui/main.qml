@@ -1045,6 +1045,28 @@ ApplicationWindow {
                     build_logic.map(app_logic.id)
                   }
                 }
+
+                ListView {
+                  Layout.fillHeight: true
+
+                  model: build_list_model
+
+                  delegate: RowLayout {
+                    Text {
+                      text: call
+                      color: "white"
+                      font.underline: true
+
+                      MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onClicked: {
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
