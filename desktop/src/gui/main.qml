@@ -1036,37 +1036,62 @@ ApplicationWindow {
                 }
               }
 
-              ColumnLayout {
-                Indent {}
+              StackLayout {
+                id: buildsStackLayout
 
-                ActionButton {
-                  text: qsTr("Draft new")
-                  function handler() {
-                    build_logic.draft_new(app_logic.id)
+                property int buildsListIndex: 0
+                property int buildControlIndex: buildsListIndex + 1
+
+                Connections {
+                  target: build_logic
+
+                  function onDrafted() {
+                    buildsStackLayout.currentIndex = buildsStackLayout.buildControlIndex
                   }
                 }
 
-                ListView {
-                  Layout.fillHeight: true
+                ColumnLayout {
+                  Indent {}
 
-                  model: build_list_model
+                  ActionButton {
+                    text: qsTr("Draft new")
+                    function handler() {
+                      build_logic.draft_new(app_logic.id)
+                    }
+                  }
 
-                  delegate: RowLayout {
-                    Text {
-                      text: call
-                      color: "white"
-                      font.underline: true
+                  ListView {
+                    Layout.fillHeight: true
 
-                      MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        hoverEnabled: true
-                        onClicked: {
-                          build_logic.map(app_logic.id, id)
-                          storeStackLayout.currentIndex = storeStackLayout.workshopAppControlIndex
+                    model: build_list_model
+
+                    delegate: RowLayout {
+                      Text {
+                        text: call
+                        color: "white"
+                        font.underline: true
+
+                        MouseArea {
+                          anchors.fill: parent
+                          cursorShape: Qt.PointingHandCursor
+                          hoverEnabled: true
+                          onClicked: {
+                            build_logic.map(app_logic.id, id)
+                            storeStackLayout.currentIndex = storeStackLayout.workshopAppControlIndex
+                          }
                         }
                       }
                     }
+                  }
+                }
+
+                ColumnLayout {
+                  Indent {}
+
+                  FormInputLabel {text: qsTr("Call")}
+                  FormInput {
+                    text: build_logic.call
+                    onTextChanged: build_logic.call = text
                   }
                 }
               }
