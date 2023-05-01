@@ -1041,7 +1041,7 @@ ApplicationWindow {
                 ActionButton {
                   text: qsTr("Draft new")
                   function handler() {
-
+                    build_logic.map(app_logic.id)
                   }
                 }
               }
