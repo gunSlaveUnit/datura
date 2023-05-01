@@ -1067,7 +1067,7 @@ ApplicationWindow {
 
                     delegate: RowLayout {
                       Text {
-                        text: directory
+                        text: platform_title
                         color: "white"
                         font.underline: true
 
@@ -1076,7 +1076,7 @@ ApplicationWindow {
                           cursorShape: Qt.PointingHandCursor
                           hoverEnabled: true
                           onClicked: {
-                            build_logic.map(app_logic.id, id)
+                            build_logic.map(id)
                             buildsStackLayout.currentIndex = buildsStackLayout.buildControlIndex
                           }
                         }
