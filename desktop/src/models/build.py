@@ -7,7 +7,7 @@ from PySide6.QtCore import QAbstractListModel, QModelIndex, QByteArray, Qt, Slot
 from desktop.src.models.entity import Entity
 from desktop.src.services.AuthService import AuthService
 from desktop.src.services.CompanyService import CompanyService
-from desktop.src.settings import GAMES_URL
+from desktop.src.settings import GAMES_URL, BUILDS_URL
 
 
 @dataclass()
@@ -17,6 +17,7 @@ class Build(Entity):
     params: str | None
     game_id: int
     platform_id: int
+    platform_title: str
 
 
 class BuildList(QAbstractListModel):
@@ -29,15 +30,28 @@ class BuildList(QAbstractListModel):
 
     @Slot(int)
     def load_for_game(self, game_id: int):
-        response = self._auth_service.authorized_session.get(GAMES_URL + f'{game_id}/builds/')
+        response = self._auth_service.authorized_session.get(
+            BUILDS_URL + f'?game_id={game_id}&include_platform=true'
+        )
 
         if response.ok:
             builds = response.json()
 
             self.beginResetModel()
             self._builds = []
-            for build in builds:
-                self._builds.append(Build(**build))
+            for build_data in builds:
+                build = Build(
+                    id=build_data['id'],
+                    created_at=build_data['created_at'],
+                    updated_at=build_data['updated_at'],
+                    directory=build_data['directory'],
+                    call=build_data['call'],
+                    params=build_data['params'],
+                    game_id=build_data['game_id'],
+                    platform_id=build_data['platform_id'],
+                    platform_title=build_data['platform']['title']
+                )
+                self._builds.append(build)
             self.endResetModel()
 
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
