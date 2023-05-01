@@ -11,6 +11,8 @@ from desktop.src.settings import GAMES_URL
 class AppLogic(QObject):
     BASE_YEAR = 1958
 
+    id_changed = Signal()
+
     title_changed = Signal()
     price_changed = Signal()
     short_description_changed = Signal()
@@ -43,7 +45,7 @@ class AppLogic(QObject):
 
         self._auth_service = auth_service
 
-        self.id = -1
+        self._id = -1
         self.is_approved = None
 
         self._title = 'Unnamed'
@@ -218,6 +220,11 @@ class AppLogic(QObject):
         years_into_future = 10
         years = [i + base for i in range(current_year - base + years_into_future)]
         return years
+
+    id = Property(int,
+                  lambda self: self._id,
+                  lambda self, value: setattr(self, '_id', value),
+                  notify=id_changed)
 
     title = Property(str,
                      lambda self: self._title,
