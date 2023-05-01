@@ -35,8 +35,6 @@ class AppLogic(QObject):
     displayed_capsule_changed = Signal()
     trailers_changed = Signal()
     displayed_trailers_changed = Signal()
-    project_files_changed = Signal()
-    displayed_project_files_changed = Signal()
 
     drafted = Signal()
 
@@ -62,7 +60,6 @@ class AppLogic(QObject):
         self._header = ''
         self._capsule = ''
         self._trailers = []
-        self._project_files = []
 
     def reset_form(self):
         self.id = -1
@@ -337,8 +334,3 @@ class AppLogic(QObject):
             self._trailers = new_value
             self.trailers_changed.emit()
             self.displayed_trailers_changed.emit()
-
-    project_files = Property(list,
-                             lambda self: self._project_files,
-                             lambda self, value: setattr(self, '_project_files', value),
-                             notify=project_files_changed)

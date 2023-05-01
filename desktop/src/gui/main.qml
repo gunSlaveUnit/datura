@@ -1122,6 +1122,35 @@ ApplicationWindow {
                     currentIndex: build_logic.selected_platform_index
                     onCurrentIndexChanged: build_logic.selected_platform_index = currentIndex
                   }
+
+                  Indent {}
+
+                  RowLayout {
+                    Platform.FileDialog {
+                      id: attach_project_archive_file_dialog
+                      fileMode: Platform.FileDialog.OpenFile
+                      nameFilters: ["Archive (*.zip *.rar *.7z)"]
+                      onAccepted: build_logic.project_archive = file
+                      folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+                    }
+
+                    Text {
+                      text: qsTr("Archive (*.zip *.rar *.7z):")
+                      color: "white"
+                    }
+
+                    Text {
+                      text: build_logic.project_archive
+                      color: "orange"
+                    }
+                  }
+
+                  NeutralButton {
+                    text: qsTr("Attach")
+                    function handler() {
+                     attach_project_archive_file_dialog.open()
+                    }
+                  }
                 }
               }
             }

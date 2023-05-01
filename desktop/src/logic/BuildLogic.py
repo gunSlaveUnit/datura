@@ -18,11 +18,14 @@ class BuildLogic(QObject):
         self._platforms = []
         self._selected_platform_index = 1
 
+        self._project_archive = ''
+
     id_changed = Signal()
     call_changed = Signal()
     params_changed = Signal()
     platform_id_changed = Signal()
     selected_platform_index_changed = Signal()
+    project_archive_changed = Signal()
 
     @Property(int, notify=id_changed)
     def id(self):
@@ -71,9 +74,18 @@ class BuildLogic(QObject):
     @selected_platform_index.setter
     def selected_platform_index(self, new_value: int):
         if self._selected_platform_index != new_value:
-            print(new_value)
             self._selected_platform_index = new_value
             self.selected_platform_index_changed.emit()
+
+    @Property(str, notify=project_archive_changed)
+    def project_archive(self):
+        return self._project_archive
+
+    @project_archive.setter
+    def project_archive(self, new_value: str):
+        if self._project_archive != new_value:
+            self._project_archive = new_value
+            self.project_archive_changed.emit()
 
     def reset_form(self):
         self.id = -1
@@ -127,3 +139,4 @@ class BuildLogic(QObject):
             self.call = data['call']
             self.params = data['params']
             self.platform_id = data['platform_id']
+            self.selected_platform_index = data['platform_id'] - 1
