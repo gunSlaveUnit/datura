@@ -174,18 +174,6 @@ class AppLogic(QObject):
             url = GAMES_URL + f"{reply.json()['id']}" + '/trailers/'
             self._auth_service.authorized_session.post(url, files=files)
 
-        if self._project_files:
-            files = []
-            for build_file in self._project_files:
-                filename = QUrl(build_file).toLocalFile()
-                files.append(
-                    (
-                        'files', (os.path.basename(filename), open(filename, 'rb'))
-                    )
-                )
-            url = GAMES_URL + f"{reply.json()['id']}" + '/builds/'
-            self._auth_service.authorized_session.post(url, files=files)
-
         if reply.status_code == requests.codes.ok:
             self.reset_files()
 

@@ -1,4 +1,6 @@
+import io
 import uuid
+import zipfile
 from pathlib import Path
 from typing import List
 
@@ -73,7 +75,8 @@ async def create(build_create_data: BuildCreateSchema,
 
 
 @router.put('/{build_id}/', response_model=BuildDBSchema)
-async def update(build_updated_data: BuildCreateSchema,
+async def update(build_id: int,
+                 build_updated_data: BuildCreateSchema,
                  db: Session = Depends(get_db),
                  current_user: User = Depends(GetCurrentUser())) -> BuildDBSchema:
     game = await Game.by_id(db, build_updated_data.game_id)
@@ -84,14 +87,13 @@ async def update(build_updated_data: BuildCreateSchema,
             detail="You are not the owner of this game"
         )
 
-    build = Build(**vars(build_updated_data))
+    build = await Build.by_id(db, build_id)
 
     return await build.update(db, build_updated_data.dict())
 
 
 @router.get('/{build_id}/files/')
-async def build_info(game_id: int,
-                     build_id: int,
+async def build_info(build_id: int,
                      filename: str | None = None,
                      db: Session = Depends(get_db)):
     """
@@ -99,8 +101,8 @@ async def build_info(game_id: int,
     If "filename" query param was provided, returns a file.
     """
 
-    game = await Game.by_id(db, game_id)
     build = await Build.by_id(db, build_id)
+    game = await Game.by_id(db, build.game_id)
 
     path = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_BUILDS_DIR, build.directory)
 
@@ -117,19 +119,20 @@ async def build_info(game_id: int,
 
 
 @router.post('/{build_id}/files/')
-async def upload_build(game_id: int,
-                       build_id: int,
-                       files: List[UploadFile],
+async def upload_build(build_id: int,
+                       file: UploadFile,
                        db: Session = Depends(get_db)):
     """
     Uploads project build files to the server.
     All will be overwritten.
     """
 
-    game = await Game.by_id(db, game_id)
     build = await Build.by_id(db, build_id)
+    game = await Game.by_id(db, build.game_id)
 
     store_files_directory = Path(GAMES_ASSETS_PATH).joinpath(game.directory, GAMES_ASSETS_BUILDS_DIR, build.directory)
     await clear(store_files_directory)
 
-    return await save(store_files_directory, files)
+    content = await file.read()
+    with zipfile.ZipFile(io.BytesIO(content)) as archive:
+        archive.extractall(store_files_directory)

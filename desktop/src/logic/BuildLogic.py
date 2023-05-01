@@ -1,4 +1,6 @@
-from PySide6.QtCore import QObject, Slot, Signal, Property
+import os
+
+from PySide6.QtCore import QObject, Slot, Signal, Property, QUrl
 
 from desktop.src.settings import GAMES_URL, BUILDS_URL, PLATFORMS_URL
 from server.src.core.models.platform import Platform
@@ -93,6 +95,30 @@ class BuildLogic(QObject):
         self.params = ''
         self.platform_id = 1
 
+    @Slot(int)
+    def update(self, game_id: int):
+        data = {
+            "call": self._call,
+            "params": self._params,
+            "game_id": game_id,
+            "platform_id": self._selected_platform_index + 1,
+        }
+
+        reply = self._auth_service.authorized_session.put(
+            BUILDS_URL + f'{str(self.id)}/',
+            json=data
+        )
+
+        if self._project_archive != '':
+            filename = QUrl(self._project_archive).toLocalFile()
+            with open(filename, 'rb') as project_archive_file:
+                files = [('file', (os.path.basename(filename), project_archive_file))]
+                url = BUILDS_URL + f"{self.id}" + '/files/'
+                self._auth_service.authorized_session.post(url, files=files)
+
+        if reply.ok:
+            self.reset_files()
+
     drafted = Signal()
 
     @Slot()
@@ -140,3 +166,6 @@ class BuildLogic(QObject):
             self.params = data['params']
             self.platform_id = data['platform_id']
             self.selected_platform_index = data['platform_id'] - 1
+
+    def reset_files(self):
+        self.project_archive = ''

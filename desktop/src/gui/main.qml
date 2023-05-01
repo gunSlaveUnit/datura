@@ -788,6 +788,7 @@ ApplicationWindow {
                 text: qsTr("Save")
                 function handler() {
                   app_logic.update()
+                  build_logic.update(app_logic.id)
                 }
               }
             }
