@@ -7,6 +7,7 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse
 
 from server.src.api.v1.endpoints import games
+from server.src.core.models.build import Build
 from server.src.core.models.game import Game
 from server.src.core.models.user import User
 from server.src.core.settings import RoleType, templates
@@ -31,7 +32,10 @@ async def item(request: Request,
                game_id: int,
                db: Session = Depends(get_db),
                _: User = Depends(GetCurrentUser(scopes=(RoleType.ADMIN,)))):
+    builds_query = db.query(Build).filter(Build.game_id == game_id)
+
     return templates.TemplateResponse("detailed_game.html", {
         "request": request,
-        "game": await games.item(game_id, db)
+        "game": await games.item(game_id, db),
+        "builds": builds_query.all()
     })
