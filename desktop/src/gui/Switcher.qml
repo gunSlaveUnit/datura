@@ -7,5 +7,4 @@ Switch {
 
     Material.theme: Material.Dark
     Material.accent: window_theme_color
-    font.pointSize: 12
 }
