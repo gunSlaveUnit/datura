@@ -84,17 +84,6 @@ async def update(game_id: int,
     return await game.update(db, updated_game_data.dict())
 
 
-@router.patch('/{game_id}/verify/')
-async def verify(game_id: int,
-                 sending: GameSendingSchema,
-                 db=Depends(get_db)):
-    """Sends a game for verification."""
-
-    game = await Game.by_id(db, game_id)
-
-    await game.update(db, {"is_send_for_verification": sending.is_send_for_verification})
-
-
 @router.patch('/{game_id}/approve/')
 async def approve(game_id: int,
                   approving: GameApprovingSchema,
@@ -104,6 +93,21 @@ async def approve(game_id: int,
     game = await Game.by_id(db, game_id)
 
     await game.update(db, {"is_approved": approving.is_approved})
+
+
+@router.patch('/{game_id}/verify/')
+async def verify(game_id: int,
+                 sending: GameSendingSchema,
+                 db=Depends(get_db)):
+    """Sends a game for verification."""
+
+    game = await Game.by_id(db, game_id)
+
+    await game.update(db, {
+        "is_approved": False,
+        "is_send_for_verification": sending.is_send_for_verification,
+        "is_published": False
+    })
 
 
 @router.patch('/{game_id}/publish/')
@@ -123,4 +127,7 @@ async def publish(game_id: int,
             detail="The game cannot be published because it was not approved"
         )
 
-    await game.update(db, {"is_published": game.is_approved})
+    await game.update(db, {
+        "is_send_for_verification": False,
+        "is_published": game.is_approved
+    })
