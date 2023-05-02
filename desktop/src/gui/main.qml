@@ -288,6 +288,74 @@ Window {
                 }
               }
 
+              SwipeView {
+                id: game_screenshots_swipe_view
+
+                Layout.preferredWidth: 400
+                Layout.preferredHeight: width * 9 / 16
+
+                clip: true
+
+                Repeater {
+                  model: 6
+
+                  Image {
+                    source: "../../resources/images/16x9_placeholder.jpg"
+                    mipmap: true
+
+                    MouseArea {
+                      id: image_mouse_area
+                      anchors.fill: parent
+                      hoverEnabled: true
+
+                      RowLayout {
+                        anchors.fill: parent
+
+                        Button {
+                          Layout.fillHeight: true
+                          Layout.preferredWidth: 30
+                          text: "<"
+                          flat: true
+                          font.bold: true
+                          font.pointSize: 16
+                          visible: image_mouse_area.containsMouse
+                          enabled: game_screenshots_swipe_view.currentIndex > 0
+                          onClicked: game_screenshots_swipe_view.decrementCurrentIndex()
+                          background: Rectangle {
+                            gradient: Gradient {
+                              orientation: Gradient.Horizontal
+                              GradientStop { position: -1.0; color: "black" }
+                              GradientStop { position: 1.0; color: "transparent" }
+                            }
+                          }
+                        }
+
+                        Item {Layout.fillWidth: true}
+
+                        Button {
+                          Layout.fillHeight: true
+                          Layout.preferredWidth: 30
+                          text: ">"
+                          flat: true
+                          font.bold: true
+                          font.pointSize: 16
+                          visible: image_mouse_area.containsMouse
+                          enabled: game_screenshots_swipe_view.currentIndex < game_screenshots_swipe_view.count - 1
+                          onClicked: game_screenshots_swipe_view.incrementCurrentIndex()
+                          background: Rectangle {
+                            gradient: Gradient {
+                              orientation: Gradient.Horizontal
+                              GradientStop { position: 0.0; color: "transparent" }
+                              GradientStop { position: 2.0; color: "black" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
               BuyButton {
                 text: "Buy"
                 visible: store_detailed_logic.location === 0
@@ -309,56 +377,56 @@ Window {
         }
 
         GridView {
-        id: storeGamesGridView
+          id: storeGamesGridView
 
-        anchors.fill: parent
-        anchors.margins: defaultMargin
+          anchors.fill: parent
+          anchors.margins: defaultMargin
 
-        boundsBehavior: Flickable.StopAtBounds
+          boundsBehavior: Flickable.StopAtBounds
 
-        property int capsuleImageWidth: 12 * 10
-        property int capsuleImageHeight: capsuleImageWidth * 16 / 10
+          property int capsuleImageWidth: 12 * 10
+          property int capsuleImageHeight: capsuleImageWidth * 16 / 10
 
-        property int idealWidth: capsuleImageWidth + defaultMargin * 2
-        property int itemsPerRow: storeGamesGridView.width / idealWidth
-        property double additionalCellWidth: (storeGamesGridView.width - itemsPerRow * idealWidth) / itemsPerRow
-        cellWidth: idealWidth + additionalCellWidth
-        cellHeight: capsuleImageHeight + defaultMargin * 2
+          property int idealWidth: capsuleImageWidth + defaultMargin * 2
+          property int itemsPerRow: storeGamesGridView.width / idealWidth
+          property double additionalCellWidth: (storeGamesGridView.width - itemsPerRow * idealWidth) / itemsPerRow
+          cellWidth: idealWidth + additionalCellWidth
+          cellHeight: capsuleImageHeight + defaultMargin * 2
 
-        clip: true
+          clip: true
 
-        model: game_list_model
+          model: game_list_model
 
-        delegate: Rectangle {
-          width: storeGamesGridView.cellWidth
-          height: storeGamesGridView.cellHeight
-          color: "transparent"
-          radius: defaultMargin / 2
+          delegate: Rectangle {
+            width: storeGamesGridView.cellWidth
+            height: storeGamesGridView.cellHeight
+            color: "transparent"
+            radius: defaultMargin / 2
 
-          Image {
-            anchors.centerIn: parent
-            width: storeGamesGridView.capsuleImageWidth
-            height: storeGamesGridView.capsuleImageHeight
-            source: `http://127.0.0.1:8000/api/v1/games/${id}/capsule/`
-            mipmap: true
-          }
+            Image {
+              anchors.centerIn: parent
+              width: storeGamesGridView.capsuleImageWidth
+              height: storeGamesGridView.capsuleImageHeight
+              source: `http://127.0.0.1:8000/api/v1/games/${id}/capsule/`
+              mipmap: true
+            }
 
-          MouseArea {
-            id: cell_mouse_area
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled: true
-            onEntered: parent.color = "#36373a"
-            onExited: parent.color = "transparent"
-            onClicked: {
-              store_detailed_logic.load(id)
-              storeStack.currentIndex = storeStack.storeDetailedIndex
+            MouseArea {
+              id: cell_mouse_area
+              anchors.fill: parent
+              cursorShape: Qt.PointingHandCursor
+              hoverEnabled: true
+              onEntered: parent.color = "#36373a"
+              onExited: parent.color = "transparent"
+              onClicked: {
+                store_detailed_logic.load(id)
+                storeStack.currentIndex = storeStack.storeDetailedIndex
+              }
             }
           }
         }
-      }
 
-      ColumnLayout {}
+        ColumnLayout {}
 
         Scroll {
           contentHeight: introduction.height + 2 * defaultMargin
