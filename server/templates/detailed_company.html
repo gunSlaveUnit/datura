@@ -126,7 +126,7 @@
     function approving(value) {
         const id = document.getElementById("id").value
 
-        fetch(`http://127.0.0.1:8000/api/v1/companies/${id}/approve/`, {
+        fetch(`http://localhost:8000/api/v1/companies/${id}/approve/`, {
             method: 'PATCH',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
