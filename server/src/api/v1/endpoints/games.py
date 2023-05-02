@@ -6,12 +6,11 @@ from starlette import status
 
 from server.src.core.models.company import Company
 from server.src.core.models.game import Game
-from server.src.core.models.game_status import GameStatus
 from server.src.core.models.user import User
-from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX, GameStatusType, GAMES_ASSETS_PATH, \
+from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX, GAMES_ASSETS_PATH, \
     GAMES_ASSETS_HEADER_DIR, GAMES_ASSETS_CAPSULE_DIR, GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, \
     GAMES_ASSETS_BUILDS_DIR
-from server.src.core.utils.auth import _get_current_user, GetCurrentUser
+from server.src.core.utils.auth import GetCurrentUser
 from server.src.core.utils.db import get_db
 from server.src.api.v1.schemas.game import GameFilterSchema, GameCreateSchema, GameApprovingSchema, GameSendingSchema, \
     GamePublishingSchema
@@ -58,9 +57,6 @@ async def create(new_game_data: GameCreateSchema,
     game = Game(**vars(new_game_data))
     game.owner_id = current_user.id
 
-    not_approved_status = await GameStatus.by_type(db, GameStatusType.NOT_APPROVED)
-    game.status_id = not_approved_status.id
-
     new_directory_uuid = str(uuid.uuid4())
     assets_directory = GAMES_ASSETS_PATH.joinpath(new_directory_uuid)
     assets_directory.mkdir(parents=True)
@@ -94,14 +90,9 @@ async def verify(game_id: int,
                  db=Depends(get_db)):
     """Sends a game for verification."""
 
-    new_game_status = await GameStatus.by_type(
-        db,
-        GameStatusType.SEND if sending.is_send else GameStatusType.NOT_SEND
-    )
-
     game = await Game.by_id(db, game_id)
 
-    await game.update(db, {"status_id": new_game_status.id})
+    await game.update(db, {"is_send_for_verification": sending.is_send_for_verification})
 
 
 @router.patch('/{game_id}/approve/')
@@ -110,14 +101,9 @@ async def approve(game_id: int,
                   db=Depends(get_db)):
     """If it denies, the game becomes not sent for verification."""
 
-    new_game_status = await GameStatus.by_type(
-        db,
-        GameStatusType.NOT_PUBLISHED if approving.is_approved else GameStatusType.NOT_SEND
-    )
-
     game = await Game.by_id(db, game_id)
 
-    await game.update(db, {"status_id": new_game_status.id})
+    await game.update(db, {"is_approved": approving.is_approved})
 
 
 @router.patch('/{game_id}/publish/')
@@ -131,18 +117,10 @@ async def publish(game_id: int,
 
     game = await Game.by_id(db, game_id)
 
-    not_published_status = await GameStatus.by_type(db, GameStatusType.NOT_PUBLISHED)
-
-    if game.status_id != not_published_status.id and publishing.is_published:
+    if not game.is_approved and publishing.is_published:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="The game cannot be published because it was not previously published or was not previously "
-                   "submitted for review"
+            detail="The game cannot be published because it was not approved"
         )
 
-    new_game_status = await GameStatus.by_type(
-        db,
-        GameStatusType.PUBLISHED if publishing.is_published else GameStatusType.NOT_PUBLISHED
-    )
-
-    await game.update(db, {"status_id": new_game_status.id})
+    await game.update(db, {"is_published": game.is_approved})

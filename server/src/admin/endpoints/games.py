@@ -8,9 +8,8 @@ from starlette.responses import HTMLResponse
 
 from server.src.api.v1.endpoints import games
 from server.src.core.models.game import Game
-from server.src.core.models.game_status import GameStatus
 from server.src.core.models.user import User
-from server.src.core.settings import RoleType, templates, GameStatusType
+from server.src.core.settings import RoleType, templates
 from server.src.core.utils.auth import GetCurrentUser
 from server.src.core.utils.db import get_db
 
@@ -22,12 +21,7 @@ async def items(request: Request,
                 current_user: User = Depends(GetCurrentUser(scopes=(RoleType.ADMIN,))),
                 db: Session = Depends(get_db)):
 
-    send_status = await GameStatus.by_type(db, GameStatusType.SEND)
-
-    games_query = db.query(Game).order_by(Game.status_id == send_status.id, desc(Game.created_at))
-
-    games_query = games_query.join(GameStatus)
-    games_query = games_query.options(joinedload(Game.status))
+    games_query = db.query(Game).order_by(Game.is_send_for_verification, desc(Game.created_at))
 
     return templates.TemplateResponse("games.html", {"request": request, "games": games_query.all()})
 

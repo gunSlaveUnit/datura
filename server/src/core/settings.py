@@ -57,7 +57,6 @@ PLATFORMS_ROUTER_PREFIX = '/platforms'
 SYSTEM_REQUIREMENTS_ROUTER_PREFIX = '/requirements'
 LANGUAGES_ROUTER_PREFIX = '/languages'
 GAME_TAGS_ROUTER_PREFIX = '/{game_id}/tags'
-GAME_STATUSES_ROUTER_PREFIX = '/statuses'
 TAGS_ROUTER_PREFIX = '/tags'
 REVIEWS_ROUTER_PREFIX = '/{game_id}/reviews'
 ADMIN_ROUTER_PREFIX = '/admin'
@@ -83,7 +82,6 @@ class Tags(str, Enum):
 
     GAMES = 'Games'
     AGE_CATEGORIES = 'Age categories'
-    STATUSES = 'Statuses'
     GAME_TAGS = 'Game tags'
     TAGS = 'Tags'
     ASSETS = 'Assets'
@@ -109,7 +107,6 @@ tags_metadata = [
     {'name': Tags.PAYMENTS, 'description': ''},
     {'name': Tags.GAMES, 'description': ''},
     {'name': Tags.AGE_CATEGORIES, 'description': ''},
-    {'name': Tags.STATUSES, 'description': ''},
     {'name': Tags.GAME_TAGS, 'description': ''},
     {'name': Tags.TAGS, 'description': ''},
     {'name': Tags.ASSETS, 'description': ''},
@@ -129,15 +126,6 @@ tags_metadata = [
 class RoleType(Enum):
     ADMIN = "admin"
     USER = "user"
-
-
-class GameStatusType(Enum):
-    NOT_APPROVED = "Not approved"
-    SEND = "Send"
-    PART_APPROVED = "Part approved"
-    FULL_APPROVED = "Full approved"
-    PART_PUBLISHED = "Part published"
-    FULL_PUBLISHED = "Full published"
 
 
 class AgeType(Enum):

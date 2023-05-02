@@ -10,7 +10,7 @@ class GameApprovingSchema(BaseModel):
 
 
 class GameSendingSchema(BaseModel):
-    is_send: bool
+    is_send_for_verification: bool
 
 
 class GamePublishingSchema(BaseModel):
@@ -38,9 +38,11 @@ class GameCreateSchema(BaseModel):
 
 
 class GameDBSchema(GameCreateSchema, EntityDBSchema):
-    status_id: int
+    is_approved: bool
+    is_send_for_verification: bool
+    is_published: bool
     directory: str
-    company_id: int
+    owner_id: int
 
     class Config:
         orm_mode = True

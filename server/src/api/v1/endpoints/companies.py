@@ -3,9 +3,8 @@ from starlette import status
 
 from server.src.core.models.company import Company
 from server.src.core.models.game import Game
-from server.src.core.models.game_status import GameStatus
 from server.src.core.models.user import User
-from server.src.core.settings import Tags, COMPANIES_ROUTER_PREFIX, GameStatusType, RoleType
+from server.src.core.settings import Tags, COMPANIES_ROUTER_PREFIX, RoleType
 from server.src.core.utils.auth import GetCurrentUser
 from server.src.core.utils.db import get_db
 from server.src.api.v1.schemas.company import CompanyCreateSchema, ApprovingSchema
@@ -74,10 +73,12 @@ async def approve(company_id: int,
 
     company_owner_id = company.owner_id
 
-    not_approved_status = await GameStatus.by_type(db, GameStatusType.NOT_APPROVED)
-
     company_games = db.query(Game).filter(Game.owner_id == company_owner_id)
     if not approving.is_approved:
-        company_games.update({"status_id": not_approved_status.id})
+        company_games.update({
+            "is_approved": False,
+            "is_send_for_verification": False,
+            "is_published": False
+        })
 
     await company.update(db, {"is_approved": approving.is_approved})

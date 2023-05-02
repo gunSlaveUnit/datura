@@ -1,12 +1,10 @@
 from server.src.core.models.age_category import AgeCategory
-from server.src.core.models.game_status import GameStatus
 from server.src.core.models.language import Language
 from server.src.core.models.platform import Platform
 from server.src.core.models.role import Role
 from server.src.core.models.tag import Tag
 from server.src.core.models.user import User
-from server.src.core.settings import admin_config, RoleType, GameStatusType, AgeType, PlatformType, Tags, DEFAULT_TAGS, \
-    DEFAULT_LANGUAGES
+from server.src.core.settings import admin_config, RoleType, AgeType, PlatformType, DEFAULT_TAGS, DEFAULT_LANGUAGES
 from server.src.core.utils.crypt import get_password_hash
 from server.src.core.utils.db import get_db
 
@@ -19,9 +17,6 @@ def init_db():
 
     if len(db.query(User).all()) == 0:
         _add_admin(db)
-
-    if len(db.query(GameStatus).all()) == 0:
-        _add_game_statuses(db)
 
     if len(db.query(AgeCategory).all()) == 0:
         _add_ages(db)
@@ -59,12 +54,6 @@ def _add_roles(session):
         session.add(role)
     session.commit()
 
-
-def _add_game_statuses(session):
-    for game_status_type in GameStatusType:
-        game_status = GameStatus(type=game_status_type, title=game_status_type.value)
-        session.add(game_status)
-    session.commit()
 
 
 def _add_ages(session):
