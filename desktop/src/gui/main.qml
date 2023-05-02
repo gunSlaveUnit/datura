@@ -156,7 +156,7 @@ Window {
 
           function handler() {
             game_list_model.load_store()
-            storeStack.currentIndex = storeStackLayout.storeIndex
+            storeStack.currentIndex = storeStack.storeIndex
           }
         }
 
@@ -399,7 +399,7 @@ Window {
                 text: qsTr("Continue")
                 function handler() {
                   bicInput.focus = true
-                  storeStackLayout.currentIndex = storeStackLayout.workshopRegisterCompanyInfoIndex
+                  storeStack.currentIndex = storeStack.workshopRegisterCompanyInfoIndex
                 }
               }
             }
