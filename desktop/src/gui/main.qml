@@ -182,9 +182,11 @@ ApplicationWindow {
     StackLayout {
       id: storeStackLayout
 
-      property int storeGamesIndex: 0
-      property int storeDetailedGameIndex: storeGamesIndex + 1
-      property int workshopIntroductionIndex: storeDetailedGameIndex + 1
+      property int storeIndex: 0
+      property int storeDetailedIndex: storeIndex + 1
+      property int libraryIndex: storeDetailedIndex + 1
+      property int libraryDetailedIndex: libraryIndex + 1
+      property int workshopIntroductionIndex: libraryDetailedIndex + 1
       property int workshopRegisterCompanyInfoIndex: workshopIntroductionIndex + 1
       property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
       property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
@@ -223,7 +225,64 @@ ApplicationWindow {
 
           authStackLayout.currentIndex = authStackLayout.signInFormIndex
           mainStackLayout.currentIndex = mainStackLayout.authorizationSectionIndex
-          storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+          storeStackLayout.currentIndex = storeStackLayout.storeIndex
+        }
+      }
+
+      Scroll {
+        contentHeight: storePage.height + 2 * defaultMargin
+
+        Item {
+          width: layoutWidth
+          anchors.horizontalCenter: parent.horizontalCenter
+
+          ColumnLayout {
+            id: storePage
+
+            ListView {
+              Layout.fillHeight: true
+
+              model: game_list_model
+
+              delegate: Text {
+                text: title
+                color: "white"
+                font.underline: true
+
+                MouseArea {
+                  anchors.fill: parent
+                  cursorShape: Qt.PointingHandCursor
+                  hoverEnabled: true
+                  onClicked: {
+                    store_detailed_logic.load(id)
+                    storeStackLayout.currentIndex = storeStackLayout.storeDetailedIndex
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      Scroll {
+        contentHeight: storeGameDetailedPage.height + 2 * defaultMargin
+
+        Item {
+          width: layoutWidth
+          anchors.horizontalCenter: parent.horizontalCenter
+
+          ColumnLayout {
+            id: storeGameDetailedPage
+
+            Link {
+              message: qsTr("To the store")
+
+              function handler() {
+                game_list_model.load_store()
+                storeStackLayout.currentIndex = storeStackLayout.storeIndex
+              }
+            }
+          }
         }
       }
 
@@ -236,7 +295,7 @@ ApplicationWindow {
         boundsBehavior: Flickable.StopAtBounds
 
         property int capsuleImageWidth: 12 * 10
-        property int capsuleImageHeight: capsuleImageWidth * 16 / 9
+        property int capsuleImageHeight: capsuleImageWidth * 16 / 10
 
         property int idealWidth: capsuleImageWidth + defaultMargin * 2
         property int itemsPerRow: storeGamesGridView.width / idealWidth
@@ -271,33 +330,13 @@ ApplicationWindow {
             onExited: parent.color = "transparent"
             onClicked: {
               store_detailed_logic.load(id)
-              storeStackLayout.currentIndex = storeStackLayout.storeDetailedGameIndex
+              storeStackLayout.currentIndex = storeStackLayout.storeDetailedIndex
             }
           }
         }
       }
 
-      Scroll {
-        contentHeight: storeGameDetailedPage.height
-
-        Item {
-          width: parent.width * 0.8
-          anchors.horizontalCenter: parent.horizontalCenter
-
-          ColumnLayout {
-            id: storeGameDetailedPage
-
-            Link {
-              message: qsTr("To the store")
-
-              function handler() {
-                game_list_model.load_store()
-                storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
-              }
-            }
-          }
-        }
-      }
+      ColumnLayout {}
 
       Scroll {
         contentHeight: introduction.height + 2 * defaultMargin
