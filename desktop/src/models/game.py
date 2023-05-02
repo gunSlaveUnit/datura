@@ -18,7 +18,9 @@ class Game(Entity):
     long_description: str
     price: float
     owner_id: int
-    status_id: int
+    is_approved: bool
+    is_send_for_verification: bool
+    is_published: bool
     age_category_id: int
     directory: str
 
