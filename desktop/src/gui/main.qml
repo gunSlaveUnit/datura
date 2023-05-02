@@ -791,6 +791,21 @@ ApplicationWindow {
                   build_logic.update(app_logic.id)
                 }
               }
+
+              ActionButton {
+                text: qsTr("Verify")
+                function handler() {
+                   app_logic.send_for_verification()
+                }
+              }
+
+              Switcher {
+                  enabled: app_logic.approved
+                  position: app_logic.is_published
+                  onToggled: app_logic.is_published = position
+                  text: qsTr("Published")
+                  onClicked: app_logic.publish()
+              }
             }
 
             StackLayout {
