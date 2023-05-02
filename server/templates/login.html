@@ -24,7 +24,7 @@
             const accountName = document.getElementById("account_name").value
             const password = document.getElementById("password").value
 
-            fetch('http://127.0.0.1:8000/api/v1/auth/sign-in/', {
+            fetch('http://localhost:8000/api/v1/auth/sign-in/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
