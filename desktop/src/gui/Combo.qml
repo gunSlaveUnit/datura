@@ -5,8 +5,8 @@ ComboBox {
   id: combo
   font.pointSize: 12
 
-  property var notHoveredColor: Qt.darker("#212834", 2)
-  property var hoveredColor: Qt.darker("#212834", 1.5)
+  property var notHoveredColor: "black"
+  property var hoveredColor: Qt.darker("#0E151E", 1.5)
   property var selectionColor: "#0079F2"
 
   delegate: ItemDelegate {
