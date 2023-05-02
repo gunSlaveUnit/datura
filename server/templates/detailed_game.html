@@ -42,7 +42,7 @@
     Release date
     {% if game.release_date %}
     <div>
-      <input value="{{game.release_date.strftime('%d-%m-%Y')}}" disabled>
+      <input value="{{game.release_date}}" disabled>
     </div>
     {% else %}
     <div>Coming soon</div>
@@ -92,6 +92,25 @@
 
 <h3>Trailers</h3>
 <div id="trailers"></div>
+
+<h2>Builds</h2>
+{% for build in builds %}
+  <div style="display: inline-block">
+      <label>
+        Platform
+        <div>
+          <h4>{{ build.platform.title }}</h4>
+        </div>
+      </label>
+
+      <label>
+        Call
+        <div>
+          <input value="{{build.call}}" disabled>
+        </div>
+      </label>
+  </div>
+  {% endfor %}
 
 <h2>Manage</h2>
 
