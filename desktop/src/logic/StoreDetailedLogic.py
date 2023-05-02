@@ -83,11 +83,11 @@ class StoreDetailedLogic(QObject):
 
     def _set_game_location_status(self):
         if self._check_game_in_library():
-            self.game_location = GameLocation.IN_LIBRARY
+            self.location = GameLocation.IN_LIBRARY
         elif self._check_game_in_cart():
-            self.game_location = GameLocation.IN_CART
+            self.location = GameLocation.IN_CART
         else:
-            self.game_location = GameLocation.IN_STORE
+            self.location = GameLocation.IN_STORE
 
     def _check_game_in_library(self):
         user_id = self._auth_service.current_user.id
