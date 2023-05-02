@@ -8,6 +8,7 @@ from desktop.src.logic.AppLogic import AppLogic
 from desktop.src.logic.AuthLogic import AuthLogic
 from desktop.src.logic.BuildLogic import BuildLogic
 from desktop.src.logic.CompanyLogic import CompanyLogic
+from desktop.src.logic.LibraryDetaledLogic import LibraryDetailedLogic
 from desktop.src.logic.StoreDetailedLogic import StoreDetailedLogic
 from desktop.src.models.build import BuildList
 from desktop.src.models.game import GameList
@@ -34,6 +35,9 @@ if __name__ == '__main__':
 
     store_detailed_logic = StoreDetailedLogic(auth_service)
     engine.rootContext().setContextProperty("store_detailed_logic", store_detailed_logic)
+
+    library_detailed_logic = LibraryDetailedLogic(auth_service)
+    engine.rootContext().setContextProperty("library_detailed_logic", library_detailed_logic)
 
     company_service = CompanyService(auth_service)
     company_logic = CompanyLogic(company_service)
