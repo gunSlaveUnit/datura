@@ -1,9 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>{{game.title}}</h1>
-<h2 style="display: inline-block">Status:</h2>
 
-<h3 style="color: gray; display: inline-block;">{{ game.status.title }}</h3>
+<div>
+  <h2 style="display: inline-block">Is approved:</h2>
+
+{% if game.is_approved %}
+    <h2 style="display: inline-block; color: gray">Approved</h2>
+{% else %}
+    <h2 style="display: inline-block; color: orange">Not approved</h2>
+{%endif%}
+</div>
+
+<div>
+  <h2 style="display: inline-block">Is published:</h2>
+
+{% if game.is_approved %}
+    <h2 style="display: inline-block; color: gray">Approved</h2>
+{% else %}
+    <h2 style="display: inline-block; color: orange">Not approved</h2>
+{%endif%}
+</div>
+
 
 <input id="id" value="{{game.id}}" hidden="hidden"/>
 <input id="author" value="{{game.author}}" hidden="hidden"/>
@@ -79,7 +97,7 @@
 
 <script>
     const id = document.getElementById("id").value
-    let imageUrl = `http://127.0.0.1:8000/api/v1/games/${id}/header/`
+    let imageUrl = `http://localhost:8000/api/v1/games/${id}/header/`
 
     fetch(imageUrl, {credentials: 'include'})
       .then(response => response.blob())
@@ -93,7 +111,7 @@
       })
       .catch(error => console.error(error));
 
-    imageUrl = `http://127.0.0.1:8000/api/v1/games/${id}/capsule/`
+    imageUrl = `http://localhost:8000/api/v1/games/${id}/capsule/`
 
     fetch(imageUrl, {credentials: 'include'})
       .then(response => response.blob())
@@ -107,7 +125,7 @@
       })
       .catch(error => console.error(error));
 
-    const screenshotsUrl = `http://127.0.0.1:8000/api/v1/games/${id}/screenshots/`
+    const screenshotsUrl = `http://localhost:8000/api/v1/games/${id}/screenshots/`
 
     fetch(screenshotsUrl, {credentials: 'include'})
       .then(response => response.json())
@@ -115,14 +133,14 @@
         const screenshotsDiv = document.getElementById("screenshots")
         data.filenames.forEach(screenshot => {
           const img = document.createElement("img")
-          img.src = `http://127.0.0.1:8000/api/v1/games/${id}/screenshots/?filename=${screenshot}`
+          img.src = `http://localhost:8000/api/v1/games/${id}/screenshots/?filename=${screenshot}`
           img.style.margin = "8px";
           img.height = 400 * 9 / 16;
           screenshotsDiv.appendChild(img)
         })
       })
 
-    const trailersUrl = `http://127.0.0.1:8000/api/v1/games/${id}/trailers/`
+    const trailersUrl = `http://localhost:8000/api/v1/games/${id}/trailers/`
 
     fetch(trailersUrl, {credentials: 'include'})
       .then(response => response.json())
@@ -130,7 +148,7 @@
         const trailersDiv = document.getElementById("trailers")
         data.filenames.forEach(screenshot => {
           const video  = document.createElement("video")
-          video.src = `http://127.0.0.1:8000/api/v1/games/${id}/trailers/?filename=${screenshot}`
+          video.src = `http://localhost:8000/api/v1/games/${id}/trailers/?filename=${screenshot}`
           video.style.margin = "8px";
           video.height = 400 * 9 / 16;
           video.controls = true;

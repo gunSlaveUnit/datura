@@ -7,7 +7,17 @@
       <a href="/admin/games/{{game.id}}/">{{ game.title }}</a>
     </h2>
 
-      <h3 style="color: gray; display: inline-block;">{{ game.status.title }}</h3>
+    {% if game.is_approved %}
+      <h3 style="color: gray; display: inline-block;">Approved</h3>
+    {% else %}
+      <h3 style="color: orange; display: inline-block;">Not approved</h3>
+    {%endif%}
+
+    {% if game.is_published %}
+      <h3 style="color: green; display: inline-block;">Published</h3>
+    {% else %}
+      <h3 style="color: orange; display: inline-block;">Not published</h3>
+    {%endif%}
   </div>
   {% endfor %}
 </div>
