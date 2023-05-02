@@ -13,7 +13,7 @@ MenuBar {
       text: qsTr("Store")
       onTriggered: {
         game_list_model.load_store()
-        storeStackLayout.currentIndex = storeStackLayout.storeGamesIndex
+        storeStackLayout.currentIndex = storeStackLayout.storeIndex
       }
     }
 

@@ -9,8 +9,8 @@ TextField {
 
   selectionColor: "#0053A6"
 
-  property var notHoveredColor: Qt.darker("#212834", 2)
-  property var hoveredColor: Qt.darker("#212834", 1.5)
+  property var notHoveredColor: "black"
+  property var hoveredColor: Qt.darker("#0E151E", 1.5)
 
   background: Rectangle {
     color: input.notHoveredColor

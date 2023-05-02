@@ -20,8 +20,7 @@ Button {
   background: Rectangle {
     color: parent.visualFocus ? button.hoveredColor : button.notHoveredColor
 
-    implicitWidth: 100
-    implicitHeight: 40
+    implicitWidth: parent.text.contentWidth
 
     radius: 4
 
