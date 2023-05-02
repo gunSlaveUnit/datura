@@ -143,11 +143,12 @@ class BuildLogic(QObject):
         data = {
             "call": self._call,
             "params": None,
-            "platform_id": 1
+            "platform_id": 1,
+            "game_id": game_id
         }
 
         response = self._auth_service.authorized_session.post(
-            GAMES_URL + f'{game_id}/builds/',
+            BUILDS_URL,
             json=data
         )
         if response.ok:
