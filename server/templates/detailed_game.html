@@ -15,8 +15,8 @@
 <div>
   <h2 style="display: inline-block">Is published:</h2>
 
-{% if game.is_approved %}
-    <h2 style="display: inline-block; color: gray">Approved</h2>
+{% if game.is_published %}
+    <h2 style="display: inline-block; color: green">Approved</h2>
 {% else %}
     <h2 style="display: inline-block; color: orange">Not approved</h2>
 {%endif%}
@@ -95,6 +95,20 @@
 
 <h2>Manage</h2>
 
+<div>
+  <label>
+    Is game currently approved:
+    <input type="checkbox" {% if game.is_approved %} checked {% endif %} onclick="approving(this.checked)">
+</label>
+</div>
+
+<div>
+  <label>
+    Is game currently published:
+    <input type="checkbox" {% if game.is_published %} checked {% endif %} onclick="publishing(this.checked)">
+</label>
+</div>
+
 <script>
     const id = document.getElementById("id").value
     let imageUrl = `http://localhost:8000/api/v1/games/${id}/header/`
@@ -157,11 +171,21 @@
       })
 
     function approving(value) {
-        fetch(`http://localhost:8000/admin/games/${id}/approve/`, {
-            method: 'POST',
+        fetch(`http://localhost:8000/api/v1/games/${id}/approve/`, {
+            method: 'PATCH',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 is_approved: value,
+            }),
+        }).then(async response => location.reload())
+    }
+
+    function publishing(value) {
+        fetch(`http://localhost:8000/api/v1/games/${id}/publish/`, {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                is_published: value,
             }),
         }).then(async response => location.reload())
     }
