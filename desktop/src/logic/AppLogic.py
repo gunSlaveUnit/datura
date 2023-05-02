@@ -23,6 +23,9 @@ class AppLogic(QObject):
     year_index_changed = Signal()
     coming_soon_changed = Signal()
 
+    is_approved_changed = Signal()
+    is_published_changed = Signal()
+
     possible_days_changed = Signal()
     possible_months_changed = Signal()
     possible_years_changed = Signal()
@@ -55,6 +58,7 @@ class AppLogic(QObject):
         self._month_index = datetime.datetime.now().month - 1
         self._year_index = datetime.datetime.now().year - AppLogic.BASE_YEAR
         self._coming_soon = True
+        self._is_published = False
 
         self._screenshots = []
         self._header = ''
@@ -63,12 +67,14 @@ class AppLogic(QObject):
 
     def reset_form(self):
         self.id = -1
+        self.is_approved = None
 
         self.title = 'Unnamed'
         self.day_index = datetime.datetime.now().day - 1
         self.month_index = datetime.datetime.now().month - 1
         self.year_index = datetime.datetime.now().year - AppLogic.BASE_YEAR
         self.coming_soon = True
+        self.is_published = False
         self.short_description = ''
         self.long_description = ''
         self.price = "0"
@@ -88,6 +94,7 @@ class AppLogic(QObject):
             data = reply.json()
 
             self.id = data['id']
+            self.is_approved = data['is_approved']
 
             self.title = data['title']
             self.short_description = data['short_description']
@@ -111,6 +118,7 @@ class AppLogic(QObject):
             self.month_index_changed.emit()
             self.year_index_changed.emit()
             self.coming_soon_changed.emit()
+            self.is_approved_changed.emit()
 
     @Slot()
     def update(self):
@@ -176,6 +184,20 @@ class AppLogic(QObject):
 
         if reply.status_code == requests.codes.ok:
             self.reset_files()
+
+    @Slot()
+    def send_for_verification(self):
+        reply = self._auth_service.authorized_session.patch(
+            GAMES_URL + f'{str(self.id)}/verify/',
+            json={"is_send_for_verification": True}
+        )
+
+    @Slot()
+    def publish(self):
+        reply = self._auth_service.authorized_session.patch(
+            GAMES_URL + f'{str(self.id)}/publish/',
+            json={"is_published": self.is_published}
+        )
 
     @Slot()
     def draft_new(self):
@@ -244,6 +266,16 @@ class AppLogic(QObject):
                            lambda self: self._coming_soon,
                            lambda self, value: setattr(self, '_coming_soon', value),
                            notify=coming_soon_changed)
+
+    approved = Property(bool,
+                        lambda self: self.is_approved,
+                        lambda self, value: setattr(self, '_is_approved', value),
+                        notify=is_approved_changed)
+
+    is_published = Property(bool,
+                            lambda self: self._is_published,
+                            lambda self, value: setattr(self, '_is_published', value),
+                            notify=is_published_changed)
 
     possible_days = Property(list, lambda self: [_ for _ in range(1, 32)], constant=True)
     possible_months = Property(list, lambda self: [_ for _ in range(1, 13)], constant=True)
