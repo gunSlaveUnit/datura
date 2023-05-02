@@ -1,6 +1,8 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
 import QtQuick.Layouts 2.15
+import QtQuick.Controls 2.15
+import Qt.labs.platform as Platform
 
 Window {
   property int defaultMargin: 8
@@ -177,7 +179,9 @@ Window {
 
         property int storeIndex: 0
         property int storeDetailedIndex: storeIndex + 1
-        property int workshopIntroductionIndex: storeDetailedIndex + 1
+        property int libraryIndex: storeDetailedIndex + 1
+        property int libraryDetailedIndex: libraryIndex + 1
+        property int workshopIntroductionIndex: libraryDetailedIndex + 1
         property int workshopRegisterCompanyInfoIndex: workshopIntroductionIndex + 1
         property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
         property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
@@ -304,6 +308,58 @@ Window {
           }
         }
 
+        GridView {
+        id: storeGamesGridView
+
+        anchors.fill: parent
+        anchors.margins: defaultMargin
+
+        boundsBehavior: Flickable.StopAtBounds
+
+        property int capsuleImageWidth: 12 * 10
+        property int capsuleImageHeight: capsuleImageWidth * 16 / 10
+
+        property int idealWidth: capsuleImageWidth + defaultMargin * 2
+        property int itemsPerRow: storeGamesGridView.width / idealWidth
+        property double additionalCellWidth: (storeGamesGridView.width - itemsPerRow * idealWidth) / itemsPerRow
+        cellWidth: idealWidth + additionalCellWidth
+        cellHeight: capsuleImageHeight + defaultMargin * 2
+
+        clip: true
+
+        model: game_list_model
+
+        delegate: Rectangle {
+          width: storeGamesGridView.cellWidth
+          height: storeGamesGridView.cellHeight
+          color: "transparent"
+          radius: defaultMargin / 2
+
+          Image {
+            anchors.centerIn: parent
+            width: storeGamesGridView.capsuleImageWidth
+            height: storeGamesGridView.capsuleImageHeight
+            source: `http://127.0.0.1:8000/api/v1/games/${id}/capsule/`
+            mipmap: true
+          }
+
+          MouseArea {
+            id: cell_mouse_area
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            hoverEnabled: true
+            onEntered: parent.color = "#36373a"
+            onExited: parent.color = "transparent"
+            onClicked: {
+              store_detailed_logic.load(id)
+              storeStack.currentIndex = storeStack.storeDetailedIndex
+            }
+          }
+        }
+      }
+
+      ColumnLayout {}
+
         Scroll {
           contentHeight: introduction.height + 2 * defaultMargin
 
@@ -423,7 +479,7 @@ Window {
 
                 function handler() {
                   juridicalNameInput.focus = true
-                  storeStackLayout.currentIndex = storeStackLayout.workshopIntroductionIndex
+                  storeStack.currentIndex = storeStack.workshopIntroductionIndex
                 }
               }
 
@@ -601,7 +657,7 @@ Window {
                 text: qsTr("Continue")
                 function handler() {
                   bicInput.focus = true
-                  storeStackLayout.currentIndex = storeStackLayout.workshopRegisterPaymentInfoIndex
+                  storeStack.currentIndex = storeStack.workshopRegisterPaymentInfoIndex
                 }
               }
             }
@@ -625,7 +681,7 @@ Window {
 
                 function handler() {
                   juridicalNameInput.focus = true
-                  storeStackLayout.currentIndex = storeStackLayout.workshopRegisterCompanyInfoIndex
+                  storeStack.currentIndex = storeStack.workshopRegisterCompanyInfoIndex
                 }
               }
 
@@ -689,7 +745,7 @@ Window {
                 target: app_logic
 
                 function onDrafted() {
-                  storeStackLayout.currentIndex = storeStackLayout.workshopAppControlIndex
+                  storeStack.currentIndex = storeStack.workshopAppControlIndex
                 }
               }
 
@@ -726,7 +782,7 @@ Window {
                       hoverEnabled: true
                       onClicked: {
                         app_logic.map(id)
-                        storeStackLayout.currentIndex = storeStackLayout.workshopAppControlIndex
+                        storeStack.currentIndex = storeStack.workshopAppControlIndex
                       }
                     }
                   }
@@ -752,7 +808,7 @@ Window {
                 message: qsTr("To apps list")
 
                 function handler() {
-                  storeStackLayout.currentIndex = storeStackLayout.workshopAppsListIndex
+                  storeStack.currentIndex = storeStack.workshopAppsListIndex
                 }
               }
 
