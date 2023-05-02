@@ -282,6 +282,23 @@ ApplicationWindow {
                 storeStackLayout.currentIndex = storeStackLayout.storeIndex
               }
             }
+
+            BuyButton {
+              text: "Buy"
+              visible: store_detailed_logic.location === 0
+            }
+
+            Text {
+              text: "Already in library"
+              color: "white"
+              visible: store_detailed_logic.location === 1
+            }
+
+            Text {
+              text: "Already in cart"
+              color: "white"
+              visible: store_detailed_logic.location === 2
+            }
           }
         }
       }
