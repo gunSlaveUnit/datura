@@ -988,9 +988,7 @@ The legal form of the company must match the one indicated in the documentation 
                     wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                     textFormat: TextEdit.MarkdownText
                     text: "
-A short description is used for a card in the store on the page for the list of games, as well as when hovering over a game in the library.
-
-Long description is used on the product page in the store. Here you can describe your game in more detail. Supports Markdown.
+Long description supports Markdown.
 "
                   }
 
@@ -1102,6 +1100,14 @@ Long description is used on the product page in the store. Here you can describe
                       text: app_logic.displayed_header
                       color: "orange"
                     }
+
+                    NeutralButton {
+                      visible: app_logic.header !== ""
+                      text: qsTr("X")
+                      function handler() {
+                       app_logic.header = ""
+                      }
+                    }
                   }
 
                   NeutralButton {
@@ -1130,6 +1136,14 @@ Long description is used on the product page in the store. Here you can describe
                     Text {
                       text: app_logic.displayed_capsule
                       color: "orange"
+                    }
+
+                    NeutralButton {
+                      visible: app_logic.capsule !== ""
+                      text: qsTr("X")
+                      function handler() {
+                       app_logic.capsule = ""
+                      }
                     }
                   }
 
@@ -1160,6 +1174,14 @@ Long description is used on the product page in the store. Here you can describe
                       text: app_logic.displayed_screenshots
                       color: "orange"
                     }
+
+                    NeutralButton {
+                      visible: app_logic.displayed_screenshots !== ""
+                      text: qsTr("X")
+                      function handler() {
+                       app_logic.screenshots = []
+                      }
+                    }
                   }
 
                   NeutralButton {
@@ -1188,6 +1210,14 @@ Long description is used on the product page in the store. Here you can describe
                     Text {
                       text: app_logic.displayed_trailers
                       color: "orange"
+                    }
+
+                    NeutralButton {
+                      visible: app_logic.displayed_trailers !== ""
+                      text: qsTr("X")
+                      function handler() {
+                       app_logic.trailers = []
+                      }
                     }
                   }
 
