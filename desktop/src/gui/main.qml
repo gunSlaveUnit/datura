@@ -766,59 +766,73 @@ The legal form of the company must match the one indicated in the documentation 
           }
         }
 
-        Scroll {
-          contentHeight: releasesAppsList.height + 2 * defaultMargin
+        ColumnLayout {
+          id: releasesAppsList
 
-          Item {
-            width: layoutWidth
-            anchors.horizontalCenter: parent.horizontalCenter
+          anchors.fill: parent
+          anchors.leftMargin: defaultMargin
 
-            ColumnLayout {
-              id: releasesAppsList
+          Connections {
+            target: app_logic
 
-              Connections {
-                target: app_logic
+            function onDrafted() {
+              storeStack.currentIndex = storeStack.workshopAppControlIndex
+            }
+          }
 
-                function onDrafted() {
+          RowLayout {
+            Span {
+              text: "Select a game to view and edit details"
+            }
+
+            ActionButton {
+              text: qsTr("Draft new")
+              function handler() {
+                app_logic.draft_new()
+              }
+              visible: company_logic.is_drafted_new_button_enabled
+            }
+          }
+
+          Span {
+            text: qsTr("Until your company data is not approved, you cannot make new releases")
+            color: "orange"
+            visible: !company_logic.is_drafted_new_button_enabled
+          }
+
+          ListView {
+            Layout.fillHeight: true
+            model: game_list_model
+            spacing: defaultMargin
+            boundsBehavior: Flickable.StopAtBounds
+
+            delegate: RowLayout {
+              Text {
+                textFormat: TextEdit.MarkdownText
+                text: "## " + title
+                color: "white"
+                font.underline: true
+              }
+
+              Text {
+                textFormat: TextEdit.MarkdownText
+                color: is_approved ? "#ddd" : "red"
+                text: is_approved ? qsTr("Approved") : qsTr("Not approved")
+              }
+
+              Text {
+                textFormat: TextEdit.MarkdownText
+                color: is_published ? "orange" : "#ccc"
+                text: is_published ? qsTr("Published") : qsTr("Not published")
+              }
+
+              MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled: true
+                onClicked: {
+                  app_logic.map(id)
                   storeStack.currentIndex = storeStack.workshopAppControlIndex
-                }
-              }
-
-              ActionButton {
-                text: qsTr("Draft new")
-                function handler() {
-                  app_logic.draft_new()
-                }
-                visible: company_logic.is_drafted_new_button_enabled
-              }
-
-              Span {
-                text: qsTr("Until your company data is not approved, you cannot make new releases")
-                color: "orange"
-                visible: !company_logic.is_drafted_new_button_enabled
-              }
-
-              ListView {
-                Layout.fillHeight: true
-
-                model: game_list_model
-
-                delegate: RowLayout {
-                  Text {
-                    text: title
-                    color: "white"
-                    font.underline: true
-
-                    MouseArea {
-                      anchors.fill: parent
-                      cursorShape: Qt.PointingHandCursor
-                      hoverEnabled: true
-                      onClicked: {
-                        app_logic.map(id)
-                        storeStack.currentIndex = storeStack.workshopAppControlIndex
-                      }
-                    }
-                  }
                 }
               }
             }
@@ -835,8 +849,6 @@ The legal form of the company must match the one indicated in the documentation 
             ColumnLayout {
               id: appControl
 
-              Indent {}
-
               Link {
                 message: qsTr("To apps list")
 
@@ -844,8 +856,6 @@ The legal form of the company must match the one indicated in the documentation 
                   storeStack.currentIndex = storeStack.workshopAppsListIndex
                 }
               }
-
-              Indent {}
 
               RowLayout {
                 NeutralButton {
@@ -911,8 +921,6 @@ The legal form of the company must match the one indicated in the documentation 
                 property int buildsPageIndex: assetsPageIndex + 1
 
                 ColumnLayout {
-                  Indent {}
-
                   FormInputLabel {
                     text: qsTr("Title")
                   }
@@ -974,8 +982,6 @@ The legal form of the company must match the one indicated in the documentation 
                 }
 
                 ColumnLayout {
-                  Indent {}
-
                   FormInputLabel {
                     text: qsTr("Short description")
                   }
@@ -1030,8 +1036,6 @@ The legal form of the company must match the one indicated in the documentation 
                 }
 
                 ColumnLayout {
-                  Indent {}
-
                   RowLayout {
                     Platform.FileDialog {
                       id: attach_header_image_file_dialog
@@ -1162,8 +1166,6 @@ The legal form of the company must match the one indicated in the documentation 
                   }
 
                   ColumnLayout {
-                    Indent {}
-
                     ActionButton {
                       text: qsTr("Draft new")
                       function handler() {
