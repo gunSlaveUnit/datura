@@ -1,6 +1,7 @@
 import uuid
 
 from fastapi import APIRouter, Body, Depends, HTTPException
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from starlette import status
 
@@ -25,9 +26,19 @@ router.include_router(reviews_router)
 
 
 @router.get('/')
-async def items(_: GameFilterSchema = Body(None),
-                db=Depends(get_db)):
-    return db.query(Game).all()
+async def items(filters: GameFilterSchema = Body(None),
+                db=Depends(get_db),
+                current_user: User = Depends(GetCurrentUser(is_required=False))):
+    games_query = db.query(Game)
+
+    if current_user is None or current_user.is_superuser:
+        if filters is None:
+            filters = GameFilterSchema(is_published=True)
+        games_query = games_query.filter(Game.is_published == filters.is_published)
+    else:
+        games_query = games_query.filter(or_(Game.owner_id == current_user.id, Game.is_published == True))
+
+    return games_query.all()
 
 
 @router.get('/{game_id}/')
