@@ -70,6 +70,7 @@ async def create(build_create_data: BuildCreateSchema,
     build.directory = new_directory_uuid
 
     await Build.create(db, build)
+    await game.update(db, {"is_approved": False, "is_published": False})
 
     return build
 
