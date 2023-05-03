@@ -26,8 +26,8 @@ async def download_header(game_id: int,
 
     admin_role = await Role.by_title(db, RoleType.ADMIN)
 
-    if not current_user or current_user.role_id != admin_role.id:
-        if not game.is_approved:
+    if not current_user or current_user.role_id != admin_role.id or current_user.id != game.owner_id:
+        if not game.is_published:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Asset not approved"
@@ -87,8 +87,8 @@ async def download_capsule(game_id: int,
 
     admin_role = await Role.by_title(db, RoleType.ADMIN)
 
-    if not current_user or current_user.role_id != admin_role.id:
-        if not game.is_approved:
+    if not current_user or current_user.role_id != admin_role.id or current_user.id != game.owner_id:
+        if not game.is_published:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Asset not approved"
@@ -151,8 +151,8 @@ async def screenshots_info(game_id: int,
 
     admin_role = await Role.by_title(db, RoleType.ADMIN)
 
-    if not current_user or current_user.role_id != admin_role.id:
-        if not game.is_approved:
+    if not current_user or current_user.role_id != admin_role.id or current_user.id != game.owner_id:
+        if not game.is_published:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Asset not approved"
@@ -206,8 +206,8 @@ async def trailers_info(game_id: int,
 
     admin_role = await Role.by_title(db, RoleType.ADMIN)
 
-    if not current_user or current_user.role_id != admin_role.id:
-        if not game.is_approved:
+    if not current_user or current_user.role_id != admin_role.id or current_user.id != game.owner_id:
+        if not game.is_published:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Asset not approved"
