@@ -1244,32 +1244,41 @@ Long description supports Markdown.
                   }
 
                   ColumnLayout {
-                    ActionButton {
-                      text: qsTr("Draft new")
-                      function handler() {
-                        build_logic.draft_new(app_logic.id)
+                    RowLayout {
+                      Text {
+                        color: highlightedTextColor
+                        text: "Here you can view and build your app build for a specific platform."
+                      }
+
+                      ActionButton {
+                        text: qsTr("Draft new")
+                        function handler() {
+                          build_logic.draft_new(app_logic.id)
+                        }
                       }
                     }
 
                     ListView {
                       Layout.fillHeight: true
-
                       model: build_list_model
+                      spacing: defaultMargin
+                      boundsBehavior: Flickable.StopAtBounds
 
                       delegate: RowLayout {
                         Text {
-                          text: platform_title
+                          textFormat: TextEdit.MarkdownText
+                          text: "## " + platform_title
                           color: "white"
                           font.underline: true
+                        }
 
-                          MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            hoverEnabled: true
-                            onClicked: {
-                              build_logic.map(id)
-                              buildsStackLayout.currentIndex = buildsStackLayout.buildControlIndex
-                            }
+                        MouseArea {
+                          anchors.fill: parent
+                          cursorShape: Qt.PointingHandCursor
+                          hoverEnabled: true
+                          onClicked: {
+                            build_logic.map(id)
+                            buildsStackLayout.currentIndex = buildsStackLayout.buildControlIndex
                           }
                         }
                       }
@@ -1277,8 +1286,6 @@ Long description supports Markdown.
                   }
 
                   ColumnLayout {
-                    Indent {}
-
                     Link {
                       message: qsTr("To the builds")
 
@@ -1340,6 +1347,11 @@ Long description supports Markdown.
                       function handler() {
                        attach_project_archive_file_dialog.open()
                       }
+                    }
+
+                    Text {
+                      text: "Please note: when unpacking the archive, you should get the root directory of your project with all the files"
+                      color: "orange"
                     }
                   }
                 }
