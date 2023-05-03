@@ -24,7 +24,9 @@ class GameFilterSchema(BaseModel):
     start_price: float = None
     end_price: float = None
     tag_id: List[int] = None
-    status_id: List[int] = None
+    is_approved: bool = None
+    is_send_for_verification: bool = None
+    is_published: bool = None
     age_category_id: List[int] = None
 
 
