@@ -442,7 +442,7 @@ Window {
               id: introduction
 
               QtObject{
-                id: markdown
+                id: introductionContent
                 property string text: "# Foggie Workshop
 Are you a developer and want to use our platform to distribute your games and software? This is great, let's get started.
 
@@ -503,7 +503,7 @@ Click the Continue button to proceed to enter your legal name and contact inform
               Text{
                 Layout.preferredWidth: layoutWidth - 2 * defaultMargin
                 textFormat: TextEdit.MarkdownText
-                text: markdown.text
+                text: introductionContent.text
                 color: "#ddd"
                 wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
               }
@@ -529,8 +529,6 @@ Click the Continue button to proceed to enter your legal name and contact inform
             ColumnLayout {
               id: companyInfoForm
 
-              Indent {}
-
               Link {
                 message: qsTr("To introduction")
 
@@ -544,7 +542,7 @@ Click the Continue button to proceed to enter your legal name and contact inform
 
               Rectangle {
                 width: layoutWidth - 2 * defaultMargin
-                height: legalNameExplanationLayout.height + 2 * defaultMargin
+                height: 230
                 radius: defaultMargin
                 border.color: "orange"
                 border.width: 1
@@ -557,40 +555,23 @@ Click the Continue button to proceed to enter your legal name and contact inform
                   ColumnLayout {
                     id: legalNameExplanationLayout
 
-                    Indent {}
+                    QtObject{
+                      id: legalNameContent
+                      property string text: "<h1 style=\"color:white\">Legal name</h1>
 
-                    SubHeader {text: "Legal name"}
+The organization whose name you enter below must be the legal entity that will sign the required license agreements. The company name entered here must match the name on official bank documents and documents provided to the tax office, or foreign tax documents, if any. If you later add bank account information, you will need to re-enter that nameas the account holder and legal entity with the appropriate tax identification number.
 
-                    Indent {}
+If you do not have a company name and are the sole owner of the content you wish to post, please enter your full name and mailing address in the \"Legal Name\" and \"Street, House and Apartment/Office Number\" fields. If you co-own the game along with other people, you will need to register a legal entity that will own the content and accept payments for it.
 
-                    Span {
+The legal name specified here is used internally by the system. If you have a commercial or informal name that you want to use in your store, you can specify it separately when you create your store page.
+"}
+                    Text {
+                      Layout.preferredWidth: layoutWidth - 3 * defaultMargin
+                      textFormat: TextEdit.MarkdownText
+                      text: legalNameContent.text
                       color: "orange"
-                      lineHeight: 0.5
-                      text: "The organization whose name you enter below must be the legal entity that will sign the required license agreements. The company name entered here must match the name on
-  \nofficial bank documents and documents provided to the tax office, or foreign tax documents, if any. If you later add bank account information, you will need to re-enter that
-  \nnameas the account holder and legal entity with the appropriate tax identification number."
+                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                     }
-
-                    Indent {}
-
-                    Span {
-                      color: "orange"
-                      lineHeight: 0.5
-                      text: "If you do not have a company name and are the sole owner of the content you wish to post, please enter your full name and mailing address in the \"Legal Name\" and \"Street,
-  \nHouse and Apartment/Office Number\" fields. If you co-own the game along with other people, you will need to register a legal entity that will own the content and accept
-  \npayments for it."
-                    }
-
-                    Indent {}
-
-                    Span {
-                      color: "orange"
-                      lineHeight: 0.5
-                      text: "The legal name specified here is used internally by the system. If you have a commercial or informal name that you want to use in your store, you can specify it separately when
-  \nyou create your store page."
-                    }
-
-                    Indent {}
 
                     FormInputLabel {
                       text: qsTr("Juridical name")
@@ -609,7 +590,7 @@ Click the Continue button to proceed to enter your legal name and contact inform
 
               Rectangle {
                 width: layoutWidth - 2 * defaultMargin
-                height: companyFormExplanationLayout.height + 2 * defaultMargin
+                height: 138
                 radius: defaultMargin
                 border.color: "orange"
                 border.width: 1
@@ -622,20 +603,19 @@ Click the Continue button to proceed to enter your legal name and contact inform
                   ColumnLayout {
                     id: companyFormExplanationLayout
 
-                    Indent {}
+                    QtObject{
+                      id: companyFormContent
+                      property string text: "<h1 style=\"color:white\">Company form</h1>
 
-                    SubHeader {text: "Company form"}
-
-                    Indent {}
-
-                    Span {
+The legal form of the company must match the one indicated in the documentation of your company. Examples of what should be entered in this field: \"A Quebec limited liability partnership\"; \"A Washington State corporation\"; \"A Sole Proprietorship\". If you are the sole owner of the game, please use \"Sole Proprietorship\".
+"}
+                    Text {
+                      Layout.preferredWidth: layoutWidth - 3 * defaultMargin
+                      textFormat: TextEdit.MarkdownText
+                      text: companyFormContent.text
                       color: "orange"
-                      lineHeight: 0.5
-                      text: "The legal form of the company must match the one indicated in the documentation of your company. Examples of what should be entered in this field: \"A Quebec limited liability
-  \npartnership\"; \"A Washington State corporation\"; \"A Sole Proprietorship\". If you are the sole owner of the game, please use \"Sole Proprietorship\"."
+                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                     }
-
-                    Indent {}
 
                     FormInputLabel {
                       text: qsTr("Company form")
@@ -731,8 +711,6 @@ Click the Continue button to proceed to enter your legal name and contact inform
             ColumnLayout {
               id: companyPayInfoForm
 
-              Indent {}
-
               Link {
                 message: qsTr("To company information")
 
@@ -805,8 +783,6 @@ Click the Continue button to proceed to enter your legal name and contact inform
                   storeStack.currentIndex = storeStack.workshopAppControlIndex
                 }
               }
-
-              Indent {}
 
               ActionButton {
                 text: qsTr("Draft new")
