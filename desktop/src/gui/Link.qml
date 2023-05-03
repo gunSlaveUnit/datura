@@ -8,8 +8,8 @@ Span {
 
   function handler() {}
 
-  property var notHoveredColor: "#ddd"
-  property var hoveredColor: "#fff"
+  property var notHoveredColor: "#959499"
+  property var hoveredColor: "#C7C5CC"
 
   text: message
   font.underline: true
