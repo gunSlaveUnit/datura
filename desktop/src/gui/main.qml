@@ -982,56 +982,104 @@ The legal form of the company must match the one indicated in the documentation 
                 }
 
                 ColumnLayout {
-                  FormInputLabel {
-                    text: qsTr("Short description")
-                  }
-                  TextArea {
-                    background: Rectangle {
-                      color: Qt.darker("#212834", 1.2)
-
-                      radius: 4
-
-                      MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.IBeamCursor
-                        onEntered: parent.color = Qt.darker("#212834", 1.5)
-                        onExited: parent.color = Qt.darker("#212834", 2)
-                      }
-                    }
-                    font.pointSize: 12
-                    Layout.preferredWidth: layoutWidth / 4
-                    Layout.preferredHeight: 150
+                  Text {
+                    color: highlightedTextColor
+                    Layout.preferredWidth: layoutWidth
                     wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                    text: app_logic.short_description
-                    onTextChanged: app_logic.short_description = text
+                    textFormat: TextEdit.MarkdownText
+                    text: "
+A short description is used for a card in the store on the page for the list of games, as well as when hovering over a game in the library.
+
+Long description is used on the product page in the store. Here you can describe your game in more detail. Supports Markdown.
+"
                   }
 
                   Indent {}
 
-                  FormInputLabel {
-                    text: qsTr("Long description")
+                  RowLayout {
+                    Header {
+                      text: "# Short description"
+                    }
+
+                    Span {
+                      text: shortDescriptionArea.length + "/" + shortDescriptionArea.limit
+                    }
                   }
-                  TextArea {
-                    background: Rectangle {
-                      color: Qt.darker("#212834", 1.2)
 
-                      radius: 4
+                  Scroll {
+                    Layout.preferredWidth: layoutWidth / 2
+                    Layout.preferredHeight: 125
 
-                      MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.IBeamCursor
-                        onEntered: parent.color = Qt.darker("#212834", 1.5)
-                        onExited: parent.color = Qt.darker("#212834", 2)
+                    TextArea {
+                      id: shortDescriptionArea
+                      property int limit: 250
+                      background: Rectangle {
+                        color: "black"
+
+                        radius: 4
+
+                        MouseArea {
+                          anchors.fill: parent
+                          hoverEnabled: true
+                          cursorShape: Qt.IBeamCursor
+                          onEntered: parent.color = Qt.darker("#0E151E", 1.5)
+                          onExited: parent.color =  "black"
+                        }
+                      }
+                      font.pointSize: 12
+                      Layout.preferredWidth: layoutWidth / 2
+                      Layout.preferredHeight: 125
+                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                      text: app_logic.short_description
+                      onTextChanged: {
+                        if (length > limit) remove(limit, length)
+                        app_logic.short_description = text
                       }
                     }
-                    font.pointSize: 12
+                  }
+
+                  Indent {}
+
+                  RowLayout {
+                    Header {
+                      text: "# Long description"
+                    }
+
+                    Span {
+                      text: longDescriptionArea.length + "/" + longDescriptionArea.limit
+                    }
+                  }
+
+                  Scroll {
                     Layout.preferredWidth: layoutWidth / 2
-                    Layout.preferredHeight: 250
-                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                    text: app_logic.long_description
-                    onTextChanged: app_logic.long_description = text
+                    Layout.preferredHeight: 350
+
+                    TextArea {
+                      id: longDescriptionArea
+                      property int limit: 1000
+                      background: Rectangle {
+                        color:  "black"
+
+                        radius: 4
+
+                        MouseArea {
+                          anchors.fill: parent
+                          hoverEnabled: true
+                          cursorShape: Qt.IBeamCursor
+                          onEntered: parent.color = Qt.darker("#0E151E", 1.5)
+                          onExited: parent.color =  "black"
+                        }
+                      }
+                      font.pointSize: 12
+                      Layout.preferredWidth: layoutWidth / 2
+                      Layout.preferredHeight: 350
+                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                      text: app_logic.long_description
+                      onTextChanged: {
+                        if (length > limit) remove(limit, length)
+                        app_logic.long_description = text
+                      }
+                    }
                   }
                 }
 
