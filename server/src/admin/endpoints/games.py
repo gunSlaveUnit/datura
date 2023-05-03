@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from fastapi import APIRouter, Depends
 from sqlalchemy import desc
 from sqlalchemy.orm import Session, joinedload
