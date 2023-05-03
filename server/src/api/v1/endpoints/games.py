@@ -96,14 +96,36 @@ async def update(game_id: int,
 
 
 @router.patch('/{game_id}/approve/')
-async def approve(game_id: int,
-                  approving: GameApprovingSchema,
-                  db=Depends(get_db)):
-    """If it denies, the game becomes not sent for verification."""
+async def approve(
+    game_id: int,
+    approving: GameApprovingSchema,
+    db: Session = Depends(get_db)
+):
+    """
+    Update the status of a game based on its approval.
+
+    If the game is denied, it is no longer sent for verification and is not published.
+    If the game is approved, it is no longer sent for verification and becomes available for publishing.
+
+    :param game_id: ID of the game to update.
+    :param approving: Schema describing the approval of the game.
+    :param db: Database session object.
+
+    :return: Updated game object.
+    """
 
     game = await Game.by_id(db, game_id)
 
-    await game.update(db, {"is_approved": approving.is_approved})
+    update_dict = {
+        "is_approved": approving.is_approved,
+        "is_send_for_verification": False
+    }
+    if not approving.is_approved:
+        update_dict["is_published"] = False
+    await game.update(db, update_dict)
+
+    # Return the updated game object.
+    return game
 
 
 @router.patch('/{game_id}/verify/')
