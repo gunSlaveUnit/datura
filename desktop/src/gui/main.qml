@@ -518,9 +518,67 @@ Window {
 
         ColumnLayout {}
 
-        ColumnLayout {
-          Button {
-            text: "Pay"
+        Scroll {
+          contentHeight: cartPage.height + 2 * defaultMargin
+
+          Item {
+            width: layoutWidth
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            ColumnLayout {
+              id: cartPage
+
+              property double total: 0.0
+
+              function updateTotal() {
+                var sum = 0
+                for (var i = 0; i < game_list_model.rowCount(); i++) {
+                    total += game_list_model.get(i).price
+                }
+                total = sum
+              }
+
+              RowLayout {
+                Text {
+                  color: "white"
+                  text: "Total Price: " cartPage.total
+                }
+
+                BuyButton {
+                  text: "Buy"
+                  function handler() {
+
+                  }
+                }
+              }
+
+              ListView {
+                model: game_list_model
+
+                delegate: RowLayout {
+                  Text {
+                    text: title
+                    color: "white"
+                    font.underline: true
+
+                    MouseArea {
+                      anchors.fill: parent
+                      cursorShape: Qt.PointingHandCursor
+                      hoverEnabled: true
+                      onClicked: {
+                        store_detailed_logic.load(id)
+                        storeStack.currentIndex = storeStack.storeDetailedIndex
+                      }
+                    }
+                  }
+
+                  Checking {
+                    checked: true
+                    onCheckedChanged: cartPage.updateTotal()
+                  }
+                }
+              }
+            }
           }
         }
 
