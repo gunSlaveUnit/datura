@@ -11,6 +11,7 @@ from desktop.src.logic.CompanyLogic import CompanyLogic
 from desktop.src.logic.CurrentUserLogic import CurrentUserLogic
 from desktop.src.logic.LibraryDetaledLogic import LibraryDetailedLogic
 from desktop.src.logic.StoreDetailedLogic import StoreDetailedLogic
+from desktop.src.logic.WalletLogic import WalletLogic
 from desktop.src.models.build import BuildList
 from desktop.src.models.game import GameList
 from desktop.src.services.AuthService import AuthService
@@ -36,6 +37,9 @@ if __name__ == '__main__':
 
     current_user_logic = CurrentUserLogic(auth_service)
     engine.rootContext().setContextProperty("current_user_logic", current_user_logic)
+
+    wallet_logic = WalletLogic(auth_service)
+    engine.rootContext().setContextProperty("wallet_logic", wallet_logic)
 
     store_detailed_logic = StoreDetailedLogic(auth_service)
     engine.rootContext().setContextProperty("store_detailed_logic", store_detailed_logic)
