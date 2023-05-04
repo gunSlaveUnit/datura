@@ -246,7 +246,8 @@ Window {
         property int libraryDetailedIndex: libraryIndex + 1
         property int profileIndex: libraryDetailedIndex + 1
         property int walletIndex: profileIndex + 1
-        property int workshopIntroductionIndex: walletIndex + 1
+        property int walletTopUpIndex: walletIndex + 1
+        property int workshopIntroductionIndex: walletTopUpIndex + 1
         property int workshopRegisterCompanyInfoIndex: workshopIntroductionIndex + 1
         property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
         property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
@@ -502,8 +503,89 @@ Window {
 
         ColumnLayout {}
 
-        ColumnLayout {
-          Header {text: "# Balance is: "}
+        Scroll {
+          contentHeight: walletPage.height + 2 * defaultMargin
+
+          Item {
+            width: layoutWidth
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            ColumnLayout {
+              id: walletPage
+
+              Header {
+                text: "# Your balance is: "
+              }
+
+              BuyButton {
+                text: "Top up"
+                function handler() {
+                  storeStack.currentIndex = storeStack.walletTopUpIndex
+                }
+              }
+            }
+          }
+        }
+
+        Scroll {
+          contentHeight: walletTopUpPage.height + 2 * defaultMargin
+
+          Item {
+            width: layoutWidth
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            RowLayout {
+              id: walletTopUpPage
+              Layout.fillWidth: true
+
+              ColumnLayout {
+                Link {
+                  message: qsTr("To wallet")
+
+                  function handler() {
+                    storeStack.currentIndex = storeStack.walletIndex
+                  }
+                }
+
+                Span {
+                  text: qsTr("Choose a deposit method")
+                }
+
+                Combo {
+                  implicitWidth: 140
+
+                  model: [
+                    "PayPal",
+                    "Visa",
+                    "MasterCard",
+                    "American Express",
+                    "Мир",
+                    "Яндекс.Деньги",
+                    "QIWI Wallet",
+                    "Mobile payments",
+                  ]
+                }
+
+                Indent {}
+
+                Span {
+                  text: qsTr("Select amount")
+                }
+
+                Combo {
+                  implicitWidth: 140
+
+                  model: [
+                    "5 $",
+                    "10 $",
+                    "25 $",
+                    "50 $",
+                    "100 $",
+                  ]
+                }
+              }
+            }
+          }
         }
 
         Scroll {
