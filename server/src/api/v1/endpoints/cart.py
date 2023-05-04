@@ -1,12 +1,13 @@
-from typing import List, Type
+from typing import Type
 
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, Query
+from sqlalchemy.orm import Session, joinedload
 from starlette import status
 from starlette.responses import Response
 
-from common.api.v1.schemas.cart import CartJoinedSchema, CartDBSchema, CartCreateSchema
+from common.api.v1.schemas.cart import CartDBSchema, CartCreateSchema
 from server.src.core.models.cart import Cart
+from server.src.core.models.game import Game
 from server.src.core.models.library import Library
 from server.src.core.models.user import User
 from server.src.core.settings import CART_ROUTER_PREFIX, Tags
@@ -16,10 +17,16 @@ from server.src.core.utils.db import get_db
 router = APIRouter(prefix=CART_ROUTER_PREFIX, tags=[Tags.CART])
 
 
-@router.get('/', response_model=List[CartJoinedSchema | CartDBSchema])
+@router.get('/')
 async def items(db: Session = Depends(get_db),
-                current_user: User = Depends(GetCurrentUser())) -> list[Type[Cart]]:
-    return db.query(Cart).filter(Cart.buyer_id == current_user.id).all()
+                include_games: bool = Query(None),
+                current_user: User = Depends(GetCurrentUser())):
+    items_query = db.query(Cart).filter(Cart.buyer_id == current_user.id)
+
+    if include_games:
+        items_query = items_query.options(joinedload(Cart.game))
+
+    return items_query.all()
 
 
 @router.post('/', response_model=CartDBSchema)
