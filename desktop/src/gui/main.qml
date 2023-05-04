@@ -200,6 +200,39 @@ Window {
               color: "#64BCEF"
             }
 		      }
+
+		      Menu {
+			      id: userProfileMenu
+
+			      width: parent.width
+
+			      y: parent.height
+
+						MenuItem {
+			        text: qsTr("Profile")
+			      }
+
+						MenuItem {
+			        text: qsTr("Wallet")
+			      }
+
+						MenuItem {
+			        text: qsTr("Settings")
+			      }
+
+			      MenuItem {
+			        text: qsTr("Logout")
+			        onTriggered: auth_logic.sign_out()
+			      }
+			    }
+
+		      MouseArea {
+			      anchors.fill: parent
+			      hoverEnabled: true
+			      onEntered: parent.color = "#375D77"
+			      onExited: parent.color = "#274257"
+			      onClicked: userProfileMenu.open()
+			    }
         }
       }
 
