@@ -21,7 +21,7 @@ router = APIRouter(prefix=USERS_ROUTER_PREFIX, tags=[Tags.USERS])
 async def balance(user_id: int,
                   db: Session = Depends(get_db),
                   current_user: User = Depends(GetCurrentUser())):
-    if current_user != user_id or not current_user.is_superuser:
+    if current_user.id != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Permission denied: you cannot receive this information"
@@ -30,10 +30,13 @@ async def balance(user_id: int,
     payments_total_cost = db.query(func.sum(Payment.amount)).filter(Payment.user_id == user_id).scalar()
     purchases_total_cost = db.query(func.sum(Purchase.price)).filter(Purchase.buyer_id == user_id).scalar()
 
-    current_balance = decimal.Decimal(payments_total_cost) - decimal.Decimal(purchases_total_cost)
+    payments_total_cost = 0 if payments_total_cost is None else decimal.Decimal(payments_total_cost)
+    purchases_total_cost = 0 if purchases_total_cost is None else decimal.Decimal(purchases_total_cost)
+
+    current_balance = payments_total_cost - purchases_total_cost
 
     return JSONResponse({
-        "balance": current_balance
+        "balance": float(current_balance)
     })
 
 
