@@ -154,6 +154,7 @@ Window {
     ColumnLayout {
       RowLayout {
         Layout.leftMargin: defaultMargin
+        Layout.rightMargin: defaultMargin
 
         MenuButton {
           text: qsTr("Store")
@@ -174,6 +175,31 @@ Window {
           onClicked: {
             storeStack.checkCompanyRegistration()
           }
+        }
+
+        Item {Layout.fillWidth: true}
+
+        Rectangle {
+		      Layout.preferredWidth: 150
+		      Layout.preferredHeight: 28
+		      color: "#274257"
+
+		      RowLayout {
+		        anchors.fill: parent
+
+		        Image {
+              id: avatar
+              Layout.preferredHeight: parent.height
+              Layout.preferredWidth: height
+              mipmap: true
+              source: `http://127.0.0.1:8000/api/v1/users/${current_user_logic.id}/avatar/`
+            }
+
+            Span {
+              text: current_user_logic.displayed_name
+              color: "#64BCEF"
+            }
+		      }
         }
       }
 
@@ -208,8 +234,15 @@ Window {
         Connections {
           target: auth_logic
 
-          function onRegistered() { game_list_model.load_store() }
-          function onLogin() { game_list_model.load_store() }
+          function onRegistered() {
+            current_user_logic.load()
+            game_list_model.load_store()
+          }
+
+          function onLogin() {
+            current_user_logic.load()
+            game_list_model.load_store()
+          }
 
           function onLogout() {
             authStack.currentIndex = authStack.signInFormIndex
