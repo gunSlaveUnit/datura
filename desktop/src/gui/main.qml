@@ -220,7 +220,7 @@ Window {
 			        text: qsTr("Cart")
 			        onTriggered: {
 			          game_list_model.load_cart()
-                storeStack.currentIndex = storeStack.walletIndex
+                storeStack.currentIndex = storeStack.cartIndex
               }
 			      }
 
@@ -257,7 +257,8 @@ Window {
         property int libraryIndex: storeDetailedIndex + 1
         property int libraryDetailedIndex: libraryIndex + 1
         property int profileIndex: libraryDetailedIndex + 1
-        property int walletIndex: profileIndex + 1
+        property int cartIndex: profileIndex + 1
+        property int walletIndex: cartIndex + 1
         property int walletTopUpIndex: walletIndex + 1
         property int workshopIntroductionIndex: walletTopUpIndex + 1
         property int workshopRegisterCompanyInfoIndex: workshopIntroductionIndex + 1
@@ -516,6 +517,12 @@ Window {
         ColumnLayout {}
 
         ColumnLayout {}
+
+        ColumnLayout {
+          Button {
+            text: "Pay"
+          }
+        }
 
         Scroll {
           contentHeight: walletPage.height + 2 * defaultMargin
