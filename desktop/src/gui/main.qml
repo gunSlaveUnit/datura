@@ -541,7 +541,7 @@ Window {
               RowLayout {
                 Text {
                   color: "white"
-                  text: "Total Price: " cartPage.total
+                  text: "Total Price: " + cartPage.total
                 }
 
                 BuyButton {
