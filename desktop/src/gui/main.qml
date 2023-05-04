@@ -199,6 +199,10 @@ Window {
               text: current_user_logic.displayed_name
               color: "#64BCEF"
             }
+
+            Span {
+              text: wallet_logic.balance + "$"
+            }
 		      }
 
 		      Menu {
@@ -273,11 +277,13 @@ Window {
 
           function onRegistered() {
             current_user_logic.load()
+            wallet_logic.load(current_user_logic.id)
             game_list_model.load_store()
           }
 
           function onLogin() {
             current_user_logic.load()
+            wallet_logic.load(current_user_logic.id)
             game_list_model.load_store()
           }
 
@@ -514,7 +520,7 @@ Window {
               id: walletPage
 
               Header {
-                text: "# Your balance is: "
+                text: "# Your balance is: " + wallet_logic.balance + "$"
               }
 
               BuyButton {
