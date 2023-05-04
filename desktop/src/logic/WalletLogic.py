@@ -1,7 +1,7 @@
 from PySide6.QtCore import QObject, Signal, Slot, Property
 
 from desktop.src.services.AuthService import AuthService
-from desktop.src.settings import ME_URL, USERS_URL
+from desktop.src.settings import ME_URL, USERS_URL, PAYMENTS_URL
 
 
 class WalletLogic(QObject):
@@ -39,5 +39,20 @@ class WalletLogic(QObject):
         if response.ok:
             data = response.json()
             self.balance = data["balance"]
+
+    @Slot(int, int)
+    def top_up(self, current_user_id: int, amount: int):
+        payment = {
+            "card_number": "string",
+            "validity_month": 0,
+            "validity_year": 0,
+            "cvv_cvc": 0,
+            "amount": amount
+        }
+
+        response = self._auth_service.authorized_session.post(PAYMENTS_URL, json=payment)
+
+        if response.ok:
+            self.load(current_user_id)
 
     # endregion
