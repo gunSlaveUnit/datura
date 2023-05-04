@@ -60,6 +60,7 @@ GAME_TAGS_ROUTER_PREFIX = '/{game_id}/tags'
 TAGS_ROUTER_PREFIX = '/tags'
 REVIEWS_ROUTER_PREFIX = '/{game_id}/reviews'
 ADMIN_ROUTER_PREFIX = '/admin'
+PAYMENTS_ROUTER_PREFIX = '/payments'
 
 
 # Tags
