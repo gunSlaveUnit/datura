@@ -243,7 +243,8 @@ Window {
         property int storeDetailedIndex: storeIndex + 1
         property int libraryIndex: storeDetailedIndex + 1
         property int libraryDetailedIndex: libraryIndex + 1
-        property int workshopIntroductionIndex: libraryDetailedIndex + 1
+        property int profileIndex: libraryDetailedIndex + 1
+        property int workshopIntroductionIndex: profileIndex + 1
         property int workshopRegisterCompanyInfoIndex: workshopIntroductionIndex + 1
         property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
         property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
@@ -494,6 +495,8 @@ Window {
             }
           }
         }
+
+        ColumnLayout {}
 
         ColumnLayout {}
 
