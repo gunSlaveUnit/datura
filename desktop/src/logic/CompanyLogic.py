@@ -67,9 +67,9 @@ class CompanyLogic(QObject):
         if reply.status_code == requests.codes.ok:
             self.registered.emit()
 
-    @Slot()
-    def check(self):
-        self._company_service.load_personal()
+    @Slot(int)
+    def check(self, current_user_id: int):
+        self._company_service.load_personal(current_user_id)
         if self._company_service.company is None:
             self.notRegistered.emit()
         else:

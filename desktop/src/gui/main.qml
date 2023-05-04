@@ -257,7 +257,7 @@ Window {
         property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
         property int workshopAppControlIndex: workshopAppsListIndex + 1
 
-        function checkCompanyRegistration() { company_logic.check() }
+        function checkCompanyRegistration() { company_logic.check(current_user_logic.id) }
 
         Connections {
           target: company_logic
