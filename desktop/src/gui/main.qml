@@ -214,6 +214,7 @@ Window {
 
 						MenuItem {
 			        text: qsTr("Wallet")
+			        onTriggered: storeStack.currentIndex = storeStack.walletIndex
 			      }
 
 						MenuItem {
@@ -244,7 +245,8 @@ Window {
         property int libraryIndex: storeDetailedIndex + 1
         property int libraryDetailedIndex: libraryIndex + 1
         property int profileIndex: libraryDetailedIndex + 1
-        property int workshopIntroductionIndex: profileIndex + 1
+        property int walletIndex: profileIndex + 1
+        property int workshopIntroductionIndex: walletIndex + 1
         property int workshopRegisterCompanyInfoIndex: workshopIntroductionIndex + 1
         property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
         property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
@@ -499,6 +501,10 @@ Window {
         ColumnLayout {}
 
         ColumnLayout {}
+
+        ColumnLayout {
+          Header {text: "# Balance is: "}
+        }
 
         Scroll {
           contentHeight: introduction.height + 2 * defaultMargin
