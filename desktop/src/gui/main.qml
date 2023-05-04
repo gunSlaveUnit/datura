@@ -579,15 +579,28 @@ Window {
                 }
 
                 Combo {
+                  id: paymentCost
                   implicitWidth: 140
 
                   model: [
-                    "5 $",
-                    "10 $",
-                    "25 $",
-                    "50 $",
-                    "100 $",
+                    "5",
+                    "10",
+                    "25",
+                    "50",
+                    "100",
                   ]
+                  onCurrentTextChanged: {
+                    text = currentText + "$"
+                  }
+                }
+
+                ActionButton {
+                  text: qsTr("Pay")
+                  function handler() {
+                    var selectedValue = paymentCost.currentText
+                    selectedValue = selectedValue.replace("$", "")
+                    wallet_logic.top_up(current_user_logic.id, selectedValue)
+                  }
                 }
               }
             }
