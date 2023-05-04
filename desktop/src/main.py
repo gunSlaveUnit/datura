@@ -8,6 +8,7 @@ from desktop.src.logic.AppLogic import AppLogic
 from desktop.src.logic.AuthLogic import AuthLogic
 from desktop.src.logic.BuildLogic import BuildLogic
 from desktop.src.logic.CompanyLogic import CompanyLogic
+from desktop.src.logic.CurrentUserLogic import CurrentUserLogic
 from desktop.src.logic.LibraryDetaledLogic import LibraryDetailedLogic
 from desktop.src.logic.StoreDetailedLogic import StoreDetailedLogic
 from desktop.src.models.build import BuildList
@@ -32,6 +33,9 @@ if __name__ == '__main__':
 
     auth_logic = AuthLogic(auth_service)
     engine.rootContext().setContextProperty("auth_logic", auth_logic)
+
+    current_user_logic = CurrentUserLogic(auth_service)
+    engine.rootContext().setContextProperty("current_user_logic", current_user_logic)
 
     store_detailed_logic = StoreDetailedLogic(auth_service)
     engine.rootContext().setContextProperty("store_detailed_logic", store_detailed_logic)
