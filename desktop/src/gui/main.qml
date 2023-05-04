@@ -218,6 +218,10 @@ Window {
 
 			      MenuItem {
 			        text: qsTr("Cart")
+			        onTriggered: {
+			          game_list_model.load_cart()
+                storeStack.currentIndex = storeStack.walletIndex
+              }
 			      }
 
 						MenuItem {
