@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from server.src.api.v1.schemas.payments import PaymentDBSchema, PaymentCreateSchema
+from common.api.v1.schemas.payments import PaymentCreateSchema
 from server.src.core.models.payment import Payment
 from server.src.core.models.user import User
 from server.src.core.settings import Tags, PAYMENTS_ROUTER_PREFIX

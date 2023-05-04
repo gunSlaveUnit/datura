@@ -49,9 +49,9 @@ class GameList(QAbstractListModel):
                 self._games.append(Game(**game))
             self.endResetModel()
 
-    @Slot()
-    def load_personal(self):
-        self._company_service.load_personal()
+    @Slot(int)
+    def load_personal(self, current_user_id):
+        self._company_service.load_personal(current_user_id)
         if self._company_service.company is not None:
             url = GAMES_URL + f'?company_id={self._company_service.company["id"]}'
             data = self._auth_service.authorized_session.get(url).json()

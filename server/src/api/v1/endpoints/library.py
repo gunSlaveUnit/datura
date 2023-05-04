@@ -3,7 +3,7 @@ from typing import List, Type
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session, joinedload
 
-from server.src.api.v1.schemas.library import LibraryJoinedSchema, LibraryDBSchema
+from common.api.v1.schemas.library import LibraryJoinedSchema, LibraryDBSchema
 from server.src.core.models.game import Game
 from server.src.core.models.library import Library
 from server.src.core.models.user import User

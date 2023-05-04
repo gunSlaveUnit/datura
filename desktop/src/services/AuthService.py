@@ -3,7 +3,7 @@ from typing import Union
 import requests
 from PySide6.QtCore import QObject, Signal, Property
 
-from desktop.src.schemas.auth import SignInSchema, SignUpSchema
+from common.api.v1.schemas.auth import SignUpSchema, SignInSchema
 from desktop.src.settings import REGISTER_URL, LOGIN_URL, LOGOUT_URL
 
 

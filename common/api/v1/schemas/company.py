@@ -1,5 +1,11 @@
 from pydantic import BaseModel
 
+from common.api.v1.schemas.entity import EntityDBSchema
+
+
+class ApprovingSchema(BaseModel):
+    is_approved: bool = False
+
 
 class CompanyCreateSchema(BaseModel):
     juridical_name: str
@@ -13,3 +19,11 @@ class CompanyCreateSchema(BaseModel):
     bic: str
     bank_address: str
     bank_account_number: str
+
+
+class CompanyDBSchema(CompanyCreateSchema, EntityDBSchema):
+    is_approved: bool
+    owner_id: int
+
+    class Config:
+        orm_mode = True

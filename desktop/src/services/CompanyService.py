@@ -1,6 +1,6 @@
 import requests
 
-from desktop.src.schemas.company import CompanyCreateSchema
+from common.api.v1.schemas.company import CompanyCreateSchema
 from desktop.src.settings import COMPANIES_URL
 
 

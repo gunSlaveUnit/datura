@@ -2,14 +2,13 @@ import io
 import uuid
 import zipfile
 from pathlib import Path
-from typing import List
 
 from fastapi import APIRouter, UploadFile, Depends, Query, HTTPException
 from sqlalchemy.orm import Session, joinedload
 from starlette import status
 from starlette.responses import StreamingResponse
 
-from server.src.api.v1.schemas.build import BuildDBSchema, BuildCreateSchema
+from common.api.v1.schemas.build import BuildDBSchema, BuildCreateSchema
 from server.src.core.models.build import Build
 from server.src.core.models.game import Game
 from server.src.core.models.platform import Platform
@@ -17,7 +16,7 @@ from server.src.core.models.user import User
 from server.src.core.settings import BUILDS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_BUILDS_DIR, Tags
 from server.src.core.utils.auth import GetCurrentUser
 from server.src.core.utils.db import get_db
-from server.src.core.utils.io import MEDIA_TYPE, read_compressed_chunks, CHUNK_SIZE, save, clear
+from server.src.core.utils.io import MEDIA_TYPE, read_compressed_chunks, CHUNK_SIZE, clear
 
 router = APIRouter(prefix=BUILDS_ROUTER_PREFIX, tags=[Tags.BUILDS])
 

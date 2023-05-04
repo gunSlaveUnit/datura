@@ -1,6 +1,6 @@
 from PySide6.QtCore import QObject, Signal, Slot, Property
 
-from desktop.src.schemas.auth import SignUpSchema, SignInSchema
+from common.api.v1.schemas.auth import SignUpSchema, SignInSchema
 from desktop.src.services.AuthService import AuthService
 
 

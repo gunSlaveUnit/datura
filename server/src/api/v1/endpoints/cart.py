@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 from starlette.responses import Response
 
-from server.src.api.v1.schemas.cart import CartJoinedSchema, CartDBSchema, CartCreateSchema
+from common.api.v1.schemas.cart import CartJoinedSchema, CartDBSchema, CartCreateSchema
 from server.src.core.models.cart import Cart
 from server.src.core.models.library import Library
 from server.src.core.models.user import User

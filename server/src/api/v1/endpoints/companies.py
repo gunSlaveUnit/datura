@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from starlette import status
 
+from common.api.v1.schemas.company import CompanyCreateSchema, ApprovingSchema
 from server.src.core.models.company import Company
 from server.src.core.models.game import Game
 from server.src.core.models.user import User
 from server.src.core.settings import Tags, COMPANIES_ROUTER_PREFIX, RoleType
 from server.src.core.utils.auth import GetCurrentUser
 from server.src.core.utils.db import get_db
-from server.src.api.v1.schemas.company import CompanyCreateSchema, ApprovingSchema
 
 router = APIRouter(prefix=COMPANIES_ROUTER_PREFIX, tags=[Tags.COMPANIES])
 

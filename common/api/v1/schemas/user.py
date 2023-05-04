@@ -1,6 +1,6 @@
 import datetime
 
-from server.src.api.v1.schemas.entity import EntityDBSchema
+from common.api.v1.schemas.entity import EntityDBSchema
 
 
 class UserDBSchema(EntityDBSchema):

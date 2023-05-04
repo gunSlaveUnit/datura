@@ -267,7 +267,7 @@ Window {
           }
 
           function onRegistered() {
-            game_list_model.load_personal()
+            game_list_model.load_personal(current_user_logic.id)
             storeStack.currentIndex = storeStack.workshopAppsListIndex
           }
         }

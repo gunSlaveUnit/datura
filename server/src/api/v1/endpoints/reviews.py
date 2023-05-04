@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from server.src.api.v1.schemas.review import ReviewCreateSchema
+from common.api.v1.schemas.review import ReviewCreateSchema
 from server.src.core.models.review import Review
 from server.src.core.models.user import User
 from server.src.core.settings import Tags, REVIEWS_ROUTER_PREFIX

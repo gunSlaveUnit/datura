@@ -1,7 +1,7 @@
 import requests
 from PySide6.QtCore import QObject, Signal, Property, Slot
 
-from desktop.src.schemas.company import CompanyCreateSchema
+from common.api.v1.schemas.company import CompanyCreateSchema
 
 
 class CompanyLogic(QObject):

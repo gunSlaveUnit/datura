@@ -11,7 +11,7 @@ from server.src.core.models.user import User
 from server.src.core.utils.auth import authenticate_user, GetCurrentUser
 from server.src.core.utils.crypt import get_password_hash
 from server.src.core.utils.db import get_session_storage, get_db
-from server.src.api.v1.schemas.auth import SignUpSchema, SignInSchema
+from common.api.v1.schemas.auth import SignUpSchema, SignInSchema
 from server.src.core.settings import Tags, AUTH_ROUTER_PREFIX, RoleType, SESSION_TTL
 
 router = APIRouter(prefix=AUTH_ROUTER_PREFIX, tags=[Tags.AUTH])
