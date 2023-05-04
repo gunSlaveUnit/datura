@@ -61,7 +61,7 @@ class GameList(QAbstractListModel):
 
     @Slot()
     def load_cart(self):
-        cart_records = self._auth_service.authorized_session.get(CART_URL).json()
+        cart_records = self._auth_service.authorized_session.get(CART_URL + "?include_games=true").json()
         self.beginResetModel()
         self._games = []
         for record in cart_records:
