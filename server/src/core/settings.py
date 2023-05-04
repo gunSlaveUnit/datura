@@ -46,7 +46,7 @@ SESSION_TTL = 3 * 24 * 60 * 60
 # Strings
 AUTH_ROUTER_PREFIX = '/auth'
 GAMES_ROUTER_PREFIX = '/games'
-USERS_ROUTER_PREFIX = '/games'
+USERS_ROUTER_PREFIX = '/users'
 COMPANIES_ROUTER_PREFIX = '/companies'
 ASSETS_ROUTER_PREFIX = '/{game_id}'
 BUILDS_ROUTER_PREFIX = '/builds'
