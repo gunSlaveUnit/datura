@@ -216,6 +216,10 @@ Window {
 			        text: qsTr("Profile")
 			      }
 
+			      MenuItem {
+			        text: qsTr("Cart")
+			      }
+
 						MenuItem {
 			        text: qsTr("Wallet")
 			        onTriggered: storeStack.currentIndex = storeStack.walletIndex
