@@ -17,7 +17,7 @@ async def items(db: Session = Depends(get_db),
     return db.query(Payment).filter(Payment.user_id == current_user.id).all()
 
 
-@router.post('/', response_model=PaymentDBSchema)
+@router.post('/')
 async def create(new_payment: PaymentCreateSchema,
                  db: Session = Depends(get_db),
                  current_user: User = Depends(GetCurrentUser())):
