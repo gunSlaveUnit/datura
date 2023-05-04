@@ -16,6 +16,7 @@ REGISTER_URL = AUTH_URL + "sign-up/"
 LOGIN_URL = AUTH_URL + "sign-in/"
 LOGOUT_URL = AUTH_URL + "sign-out/"
 ME_URL = AUTH_URL + "me/"
+USERS_URL = SERVER_URL + "users/"
 GAMES_URL = SERVER_URL + 'games/'
 BUILDS_URL = SERVER_URL + 'builds/'
 PLATFORMS_URL = SERVER_URL + 'platforms/'
