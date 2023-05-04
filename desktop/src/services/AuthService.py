@@ -3,9 +3,8 @@ from typing import Union
 import requests
 from PySide6.QtCore import QObject, Signal, Property
 
-from desktop.src.models.user import User
 from desktop.src.schemas.auth import SignInSchema, SignUpSchema
-from desktop.src.settings import REGISTER_URL, LOGIN_URL, LOGOUT_URL, ME_URL
+from desktop.src.settings import REGISTER_URL, LOGIN_URL, LOGOUT_URL
 
 
 class AuthService(QObject):
@@ -33,7 +32,6 @@ class AuthService(QObject):
         if response.ok:
             self.authorized_session = requests.session()
             self.authorized_session.cookies.set('session', response.cookies['session'])
-            self.load_personal_user_data()
 
         return response
 
@@ -51,9 +49,3 @@ class AuthService(QObject):
             self.current_user = None
 
         return response
-
-    def load_personal_user_data(self):
-        response = self.authorized_session.get(ME_URL)
-
-        if response.ok:
-            self.current_user = User(**response.json())
