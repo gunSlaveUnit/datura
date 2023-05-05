@@ -1,16 +1,11 @@
 from PySide6.QtCore import QObject, Signal, Slot, Property
 
 from desktop.src.services.AuthService import AuthService
-from desktop.src.settings import ME_URL
 
 
 class CurrentUserLogic(QObject):
-    # region Signals
-
     id_changed = Signal()
     displayed_name_changed = Signal()
-
-    # endregion
 
     def __init__(self, auth_service: AuthService):
         super().__init__()
@@ -19,8 +14,6 @@ class CurrentUserLogic(QObject):
 
         self._id = -1
         self._displayed_name = ''
-
-    # region Properties
 
     @Property(int, notify=id_changed)
     def id(self):
@@ -42,17 +35,7 @@ class CurrentUserLogic(QObject):
             self._displayed_name = new_value
             self.displayed_name_changed.emit()
 
-    # endregion
-
-    # region Slots
-
     @Slot()
-    def load(self):
-        response = self._auth_service.authorized_session.get(ME_URL)
-
-        if response.ok:
-            data = response.json()
-            self.id = data["id"]
-            self.displayed_name = data["displayed_name"]
-
-    # endregion
+    def map(self):
+        self.id = self._auth_service.current_user.id
+        self.displayed_name = self._auth_service.current_user.displayed_name
