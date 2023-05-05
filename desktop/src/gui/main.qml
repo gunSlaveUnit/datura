@@ -37,16 +37,14 @@ Window {
 				target: auth_logic
 
 				function onRegistered() {
-				  auth_service.load_current_user()
 				  current_user_logic.map()
-				  wallet_logic.load()
+				  wallet_logic.map()
 					mainStack.currentIndex = mainStack.storeIndex
 				}
 
 		    function onLogin() {
-		      auth_service.load_current_user()
 				  current_user_logic.map()
-				  wallet_logic.load()
+				  wallet_logic.map()
 					mainStack.currentIndex = mainStack.storeIndex
 		    }
 			}
