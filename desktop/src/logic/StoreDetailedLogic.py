@@ -23,6 +23,8 @@ class StoreDetailedLogic(QObject):
 
     location_changed = Signal()
 
+    loaded = Signal()
+
     def __init__(self,
                  game_service: GameService,
                  library_service: LibraryService,
@@ -118,7 +120,7 @@ class StoreDetailedLogic(QObject):
         if response.ok:
             game = Game(**response.json())
 
-            self._id = game.id
+            self.id = game.id
             self.title = game.title
             self.price = game.price
 
@@ -128,6 +130,8 @@ class StoreDetailedLogic(QObject):
 
         if response.ok:
             self.screenshots = response.json()["filenames"]
+
+        self.loaded.emit()
 
     def _set_game_location_status(self):
         if self._library_service.check(item_id=self.id):
