@@ -2,8 +2,9 @@ from enum import Enum
 
 from PySide6.QtCore import QObject, Signal, Slot, Property
 
-from desktop.src.services.AuthService import AuthService
-from desktop.src.settings import GAMES_URL, LIBRARY_URL, CART_URL
+from desktop.src.models.game import Game
+from desktop.src.services.GameService import GameService
+from desktop.src.settings import LIBRARY_URL, CART_URL
 
 
 class GameLocation(int, Enum):
@@ -13,19 +14,34 @@ class GameLocation(int, Enum):
 
 
 class StoreDetailedLogic(QObject):
+    id_changed = Signal()
     title_changed = Signal()
     price_changed = Signal()
     location_changed = Signal()
 
-    def __init__(self, auth_service: AuthService):
+    def __init__(self, game_service: GameService):
         super().__init__()
 
-        self._auth_service = auth_service
+        self._game_service = game_service
 
         self._id = -1
         self._title = ''
         self._price = 0.0
         self._location: int = GameLocation.IN_STORE
+
+    # region Title
+
+    @Property(int, notify=id_changed)
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, new_value: int):
+        if self._id != new_value:
+            self._id = new_value
+            self.id_changed.emit()
+
+    # endregion
 
     # region Title
 
@@ -70,14 +86,15 @@ class StoreDetailedLogic(QObject):
     # endregion
 
     @Slot(int)
-    def load(self, game_id: int):
-        response = self._auth_service.authorized_session.get(GAMES_URL + f'{game_id}/')
-        if response.ok:
-            data = response.json()
+    def map(self, game_id: int):
+        response = self._game_service.item(game_id)
 
-            self._id = data["id"]
-            self.title = data["title"]
-            self.price = data["price"]
+        if response.ok:
+            game = Game(**response.json())
+
+            self._id = game.id
+            self.title = game.title
+            self.price = game.price
 
             self._set_game_location_status()
 
