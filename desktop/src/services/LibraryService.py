@@ -12,7 +12,7 @@ class LibraryService(QObject):
 
         self._auth_service: AuthService = auth_service
 
-    def check(self, item_id: int, user_id: Optional[int]):
+    def check(self, item_id: int, user_id: Optional[int] = None):
         params = {
             "user_id": user_id if user_id is not None else self._auth_service.current_user.id,
             "game_id": item_id
