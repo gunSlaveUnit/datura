@@ -35,6 +35,8 @@ if __name__ == '__main__':
     engine = QQmlApplicationEngine()
 
     auth_service = AuthService()
+    engine.rootContext().setContextProperty("auth_service", auth_service)
+
     wallet_service = WalletService(auth_service)
     game_service = GameService(auth_service)
     library_service = LibraryService(auth_service)
