@@ -383,22 +383,22 @@ Window {
               SwipeView {
                 id: game_screenshots_swipe_view
 
-                Layout.preferredWidth: 400
+                Layout.preferredWidth: 700
                 Layout.preferredHeight: width * 9 / 16
 
                 clip: true
 
-                Component.onCompleted: {
-                  var component = Qt.createComponent("Screenshot.qml")
-                  var game_id = store_detailed_logic.id
-                  var fileNames = store_detailed_logic.screenshots
+                Connections {
+                  target: store_detailed_logic
 
-                  if (component.status == Component.Ready) {
+                  function onLoaded() {
+                    var component = Qt.createComponent("Screenshot.qml")
+                    var game_id = store_detailed_logic.id
+                    var fileNames = store_detailed_logic.screenshots
+
                     for (var i = 0; i < fileNames.length; i++) {
                       var imageUrl = `http://127.0.0.1:8000/api/v1/games/${game_id}/screenshots/?filename=${fileNames[i]}`
-                      console.log(imageUrl)
-
-                      var image = component.createObject(`image${i}`, {source: imageUrl})
+                      var image = component.createObject(game_screenshots_swipe_view, {source: imageUrl})
                       game_screenshots_swipe_view.addItem(image)
                     }
                   }
