@@ -516,7 +516,48 @@ Window {
 
         ColumnLayout {}
 
-        ColumnLayout {}
+        Scroll {
+          contentHeight: libraryDetailedPage.height + 2 * defaultMargin
+
+          Item {
+            width: layoutWidth
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            ColumnLayout {
+              id: libraryDetailedPage
+
+              Text {
+                text: library_detailed_logic.game_title
+                color: "white"
+              }
+
+              Text {
+                text: library_detailed_logic.last_launched
+                color: "white"
+              }
+
+              Text {
+                visible: library_detailed_logic.play_time !== "0"
+                text: library_detailed_logic.play_time
+                color: "white"
+              }
+
+              FolderDialog {
+                id: installation_path_dialog
+
+                onAccepted: {
+                  library_detailed_logic.installation_path = folder
+                  library_detailed_logic.download()
+                }
+              }
+
+              Button {
+                text: library_detailed_logic.is_game_installed ? "Launch" : "Install"
+                onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : installation_path_dialog.open()
+              }
+            }
+          }
+        }
 
         Scroll {
           contentHeight: cartPage.height + 2 * defaultMargin
