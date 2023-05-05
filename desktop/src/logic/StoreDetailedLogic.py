@@ -127,7 +127,6 @@ class StoreDetailedLogic(QObject):
         response = self._game_service.screenshots(game_id)
 
         if response.ok:
-            print(response.json()["filenames"])
             self.screenshots = response.json()["filenames"]
 
     def _set_game_location_status(self):
