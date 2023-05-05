@@ -2,7 +2,7 @@ from dataclasses import fields, dataclass
 from typing import Any
 
 import requests
-from PySide6.QtCore import QAbstractListModel, QModelIndex, QByteArray, Qt, Slot
+from PySide6.QtCore import QAbstractListModel, QModelIndex, QByteArray, Qt, Slot, Property, Signal
 
 from desktop.src.models.entity import Entity
 from desktop.src.services.AuthService import AuthService
@@ -23,6 +23,7 @@ class Game(Entity):
     is_published: bool
     age_category_id: int
     directory: str
+    is_checked: bool | None
 
 
 class GameList(QAbstractListModel):
@@ -35,6 +36,19 @@ class GameList(QAbstractListModel):
         self._company_service = company_service
 
         self._games = []
+        self._total_cost = 0.0
+
+    total_cost_changed = Signal()
+
+    @Property(float, notify=total_cost_changed)
+    def total_cost(self):
+        return self._total_cost
+
+    @total_cost.setter
+    def total_cost(self, new_value: float):
+        if self._total_cost != new_value:
+            self._total_cost = new_value
+            self.total_cost_changed.emit()
 
     @Slot()
     def load_store(self):
@@ -46,7 +60,7 @@ class GameList(QAbstractListModel):
             self.beginResetModel()
             self._games = []
             for game in games:
-                self._games.append(Game(**game))
+                self._games.append(Game(**game, is_checked=False))
             self.endResetModel()
 
     @Slot(int)
@@ -56,7 +70,7 @@ class GameList(QAbstractListModel):
             url = GAMES_URL + f'?company_id={self._company_service.company["id"]}'
             data = self._auth_service.authorized_session.get(url).json()
             self.beginResetModel()
-            self._games = [Game(**detailed_game_data) for detailed_game_data in data]
+            self._games = [Game(**detailed_game_data, is_checked=False) for detailed_game_data in data]
             self.endResetModel()
 
     @Slot()
@@ -66,7 +80,7 @@ class GameList(QAbstractListModel):
         self._games = []
         for record in cart_records:
             game_data = record["game"]
-            self._games.append(Game(**game_data))
+            self._games.append(Game(**game_data, is_checked=False))
         self.endResetModel()
 
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
@@ -84,3 +98,14 @@ class GameList(QAbstractListModel):
 
     def rowCount(self, index: QModelIndex = QModelIndex()) -> int:
         return len(self._games)
+
+    @Slot(int)
+    def change_checked_state(self, index: int):
+        self._games[index].is_checked = not self._games[index].is_checked
+
+    @Slot()
+    def recount_total_cost(self):
+        self.total_cost = 0
+        for game in self._games:
+            if game.is_checked:
+                self.total_cost += game.price

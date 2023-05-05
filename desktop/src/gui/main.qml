@@ -528,20 +528,10 @@ Window {
             ColumnLayout {
               id: cartPage
 
-              property double total: 0.0
-
-              function updateTotal() {
-                var sum = 0
-                for (var i = 0; i < game_list_model.rowCount(); i++) {
-                    total += game_list_model.get(i).price
-                }
-                total = sum
-              }
-
               RowLayout {
                 Text {
                   color: "white"
-                  text: "Total Price: " + cartPage.total
+                  text: "Total Price: " + game_list_model.total_cost
                 }
 
                 BuyButton {
@@ -573,8 +563,11 @@ Window {
                   }
 
                   Checking {
-                    checked: true
-                    onCheckedChanged: cartPage.updateTotal()
+                    checked: is_checked
+                    onCheckedChanged: {
+                      game_list_model.change_checked_state(index)
+                      game_list_model.recount_total_cost()
+                    }
                   }
                 }
               }
