@@ -26,6 +26,8 @@ class WalletLogic(QObject):
 
     @Slot()
     def map(self):
+        self._wallet_service.load()
+
         self.balance = self._wallet_service.balance
 
     @Slot(int)

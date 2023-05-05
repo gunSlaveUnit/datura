@@ -37,5 +37,7 @@ class CurrentUserLogic(QObject):
 
     @Slot()
     def map(self):
+        self._auth_service.load_current_user()
+
         self.id = self._auth_service.current_user.id
         self.displayed_name = self._auth_service.current_user.displayed_name
