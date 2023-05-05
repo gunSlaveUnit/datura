@@ -15,7 +15,11 @@ from desktop.src.logic.WalletLogic import WalletLogic
 from desktop.src.models.build import BuildList
 from desktop.src.models.game import GameList
 from desktop.src.services.AuthService import AuthService
+from desktop.src.services.CartService import CartService
 from desktop.src.services.CompanyService import CompanyService
+from desktop.src.services.GameService import GameService
+from desktop.src.services.LibraryService import LibraryService
+from desktop.src.services.WalletService import WalletService
 from desktop.src.settings import ICONS_DIR, LAYOUTS_DIR, APP_ID
 
 if __name__ == '__main__':
@@ -31,6 +35,10 @@ if __name__ == '__main__':
     engine = QQmlApplicationEngine()
 
     auth_service = AuthService()
+    wallet_service = WalletService(auth_service)
+    game_service = GameService(auth_service)
+    library_service = LibraryService(auth_service)
+    cart_service = CartService(auth_service)
 
     auth_logic = AuthLogic(auth_service)
     engine.rootContext().setContextProperty("auth_logic", auth_logic)
@@ -38,10 +46,10 @@ if __name__ == '__main__':
     current_user_logic = CurrentUserLogic(auth_service)
     engine.rootContext().setContextProperty("current_user_logic", current_user_logic)
 
-    wallet_logic = WalletLogic(auth_service)
+    wallet_logic = WalletLogic(wallet_service)
     engine.rootContext().setContextProperty("wallet_logic", wallet_logic)
 
-    store_detailed_logic = StoreDetailedLogic(auth_service)
+    store_detailed_logic = StoreDetailedLogic(game_service, library_service, cart_service)
     engine.rootContext().setContextProperty("store_detailed_logic", store_detailed_logic)
 
     library_detailed_logic = LibraryDetailedLogic(auth_service)
