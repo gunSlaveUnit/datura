@@ -1,10 +1,11 @@
-from typing import Union
+from typing import Union, Optional
 
 import requests
-from PySide6.QtCore import QObject
+from PySide6.QtCore import QObject, Slot
 
 from common.api.v1.schemas.auth import SignUpSchema, SignInSchema
-from desktop.src.settings import REGISTER_URL, LOGIN_URL, LOGOUT_URL
+from desktop.src.models.user import User
+from desktop.src.settings import REGISTER_URL, LOGIN_URL, LOGOUT_URL, ME_URL
 
 
 class AuthService(QObject):
@@ -12,6 +13,7 @@ class AuthService(QObject):
         super().__init__()
 
         self.authorized_session = None
+        self.current_user: Optional[User] = None
 
     def _user_access(self, url: str, data: Union[SignUpSchema, SignInSchema]):
         response = requests.post(url, json=data.dict())
@@ -35,3 +37,10 @@ class AuthService(QObject):
             self.authorized_session = None
 
         return response
+
+    @Slot()
+    def load_current_user(self):
+        response = self.authorized_session.get(ME_URL)
+
+        if response.ok:
+            self.current_user = User(**response.json())
