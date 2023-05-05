@@ -1,7 +1,7 @@
-import requests
 from PySide6.QtCore import QObject, Signal, Property, Slot
 
 from common.api.v1.schemas.company import CompanyCreateSchema
+from desktop.src.services.CompanyService import CompanyService
 
 
 class CompanyLogic(QObject):
@@ -27,10 +27,10 @@ class CompanyLogic(QObject):
     registered = Signal()
     notRegistered = Signal()
 
-    def __init__(self, company_service):
+    def __init__(self, company_service: CompanyService):
         super().__init__()
 
-        self._company_service = company_service
+        self._company_service: CompanyService  = company_service
 
         self._juridical_name = ''
         self._company_form = ''
@@ -48,7 +48,6 @@ class CompanyLogic(QObject):
 
     @Slot()
     def new(self):
-
         data = CompanyCreateSchema(
             juridical_name=self._juridical_name,
             form=self._company_form,
@@ -63,17 +62,16 @@ class CompanyLogic(QObject):
             bank_account_number=self._bank_account_number
         )
 
-        reply = self._company_service.new(data)
-        if reply.status_code == requests.codes.ok:
+        response = self._company_service.create(data)
+        if response.ok:
             self.registered.emit()
 
-    @Slot(int)
-    def check(self, current_user_id: int):
-        self._company_service.load_personal(current_user_id)
+    @Slot()
+    def check(self, ):
         if self._company_service.company is None:
             self.notRegistered.emit()
         else:
-            if self._company_service.company["is_approved"]:
+            if self._company_service.company.is_approved:
                 self.is_drafted_new_button_enabled = True
                 self.drafted_new_button_state_changed.emit()
             self.registered.emit()

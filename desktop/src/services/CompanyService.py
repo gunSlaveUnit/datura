@@ -1,5 +1,7 @@
 from typing import Optional
 
+from PySide6.QtCore import Slot
+
 from common.api.v1.schemas.company import CompanyCreateSchema
 from desktop.src.models.company import Company
 from desktop.src.services.AuthService import AuthService
@@ -16,6 +18,7 @@ class CompanyService:
     def create(self, data: CompanyCreateSchema):
         return self._auth_service.authorized_session.post(COMPANIES_URL, json=data.dict())
 
+    @Slot()
     def load_personal(self):
         params = {"owner_id": self._auth_service.current_user.id}
         response = self._auth_service.authorized_session.get(COMPANIES_URL, params=params)
