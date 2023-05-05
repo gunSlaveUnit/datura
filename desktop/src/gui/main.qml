@@ -270,7 +270,9 @@ Window {
         property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
         property int workshopAppControlIndex: workshopAppsListIndex + 1
 
-        function checkCompanyRegistration() { company_logic.check(current_user_logic.id) }
+        function checkCompanyRegistration() {
+          company_logic.check()
+        }
 
         Connections {
           target: company_logic
@@ -280,7 +282,7 @@ Window {
           }
 
           function onRegistered() {
-            game_list_model.load_personal(current_user_logic.id)
+            game_list_model.load_personal()
             storeStack.currentIndex = storeStack.workshopAppsListIndex
           }
         }
