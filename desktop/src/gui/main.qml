@@ -388,11 +388,18 @@ Window {
 
                 clip: true
 
-                Repeater {
-                  model: 6
+                Component.onCompleted: {
+                  var game_id = store_detailed_logic.id
+                  var fileNames = store_detailed_logic.screenshots
 
-                  Image {
-                    source: "../../resources/images/16x9_placeholder.jpg"
+                  for (var i = 0; i < fileNames.length; i++) {
+                    var fileName = fileNames[i];
+                    var imageUrl = "http://api/v1/games/1/screenshots/?filename=" + fileName;
+
+                    var image = Qt.createQmlObject(
+                      'import QtQuick 2.15;
+                      Image {
+                    source: imageUrl
                     mipmap: true
 
                     MouseArea {
@@ -444,6 +451,10 @@ Window {
                         }
                       }
                     }
+                  }',
+                      swipeView
+                    );
+                    swipeView.addItem(image);
                   }
                 }
               }
