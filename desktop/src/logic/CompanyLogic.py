@@ -67,7 +67,9 @@ class CompanyLogic(QObject):
             self.registered.emit()
 
     @Slot()
-    def check(self, ):
+    def check(self):
+        self._company_service.load_personal()
+
         if self._company_service.company is None:
             self.notRegistered.emit()
         else:
