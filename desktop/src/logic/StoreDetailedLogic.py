@@ -18,6 +18,9 @@ class StoreDetailedLogic(QObject):
     id_changed = Signal()
     title_changed = Signal()
     price_changed = Signal()
+
+    screenshots_changed = Signal()
+
     location_changed = Signal()
 
     def __init__(self,
@@ -33,6 +36,9 @@ class StoreDetailedLogic(QObject):
         self._id = -1
         self._title = ''
         self._price = 0.0
+
+        self._screenshots = []
+
         self._location: int = GameLocation.IN_STORE
 
     # region Title
@@ -74,6 +80,20 @@ class StoreDetailedLogic(QObject):
         if self._price != new_value:
             self._price = new_value
             self.price_changed.emit()
+
+    # endregion
+
+    # region Screenshots
+
+    @Property(list, notify=screenshots_changed)
+    def screenshots(self):
+        return self._screenshots
+
+    @screenshots.setter
+    def screenshots(self, new_value: list):
+        if self._screenshots != new_value:
+            self._screenshots = new_value
+            self.screenshots_changed.emit()
 
     # endregion
 
