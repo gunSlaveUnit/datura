@@ -24,4 +24,4 @@ class CompanyService:
         response = self._auth_service.authorized_session.get(COMPANIES_URL, params=params)
 
         if response.ok:
-            self.company = response.json()[0]
+            self.company = Company(**response.json()[0])
