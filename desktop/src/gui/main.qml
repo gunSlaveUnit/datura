@@ -389,73 +389,18 @@ Window {
                 clip: true
 
                 Component.onCompleted: {
+                  var component = Qt.createComponent("Screenshot.qml")
                   var game_id = store_detailed_logic.id
                   var fileNames = store_detailed_logic.screenshots
-                  console.log(fileNames)
 
-                  for (var i = 0; i < fileNames.length; i++) {
-                    var fileName = fileNames[i];
-                    var imageUrl = "http://api/v1/games/1/screenshots/?filename=" + fileName;
+                  if (component.status == Component.Ready) {
+                    for (var i = 0; i < fileNames.length; i++) {
+                      var imageUrl = `http://127.0.0.1:8000/api/v1/games/${game_id}/screenshots/?filename=${fileNames[i]}`
+                      console.log(imageUrl)
 
-                    var image = Qt.createQmlObject(
-                      'import QtQuick 2.15;
-                      Image {
-                    source: imageUrl
-                    mipmap: true
-
-                    MouseArea {
-                      id: image_mouse_area
-                      anchors.fill: parent
-                      hoverEnabled: true
-
-                      RowLayout {
-                        anchors.fill: parent
-
-                        Button {
-                          Layout.fillHeight: true
-                          Layout.preferredWidth: 30
-                          text: "<"
-                          flat: true
-                          font.bold: true
-                          font.pointSize: 16
-                          visible: image_mouse_area.containsMouse
-                          enabled: game_screenshots_swipe_view.currentIndex > 0
-                          onClicked: game_screenshots_swipe_view.decrementCurrentIndex()
-                          background: Rectangle {
-                            gradient: Gradient {
-                              orientation: Gradient.Horizontal
-                              GradientStop { position: -1.0; color: "black" }
-                              GradientStop { position: 1.0; color: "transparent" }
-                            }
-                          }
-                        }
-
-                        Item {Layout.fillWidth: true}
-
-                        Button {
-                          Layout.fillHeight: true
-                          Layout.preferredWidth: 30
-                          text: ">"
-                          flat: true
-                          font.bold: true
-                          font.pointSize: 16
-                          visible: image_mouse_area.containsMouse
-                          enabled: game_screenshots_swipe_view.currentIndex < game_screenshots_swipe_view.count - 1
-                          onClicked: game_screenshots_swipe_view.incrementCurrentIndex()
-                          background: Rectangle {
-                            gradient: Gradient {
-                              orientation: Gradient.Horizontal
-                              GradientStop { position: 0.0; color: "transparent" }
-                              GradientStop { position: 2.0; color: "black" }
-                            }
-                          }
-                        }
-                      }
+                      var image = component.createObject(`image${i}`, {source: imageUrl})
+                      game_screenshots_swipe_view.addItem(image)
                     }
-                  }',
-                      swipeView
-                    );
-                    swipeView.addItem(image);
                   }
                 }
               }
