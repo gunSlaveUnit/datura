@@ -1,21 +1,24 @@
-import requests
+from typing import Optional
 
 from common.api.v1.schemas.company import CompanyCreateSchema
+from desktop.src.models.company import Company
+from desktop.src.services.AuthService import AuthService
 from desktop.src.settings import COMPANIES_URL
 
 
 class CompanyService:
-    def __init__(self, auth_service):
+    def __init__(self, auth_service: AuthService):
         super().__init__()
 
-        self._auth_service = auth_service
-        self.company = None
+        self._auth_service: AuthService = auth_service
+        self.company: Optional[Company] = None
 
-    def new(self, data: CompanyCreateSchema):
+    def create(self, data: CompanyCreateSchema):
         return self._auth_service.authorized_session.post(COMPANIES_URL, json=data.dict())
 
-    def load_personal(self, current_user_id: int):
-        params = {"owner_id": current_user_id}
-        reply = self._auth_service.authorized_session.get(COMPANIES_URL, params=params)
-        if reply.status_code == requests.codes.ok:
-            self.company = reply.json()[0]
+    def load_personal(self):
+        params = {"owner_id": self._auth_service.current_user.id}
+        response = self._auth_service.authorized_session.get(COMPANIES_URL, params=params)
+
+        if response.ok:
+            self.company = response.json()[0]
