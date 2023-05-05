@@ -33,7 +33,6 @@ async def items(user_id: int | None = None,
         records_query = records_query.filter(Library.game_id == game_id)
 
     if include_games:
-        records_query = records_query.join(Game)
         records_query = records_query.options(joinedload(Library.game))
 
     return records_query.all()
