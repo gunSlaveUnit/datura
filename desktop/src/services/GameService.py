@@ -12,3 +12,6 @@ class GameService(QObject):
 
     def item(self, item_id: int):
         return self._auth_service.authorized_session.get(GAMES_URL + f'{item_id}/')
+
+    def screenshots(self, item_id: int):
+        return self._auth_service.authorized_session.get(GAMES_URL + f'{item_id}/screenshots')
