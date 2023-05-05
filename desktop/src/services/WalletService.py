@@ -11,12 +11,13 @@ class WalletService:
         self.balance: float = 0.00
 
     def load(self):
-        current_user_id = self._auth_service.current_user.id
-        response = self._auth_service.authorized_session.get(USERS_URL + f'{current_user_id}/balance/')
+        if (user := self._auth_service.current_user) is not None:
+            current_user_id = user.id
+            response = self._auth_service.authorized_session.get(USERS_URL + f'{current_user_id}/balance/')
 
-        if response.ok:
-            data = response.json()
-            self.balance = data["balance"]
+            if response.ok:
+                data = response.json()
+                self.balance = data["balance"]
 
     def top_up(self, data: PaymentCreateSchema):
         response = self._auth_service.authorized_session.post(PAYMENTS_URL, json=data)
