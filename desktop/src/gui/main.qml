@@ -285,14 +285,12 @@ Window {
           target: auth_logic
 
           function onRegistered() {
-            current_user_logic.load()
-            wallet_logic.load(current_user_logic.id)
+            wallet_logic.map()
             game_list_model.load_store()
           }
 
           function onLogin() {
-            current_user_logic.load()
-            wallet_logic.load(current_user_logic.id)
+            wallet_logic.map()
             game_list_model.load_store()
           }
 
@@ -338,7 +336,7 @@ Window {
                   font.pointSize: 26
 
                   function handler() {
-                    store_detailed_logic.load(id)
+                    store_detailed_logic.map(id)
                     storeStack.currentIndex = storeStack.storeDetailedIndex
                   }
                 }
@@ -507,7 +505,7 @@ Window {
               onEntered: parent.color = "#36373a"
               onExited: parent.color = "transparent"
               onClicked: {
-                store_detailed_logic.load(id)
+                store_detailed_logic.map(id)
                 storeStack.currentIndex = storeStack.storeDetailedIndex
               }
             }
@@ -542,7 +540,7 @@ Window {
                 color: "white"
               }
 
-              FolderDialog {
+              Platform.FolderDialog {
                 id: installation_path_dialog
 
                 onAccepted: {
@@ -597,7 +595,7 @@ Window {
                       cursorShape: Qt.PointingHandCursor
                       hoverEnabled: true
                       onClicked: {
-                        store_detailed_logic.load(id)
+                        store_detailed_logic.map(id)
                         storeStack.currentIndex = storeStack.storeDetailedIndex
                       }
                     }
