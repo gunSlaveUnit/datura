@@ -3,8 +3,9 @@ from enum import Enum
 from PySide6.QtCore import QObject, Signal, Slot, Property
 
 from desktop.src.models.game import Game
+from desktop.src.services.CartService import CartService
 from desktop.src.services.GameService import GameService
-from desktop.src.settings import LIBRARY_URL, CART_URL
+from desktop.src.services.LibraryService import LibraryService
 
 
 class GameLocation(int, Enum):
@@ -19,10 +20,15 @@ class StoreDetailedLogic(QObject):
     price_changed = Signal()
     location_changed = Signal()
 
-    def __init__(self, game_service: GameService):
+    def __init__(self,
+                 game_service: GameService,
+                 library_service: LibraryService,
+                 cart_service: CartService):
         super().__init__()
 
-        self._game_service = game_service
+        self._game_service: GameService = game_service
+        self._library_service: LibraryService = library_service
+        self._cart_service: CartService = cart_service
 
         self._id = -1
         self._title = ''
@@ -99,20 +105,9 @@ class StoreDetailedLogic(QObject):
             self._set_game_location_status()
 
     def _set_game_location_status(self):
-        if self._check_game_in_library():
+        if self._library_service.check(item_id=self.id):
             self.location = GameLocation.IN_LIBRARY
-        elif self._check_game_in_cart():
+        elif self._cart_service.check(item_id=self.id):
             self.location = GameLocation.IN_CART
         else:
             self.location = GameLocation.IN_STORE
-
-    def _check_game_in_library(self):
-        user_id = self._auth_service.current_user.id
-        response = self._auth_service.authorized_session.get(
-            LIBRARY_URL + f"?user_id={user_id}&game_id={self._id}"
-        )
-        return response.ok and response.json()
-
-    def _check_game_in_cart(self):
-        response = self._auth_service.authorized_session.get(CART_URL + f'?game_id={self._id}')
-        return response.ok and response.json()
