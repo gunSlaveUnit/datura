@@ -1,24 +1,18 @@
 from PySide6.QtCore import QObject, Signal, Slot, Property
 
-from desktop.src.services.AuthService import AuthService
-from desktop.src.settings import ME_URL, USERS_URL, PAYMENTS_URL
+from common.api.v1.schemas.payments import PaymentCreateSchema
+from desktop.src.services.WalletService import WalletService
 
 
 class WalletLogic(QObject):
-    # region Signals
-
     balance_changed = Signal()
 
-    # endregion
-
-    def __init__(self, auth_service: AuthService):
+    def __init__(self, wallet_service: WalletService):
         super().__init__()
 
-        self._auth_service = auth_service
+        self._wallet_service = wallet_service
 
         self._balance = 0.00
-
-    # region Properties
 
     @Property(float, notify=balance_changed)
     def balance(self):
@@ -30,29 +24,21 @@ class WalletLogic(QObject):
             self._balance = new_value
             self.balance_changed.emit()
 
-    # region Slots
+    @Slot()
+    def map(self):
+        self.balance = self._wallet_service.balance
 
     @Slot(int)
-    def load(self, current_user_id: int):
-        response = self._auth_service.authorized_session.get(USERS_URL + f'{current_user_id}/balance/')
+    def top_up(self,amount: int):
+        payment = PaymentCreateSchema(
+            card_number="string",
+            validity_month=0,
+            validity_year=0,
+            cvv_cvc=0,
+            amount=amount
+        )
+
+        response = self._wallet_service.top_up(payment)
 
         if response.ok:
-            data = response.json()
-            self.balance = data["balance"]
-
-    @Slot(int, int)
-    def top_up(self, current_user_id: int, amount: int):
-        payment = {
-            "card_number": "string",
-            "validity_month": 0,
-            "validity_year": 0,
-            "cvv_cvc": 0,
-            "amount": amount
-        }
-
-        response = self._auth_service.authorized_session.post(PAYMENTS_URL, json=payment)
-
-        if response.ok:
-            self.load(current_user_id)
-
-    # endregion
+            self.balance = self._wallet_service.balance
