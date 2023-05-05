@@ -391,6 +391,7 @@ Window {
                 Component.onCompleted: {
                   var game_id = store_detailed_logic.id
                   var fileNames = store_detailed_logic.screenshots
+                  console.log(fileNames)
 
                   for (var i = 0; i < fileNames.length; i++) {
                     var fileName = fileNames[i];
