@@ -23,7 +23,7 @@ class Game(Entity):
     is_published: bool
     age_category_id: int
     directory: str
-    is_checked: bool | None
+    is_checked: bool | None = None
 
 
 class GameList(QAbstractListModel):
