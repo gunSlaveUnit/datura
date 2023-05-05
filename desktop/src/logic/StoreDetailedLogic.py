@@ -20,6 +20,7 @@ class StoreDetailedLogic(QObject):
     price_changed = Signal()
 
     screenshots_changed = Signal()
+    trailers_changed = Signal()
 
     location_changed = Signal()
 
@@ -40,6 +41,7 @@ class StoreDetailedLogic(QObject):
         self._price = 0.0
 
         self._screenshots = []
+        self._trailers = []
 
         self._location: int = GameLocation.IN_STORE
 
@@ -99,6 +101,20 @@ class StoreDetailedLogic(QObject):
 
     # endregion
 
+    # region Trailers
+
+    @Property(list, notify=trailers_changed)
+    def trailers(self):
+        return self._trailers
+
+    @trailers.setter
+    def trailers(self, new_value: list):
+        if self._trailers != new_value:
+            self._trailers = new_value
+            self.trailers_changed.emit()
+
+    # endregion
+
     # region Location
 
     @Property(int, notify=location_changed)
@@ -116,7 +132,6 @@ class StoreDetailedLogic(QObject):
     @Slot(int)
     def map(self, game_id: int):
         response = self._game_service.item(game_id)
-
         if response.ok:
             game = Game(**response.json())
 
@@ -127,9 +142,12 @@ class StoreDetailedLogic(QObject):
             self._set_game_location_status()
 
         response = self._game_service.screenshots(game_id)
-
         if response.ok:
             self.screenshots = response.json()["filenames"]
+
+        response = self._game_service.trailers(game_id)
+        if response.ok:
+            self.trailers = response.json()["filenames"]
 
         self.loaded.emit()
 
