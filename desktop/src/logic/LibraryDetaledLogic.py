@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 
 import requests
-from PySide6.QtCore import QObject, Signal, Slot, Property, QUrl
+from PySide6.QtCore import QObject, Signal, Slot, Property, QUrl, QTimer
 
 from desktop.src.services.AuthService import AuthService
 from desktop.src.settings import LIBRARY_URL, GAMES_URL, BUILDS_URL, PLATFORMS_URL
@@ -35,6 +35,13 @@ class LibraryDetailedLogic(QObject):
         self._is_running = False
 
         self.app = None
+        self.timer = QTimer()
+        minute = 1000 * 60
+        self.timer.setInterval(minute)
+        self.timer.timeout.connect(self.timer_callback)
+
+    def timer_callback(self):
+        print('Таймер сработал!')
 
     # region Game title
 
@@ -224,6 +231,7 @@ class LibraryDetailedLogic(QObject):
         self.app.kill()
         self.app.wait()
         self.is_running=False
+        self.timer.stop()
 
 
     @Slot()
@@ -237,4 +245,5 @@ class LibraryDetailedLogic(QObject):
                     process = Path(config["default_games_installation_path"][sys.platform]).joinpath(config["default_library_path_name"], app['path'], app['call'])
                     self.app = subprocess.Popen(process, stdout=subprocess.PIPE)
                     self.is_running = True
+                    self.timer.start()
                     break
