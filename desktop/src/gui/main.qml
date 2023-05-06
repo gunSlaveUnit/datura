@@ -172,6 +172,8 @@ Window {
         MenuButton {
           text: qsTr("Library")
           onClicked: {
+            game_list_model.load_library()
+            storeStack.currentIndex = storeStack.libraryIndex
           }
         }
 
@@ -495,8 +497,8 @@ Window {
 
           boundsBehavior: Flickable.StopAtBounds
 
-          property int capsuleImageWidth: 12 * 10
-          property int capsuleImageHeight: capsuleImageWidth * 16 / 10
+          property int capsuleImageWidth: 12 * 11
+          property int capsuleImageHeight: capsuleImageWidth * 16 / 11
 
           property int idealWidth: capsuleImageWidth + defaultMargin * 2
           property int itemsPerRow: storeGamesGridView.width / idealWidth
@@ -530,8 +532,8 @@ Window {
               onEntered: parent.color = "#36373a"
               onExited: parent.color = "transparent"
               onClicked: {
-                store_detailed_logic.map(id)
-                storeStack.currentIndex = storeStack.storeDetailedIndex
+                library_detailed_logic.map(id)
+                storeStack.currentIndex = storeStack.libraryDetailedIndex
               }
             }
           }
