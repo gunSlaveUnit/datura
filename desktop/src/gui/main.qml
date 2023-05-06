@@ -448,6 +448,9 @@ Window {
 
                   BuyButton {
                     text: "Add to cart"
+                    function handler() {
+                      cart_logic.add(store_detailed_logic.id)
+                    }
                   }
                 }
 
