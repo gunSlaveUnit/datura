@@ -7,6 +7,7 @@ from PySide6.QtQml import QQmlApplicationEngine
 from desktop.src.logic.AppLogic import AppLogic
 from desktop.src.logic.AuthLogic import AuthLogic
 from desktop.src.logic.BuildLogic import BuildLogic
+from desktop.src.logic.CartLogic import CartLogic
 from desktop.src.logic.CompanyLogic import CompanyLogic
 from desktop.src.logic.CurrentUserLogic import CurrentUserLogic
 from desktop.src.logic.LibraryDetaledLogic import LibraryDetailedLogic
@@ -49,6 +50,9 @@ if __name__ == '__main__':
 
     wallet_logic = WalletLogic(wallet_service)
     engine.rootContext().setContextProperty("wallet_logic", wallet_logic)
+
+    cart_logic = CartLogic(cart_service)
+    engine.rootContext().setContextProperty("cart_logic", cart_logic)
 
     store_detailed_logic = StoreDetailedLogic(game_service, library_service, cart_service)
     engine.rootContext().setContextProperty("store_detailed_logic", store_detailed_logic)
