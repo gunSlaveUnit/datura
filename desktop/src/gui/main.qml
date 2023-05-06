@@ -407,6 +407,14 @@ Window {
                     }
                   }
                 }
+
+                Text {
+                  Layout.alignment: Qt.AlignTop
+                  Layout.preferredWidth: layoutWidth - game_screenshots_swipe_view.width - defaultMargin
+                  color: "#ddd"
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                  text: `<p align='justify'>${store_detailed_logic.short_description}</p>`
+                }
               }
 
               BuyButton {
