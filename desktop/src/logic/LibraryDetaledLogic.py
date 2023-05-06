@@ -222,6 +222,7 @@ class LibraryDetailedLogic(QObject):
     @Slot()
     def stop(self):
         self.app.kill()
+        self.app.wait()
         self.is_running=False
 
 
