@@ -17,6 +17,7 @@ class GameLocation(int, Enum):
 class StoreDetailedLogic(QObject):
     id_changed = Signal()
     title_changed = Signal()
+    short_description_changed = Signal()
     price_changed = Signal()
 
     screenshots_changed = Signal()
@@ -38,6 +39,7 @@ class StoreDetailedLogic(QObject):
 
         self._id = -1
         self._title = ''
+        self._short_description = ''
         self._price = 0.0
 
         self._screenshots = []
@@ -70,6 +72,20 @@ class StoreDetailedLogic(QObject):
         if self._title != new_value:
             self._title = new_value
             self.title_changed.emit()
+
+    # endregion
+
+    # region Short description
+
+    @Property(str, notify=short_description_changed)
+    def short_description(self):
+        return self._short_description
+
+    @short_description.setter
+    def short_description(self, new_value: str):
+        if self._short_description != new_value:
+            self._short_description = new_value
+            self.short_description_changed.emit()
 
     # endregion
 
@@ -137,6 +153,7 @@ class StoreDetailedLogic(QObject):
 
             self.id = game.id
             self.title = game.title
+            self.short_description = game.short_description
             self.price = game.price
 
             self._set_game_location_status()
