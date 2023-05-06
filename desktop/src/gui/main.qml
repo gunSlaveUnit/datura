@@ -450,22 +450,25 @@ Window {
                     text: "Add to cart"
                     function handler() {
                       cart_logic.add(store_detailed_logic.id)
+                      store_detailed_logic.location = 2
                     }
                   }
                 }
 
                 Text {
+                  textFormat: TextEdit.MarkdownText
                   anchors.fill: parent
                   anchors.margins: defaultMargin
-                  text: "Already in library"
+                  text: "## Already in library"
                   color: "white"
                   visible: store_detailed_logic.location === 1
                 }
 
                 Text {
+                  textFormat: TextEdit.MarkdownText
                   anchors.fill: parent
                   anchors.margins: defaultMargin
-                  text: "Already in cart"
+                  text: "## Already in cart"
                   color: "white"
                   visible: store_detailed_logic.location === 2
                 }
@@ -598,7 +601,9 @@ Window {
                 BuyButton {
                   text: "Buy"
                   function handler() {
-
+                    cart_logic.pay()
+                    game_list_model.load_cart()
+                    game_list_model.recount_total_cost()
                   }
                 }
               }
