@@ -389,22 +389,19 @@ Window {
 
                 clip: true
 
-                Video {
-                  source: "http://127.0.0.1:8000/api/v1/games/1/trailers/?filename=elden-ring.mp4"
-                  Layout.preferredWidth: 700
-                  Layout.preferredHeight: width * 9 / 16
-                  fillMode: VideoOutput.PreserveAspectFit
-                  MouseArea {
-                      anchors.fill: parent
-                      onClicked: {
-                          video.play()
-                      }
-                  }
+                Connections {
+                  target: store_detailed_logic
 
-                  focus: true
-                  Keys.onSpacePressed: video.playbackState == MediaPlayer.PlayingState ? video.pause() : video.play()
-                  Keys.onLeftPressed: video.position = video.position - 5000
-                  Keys.onRightPressed: video.position = video.position + 5000
+                  function onLoaded() {
+                    var component = Qt.createComponent("Screenshot.qml")
+                    var game_id = store_detailed_logic.id
+                    var fileNames = store_detailed_logic.screenshots
+                    for (var i = 0; i < fileNames.length; i++) {
+                      var imageUrl = `http://127.0.0.1:8000/api/v1/games/${game_id}/screenshots/?filename=${fileNames[i]}`
+                      var image = component.createObject(game_screenshots_swipe_view, {source: imageUrl})
+                      game_screenshots_swipe_view.addItem(image)
+                    }
+                  }
                 }
               }
 
