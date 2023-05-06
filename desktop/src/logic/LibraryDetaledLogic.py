@@ -111,7 +111,7 @@ class LibraryDetailedLogic(QObject):
             return False
 
     @Slot(int)
-    def load(self, game_id: int):
+    def map(self, game_id: int):
         headers = {"Authorization": self._auth_service.session_id}
         current_user_id = self._auth_service.current_user.id
 
