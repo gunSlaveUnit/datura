@@ -417,6 +417,14 @@ Window {
                 }
               }
 
+              Text {
+                textFormat: TextEdit.MarkdownText
+                Layout.preferredWidth: game_screenshots_swipe_view.width
+                color: "#ddd"
+                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                text: store_detailed_logic.long_description
+              }
+
               BuyButton {
                 text: "Buy"
                 visible: store_detailed_logic.location === 0
