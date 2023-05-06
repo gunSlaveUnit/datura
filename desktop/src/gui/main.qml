@@ -381,6 +381,8 @@ Window {
                 }
               }
 
+              Indent {}
+
               Header {text: "# " + store_detailed_logic.title}
 
               RowLayout {
@@ -417,29 +419,63 @@ Window {
                 }
               }
 
+              Indent {}
+
+              Rectangle {
+                width: game_screenshots_swipe_view.width
+                height: 40
+                radius: defaultMargin / 2
+                color: "#586776"
+
+                RowLayout {
+                  visible: store_detailed_logic.location === 0
+                  anchors.fill: parent
+                  anchors.margins: defaultMargin
+
+                  Text {
+                    textFormat: TextEdit.MarkdownText
+                    color: "#ddd"
+                    text: "## Buy " + store_detailed_logic.title
+                  }
+
+                  Item {Layout.fillWidth: true}
+
+                  Text {
+                    textFormat: TextEdit.MarkdownText
+                    color: "lightgreen"
+                    text: "## " + store_detailed_logic.price + "$"
+                  }
+
+                  BuyButton {
+                    text: "Add to cart"
+                  }
+                }
+
+                Text {
+                  anchors.fill: parent
+                  anchors.margins: defaultMargin
+                  text: "Already in library"
+                  color: "white"
+                  visible: store_detailed_logic.location === 1
+                }
+
+                Text {
+                  anchors.fill: parent
+                  anchors.margins: defaultMargin
+                  text: "Already in cart"
+                  color: "white"
+                  visible: store_detailed_logic.location === 2
+                }
+              }
+
+              Indent {}
+
               Text {
                 textFormat: TextEdit.MarkdownText
                 Layout.preferredWidth: game_screenshots_swipe_view.width
                 color: "#ddd"
                 wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                 text: store_detailed_logic.long_description
-              }
-
-              BuyButton {
-                text: "Buy"
-                visible: store_detailed_logic.location === 0
-              }
-
-              Text {
-                text: "Already in library"
-                color: "white"
-                visible: store_detailed_logic.location === 1
-              }
-
-              Text {
-                text: "Already in cart"
-                color: "white"
-                visible: store_detailed_logic.location === 2
               }
             }
           }
