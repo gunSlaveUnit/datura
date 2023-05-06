@@ -7,7 +7,7 @@ from PySide6.QtCore import QAbstractListModel, QModelIndex, QByteArray, Qt, Slot
 from desktop.src.models.entity import Entity
 from desktop.src.services.AuthService import AuthService
 from desktop.src.services.CompanyService import CompanyService
-from desktop.src.settings import GAMES_URL, CART_URL
+from desktop.src.settings import GAMES_URL, CART_URL, LIBRARY_URL
 
 
 @dataclass()
@@ -79,6 +79,20 @@ class GameList(QAbstractListModel):
         self.beginResetModel()
         self._games = []
         for record in cart_records:
+            game_data = record["game"]
+            self._games.append(Game(**game_data, is_checked=False))
+        self.endResetModel()
+
+    @Slot()
+    def load_library(self):
+        params = {
+            "user_id": self._auth_service.current_user.id,
+            "include_games": True
+        }
+        records = self._auth_service.authorized_session.get(LIBRARY_URL, params=params).json()
+        self.beginResetModel()
+        self._games = []
+        for record in records:
             game_data = record["game"]
             self._games.append(Game(**game_data, is_checked=False))
         self.endResetModel()
