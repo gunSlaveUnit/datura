@@ -381,25 +381,29 @@ Window {
                 }
               }
 
-              SwipeView {
-                id: game_screenshots_swipe_view
+              Header {text: "# " + store_detailed_logic.title}
 
-                Layout.preferredWidth: 700
-                Layout.preferredHeight: width * 9 / 16
+              RowLayout {
+                SwipeView {
+                  id: game_screenshots_swipe_view
 
-                clip: true
+                  Layout.preferredWidth: 700
+                  Layout.preferredHeight: width * 9 / 16
 
-                Connections {
-                  target: store_detailed_logic
+                  clip: true
 
-                  function onLoaded() {
-                    var component = Qt.createComponent("Screenshot.qml")
-                    var game_id = store_detailed_logic.id
-                    var fileNames = store_detailed_logic.screenshots
-                    for (var i = 0; i < fileNames.length; i++) {
-                      var imageUrl = `http://127.0.0.1:8000/api/v1/games/${game_id}/screenshots/?filename=${fileNames[i]}`
-                      var image = component.createObject(game_screenshots_swipe_view, {source: imageUrl})
-                      game_screenshots_swipe_view.addItem(image)
+                  Connections {
+                    target: store_detailed_logic
+
+                    function onLoaded() {
+                      var component = Qt.createComponent("Screenshot.qml")
+                      var game_id = store_detailed_logic.id
+                      var fileNames = store_detailed_logic.screenshots
+                      for (var i = 0; i < fileNames.length; i++) {
+                        var imageUrl = `http://127.0.0.1:8000/api/v1/games/${game_id}/screenshots/?filename=${fileNames[i]}`
+                        var image = component.createObject(game_screenshots_swipe_view, {source: imageUrl})
+                        game_screenshots_swipe_view.addItem(image)
+                      }
                     }
                   }
                 }
