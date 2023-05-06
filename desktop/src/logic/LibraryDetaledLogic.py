@@ -1,5 +1,6 @@
 import gzip
 import json
+import signal
 import subprocess
 import sys
 from datetime import datetime, timedelta
@@ -18,6 +19,7 @@ class LibraryDetailedLogic(QObject):
     last_launched_changed = Signal()
     play_time_changed = Signal()
     installation_path_changed = Signal()
+    is_running_changed = Signal()
 
     def __init__(self, auth_service: AuthService):
         super().__init__()
@@ -30,6 +32,9 @@ class LibraryDetailedLogic(QObject):
         self._last_launched = False
         self._play_time = ''
         self._installation_path = ''
+        self._is_running = False
+
+        self.app = None
 
     # region Game title
 
@@ -99,6 +104,21 @@ class LibraryDetailedLogic(QObject):
             return
         self._installation_path = new_value
         self.installation_path_changed.emit()
+
+    # endregion
+
+    # region Installation path
+
+    @Property(bool, notify=is_running_changed)
+    def is_running(self):
+        return self._is_running
+
+    @is_running.setter
+    def is_running(self, new_value: bool):
+        if self._is_running == new_value:
+            return
+        self._is_running = new_value
+        self.is_running_changed.emit()
 
     # endregion
 
@@ -200,6 +220,12 @@ class LibraryDetailedLogic(QObject):
                 break
 
     @Slot()
+    def stop(self):
+        self.app.kill()
+        self.is_running=False
+
+
+    @Slot()
     def run(self):
         with open("../app_config.json", "r") as app_config_file:
             config = json.load(app_config_file)
@@ -208,5 +234,6 @@ class LibraryDetailedLogic(QObject):
             for app in apps:
                 if self._game_id == app['game_id']:
                     process = Path(config["default_games_installation_path"][sys.platform]).joinpath(config["default_library_path_name"], app['path'], app['call'])
-                    app = subprocess.Popen(process, stdout=subprocess.PIPE)
+                    self.app = subprocess.Popen(process, stdout=subprocess.PIPE)
+                    self.is_running = True
                     break

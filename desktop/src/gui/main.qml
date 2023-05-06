@@ -575,8 +575,15 @@ Window {
               }
 
               Button {
+                visible: !library_detailed_logic.is_running
                 text: library_detailed_logic.is_game_installed ? "Launch" : "Install"
                 onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : installation_path_dialog.open()
+              }
+
+              Button {
+                visible: library_detailed_logic.is_running
+                text: "Stop"
+                onClicked: library_detailed_logic.stop()
               }
             }
           }
