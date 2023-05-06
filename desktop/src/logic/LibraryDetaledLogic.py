@@ -112,12 +112,15 @@ class LibraryDetailedLogic(QObject):
 
     @Slot(int)
     def map(self, game_id: int):
-        headers = {"Authorization": self._auth_service.session_id}
         current_user_id = self._auth_service.current_user.id
+        params = {
+            "user_id": current_user_id,
+            "game_id": game_id
+        }
 
-        reply = requests.get(LIBRARY_URL + f"?user_id={current_user_id}&game_id={game_id}", headers=headers)
-        if reply.status_code == requests.codes.ok:
-            data = reply.json()[0]
+        response = self._auth_service.authorized_session.get(LIBRARY_URL, params=params)
+        if response.ok:
+            data = response.json()[0]
 
             self._game_id = data["game"]["id"]
             self.game_title = data["game"]["title"]
