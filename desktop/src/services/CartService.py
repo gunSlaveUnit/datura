@@ -16,3 +16,8 @@ class CartService(QObject):
         params = {"game_id": item_id}
         response = self._auth_service.authorized_session.get(CART_URL, params=params)
         return response.ok and response.json()
+
+    def add(self, item_id):
+        json = {"game_id": item_id}
+        response = self._auth_service.authorized_session.post(CART_URL, json=json)
+        return response
