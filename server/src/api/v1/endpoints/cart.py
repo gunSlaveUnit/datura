@@ -42,9 +42,9 @@ async def create(new_record: CartCreateSchema,
 @router.post('/pay/')
 async def pay(db: Session = Depends(get_db),
               current_user: User = Depends(GetCurrentUser())):
-    user_cart = await items(db, current_user)
+    items = db.query(Cart).filter(Cart.buyer_id == current_user.id).all()
 
-    for record in user_cart:
+    for record in items:
         new_library_record = Library(
             player_id=current_user.id,
             game_id=record.game_id
