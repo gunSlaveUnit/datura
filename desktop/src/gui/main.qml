@@ -539,8 +539,6 @@ Window {
           }
         }
 
-        ColumnLayout {}
-
         Scroll {
           contentHeight: libraryDetailedPage.height + 2 * defaultMargin
 
@@ -580,6 +578,19 @@ Window {
                 text: library_detailed_logic.is_game_installed ? "Launch" : "Install"
                 onClicked: library_detailed_logic.is_game_installed ? library_detailed_logic.run() : installation_path_dialog.open()
               }
+            }
+          }
+        }
+
+        Scroll {
+          contentHeight: profilePage.height + 2 * defaultMargin
+
+          Item {
+            width: layoutWidth
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            ColumnLayout {
+              id: profilePage
             }
           }
         }
