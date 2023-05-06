@@ -9,7 +9,7 @@ import requests
 from PySide6.QtCore import QObject, Signal, Slot, Property, QUrl
 
 from desktop.src.services.AuthService import AuthService
-from desktop.src.settings import LIBRARY_URL, GAMES_URL, BUILDS_URL
+from desktop.src.settings import LIBRARY_URL, GAMES_URL, BUILDS_URL, PLATFORMS_URL
 
 
 class LibraryDetailedLogic(QObject):
@@ -151,47 +151,53 @@ class LibraryDetailedLogic(QObject):
         get_builds_url = ''.join(BUILDS_URL + f"?game_id={self._game_id}")
         builds = requests.get(get_builds_url).json()
 
+        platforms = self._auth_service.authorized_session.get(PLATFORMS_URL).json()
+
         for build in builds:
-            if build['platform']['title'] == sys.platform:
-                get_build_filenames = get_builds_url + str(build["id"])
-                filenames = requests.get(get_build_filenames).json()["filenames"]
+            platform_id = build['platform_id']
+            platform = next((platform for platform in platforms if platform['id'] == platform_id), None)
+            if platform:
+                if platform['title'] == sys.platform:
+                    get_build_filenames = get_builds_url + str(build["id"])
+                    filenames = requests.get(get_build_filenames).json()
 
-                library_path = QUrl(self.installation_path).toLocalFile()
-                game_installation_path = Path(library_path).joinpath(self.game_title)
+                    library_path = QUrl(self.installation_path).toLocalFile()
+                    game_installation_path = Path(library_path).joinpath(self.game_title)
 
-                Path.mkdir(game_installation_path, parents=True)
+                    Path.mkdir(game_installation_path, parents=True)
 
-                for filename in filenames:
-                    file_url = get_build_filenames + f'/?filename={filename}'
-                    response = requests.get(file_url, stream=True)
-                    file_name = response.headers.get("Content-Disposition").split('=')[1]
-                    with open(game_installation_path.joinpath(file_name), "wb") as f:
-                        with gzip.GzipFile(fileobj=response.raw, mode="rb") as gz:
-                            while True:
-                                chunk = gz.read(8192)
-                                if not chunk:
-                                    break
-                                f.write(chunk)
+                    for filename in filenames:
+                        file_url = get_build_filenames + f'/?filename={filename}'
+                        response = requests.get(file_url, stream=True)
+                        file_name = response.headers.get("Content-Disposition").split('=')[1]
+                        with open(game_installation_path.joinpath(file_name), "wb") as f:
+                            with gzip.GzipFile(fileobj=response.raw, mode="rb") as gz:
+                                while True:
+                                    chunk = gz.read(8192)
+                                    if not chunk:
+                                        break
+                                    f.write(chunk)
 
-                app_config_file = open("../app_config.json", "r")
-                config = json.load(app_config_file)
-                app_config_file.close()
+                    app_config_file = open("../app_config.json", "r")
+                    config = json.load(app_config_file)
+                    app_config_file.close()
 
-                game_running_config = {
-                    "game_id": build["game_id"],
-                    "path": game_installation_path.name,
-                    "call": build["call"]
-                }
-                if build["params"]:
-                    game_running_config["params"] = build["params"]
+                    game_running_config = {
+                        "game_id": build["game_id"],
+                        "path": game_installation_path.name,
+                        "call": build["call"]
+                    }
+                    if build["params"]:
+                        game_running_config["params"] = build["params"]
 
-                config["apps"].append(game_running_config)
+                    config["apps"].append(game_running_config)
 
-                app_config_file = open("../app_config.json", "w")
-                json.dump(config, app_config_file)
-                app_config_file.close()
+                    app_config_file = open("../app_config.json", "w")
+                    json.dump(config, app_config_file)
+                    app_config_file.close()
 
-                self.is_game_installed = True
+                    self.is_game_installed = True
+                break
 
     @Slot()
     def run(self):
