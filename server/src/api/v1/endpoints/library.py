@@ -3,8 +3,7 @@ from typing import List, Type
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session, joinedload
 
-from common.api.v1.schemas.library import LibraryJoinedSchema, LibraryDBSchema
-from server.src.core.models.game import Game
+from common.api.v1.schemas.library import LibraryJoinedSchema, LibraryDBSchema, LibraryUpdateSchema
 from server.src.core.models.library import Library
 from server.src.core.models.user import User
 from server.src.core.settings import LIBRARY_ROUTER_PREFIX, Tags
@@ -19,7 +18,7 @@ async def items(user_id: int | None = None,
                 game_id: int | None = None,
                 include_games: bool = False,
                 db: Session = Depends(get_db),
-                current_user: User = Depends(GetCurrentUser())) -> list[Type[Library]]:
+                _: User = Depends(GetCurrentUser())) -> list[Type[Library]]:
     """
     List of all library records according to the given filters.
     Returns a list of LibraryDBSchema with library record data.
@@ -36,3 +35,12 @@ async def items(user_id: int | None = None,
         records_query = records_query.options(joinedload(Library.game))
 
     return records_query.all()
+
+
+@router.put('/{item_id}/', response_model=LibraryDBSchema)
+async def update(item_id: int,
+                 updated_data: LibraryUpdateSchema,
+                 _: User = Depends(GetCurrentUser()),
+                 db: Session = Depends(get_db)):
+    item = await Library.by_id(db, item_id)
+    return await item.update(db, updated_data.dict())
