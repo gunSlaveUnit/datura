@@ -10,7 +10,7 @@ import requests
 from PySide6.QtCore import QObject, Signal, Slot, Property, QUrl, QTimer
 
 from desktop.src.services.AuthService import AuthService
-from desktop.src.settings import LIBRARY_URL, GAMES_URL, BUILDS_URL, PLATFORMS_URL
+from desktop.src.settings import LIBRARY_URL, BUILDS_URL, PLATFORMS_URL
 
 
 class LibraryDetailedLogic(QObject):
@@ -24,6 +24,7 @@ class LibraryDetailedLogic(QObject):
     def __init__(self, auth_service: AuthService):
         super().__init__()
 
+        self._id = None
         self._auth_service = auth_service
 
         self._game_id = -1
@@ -41,7 +42,9 @@ class LibraryDetailedLogic(QObject):
         self.timer.timeout.connect(self.timer_callback)
 
     def timer_callback(self):
-        print('Таймер сработал!')
+        self._auth_service.authorized_session.put(LIBRARY_URL + f'{self._id}/', json={
+            "game_time": 1
+        })
 
     # region Game title
 
@@ -149,6 +152,7 @@ class LibraryDetailedLogic(QObject):
         if response.ok:
             data = response.json()[0]
 
+            self._id = data["id"]
             self._game_id = data["game"]["id"]
             self.game_title = data["game"]["title"]
 
@@ -246,4 +250,8 @@ class LibraryDetailedLogic(QObject):
                     self.app = subprocess.Popen(process, stdout=subprocess.PIPE)
                     self.is_running = True
                     self.timer.start()
+                    self._auth_service.authorized_session.put(LIBRARY_URL + f'{self._id}/', json={
+                        "game_time": 1,
+                        "last_run": datetime.today().timestamp()
+                    })
                     break
