@@ -1651,11 +1651,9 @@ Long description supports Markdown.
                     Indent {}
 
                     RowLayout {
-                      Platform.FileDialog {
+                      Platform.FolderDialog {
                         id: attach_project_archive_file_dialog
-                        fileMode: Platform.FileDialog.OpenFile
-                        nameFilters: ["Archive (*.zip *.rar *.7z)"]
-                        onAccepted: build_logic.project_archive = file
+                        onAccepted: build_logic.project_archive = folder
                         folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
                       }
 
