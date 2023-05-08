@@ -1,7 +1,11 @@
+import asyncio
+import concurrent
 import gzip
+import hashlib
 import io
 import uuid
 import zipfile
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import aiofiles
@@ -19,7 +23,7 @@ from server.src.core.models.user import User
 from server.src.core.settings import BUILDS_ROUTER_PREFIX, GAMES_ASSETS_PATH, GAMES_ASSETS_BUILDS_DIR, Tags
 from server.src.core.utils.auth import GetCurrentUser
 from server.src.core.utils.db import get_db
-from server.src.core.utils.io import MEDIA_TYPE, read_compressed_chunks, CHUNK_SIZE, clear
+from server.src.core.utils.io import MEDIA_TYPE, read_compressed_chunks, CHUNK_SIZE, clear, read_uncompressed_chunks
 
 router = APIRouter(prefix=BUILDS_ROUTER_PREFIX, tags=[Tags.BUILDS])
 
@@ -95,6 +99,36 @@ async def update(build_id: int,
     return await build.update(db, build_updated_data.dict())
 
 
+def get_file_info(filepath: Path, base_path: Path):
+    sha1 = hashlib.sha1()
+
+    for chunk in read_uncompressed_chunks(filepath):
+        sha1.update(chunk)
+
+    return {
+        "sha-1": sha1.hexdigest(),
+        "size_bytes": filepath.stat().st_size,
+        'rel_path': filepath.relative_to(base_path)
+    }
+
+
+async def files_info(path: Path):
+    futures = []
+    pool = ThreadPoolExecutor(8)
+    loop = asyncio.get_running_loop()
+    for file_path in path.glob("**/*"):
+        if file_path.is_file():
+            futures.append(loop.run_in_executor(pool, get_file_info, file_path, path))
+
+    await asyncio.gather(*futures)
+
+    files = []
+    for future in futures:
+        files.append(future.result())
+
+    return {"files": files}
+
+
 @router.get('/{build_id}/files/')
 async def build_info(build_id: int,
                      filename: str | None = None,
@@ -118,7 +152,7 @@ async def build_info(build_id: int,
             media_type=MEDIA_TYPE
         )
     else:
-        return {"filenames": [file_path.relative_to(path) for file_path in path.glob("**/*") if file_path.is_file()]}
+        return await files_info(path)
 
 
 @router.post('/{build_id}/files/')
