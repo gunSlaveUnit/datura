@@ -34,18 +34,18 @@ async def remove(directory: str, files: List[str]):
         os.remove(Path(directory).joinpath(file.filename))
 
 
-def _read_chunks(file_object: BinaryIO, chunk_size: int) -> bytes:
+def _read_chunks(file_object: BinaryIO, chunk_size: int = CHUNK_SIZE) -> bytes:
     while chunk := file_object.read(chunk_size):
         yield chunk
 
 
-def read_uncompressed_chunks(file_path: str, chunk_size: int) -> bytes:
+def read_uncompressed_chunks(file_path: str, chunk_size: int = CHUNK_SIZE) -> bytes:
     with open(file_path, "rb") as file:
         for chunk in _read_chunks(file, chunk_size):
             yield chunk
 
 
-def read_compressed_chunks(file_path: str, chunk_size: int) -> bytes:
+def read_compressed_chunks(file_path: str, chunk_size: int = CHUNK_SIZE) -> bytes:
     with open(file_path, "rb") as file:
         for chunk in _read_chunks(file, chunk_size):
             yield gzip.compress(chunk)
