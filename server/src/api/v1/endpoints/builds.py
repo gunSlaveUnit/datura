@@ -118,7 +118,7 @@ async def build_info(build_id: int,
             media_type=MEDIA_TYPE
         )
     else:
-        return {"filenames": [f.name for f in path.iterdir() if f.is_file()]}
+        return {"filenames": [file_path.relative_to(path) for file_path in path.glob("**/*") if file_path.is_file()]}
 
 
 @router.post('/{build_id}/files/')
