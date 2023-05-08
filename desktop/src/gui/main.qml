@@ -1654,7 +1654,6 @@ Long description supports Markdown.
                       Platform.FolderDialog {
                         id: attach_project_archive_file_dialog
                         onAccepted: build_logic.project_archive = folder
-                        folder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
                       }
 
                       Text {
