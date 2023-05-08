@@ -7,7 +7,7 @@ from typing import List, BinaryIO
 import aiofiles as aiofiles
 from fastapi import UploadFile
 
-CHUNK_SIZE = 8192
+CHUNK_SIZE = 1024 * 1024
 MEDIA_TYPE = "application/gzip"
 
 
