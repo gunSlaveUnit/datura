@@ -1,9 +1,12 @@
 import os
+from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
 from PySide6.QtCore import QObject, Slot, Signal, Property, QUrl
 
 from desktop.src.settings import GAMES_URL, BUILDS_URL, PLATFORMS_URL
 from server.src.core.models.platform import Platform
+from server.src.core.utils.io import read_compressed_chunks, read_uncompressed_chunks
 
 
 class BuildLogic(QObject):
@@ -95,6 +98,21 @@ class BuildLogic(QObject):
         self.params = ''
         self.platform_id = 1
 
+    def upload(self):
+        filename = QUrl(self._project_archive).toLocalFile()
+        base_path = Path(filename)
+        url = BUILDS_URL + f"{self.id}" + '/files/'
+        for file_path in base_path.glob("**/*"):
+            if file_path.is_file():
+                relative_path = file_path.relative_to(base_path)
+                for chunk in read_uncompressed_chunks(file_path):
+                    self._auth_service.authorized_session.post(url, headers={"Content-Disposition": str(relative_path)}, data=chunk)
+
+        self.reset_files()
+
+    def done(self, task):
+        print("Uploading done")
+
     @Slot(int)
     def update(self, game_id: int):
         data = {
@@ -110,14 +128,10 @@ class BuildLogic(QObject):
         )
 
         if self._project_archive != '':
-            filename = QUrl(self._project_archive).toLocalFile()
-            with open(filename, 'rb') as project_archive_file:
-                files = [('file', (os.path.basename(filename), project_archive_file))]
-                url = BUILDS_URL + f"{self.id}" + '/files/'
-                self._auth_service.authorized_session.post(url, files=files)
+            executor = ThreadPoolExecutor(1)
+            future_file = executor.submit(self.upload)
+            future_file.add_done_callback(self.done)
 
-        if reply.ok:
-            self.reset_files()
 
     drafted = Signal()
 
