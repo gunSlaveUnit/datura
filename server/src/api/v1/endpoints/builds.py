@@ -1,12 +1,15 @@
+import gzip
 import io
 import uuid
 import zipfile
 from pathlib import Path
 
-from fastapi import APIRouter, UploadFile, Depends, Query, HTTPException
+import aiofiles
+from fastapi import APIRouter, UploadFile, Depends, Query, HTTPException, Header
 from sqlalchemy.orm import Session, joinedload
 from starlette import status
-from starlette.responses import StreamingResponse
+from starlette.requests import Request
+from starlette.responses import StreamingResponse, Response
 
 from common.api.v1.schemas.build import BuildDBSchema, BuildCreateSchema
 from server.src.core.models.build import Build
@@ -120,19 +123,23 @@ async def build_info(build_id: int,
 
 @router.post('/{build_id}/files/')
 async def upload_build(build_id: int,
-                       file: UploadFile,
+                       request: Request,
+                       content_disposition: str = Header(),
                        db: Session = Depends(get_db)):
     """
     Uploads project build files to the server.
     All will be overwritten.
     """
-
     build = await Build.by_id(db, build_id)
     game = await Game.by_id(db, build.game_id)
 
     store_files_directory = Path(GAMES_ASSETS_PATH).joinpath(game.directory, GAMES_ASSETS_BUILDS_DIR, build.directory)
-    await clear(store_files_directory)
 
-    content = await file.read()
-    with zipfile.ZipFile(io.BytesIO(content)) as archive:
-        archive.extractall(store_files_directory)
+    possible_directory = store_files_directory.joinpath(content_disposition).parent
+
+    if not possible_directory.exists():
+        possible_directory.mkdir(parents=True, exist_ok=True)
+
+    async with aiofiles.open(store_files_directory.joinpath(content_disposition), 'ab') as f:
+        body_bytes = await request.body()
+        await f.write(body_bytes)
