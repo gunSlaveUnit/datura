@@ -1,3 +1,5 @@
+import asyncio
+import hashlib
 import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -24,6 +26,8 @@ class BuildLogic(QObject):
         self._selected_platform_index = 1
 
         self._project_archive = ''
+        self._displayed_status = ''
+        self._build_size_bytes = 0
 
     id_changed = Signal()
     call_changed = Signal()
@@ -31,6 +35,7 @@ class BuildLogic(QObject):
     platform_id_changed = Signal()
     selected_platform_index_changed = Signal()
     project_archive_changed = Signal()
+    displayed_status_changed = Signal()
 
     @Property(int, notify=id_changed)
     def id(self):
@@ -92,6 +97,16 @@ class BuildLogic(QObject):
             self._project_archive = new_value
             self.project_archive_changed.emit()
 
+    @Property(str, notify=displayed_status_changed)
+    def displayed_status(self):
+        return self._displayed_status
+
+    @displayed_status.setter
+    def displayed_status(self, new_value: str):
+        if self._displayed_status != new_value:
+            self._displayed_status = new_value
+            self.displayed_status_changed.emit()
+
     def reset_form(self):
         self.id = -1
         self.call = ''
@@ -99,6 +114,7 @@ class BuildLogic(QObject):
         self.platform_id = 1
 
     def upload(self):
+        uploading_bytes_progress = 0
         filename = QUrl(self._project_archive).toLocalFile()
         base_path = Path(filename)
         url = BUILDS_URL + f"{self.id}" + '/files/'
@@ -107,11 +123,33 @@ class BuildLogic(QObject):
                 relative_path = file_path.relative_to(base_path)
                 for chunk in read_uncompressed_chunks(file_path):
                     self._auth_service.authorized_session.post(url, headers={"Content-Disposition": str(relative_path)}, data=chunk)
+                    uploading_bytes_progress += len(chunk)
+                    self.displayed_status = f"Uploading ... {(uploading_bytes_progress / self._build_size_bytes * 100):.2f}%"
 
         self.reset_files()
 
     def done(self, task):
-        print("Uploading done")
+        self.displayed_status = "Uploading done"
+
+    def get_file_info(self, filepath: Path, base_path: Path):
+        return {
+            "size_bytes": filepath.stat().st_size,
+            'rel_path': filepath.relative_to(base_path)
+        }
+
+    def files_info(self):
+        filename = QUrl(self._project_archive).toLocalFile()
+        base_path = Path(filename)
+        futures = []
+        pool = ThreadPoolExecutor(8)
+        for file_path in base_path.glob("**/*"):
+            if file_path.is_file():
+                futures.append(pool.submit(self.get_file_info, file_path, base_path))
+
+        self._build_size_bytes = sum([future.result()['size_bytes'] for future in futures])
+
+    def collecting_size_done_callback(self, task):
+        self.displayed_status = str(self._build_size_bytes)
 
     @Slot(int)
     def update(self, game_id: int):
@@ -128,10 +166,13 @@ class BuildLogic(QObject):
         )
 
         if self._project_archive != '':
+            self.displayed_status = "Collecting information about build ..."
             executor = ThreadPoolExecutor(1)
-            future_file = executor.submit(self.upload)
-            future_file.add_done_callback(self.done)
-
+            future = executor.submit(self.files_info)
+            future.add_done_callback(self.collecting_size_done_callback)
+            self.displayed_status = "Uploading ... 0%"
+            future = executor.submit(self.upload)
+            future.add_done_callback(self.done)
 
     drafted = Signal()
 

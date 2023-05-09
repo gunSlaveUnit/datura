@@ -1675,7 +1675,7 @@ Long description supports Markdown.
                     }
 
                     Text {
-                      text: "Please note: when unpacking the archive, you should get the root directory of your project with all the files"
+                      text: build_logic.displayed_status
                       color: "orange"
                     }
                   }
