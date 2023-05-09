@@ -1105,72 +1105,81 @@ The legal form of the company must match the one indicated in the documentation 
           }
         }
 
-        ColumnLayout {
-          id: releasesAppsList
+        Scroll {
+          contentHeight: companyInfoForm.height + 2 * defaultMargin
 
-          anchors.fill: parent
-          anchors.leftMargin: defaultMargin
+          Item {
+            width: layoutWidth
+            anchors.horizontalCenter: parent.horizontalCenter
 
-          Connections {
-            target: app_logic
+            ColumnLayout {
+              id: releasesAppsList
 
-            function onDrafted() {
-              storeStack.currentIndex = storeStack.workshopAppControlIndex
-            }
-          }
+              anchors.fill: parent
+              anchors.leftMargin: defaultMargin
 
-          Span {
-            text: qsTr("Until your company data is not approved, you cannot make new releases")
-            color: "orange"
-            visible: !company_logic.is_drafted_new_button_enabled
-          }
+              Connections {
+                target: app_logic
 
-          RowLayout {
-            Span {
-              text: "Select a game to view and edit details"
-            }
-
-            ActionButton {
-              text: qsTr("Draft new")
-              function handler() {
-                app_logic.draft_new()
-              }
-              visible: company_logic.is_drafted_new_button_enabled
-            }
-          }
-          ListView {
-            Layout.fillHeight: true
-            model: game_list_model
-            spacing: defaultMargin
-            boundsBehavior: Flickable.StopAtBounds
-
-            delegate: RowLayout {
-              Text {
-                textFormat: TextEdit.MarkdownText
-                text: "## " + title
-                color: "white"
-                font.underline: true
-              }
-
-              Text {
-                textFormat: TextEdit.MarkdownText
-                color: is_approved ? "#ddd" : "red"
-                text: is_approved ? qsTr("Approved") : qsTr("Not approved")
-              }
-
-              Text {
-                textFormat: TextEdit.MarkdownText
-                color: is_published ? "orange" : "#ccc"
-                text: is_published ? qsTr("Published") : qsTr("Not published")
-              }
-
-              MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                hoverEnabled: true
-                onClicked: {
-                  app_logic.map(id)
+                function onDrafted() {
                   storeStack.currentIndex = storeStack.workshopAppControlIndex
+                }
+              }
+
+              Span {
+                text: qsTr("Until your company data is not approved, you cannot make new releases")
+                color: "orange"
+                visible: !company_logic.is_drafted_new_button_enabled
+              }
+
+              RowLayout {
+                Span {
+                  text: "Select a game to view and edit details"
+                }
+
+                ActionButton {
+                  text: qsTr("Draft new")
+                  function handler() {
+                    app_logic.draft_new()
+                  }
+                  visible: company_logic.is_drafted_new_button_enabled
+                }
+              }
+              ListView {
+                Layout.fillHeight: true
+                model: game_list_model
+                spacing: defaultMargin
+                boundsBehavior: Flickable.StopAtBounds
+
+                delegate: RowLayout {
+                  Text {
+                    textFormat: TextEdit.MarkdownText
+                    text: "## " + title
+                    color: "white"
+                    font.underline: true
+                  }
+
+                  Text {
+                    textFormat: TextEdit.MarkdownText
+                    color: is_approved ? "#ddd" : "red"
+                    text: is_approved ? qsTr("Approved") : qsTr("Not approved")
+                  }
+
+                  Text {
+                    textFormat: TextEdit.MarkdownText
+                    color: is_published ? "orange" : "#ccc"
+                    text: is_published ? qsTr("Published") : qsTr("Not published")
+                  }
+
+                  MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onClicked: {
+                      app_logic.map(id)
+                      storeStack.currentIndex = storeStack.workshopAppControlIndex
+                    }
+                  }
                 }
               }
             }
