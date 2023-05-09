@@ -31,7 +31,7 @@ class WalletLogic(QObject):
         self.balance = self._wallet_service.balance
 
     @Slot(int)
-    def top_up(self,amount: int):
+    def top_up(self, amount: int):
         payment = PaymentCreateSchema(
             card_number="string",
             validity_month=0,
