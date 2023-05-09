@@ -134,6 +134,6 @@ class LibraryDetailedLogic(QObject):
                 elif datetime.today().date() - timedelta(1) == launch_date.date():
                     self.last_launched = "Yesterday"
                 else:
-                    self.last_launched = launch_date.strftime('%d %b %y')
+                    self.last_launched = launch_date.strftime('%d %b %Y')
             else:
                 self.last_launched = "Never"
