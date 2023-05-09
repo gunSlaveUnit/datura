@@ -1,11 +1,19 @@
+import gzip
 import json
+import os
+import subprocess
+import sys
+from concurrent.futures import ThreadPoolExecutor
 from enum import Enum, auto
 from datetime import datetime, timedelta
+from pathlib import Path
 
-from PySide6.QtCore import QObject, Slot, Signal, Property
+import requests
+from PySide6.QtCore import QObject, Slot, Signal, Property, QTimer, QUrl
 
 from desktop.src.services.AuthService import AuthService
-from desktop.src.settings import LIBRARY_URL
+from desktop.src.settings import LIBRARY_URL, BUILDS_URL, PLATFORMS_URL
+from server.src.core.utils.io import CHUNK_SIZE
 
 
 def _check_game_installed(game_id: int) -> bool:
@@ -30,11 +38,24 @@ class LibraryDetailedLogic(QObject):
         self._id = None
         self._auth_service = auth_service
 
+        self.app = None
         self._app_status = self.AppStatus.NOT_INSTALLED
+
         self._game_id = -1
         self._game_title = ''
         self._last_launched = ''
         self._play_time = ''
+
+        self._installation_path = ''
+        self._loading_progress = ''
+
+        self.timer = QTimer()
+        minute = 1000 * 60
+        self.timer.setInterval(minute)
+        self.timer.timeout.connect(self.timer_tick)
+
+    def timer_tick(self):
+        pass
 
     # region App status
 
@@ -100,6 +121,40 @@ class LibraryDetailedLogic(QObject):
 
     # endregion
 
+    # region Installation path
+
+    installation_path_changed = Signal()
+
+    @Property(str, notify=installation_path_changed)
+    def installation_path(self):
+        return self._installation_path
+
+    @installation_path.setter
+    def installation_path(self, new_value: str):
+        if self._installation_path == new_value:
+            return
+        self._installation_path = new_value
+        self.installation_path_changed.emit()
+
+    # endregion
+
+    # region Loading progress
+
+    loading_progress_changed = Signal()
+
+    @Property(str, notify=loading_progress_changed)
+    def loading_progress(self):
+        return self._loading_progress
+
+    @loading_progress.setter
+    def loading_progress(self, new_value: str):
+        if self._loading_progress == new_value:
+            return
+        self._loading_progress = new_value
+        self.loading_progress_changed.emit()
+
+    # endregion
+
     @Slot(int)
     def map(self, game_id: int):
         current_user_id = self._auth_service.current_user.id
@@ -137,3 +192,107 @@ class LibraryDetailedLogic(QObject):
                     self.last_launched = launch_date.strftime('%d %b %Y')
             else:
                 self.last_launched = "Never"
+
+    def load_build_files(self):
+        builds = requests.get(BUILDS_URL).json()
+
+        platforms = self._auth_service.authorized_session.get(PLATFORMS_URL).json()
+
+        for build in builds:
+            platform_id = build['platform_id']
+            platform = next((platform for platform in platforms if platform['id'] == platform_id), None)
+            if platform:
+                if platform['title'] == sys.platform:
+                    get_build_filenames = BUILDS_URL + str(build["id"]) + '/files/'
+                    files = requests.get(get_build_filenames).json()['files']
+
+                    processed_bytes = 0
+                    build_size_bytes = sum([file['size_bytes'] for file in files])
+                    self.loading_progress = 'Downloading ... 0%'
+
+                    app_config_file = open("../app_config.json", "r")
+                    config = json.load(app_config_file)
+                    app_config_file.close()
+
+                    game_installation_path = Path(config["default_games_installation_path"][sys.platform])
+                    if sys.platform == 'linux':
+                        game_installation_path = game_installation_path.joinpath(os.getlogin())
+                    game_installation_path = game_installation_path.joinpath(config["default_library_path_name"], self.game_title)
+
+                    Path.mkdir(game_installation_path, parents=True)
+
+                    for file in files:
+                        file_url = get_build_filenames + f'?filename={file["rel_path"]}'
+
+                        response = requests.get(file_url, stream=True)
+
+                        file_name = game_installation_path.joinpath(file["rel_path"])
+                        possible_directory = file_name.parent
+
+                        if not possible_directory.exists():
+                            possible_directory.mkdir(parents=True, exist_ok=True)
+
+                        with open(game_installation_path.joinpath(file_name), "wb") as f:
+                            with gzip.GzipFile(fileobj=response.raw, mode="rb") as gz:
+                                while True:
+                                    chunk = gz.read(CHUNK_SIZE)
+                                    if not chunk:
+                                        break
+                                    f.write(chunk)
+                                    processed_bytes += len(chunk)
+                                    self.loading_progress = f"Downloading ... {(processed_bytes / build_size_bytes * 100):.2f}%"
+
+                    game_running_config = {
+                        "game_id": build["game_id"],
+                        "path": game_installation_path.name,
+                        "call": build["call"]
+                    }
+                    if build["params"]:
+                        game_running_config["params"] = build["params"]
+
+                    config["apps"].append(game_running_config)
+
+                    app_config_file = open("../app_config.json", "w")
+                    json.dump(config, app_config_file)
+                    app_config_file.close()
+                break
+
+    def loading_done(self, task):
+        self.app_status = self.AppStatus.INSTALLED
+
+    @Slot()
+    def download(self):
+        self.app_status = self.AppStatus.LOADING
+        executor = ThreadPoolExecutor(1)
+        future = executor.submit(self.load_build_files)
+        future.add_done_callback(self.loading_done)
+        self.loading_progress = 'Grab build ...'
+
+    @Slot()
+    def launch(self):
+        with open("../app_config.json", "r") as app_config_file:
+            config = json.load(app_config_file)
+            apps = config["apps"]
+
+            for app in apps:
+                if self._game_id == app['game_id']:
+                    path = Path(config["default_games_installation_path"][sys.platform])
+                    if sys.platform == 'linux':
+                        path = path.joinpath(os.getlogin())
+
+                    path = path.joinpath(config["default_library_path_name"], app['path'], app['call'])
+
+                    params = app['params'].split() if 'params' in app else []
+
+                    self.app = subprocess.Popen(path, *params, stdout=subprocess.PIPE)
+                    self.app_status = self.AppStatus.RUNNING
+                    self.timer.start()
+                    break
+
+    @Slot()
+    def shutdown(self):
+        self.app.terminate()
+        self.app.kill()
+        self.app.wait()
+        self.app_status = self.AppStatus.INSTALLED
+        self.timer.stop()
