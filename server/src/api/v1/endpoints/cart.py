@@ -50,7 +50,7 @@ async def pay(db: Session = Depends(get_db),
             game_id=record.game_id
         )
 
-        await Cart.create(db, new_library_record)
+        await Library.create(db, new_library_record)
         await Cart.delete(db, record.id)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
