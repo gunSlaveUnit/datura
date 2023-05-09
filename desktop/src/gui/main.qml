@@ -1246,6 +1246,7 @@ The legal form of the company must match the one indicated in the documentation 
 
                 ActionButton {
                   text: qsTr("Verify")
+                  visible: false
                   function handler() {
                      app_logic.send_for_verification()
                   }
