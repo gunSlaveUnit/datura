@@ -1253,7 +1253,7 @@ The legal form of the company must match the one indicated in the documentation 
                 }
 
                 Switcher {
-                    enabled: app_logic.is_published
+                    enabled: app_logic.approved
                     position: app_logic.is_published
                     onToggled: app_logic.is_published = position
                     text: qsTr("Published")
