@@ -762,7 +762,7 @@ Window {
                   function handler() {
                     var selectedValue = paymentCost.currentText
                     selectedValue = selectedValue.replace("$", "")
-                    wallet_logic.top_up(current_user_logic.id, selectedValue)
+                    wallet_logic.top_up(selectedValue)
                   }
                 }
               }
