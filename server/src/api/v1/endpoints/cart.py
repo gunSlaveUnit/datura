@@ -9,6 +9,7 @@ from common.api.v1.schemas.cart import CartDBSchema, CartCreateSchema
 from server.src.core.models.cart import Cart
 from server.src.core.models.game import Game
 from server.src.core.models.library import Library
+from server.src.core.models.purchase import Purchase
 from server.src.core.models.user import User
 from server.src.core.settings import CART_ROUTER_PREFIX, Tags
 from server.src.core.utils.auth import GetCurrentUser
@@ -42,15 +43,23 @@ async def create(new_record: CartCreateSchema,
 @router.post('/pay/')
 async def pay(db: Session = Depends(get_db),
               current_user: User = Depends(GetCurrentUser())):
-    items = db.query(Cart).filter(Cart.buyer_id == current_user.id).all()
+    cart_records = db.query(Cart).filter(Cart.buyer_id == current_user.id).all()
 
-    for record in items:
+    for record in cart_records:
         new_library_record = Library(
             player_id=current_user.id,
             game_id=record.game_id
         )
 
+        game = await Game.by_id(db, record.game_id)
+        new_purchase_record = Purchase(
+            buyer_id=current_user.id,
+            game_id=record.game_id,
+            price=game.price
+        )
+
         await Library.create(db, new_library_record)
+        await Purchase.create(db, new_purchase_record)
         await Cart.delete(db, record.id)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
