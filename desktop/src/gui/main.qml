@@ -881,7 +881,7 @@ Click the Continue button to proceed to enter your legal name and contact inform
 
               Rectangle {
                 width: layoutWidth - 2 * defaultMargin
-                height: 230
+                height: 274
                 radius: defaultMargin
                 border.color: "orange"
                 border.width: 1
@@ -905,7 +905,7 @@ If you do not have a company name and are the sole owner of the content you wish
 The legal name specified here is used internally by the system. If you have a commercial or informal name that you want to use in your store, you can specify it separately when you create your store page.
 "}
                     Text {
-                      Layout.preferredWidth: layoutWidth - 3 * defaultMargin
+                      Layout.preferredWidth: layoutWidth - 4 * defaultMargin
                       textFormat: TextEdit.MarkdownText
                       text: legalNameContent.text
                       color: "orange"
@@ -929,7 +929,7 @@ The legal name specified here is used internally by the system. If you have a co
 
               Rectangle {
                 width: layoutWidth - 2 * defaultMargin
-                height: 138
+                height: 158
                 radius: defaultMargin
                 border.color: "orange"
                 border.width: 1
@@ -1119,6 +1119,12 @@ The legal form of the company must match the one indicated in the documentation 
             }
           }
 
+          Span {
+            text: qsTr("Until your company data is not approved, you cannot make new releases")
+            color: "orange"
+            visible: !company_logic.is_drafted_new_button_enabled
+          }
+
           RowLayout {
             Span {
               text: "Select a game to view and edit details"
@@ -1132,13 +1138,6 @@ The legal form of the company must match the one indicated in the documentation 
               visible: company_logic.is_drafted_new_button_enabled
             }
           }
-
-          Span {
-            text: qsTr("Until your company data is not approved, you cannot make new releases")
-            color: "orange"
-            visible: !company_logic.is_drafted_new_button_enabled
-          }
-
           ListView {
             Layout.fillHeight: true
             model: game_list_model
