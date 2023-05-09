@@ -635,6 +635,7 @@ Window {
                     cart_logic.pay()
                     game_list_model.load_cart()
                     game_list_model.recount_total_cost()
+                    wallet_logic.map()
                   }
                 }
               }
