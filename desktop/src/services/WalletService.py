@@ -20,6 +20,6 @@ class WalletService:
                 self.balance = data["balance"]
 
     def top_up(self, data: PaymentCreateSchema):
-        response = self._auth_service.authorized_session.post(PAYMENTS_URL, json=data)
+        response = self._auth_service.authorized_session.post(PAYMENTS_URL, json=data.dict())
         self.load()
         return response
