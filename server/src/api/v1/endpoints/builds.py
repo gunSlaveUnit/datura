@@ -144,11 +144,8 @@ async def build_info(build_id: int,
     path = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_BUILDS_DIR, build.directory)
 
     if filename:
-        headers = {"Content-Disposition": f"filename={filename}"}
-
         return StreamingResponse(
             read_compressed_chunks(path.joinpath(filename), CHUNK_SIZE),
-            headers=headers,
             media_type=MEDIA_TYPE
         )
     else:
