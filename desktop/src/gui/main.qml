@@ -565,19 +565,10 @@ Window {
                 color: "white"
               }
 
-              Platform.FolderDialog {
-                id: installation_path_dialog
-
-                onAccepted: {
-                  library_detailed_logic.installation_path = folder
-                  //library_detailed_logic.download()
-                }
-              }
-
               Button {
                 visible: library_detailed_logic.app_status === 0
                 text: qsTr("Install")
-                onClicked:  installation_path_dialog.open()
+                onClicked:  library_detailed_logic.download()
               }
 
               Button {
@@ -588,13 +579,13 @@ Window {
 
               Button {
                 visible: library_detailed_logic.app_status === 2
-                text: qsTr("Loading")
+                text: library_detailed_logic.loading_progress
               }
 
               Button {
                 visible: library_detailed_logic.app_status === 3
                 text: qsTr("Stop")
-                onClicked: library_detailed_logic.stop()
+                onClicked: library_detailed_logic.shutdown()
               }
             }
           }
