@@ -95,6 +95,7 @@ class AppLogic(QObject):
 
             self.id = data['id']
             self.is_approved = data['is_approved']
+            self.is_published = data['is_published']
 
             self.title = data['title']
             self.short_description = data['short_description']
@@ -119,6 +120,7 @@ class AppLogic(QObject):
             self.year_index_changed.emit()
             self.coming_soon_changed.emit()
             self.is_approved_changed.emit()
+            self.is_published_changed.emit()
 
     @Slot()
     def update(self):
