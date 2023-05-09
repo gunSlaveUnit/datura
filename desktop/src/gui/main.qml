@@ -1135,6 +1135,7 @@ The legal form of the company must match the one indicated in the documentation 
               RowLayout {
                 Span {
                   text: "Select a game to view and edit details"
+                  visible: company_logic.is_drafted_new_button_enabled
                 }
 
                 ActionButton {
