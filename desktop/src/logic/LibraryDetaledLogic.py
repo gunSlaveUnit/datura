@@ -178,11 +178,26 @@ class LibraryDetailedLogic(QObject):
             self._game_id = data["game"]["id"]
             self.game_title = data["game"]["title"]
 
-            if _check_game_installed(data["game"]["id"]):
-                if self.app is not None:
-                    self.app_status = self.AppStatus.RUNNING
-                else:
-                    self.app_status = self.AppStatus.INSTALLED
+            params = {"game_id": self._game_id}
+            builds = self._auth_service.authorized_session.get(BUILDS_URL, params=params).json()
+            platforms = self._auth_service.authorized_session.get(PLATFORMS_URL).json()
+
+            is_game_available_for_current_platform = False
+            for build in builds:
+                platform_id = build['platform_id']
+                platform = next((platform for platform in platforms if platform['id'] == platform_id), None)
+                if platform:
+                    if platform['title'] == sys.platform:
+                        is_game_available_for_current_platform = True
+
+            if is_game_available_for_current_platform:
+                if _check_game_installed(data["game"]["id"]):
+                    if self.app is not None:
+                        self.app_status = self.AppStatus.RUNNING
+                    else:
+                        self.app_status = self.AppStatus.INSTALLED
+            else:
+                self.app_status = self.AppStatus.NOT_AVAILABLE
 
             self.time = data["game_time"]
             if self.time < 3600:
@@ -205,7 +220,7 @@ class LibraryDetailedLogic(QObject):
 
     def load_build_files(self):
         params = {"game_id": self._game_id}
-        builds = requests.get(BUILDS_URL, params=params).json()
+        builds = self._auth_service.authorized_session.get(BUILDS_URL, params=params).json()
 
         platforms = self._auth_service.authorized_session.get(PLATFORMS_URL).json()
 

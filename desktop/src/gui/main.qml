@@ -587,6 +587,12 @@ Window {
                 text: qsTr("Stop")
                 onClicked: library_detailed_logic.shutdown()
               }
+
+              Text {
+                visible: library_detailed_logic.app_status === 4
+                text: "Not available for your platform"
+                color: "white"
+              }
             }
           }
         }
