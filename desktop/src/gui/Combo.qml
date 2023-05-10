@@ -22,8 +22,8 @@ ComboBox {
   background: Rectangle {
     anchors.fill: parent
     color: notHoveredColor
-    implicitWidth: 20
-    implicitHeight: 20
+    implicitWidth: 100
+    implicitHeight: 30
     radius: 4
 
     MouseArea {
@@ -32,16 +32,6 @@ ComboBox {
       hoverEnabled: true
       onEntered: parent.color = combo.hoveredColor
       onExited: parent.color = combo.notHoveredColor
-    }
-
-    Image {
-      anchors.margins: 8
-      anchors.right: parent.right
-      width: height * 0.8
-      height: parent.height - 12
-      anchors.verticalCenter: parent.verticalCenter
-      mipmap: true
-      source: "../../resources/icons/dropdown.png"
     }
   }
 }
