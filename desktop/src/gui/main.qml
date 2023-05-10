@@ -7,6 +7,7 @@ import Qt.labs.platform as Platform
 
 Window {
   property int defaultMargin: 8
+  property int doubleDefaultMargin: defaultMargin * 2
   property string backgroundWindowColor: "#0E151E"
   property string highlightedTextColor: "#0079F2"
 
@@ -61,7 +62,7 @@ Window {
         }
         FormInput {
           id: signInAccountNameInput
-          Layout.bottomMargin: defaultMargin
+          Layout.bottomMargin: doubleDefaultMargin
           focus: true
           text: auth_logic.account_name
           onTextChanged: auth_logic.account_name = text
@@ -69,7 +70,7 @@ Window {
 
         FormInputLabel {content: qsTr("ПАРОЛЬ")}
         FormInput {
-          Layout.bottomMargin: defaultMargin
+          Layout.bottomMargin: doubleDefaultMargin
           echoMode: TextInput.Password
           text: auth_logic.password
           onTextChanged: auth_logic.password = text
@@ -77,7 +78,7 @@ Window {
 
         ActionButton {
           Layout.alignment: Qt.AlignHCenter
-          Layout.bottomMargin: defaultMargin
+          Layout.bottomMargin: doubleDefaultMargin
           Layout.preferredWidth: 300
           Layout.preferredHeight: 40
           text: qsTr("Войти")
