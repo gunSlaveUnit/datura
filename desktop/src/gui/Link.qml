@@ -2,16 +2,13 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 Span {
-  id: text
-
-  property string message: ""
+  id: element
 
   function handler() {}
 
-  property var notHoveredColor: "#959499"
-  property var hoveredColor: "#C7C5CC"
+  property var notHoveredColor: "#B1B5BC"
+  property var hoveredColor: "#ddd"
 
-  text: message
   font.underline: true
   font.bold: true
 
@@ -20,7 +17,7 @@ Span {
     cursorShape: Qt.PointingHandCursor
     hoverEnabled: true
     onClicked: handler()
-    onEntered: parent.color = text.hoveredColor
-    onExited: parent.color = text.notHoveredColor
+    onEntered: parent.color = element.hoveredColor
+    onExited: parent.color = element.notHoveredColor
   }
 }
