@@ -4,7 +4,7 @@ import QtQuick.Controls 2.15
 TextField {
   id: input
 
-  implicitWidth: 240
+  implicitWidth: 300
   font.pointSize: 12
 
   selectionColor: "#0053A6"
