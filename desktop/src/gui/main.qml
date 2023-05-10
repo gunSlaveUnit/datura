@@ -111,21 +111,21 @@ Window {
         FormInputLabel {content: qsTr("АДРЕС ЭЛЕКТРОННОЙ ПОЧТЫ")}
         FormInput {
           id: signUpEmailInput
-          Layout.bottomMargin: defaultMargin
+          Layout.bottomMargin: doubleDefaultMargin
           text: auth_logic.email
           onTextChanged: auth_logic.email = text
         }
 
         FormInputLabel {content: qsTr("ИМЯ АККАУНТА")}
         FormInput {
-          Layout.bottomMargin: defaultMargin
+          Layout.bottomMargin: doubleDefaultMargin
           text: auth_logic.account_name
           onTextChanged: auth_logic.account_name = text
         }
 
         FormInputLabel {content: qsTr("ПАРОЛЬ")}
         FormInput {
-          Layout.bottomMargin: defaultMargin
+          Layout.bottomMargin: doubleDefaultMargin
           echoMode: TextInput.Password
           text: auth_logic.password
           onTextChanged: auth_logic.password = text
@@ -133,7 +133,7 @@ Window {
 
         ActionButton {
           Layout.alignment: Qt.AlignHCenter
-          Layout.bottomMargin: defaultMargin
+          Layout.bottomMargin: doubleDefaultMargin
           Layout.preferredWidth: 300
           Layout.preferredHeight: 40
           text: qsTr("Зарегистрироваться")
@@ -167,7 +167,7 @@ Window {
         Layout.rightMargin: defaultMargin
 
         MenuButton {
-          text: qsTr("Store")
+          text: qsTr("МАГАЗИН")
           onClicked: {
             game_list_model.load_store()
             storeStack.currentIndex = storeStack.storeIndex
@@ -175,7 +175,7 @@ Window {
         }
 
         MenuButton {
-          text: qsTr("Library")
+          text: qsTr("БИБЛИОТЕКА")
           onClicked: {
             game_list_model.load_library()
             storeStack.currentIndex = storeStack.libraryIndex
@@ -183,7 +183,7 @@ Window {
         }
 
         MenuButton {
-          text: qsTr("Workshop")
+          text: qsTr("МАСТЕРСКАЯ")
           onClicked: {
             storeStack.checkCompanyRegistration()
           }
@@ -192,8 +192,8 @@ Window {
         Item {Layout.fillWidth: true}
 
         Rectangle {
-		      Layout.preferredWidth: 150
-		      Layout.preferredHeight: 28
+		      Layout.preferredWidth: userAccountName.contentWidth + 32 + defaultMargin * 3 + userBalance.contentWidth
+		      Layout.preferredHeight: 32
 		      color: "#274257"
 
 		      RowLayout {
@@ -208,12 +208,15 @@ Window {
             }
 
             Span {
-              text: current_user_logic.displayed_name
+              id: userAccountName
+              content: current_user_logic.displayed_name.slice(0, 15) + (current_user_logic.displayed_name.length > 15 ? "..." : "")
               color: "#64BCEF"
             }
 
             Span {
-              text: wallet_logic.balance + "$"
+              id: userBalance
+              content: wallet_logic.balance + " руб."
+              Layout.rightMargin: defaultMargin
             }
 		      }
 
