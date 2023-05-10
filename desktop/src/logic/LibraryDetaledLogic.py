@@ -49,13 +49,19 @@ class LibraryDetailedLogic(QObject):
         self._installation_path = ''
         self._loading_progress = ''
 
+        self.time = 0
         self.timer = QTimer()
         minute = 1000 * 60
         self.timer.setInterval(minute)
         self.timer.timeout.connect(self.timer_tick)
 
     def timer_tick(self):
-        pass
+        minute = 60
+        self._auth_service.authorized_session.put(LIBRARY_URL + f'{self._id}/', json={
+            "game_time": self.time + minute,
+            "last_run": datetime.today().timestamp()
+        })
+        self.map(self._game_id)
 
     # region App status
 
@@ -172,13 +178,16 @@ class LibraryDetailedLogic(QObject):
             self.game_title = data["game"]["title"]
 
             if _check_game_installed(data["game"]["id"]):
-                self.app_status = self.AppStatus.INSTALLED
+                if self.app is not None:
+                    self.app_status = self.AppStatus.RUNNING
+                else:
+                    self.app_status = self.AppStatus.INSTALLED
 
-            game_play_time = data["game_time"]
-            if game_play_time < 3600:
-                self.play_time = f"{game_play_time // 60} m"
+            self.time = data["game_time"]
+            if self.time < 3600:
+                self.play_time = f"{self.time // 60} m"
             else:
-                self.play_time = f"{game_play_time / 3600:.1f} h"
+                self.play_time = f"{self.time / 3600:.1f} h"
 
             possible_last_launch_stamp: int | None = data["last_run"]
             if possible_last_launch_stamp:
@@ -287,6 +296,10 @@ class LibraryDetailedLogic(QObject):
                     self.app = subprocess.Popen(path, *params, stdout=subprocess.PIPE)
                     self.app_status = self.AppStatus.RUNNING
                     self.timer.start()
+                    self._auth_service.authorized_session.put(LIBRARY_URL + f'{self._id}/', json={
+                        "game_time": self.time,
+                        "last_run": datetime.today().timestamp()
+                    })
                     break
 
     @Slot()
