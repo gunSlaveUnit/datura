@@ -1104,7 +1104,7 @@ The legal form of the company must match the one indicated in the documentation 
         }
 
         Scroll {
-          contentHeight: companyInfoForm.height + 2 * defaultMargin
+          contentHeight: releasesAppsList.height + 2 * defaultMargin
 
           Item {
             width: layoutWidth
