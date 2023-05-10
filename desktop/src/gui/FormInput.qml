@@ -5,7 +5,7 @@ TextField {
   id: input
 
   implicitWidth: 300
-  font.pointSize: 12
+  font.pointSize: 14
 
   selectionColor: "#0053A6"
 
