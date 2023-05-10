@@ -8,7 +8,7 @@ Button {
   function handler() {}
   hoverEnabled: false
 
-  font.bold: true
+  font.pointSize: 14
 
   property string notHoveredColor: "#0053A6"
   property string hoveredColor: "#0079F2"
