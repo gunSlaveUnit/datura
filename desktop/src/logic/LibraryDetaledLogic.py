@@ -31,6 +31,7 @@ class LibraryDetailedLogic(QObject):
         INSTALLED = auto()
         LOADING = auto()
         RUNNING = auto()
+        NOT_AVAILABLE = auto()
 
     def __init__(self, auth_service: AuthService):
         super().__init__()
@@ -203,7 +204,8 @@ class LibraryDetailedLogic(QObject):
                 self.last_launched = "Never"
 
     def load_build_files(self):
-        builds = requests.get(BUILDS_URL).json()
+        params = {"game_id": self._game_id}
+        builds = requests.get(BUILDS_URL, params=params).json()
 
         platforms = self._auth_service.authorized_session.get(PLATFORMS_URL).json()
 
