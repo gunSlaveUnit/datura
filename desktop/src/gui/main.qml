@@ -789,61 +789,65 @@ Window {
               QtObject{
                 id: introductionContent
                 property string text: "# Foggie Workshop
-Are you a developer and want to use our platform to distribute your games and software? This is great, let's get started.
 
 &nbsp;
-## What to expect
----
-General procedure for publishing products:
-1. Fill in electronic documents:
-    * Information about the legal entity
-    * Banking / tax information
-2. Once you have access to the Workshop, start preparing your product for release. You will need to create a store page, upload product builds, and enter your desired price.
-3. Prior to the final launch of your build of the game and the store page, we will run a test run of the game and check the page to make sure there are no errors or malicious elements. The verification usually takes 1 to 5 days.
+### Вы разработчик и хотите стать нашим партнером, использовать нашу платформу для распространения своих игр и программного обеспечения? Это здорово, давайте начнем.
 
 &nbsp;
-## Information to keep handy:
+## Чего ожидать
 ---
-* Legal details and name
-
-Accurate legal information about the person or company signing the agreement so we understand who you are and who you represent. This is information about your company.
-* Payment Information
-
-Accurate banking information on where to transfer the proceeds from the sales of your application: bank code, bank account number and bank address.
+### Общая процедура публикации продуктов состоит в следующем:
+### 1. Заполните электронные документы:
+###     * Информация о юридическом лице
+###     * Банковская платежная информация
+### 2. Получив доступ к Workshop, начните подготовку продукта к выпуску. Вам нужно будет создать страницу магазина, загрузить сборку и ввести желаемую цену.
+### 3. Перед окончательным запуском вашей сборки игры и страницы магазина мы запустим игру и проверим страницу, чтобы убедиться в отсутствии ошибок или вредоносных элементов. Проверка обычно занимает от 1 до 5 дней.
 
 &nbsp;
-## Rules and regulations
+## Информация, которая нам понадобится:
 ---
-What should not be distributed using our platform:
-* Advocacy of hatred, violence or discrimination against groups of people based on ethnicity, religion, gender, age, disability or sexual orientation.
-* Images of a sexual nature with real people.
-* Adult content that is not labeled as such and contains no age rating information.
-* Slanderous statements or statements that offend honor and dignity. Content to which you do not own the rights.
-* Content to which you do not own the rights.
-* Content that violates the laws of the countries in which it will be distributed.
-* Content that is blatantly offensive or intentionally shocks or disgusts the public.
-* Content that is in any way related to the exploitation of minors.
-* Applications that change the user's computer in ways they do not expect or that cause harm, such as viruses or malware.
-* Applications that attempt to fraudulently obtain sensitive information (such as login details) or financial data (such as credit card information).
-* Video content that is not directly related to the product released on platform.
-* Non-interactive panoramic virtual reality videos.
-* Applications created using blockchain technology that issue or exchange cryptocurrencies or NFTs (non-fungible tokens).
+### * Юридические данные и название
 
-Allowed types of content
-
-First of all, we accept games. Non-gaming software may be accepted if it falls into one of the following categories:
-* animation and modeling;
-* work with sound and video;
-* design and illustration;
-* photo processing;
-* education and training;
-* finance and accounting;
-* tools for players;
+### Точная юридическая информация о лице или компании, подписавших соглашение, чтобы мы понимали, кто вы и кого представляете. Это информация о вашей компании. Для работы с нами юридическое лицо желательно (для упрощения налогообложения и совершения денежных операций), но необязательно. Вы также можете представлять индивидуального предпринимателя
 
 &nbsp;
-## Let's get started
+### * Платежная информация
+
+### Точная банковская информация о том, куда перевести выручку от продажи вашего приложения: код банка, номер банковского счета и адрес банка.
+
+&nbsp;
+## Правила и ограничения
 ---
-Click the Continue button to proceed to enter your legal name and contact information.
+### Что нельзя распространять с помощью нашей платформы:
+### * Пропаганда ненависти, насилия или дискриминации в отношении групп людей по признаку этнической принадлежности, религии, пола, возраста, инвалидности или сексуальной ориентации.
+### * Изображения сексуального характера с реальными людьми.
+### * Контент для взрослых, который не помечен как таковой и не содержит информации о возрастном рейтинге.
+### * Клеветнические высказывания или высказывания, оскорбляющие честь и достоинство. Контент, на который у вас нет прав.
+### * Контент, на который у вас нет прав.
+### * Контент, нарушающий законы стран, в которых он будет распространяться.
+### * Контент, который является откровенно оскорбительным или намеренно шокирует или вызывает отвращение у публики.
+### * Контент, который каким-либо образом связан с эксплуатацией несовершеннолетних.
+### * Приложения, которые изменяют компьютер пользователя неожиданным для него образом или причиняют вред, например вирусы или вредоносное ПО.
+### * Приложения, которые пытаются обманным путем получить конфиденциальную информацию (например, данные для входа) или финансовые данные (например, информацию о кредитной карте).
+### * Видеоконтент, не имеющий прямого отношения к продукту, выпущенному на платформе.
+### * Неинтерактивные панорамные видеоролики виртуальной реальности.
+### * Приложения, созданные с использованием технологии блокчейн, которые выпускают или обменивают криптовалюты или NFT (невзаимозаменяемые токены).
+
+&nbsp;
+### Разрешенные типы контента:
+### Во-первых, мы принимаем игры. Неигровое программное обеспечение может быть принято, если оно относится к одной из следующих категорий:
+### * анимация и моделирование;
+### * работа со звуком и видео;
+### * дизайн и иллюстрации;
+### * обработка фото;
+### * образование и обучение;
+### * Финансы и учет;
+### * инструменты для игроков;
+
+&nbsp;
+## Давайте приступим
+---
+### Нажмите кнопку «Продолжить», чтобы перейти к вводу вашего официального имени и контактной информации.
 "}
               Text{
                 Layout.preferredWidth: layoutWidth - 2 * defaultMargin
@@ -854,7 +858,7 @@ Click the Continue button to proceed to enter your legal name and contact inform
               }
 
               NeutralButton {
-                text: qsTr("Continue")
+                text: qsTr("Продолжить")
                 function handler() {
                   bicInput.focus = true
                   storeStack.currentIndex = storeStack.workshopRegisterCompanyInfoIndex
