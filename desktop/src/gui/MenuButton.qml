@@ -9,4 +9,5 @@ Button {
     Material.foreground: text_color
     flat: true
     font.bold: true
+    font.pointSize: 14
 }
