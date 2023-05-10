@@ -57,7 +57,7 @@ Window {
 
         FormInputLabel {
           color: highlightedTextColor
-          text: qsTr("ACCOUNT NAME")
+          content: qsTr("ВОЙТИ, ИСПОЛЬЗУЯ ИМЯ АККАУНТА")
         }
         FormInput {
           id: signInAccountNameInput
@@ -67,7 +67,7 @@ Window {
           onTextChanged: auth_logic.account_name = text
         }
 
-        FormInputLabel {text: qsTr("PASSWORD")}
+        FormInputLabel {content: qsTr("ПАРОЛЬ")}
         FormInput {
           Layout.bottomMargin: defaultMargin
           echoMode: TextInput.Password
@@ -78,7 +78,9 @@ Window {
         ActionButton {
           Layout.alignment: Qt.AlignHCenter
           Layout.bottomMargin: defaultMargin
-          text: qsTr("Sign in")
+          Layout.preferredWidth: 300
+          Layout.preferredHeight: 40
+          text: qsTr("Войти")
           function handler() {
             auth_logic.sign_in()
           }
@@ -87,10 +89,10 @@ Window {
         RowLayout {
           Layout.alignment: Qt.AlignHCenter
 
-          Span {text: qsTr("Need an account?")}
+          Span {content: qsTr("Нужен аккаунт?")}
 
           Link {
-            message: qsTr("Sign up")
+            content: qsTr("Создайте бесплатный аккаунт")
 
             function handler() {
               auth_logic.reset()
@@ -105,7 +107,7 @@ Window {
         id: signUpForm
         anchors.centerIn: parent
 
-        FormInputLabel {text: qsTr("EMAIL")}
+        FormInputLabel {content: qsTr("АДРЕС ЭЛЕКТРОННОЙ ПОЧТЫ")}
         FormInput {
           id: signUpEmailInput
           Layout.bottomMargin: defaultMargin
@@ -113,14 +115,14 @@ Window {
           onTextChanged: auth_logic.email = text
         }
 
-        FormInputLabel {text: qsTr("ACCOUNT NAME")}
+        FormInputLabel {content: qsTr("ИМЯ АККАУНТА")}
         FormInput {
           Layout.bottomMargin: defaultMargin
           text: auth_logic.account_name
           onTextChanged: auth_logic.account_name = text
         }
 
-        FormInputLabel {text: qsTr("PASSWORD")}
+        FormInputLabel {content: qsTr("ПАРОЛЬ")}
         FormInput {
           Layout.bottomMargin: defaultMargin
           echoMode: TextInput.Password
@@ -131,7 +133,9 @@ Window {
         ActionButton {
           Layout.alignment: Qt.AlignHCenter
           Layout.bottomMargin: defaultMargin
-          text: qsTr("Sign up")
+          Layout.preferredWidth: 300
+          Layout.preferredHeight: 40
+          text: qsTr("Зарегистрироваться")
 
           function handler() {
             auth_logic.sign_up()
@@ -141,10 +145,10 @@ Window {
         RowLayout {
           Layout.alignment: Qt.AlignHCenter
 
-          Span {text: qsTr("Already have an account?")}
+          Span {content: qsTr("Уже есть аккаунт?")}
 
           Link {
-            message: qsTr("Sign in")
+            content: qsTr("Войти в существующий аккаунт")
 
             function handler() {
               auth_logic.reset()
@@ -375,7 +379,7 @@ Window {
               id: storeGameDetailedPage
 
               Link {
-                message: qsTr("To the store")
+                content: qsTr("To the store")
 
                 function handler() {
                   game_list_model.load_store()
@@ -707,7 +711,7 @@ Window {
 
               ColumnLayout {
                 Link {
-                  message: qsTr("To wallet")
+                  content: qsTr("To wallet")
 
                   function handler() {
                     storeStack.currentIndex = storeStack.walletIndex
@@ -867,7 +871,7 @@ Click the Continue button to proceed to enter your legal name and contact inform
               id: companyInfoForm
 
               Link {
-                message: qsTr("To introduction")
+                content: qsTr("To introduction")
 
                 function handler() {
                   juridicalNameInput.focus = true
@@ -1049,7 +1053,7 @@ The legal form of the company must match the one indicated in the documentation 
               id: companyPayInfoForm
 
               Link {
-                message: qsTr("To company information")
+                content: qsTr("To company information")
 
                 function handler() {
                   juridicalNameInput.focus = true
@@ -1196,7 +1200,7 @@ The legal form of the company must match the one indicated in the documentation 
               id: appControl
 
               Link {
-                message: qsTr("To apps list")
+                content: qsTr("To apps list")
 
                 function handler() {
                   storeStack.currentIndex = storeStack.workshopAppsListIndex
@@ -1634,7 +1638,7 @@ Long description supports Markdown.
 
                   ColumnLayout {
                     Link {
-                      message: qsTr("To the builds")
+                      content: qsTr("To the builds")
 
                       function handler() {
                         build_list_model.load_for_game(app_logic.id)
