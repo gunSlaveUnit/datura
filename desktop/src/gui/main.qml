@@ -1148,14 +1148,12 @@ Window {
           contentHeight: releasesAppsList.height + 2 * defaultMargin
 
           Item {
-            width: layoutWidth
+            width: layoutWidth - 2 * defaultMargin
+            height: parent.height
             anchors.horizontalCenter: parent.horizontalCenter
 
             ColumnLayout {
               id: releasesAppsList
-
-              anchors.fill: parent
-              anchors.leftMargin: defaultMargin
 
               Connections {
                 target: app_logic
@@ -1165,22 +1163,25 @@ Window {
                 }
               }
 
-              Span {
-                text: qsTr("Until your company data is not approved, you cannot make new releases")
+              Regular {
+                content: qsTr("Пока информация о вашей компании не проверена, Вы не можете создавать новые релизы")
                 color: "orange"
                 visible: !company_logic.is_drafted_new_button_enabled
               }
 
               RowLayout {
-                Span {
-                  text: "Select a game to view and edit details"
-                  visible: company_logic.is_drafted_new_button_enabled
+                Regular {
+                  content: "Выберите продукт для просмотра и редактирования"
                 }
 
+                Item {Layout.fillWidth: true}
+
                 ActionButton {
-                  text: qsTr("Draft new")
+                  Layout.rightMargin: defaultMargin
+                  text: qsTr("Создать")
                   function handler() {
                     app_logic.draft_new()
+                    game_list_model.load_personal()
                   }
                   visible: company_logic.is_drafted_new_button_enabled
                 }
@@ -1280,6 +1281,7 @@ Window {
                   function handler() {
                     app_logic.update()
                     build_logic.update(app_logic.id)
+                    game_list_model.load_personal()
                   }
                 }
 
