@@ -1205,6 +1205,16 @@ Window {
                   visible: company_logic.is_drafted_new_button_enabled
                 }
               }
+
+              RowLayout {
+                FormInputLabel {
+                  Layout.preferredWidth: 250
+                  content: "Название"
+                }
+                FormInputLabel {content: "Одобрено"}
+                FormInputLabel {content: "Опубликовано"}
+              }
+
               ListView {
                 id: boo
                 Layout.fillHeight: true
@@ -1213,29 +1223,37 @@ Window {
                 boundsBehavior: Flickable.StopAtBounds
 
                 delegate: RowLayout {
-                  Text {
-                    textFormat: TextEdit.MarkdownText
-                    text: "## " + title
-                    color: "white"
-                    font.underline: true
+                  Rectangle {
+                    id: releaseRowBack
+                    anchors.fill: parent
+                    color: "transparent"
+                    radius: defaultMargin / 2
+                    opacity: 0.2
                   }
 
-                  Text {
-                    textFormat: TextEdit.MarkdownText
+                  FormInputLabel {
+                    content: title
+                    Layout.preferredWidth: 272
+                  }
+
+                  FormInputLabel {
                     color: is_approved ? "#ddd" : "red"
-                    text: is_approved ? qsTr("Approved") : qsTr("Not approved")
+                    Layout.preferredWidth: 88
+                    content: is_approved ? qsTr("Да") : qsTr("Нет")
                   }
 
-                  Text {
-                    textFormat: TextEdit.MarkdownText
+                  FormInputLabel {
                     color: is_published ? "orange" : "#ccc"
-                    text: is_published ? qsTr("Published") : qsTr("Not published")
+                    Layout.preferredWidth: 50
+                    content: is_published ? qsTr("Да") : qsTr("Нет")
                   }
 
                   MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     hoverEnabled: true
+                    onEntered: releaseRowBack.color = "gray"
+                    onExited: releaseRowBack.color = "transparent"
                     onClicked: {
                       app_logic.map(id)
                       storeStack.currentIndex = storeStack.workshopAppControlIndex
