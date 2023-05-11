@@ -9,6 +9,7 @@ Button {
   hoverEnabled: false
 
   font.pointSize: 14
+  font.bold: true
 
   property string notHoveredColor: "#0053A6"
   property string hoveredColor: "#0079F2"

@@ -1296,6 +1296,8 @@ Window {
                   }
                 }
 
+                Item {Layout.fillWidth: true}
+
                 ActionButton {
                   text: qsTr("Сохранить")
                   function handler() {
@@ -1305,20 +1307,13 @@ Window {
                   }
                 }
 
-                ActionButton {
-                  text: qsTr("Verify")
-                  visible: false
-                  function handler() {
-                     app_logic.send_for_verification()
-                  }
-                }
-
                 Switcher {
-                    enabled: app_logic.is_approved
-                    position: app_logic.is_published
-                    onToggled: app_logic.is_published = position
-                    text: qsTr("Опубликовано")
-                    onClicked: app_logic.publish()
+                  enabled: app_logic.is_approved
+                  position: app_logic.is_published
+                  onToggled: app_logic.is_published = position
+                  text: qsTr("Опубликовано")
+                  onClicked: app_logic.publish()
+                  Layout.rightMargin: defaultMargin
                 }
               }
 
@@ -1500,27 +1495,26 @@ Window {
                       folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
                     }
 
-                    Text {
-                      text: qsTr("Header image (*.webp):")
-                      color: "white"
+                    FormInputLabel {
+                      content: qsTr("ПОСТЕР ДЛЯ МАГАЗИНА (*.webp):")
                     }
 
-                    Text {
-                      text: app_logic.displayed_header
+                    FormInputLabel {
+                      content: app_logic.displayed_header
                       color: "orange"
                     }
 
                     NeutralButton {
                       visible: app_logic.header !== ""
-                      text: qsTr("X")
+                      text: qsTr("Unpin")
                       function handler() {
                        app_logic.header = ""
                       }
                     }
                   }
 
-                  NeutralButton {
-                    text: qsTr("Attach")
+                  ActionButton {
+                    text: qsTr("Прикрепить")
                     function handler() {
                      attach_header_image_file_dialog.open()
                     }
@@ -1537,27 +1531,26 @@ Window {
                       folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
                     }
 
-                    Text {
-                      text: qsTr("Capsule image (*.webp):")
-                      color: "white"
+                    FormInputLabel {
+                      content: qsTr("ПОСТЕР ДЛЯ БИБЛИОТЕКИ (*.webp):")
                     }
 
-                    Text {
-                      text: app_logic.displayed_capsule
+                    FormInputLabel {
+                      content: app_logic.displayed_capsule
                       color: "orange"
                     }
 
                     NeutralButton {
                       visible: app_logic.capsule !== ""
-                      text: qsTr("X")
+                      text: qsTr("Открепить")
                       function handler() {
                        app_logic.capsule = ""
                       }
                     }
                   }
 
-                  NeutralButton {
-                    text: qsTr("Attach")
+                  ActionButton {
+                    text: qsTr("Прикрепить")
                     function handler() {
                      attach_capsule_image_file_dialog.open()
                     }
@@ -1574,27 +1567,26 @@ Window {
                       folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
                     }
 
-                    Text {
-                      text: qsTr("Screenshots (*webp):")
-                      color: "white"
+                    FormInputLabel {
+                      content: qsTr("СКРИНШОТЫ (*webp):")
                     }
 
-                    Text {
-                      text: app_logic.displayed_screenshots
+                    FormInputLabel {
+                      content: app_logic.displayed_screenshots
                       color: "orange"
                     }
 
                     NeutralButton {
                       visible: app_logic.displayed_screenshots !== ""
-                      text: qsTr("X")
+                      text: qsTr("Открепить")
                       function handler() {
                        app_logic.screenshots = []
                       }
                     }
                   }
 
-                  NeutralButton {
-                    text: qsTr("Attach")
+                  ActionButton {
+                    text: qsTr("Прикрепить")
                     function handler() {
                      attach_screenshots_file_dialog.open()
                     }
@@ -1611,27 +1603,26 @@ Window {
                       folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
                     }
 
-                    Text {
-                      text: qsTr("Trailers (*.webm *.mp4):")
-                      color: "white"
+                    FormInputLabel {
+                      content: qsTr("ТРЕЙЛЕРЫ (*.webm *.mp4):")
                     }
 
-                    Text {
-                      text: app_logic.displayed_trailers
+                    FormInputLabel {
+                      content: app_logic.displayed_trailers
                       color: "orange"
                     }
 
                     NeutralButton {
                       visible: app_logic.displayed_trailers !== ""
-                      text: qsTr("X")
+                      text: qsTr("Открепить")
                       function handler() {
                        app_logic.trailers = []
                       }
                     }
                   }
 
-                  NeutralButton {
-                    text: qsTr("Attach")
+                  ActionButton {
+                    text: qsTr("Прикрепить")
                     function handler() {
                      attach_trailers_file_dialog.open()
                     }
@@ -1654,15 +1645,19 @@ Window {
 
                   ColumnLayout {
                     RowLayout {
-                      Text {
-                        color: highlightedTextColor
-                        text: "Here you can view and build your app build for a specific platform."
+                      Regular {
+                        color: "#64BCEF"
+                        content: "Здесь вы можете просмотреть и создать сборку приложения для конкретной платформы"
                       }
 
+                      Item {Layout.fillWidth: true}
+
                       ActionButton {
-                        text: qsTr("Draft new")
+                        text: qsTr("Создать")
+                        Layout.rightMargin: doubleDefaultMargin
                         function handler() {
                           build_logic.draft_new(app_logic.id)
+                          build_list_model.load_for_game(app_logic.id)booboo
                         }
                       }
                     }
@@ -1696,7 +1691,7 @@ Window {
 
                   ColumnLayout {
                     Link {
-                      content: qsTr("To the builds")
+                      content: qsTr("К списку сборок")
 
                       function handler() {
                         build_list_model.load_for_game(app_logic.id)
@@ -1706,7 +1701,7 @@ Window {
 
                     Indent {}
 
-                    FormInputLabel {text: qsTr("Call")}
+                    FormInputLabel {content: qsTr("ИСПОЛНЯЕМЫЙ ФАЙЛ")}
                     FormInput {
                       text: build_logic.call
                       onTextChanged: build_logic.call = text
@@ -1714,7 +1709,7 @@ Window {
 
                     Indent {}
 
-                    FormInputLabel {text: qsTr("Parameters")}
+                    FormInputLabel {content: qsTr("ПАРАМЕТРЫ")}
                     FormInput {
                       text: build_logic.params
                       onTextChanged: build_logic.params = text
@@ -1722,7 +1717,7 @@ Window {
 
                     Indent {}
 
-                    FormInputLabel {text: qsTr("Target platform")}
+                    FormInputLabel {content: qsTr("ПЛАТФОРМА")}
                     Combo {
                       model: build_logic.displayed_platforms
                       currentIndex: build_logic.selected_platform_index
@@ -1737,26 +1732,25 @@ Window {
                         onAccepted: build_logic.project_archive = folder
                       }
 
-                      Text {
-                        text: qsTr("Archive (*.zip *.rar *.7z):")
-                        color: "white"
+                      FormInputLabel {
+                        content: qsTr("Директория:")
                       }
 
-                      Text {
-                        text: build_logic.project_archive
+                      FormInputLabel {
+                        content: build_logic.project_archive
                         color: "orange"
                       }
                     }
 
-                    NeutralButton {
-                      text: qsTr("Attach")
+                    ActionButton {
+                      text: qsTr("Выбрать")
                       function handler() {
                        attach_project_archive_file_dialog.open()
                       }
                     }
 
-                    Text {
-                      text: build_logic.displayed_status
+                    FormInputLabel {
+                      content: build_logic.displayed_status
                       color: "orange"
                     }
                   }
