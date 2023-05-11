@@ -794,7 +794,10 @@ Window {
 ### Вы разработчик и хотите стать нашим партнером, использовать нашу платформу для распространения своих игр и программного обеспечения? Это здорово, давайте начнем.
 
 &nbsp;
-## Чего ожидать
+
+<h2 style=\"color:#64BCEF\">Чего ожидать</h2>
+&nbsp;
+
 ---
 ### Общая процедура публикации продуктов состоит в следующем:
 ### 1. Заполните электронные документы:
@@ -804,7 +807,10 @@ Window {
 ### 3. Перед окончательным запуском вашей сборки игры и страницы магазина мы запустим игру и проверим страницу, чтобы убедиться в отсутствии ошибок или вредоносных элементов. Проверка обычно занимает от 1 до 5 дней.
 
 &nbsp;
-## Информация, которая нам понадобится:
+
+<h2 style=\"color:#64BCEF\">Информация, которая нам понадобится</h2>
+&nbsp;
+
 ---
 ### * Юридические данные и название
 
@@ -816,7 +822,10 @@ Window {
 ### Точная банковская информация о том, куда перевести выручку от продажи вашего приложения: код банка, номер банковского счета и адрес банка.
 
 &nbsp;
-## Правила и ограничения
+
+<h2 style=\"color:#64BCEF\">Правила и ограничения</h2>
+&nbsp;
+
 ---
 ### Что нельзя распространять с помощью нашей платформы:
 ### * Пропаганда ненависти, насилия или дискриминации в отношении групп людей по признаку этнической принадлежности, религии, пола, возраста, инвалидности или сексуальной ориентации.
@@ -845,7 +854,10 @@ Window {
 ### * инструменты для игроков;
 
 &nbsp;
-## Давайте приступим
+
+<h2 style=\"color:#64BCEF\">Давайте приступим</h2>
+&nbsp;
+
 ---
 ### Нажмите кнопку «Продолжить», чтобы перейти к вводу вашего официального имени и контактной информации.
 "}
@@ -879,7 +891,7 @@ Window {
               id: companyInfoForm
 
               Link {
-                content: qsTr("To introduction")
+                content: qsTr("К введению")
 
                 function handler() {
                   juridicalNameInput.focus = true
@@ -891,7 +903,7 @@ Window {
 
               Rectangle {
                 width: layoutWidth - 2 * defaultMargin
-                height: 274
+                height: 312
                 radius: defaultMargin
                 border.color: "orange"
                 border.width: 1
@@ -906,13 +918,13 @@ Window {
 
                     QtObject{
                       id: legalNameContent
-                      property string text: "<h1 style=\"color:white\">Legal name</h1>
+                      property string text: "<h1 style=\"color:white\">Юридическое имя</h1>
 
-The organization whose name you enter below must be the legal entity that will sign the required license agreements. The company name entered here must match the name on official bank documents and documents provided to the tax office, or foreign tax documents, if any. If you later add bank account information, you will need to re-enter that nameas the account holder and legal entity with the appropriate tax identification number.
+### Организация, название которой вы введете ниже, должна быть юридическим лицом, которое подпишет необходимые лицензионные соглашения. Введенное здесь название компании должно совпадать с названием в официальных банковских документах и документах, предоставленных в налоговую инспекцию, или иностранных налоговых документах, если таковые имеются.
 
-If you do not have a company name and are the sole owner of the content you wish to post, please enter your full name and mailing address in the \"Legal Name\" and \"Street, House and Apartment/Office Number\" fields. If you co-own the game along with other people, you will need to register a legal entity that will own the content and accept payments for it.
+### Если у вас нет названия компании и вы являетесь единственным владельцем контента, который вы хотите опубликовать, укажите свое полное имя и почтовый адрес в полях \"Юридическое название\" и \"Улица, дом и квартира/офис Числовое поле. Если вы являетесь совладельцем игры вместе с другими людьми, вам потребуется зарегистрировать юридическое лицо, которое будет владеть контентом и принимать за него платежи.
 
-The legal name specified here is used internally by the system. If you have a commercial or informal name that you want to use in your store, you can specify it separately when you create your store page.
+### Указанное здесь юридическое имя используется внутри системы. Если у вас есть коммерческое или неофициальное имя, которое вы хотите использовать в своем магазине, вы можете указать его отдельно при создании страницы своего магазина.
 "}
                     Text {
                       Layout.preferredWidth: layoutWidth - 4 * defaultMargin
@@ -920,14 +932,16 @@ The legal name specified here is used internally by the system. If you have a co
                       text: legalNameContent.text
                       color: "orange"
                       wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                      Layout.bottomMargin: defaultMargin
                     }
 
                     FormInputLabel {
-                      text: qsTr("Juridical name")
+                      content: qsTr("ЮРИДИЧЕСКОЕ ИМЯ")
                     }
                     FormInput {
                       id: juridicalNameInput
                       focus: true
+                      Layout.preferredWidth: 308
                       text: company_logic.juridical_name
                       onTextChanged: company_logic.juridical_name = text
                     }
@@ -939,7 +953,7 @@ The legal name specified here is used internally by the system. If you have a co
 
               Rectangle {
                 width: layoutWidth - 2 * defaultMargin
-                height: 158
+                height: 190
                 radius: defaultMargin
                 border.color: "orange"
                 border.width: 1
@@ -954,9 +968,9 @@ The legal name specified here is used internally by the system. If you have a co
 
                     QtObject{
                       id: companyFormContent
-                      property string text: "<h1 style=\"color:white\">Company form</h1>
+                      property string text: "<h1 style=\"color:white\">Форма компании</h1>
 
-The legal form of the company must match the one indicated in the documentation of your company. Examples of what should be entered in this field: \"A Quebec limited liability partnership\"; \"A Washington State corporation\"; \"A Sole Proprietorship\". If you are the sole owner of the game, please use \"Sole Proprietorship\".
+### Организационно-правовая форма компании должна соответствовать той, что указана в документации вашей компании. Примеры того, что следует вводить в это поле: Общество с ограниченной ответственностью \"Лига\"; Публичное акционерное общество \"Сбербанк России\"; Индивидуальный предприниматель. Если вы являетесь единственным владельцем игры, используйте \"Индивидуальный предприниматель\".
 "}
                     Text {
                       Layout.preferredWidth: layoutWidth - 3 * defaultMargin
@@ -967,10 +981,11 @@ The legal form of the company must match the one indicated in the documentation 
                     }
 
                     FormInputLabel {
-                      text: qsTr("Company form")
+                      content: qsTr("ФОРМА КОМПАНИИ")
                     }
                     FormInput {
                       text: company_logic.company_form
+                      Layout.preferredWidth: 308
                       onTextChanged: company_logic.company_form = text
                     }
                   }
@@ -980,67 +995,81 @@ The legal form of the company must match the one indicated in the documentation 
               Indent {}
 
               FormInputLabel {
-                text: qsTr("Street, house and apartment/office number")
+                content: qsTr("УЛИЦА, ДОМ, НОМЕР КВАРТИРЫ / ОФИСА")
               }
               FormInput {
                 text: company_logic.street_house_apartment
+                Layout.preferredWidth: 308
                 onTextChanged: company_logic.street_house_apartment = text
               }
 
               Indent {}
 
               FormInputLabel {
-                text: qsTr("City")
+                content: qsTr("ГОРОД")
               }
               FormInput {
                 text: company_logic.city
+                Layout.preferredWidth: 308
                 onTextChanged: company_logic.city = text
               }
 
               Indent {}
 
               FormInputLabel {
-                text: qsTr("Region")
+                content: qsTr("РЕГИОН / ОБЛАСТЬ")
               }
               FormInput {
                 text: company_logic.region
+                Layout.preferredWidth: 308
                 onTextChanged: company_logic.region = text
               }
 
               Indent {}
 
               FormInputLabel {
-                text: qsTr("Country")
+                content: qsTr("СТРАНА")
               }
               FormInput {
                 text: company_logic.country
+                Layout.preferredWidth: 308
                 onTextChanged: company_logic.country = text
               }
 
               Indent {}
 
               FormInputLabel {
-                text: qsTr("Postal code")
+                content: qsTr("ПОЧТОВЫЙ ИНДЕКС")
               }
               FormInput {
                 text: company_logic.postal_code
+                Layout.preferredWidth: 308
                 onTextChanged: company_logic.postal_code = text
               }
 
               Indent {}
 
               FormInputLabel {
-                text: qsTr("Notification email")
+                  content: qsTr("ЭЛЕКТРОННЫЙ АДРЕС ДЛЯ УВЕДОМЛЕНИЙ")
               }
               FormInput {
                 text: company_logic.notification_email
+                Layout.preferredWidth: 308
                 onTextChanged: company_logic.notification_email = text
               }
 
               Indent {}
 
+              Text{
+                Layout.preferredWidth: layoutWidth - 2 * defaultMargin
+                textFormat: TextEdit.MarkdownText
+                text: "### Нажмите кнопку «Продолжить», чтобы перейти к вводу платежной информации"
+                color: "#ddd"
+                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+              }
+
               NeutralButton {
-                text: qsTr("Continue")
+                text: qsTr("Продолжить")
                 function handler() {
                   bicInput.focus = true
                   storeStack.currentIndex = storeStack.workshopRegisterPaymentInfoIndex
