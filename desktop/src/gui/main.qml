@@ -1145,15 +1145,17 @@ Window {
         }
 
         Scroll {
-          contentHeight: releasesAppsList.height + 2 * defaultMargin
+          contentHeight: boo.contentHeight + 2 * defaultMargin
 
           Item {
-            width: layoutWidth - 2 * defaultMargin
+            width: layoutWidth - defaultMargin
             height: parent.height
             anchors.horizontalCenter: parent.horizontalCenter
 
             ColumnLayout {
               id: releasesAppsList
+
+              anchors.fill: parent
 
               Connections {
                 target: app_logic
@@ -1187,6 +1189,7 @@ Window {
                 }
               }
               ListView {
+                id: boo
                 Layout.fillHeight: true
                 model: game_list_model
                 spacing: defaultMargin
