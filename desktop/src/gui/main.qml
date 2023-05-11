@@ -1680,6 +1680,13 @@ Window {
                       }
                     }
 
+                    RowLayout {
+                      FormInputLabel {
+                        Layout.preferredWidth: 250
+                        content: "Платформа"
+                      }
+                    }
+
                     ListView {
                       Layout.fillHeight: true
                       model: build_list_model
