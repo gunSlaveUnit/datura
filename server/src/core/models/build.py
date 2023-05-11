@@ -7,6 +7,7 @@ from server.src.core.models.entity import Entity
 class Build(Entity):
     __tablename__ = "builds"
 
+    version = Column(String, nullable=False)
     directory = Column(String, nullable=False)
     call = Column(String, nullable=False)
     params = Column(String)

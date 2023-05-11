@@ -1682,8 +1682,20 @@ Window {
 
                     RowLayout {
                       FormInputLabel {
-                        Layout.preferredWidth: 250
-                        content: "Платформа"
+                        Layout.preferredWidth: 140
+                        content: "ПЛАТФОРМА"
+                      }
+                      FormInputLabel {
+                        Layout.preferredWidth: 100
+                        content: "ВЕРСИЯ"
+                      }
+                      FormInputLabel {
+                        Layout.preferredWidth: 190
+                        content: "ВЫПОЛНИТЬ"
+                      }
+                      FormInputLabel {
+                        Layout.preferredWidth: 100
+                        content: "ПАРАМЕТРЫ"
                       }
                     }
 
@@ -1694,17 +1706,41 @@ Window {
                       boundsBehavior: Flickable.StopAtBounds
 
                       delegate: RowLayout {
-                        Text {
-                          textFormat: TextEdit.MarkdownText
-                          text: "## " + platform_title
-                          color: "white"
+                        Rectangle {
+                          id: buildRowBack
+                          anchors.fill: parent
+                          color: "transparent"
+                          radius: defaultMargin / 2
+                          opacity: 0.2
+                        }
+
+                        Regular {
+                          content: platform_title
+                          Layout.preferredWidth: 142
                           font.underline: true
+                        }
+
+                        Regular {
+                          Layout.preferredWidth: 94
+                          content: version
+                        }
+
+                        Regular {
+                          Layout.preferredWidth: 190
+                          content: call
+                        }
+
+                        Regular {
+                          Layout.preferredWidth: 80
+                          content: params
                         }
 
                         MouseArea {
                           anchors.fill: parent
                           cursorShape: Qt.PointingHandCursor
                           hoverEnabled: true
+                          onEntered: buildRowBack.color = "gray"
+                          onExited: buildRowBack.color = "transparent"
                           onClicked: {
                             build_logic.map(id)
                             buildsStackLayout.currentIndex = buildsStackLayout.buildControlIndex
@@ -1722,6 +1758,14 @@ Window {
                         build_list_model.load_for_game(app_logic.id)
                         buildsStackLayout.currentIndex = buildsStackLayout.buildsListIndex
                       }
+                    }
+
+                    Indent {}
+
+                    FormInputLabel {content: qsTr("ВЕРСИЯ")}
+                    FormInput {
+                      text: build_logic.version
+                      onTextChanged: build_logic.version = text
                     }
 
                     Indent {}

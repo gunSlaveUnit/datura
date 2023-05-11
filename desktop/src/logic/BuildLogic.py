@@ -18,6 +18,7 @@ class BuildLogic(QObject):
         self._auth_service = auth_service
 
         self._id = -1
+        self._version = ''
         self._call = ''
         self._params = ''
         self._platform_id = -1
@@ -30,6 +31,7 @@ class BuildLogic(QObject):
         self._build_size_bytes = 0
 
     id_changed = Signal()
+    version_changed = Signal()
     call_changed = Signal()
     params_changed = Signal()
     platform_id_changed = Signal()
@@ -46,6 +48,16 @@ class BuildLogic(QObject):
         if self._id != new_value:
             self._id = new_value
             self.id_changed.emit()
+
+    @Property(str, notify=version_changed)
+    def version(self):
+        return self._version
+
+    @version.setter
+    def version(self, new_value: str):
+        if self._version != new_value:
+            self._version = new_value
+            self.version_changed.emit()
 
     @Property(str, notify=call_changed)
     def call(self):
@@ -109,6 +121,7 @@ class BuildLogic(QObject):
 
     def reset_form(self):
         self.id = -1
+        self.version = '1.0.0'
         self.call = ''
         self.params = ''
         self.platform_id = 1
@@ -154,13 +167,14 @@ class BuildLogic(QObject):
     @Slot(int)
     def update(self, game_id: int):
         data = {
+            "version": self._version,
             "call": self._call,
             "params": self._params,
             "game_id": game_id,
             "platform_id": self._selected_platform_index + 1,
         }
 
-        reply = self._auth_service.authorized_session.put(
+        response = self._auth_service.authorized_session.put(
             BUILDS_URL + f'{str(self.id)}/',
             json=data
         )
@@ -194,8 +208,8 @@ class BuildLogic(QObject):
     def draft_new(self, game_id: int):
         self.reset_form()
 
-        # TODO: need to get available platforms
         data = {
+            "version": self._version,
             "call": self._call,
             "params": None,
             "platform_id": 1,
@@ -218,6 +232,7 @@ class BuildLogic(QObject):
             data = response.json()
 
             self.id = data['id']
+            self.version = data['version']
             self.call = data['call']
             self.params = data['params']
             self.platform_id = data['platform_id']

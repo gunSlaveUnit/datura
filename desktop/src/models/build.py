@@ -12,6 +12,7 @@ from desktop.src.settings import GAMES_URL, BUILDS_URL
 
 @dataclass()
 class Build(Entity):
+    version: str
     directory: str
     call: str
     params: str | None
@@ -42,6 +43,7 @@ class BuildList(QAbstractListModel):
             for build_data in builds:
                 build = Build(
                     id=build_data['id'],
+                    version=build_data['version'],
                     created_at=build_data['created_at'],
                     updated_at=build_data['updated_at'],
                     directory=build_data['directory'],
