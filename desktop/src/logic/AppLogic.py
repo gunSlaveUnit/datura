@@ -84,7 +84,6 @@ class AppLogic(QObject):
         self.screenshots = []
         self.capsule = ''
         self.trailers = []
-        self.project_files = []
 
     @Slot(int)
     def map(self, game_id: int):
@@ -204,6 +203,7 @@ class AppLogic(QObject):
     @Slot()
     def draft_new(self):
         self.reset_form()
+        self.reset_files()
 
         # TODO: need to get available age categories
         data = {
