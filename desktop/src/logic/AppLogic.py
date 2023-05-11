@@ -47,7 +47,7 @@ class AppLogic(QObject):
         self._auth_service = auth_service
 
         self._id = -1
-        self.is_approved = None
+        self._is_approved = None
 
         self._title = 'Unnamed'
         self._price = "0.00"
@@ -64,6 +64,160 @@ class AppLogic(QObject):
         self._header = ''
         self._capsule = ''
         self._trailers = []
+
+    # region Id
+
+    @Property(int, notify=id_changed)
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, new_value: int):
+        if self._id != new_value:
+            self._id = new_value
+            self.id_changed.emit()
+
+    # endregion
+
+    # region Title
+
+    @Property(str, notify=title_changed)
+    def title(self):
+        return self._title
+
+    @title.setter
+    def title(self, new_value: str):
+        if self._title != new_value:
+            self._title = new_value
+            self.title_changed.emit()
+
+    # endregion
+
+    # region Price
+
+    @Property(str, notify=price_changed)
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, new_value: str):
+        if self._price != new_value:
+            self._price = new_value
+            self.price_changed.emit()
+
+    # endregion
+
+    # region Short description
+
+    @Property(str, notify=short_description_changed)
+    def short_description(self):
+        return self._short_description
+
+    @short_description.setter
+    def short_description(self, new_value: str):
+        if self._short_description != new_value:
+            self._short_description = new_value
+            self.short_description_changed.emit()
+
+    # endregion
+
+    # region Long description
+
+    @Property(str, notify=long_description_changed)
+    def long_description(self):
+        return self._long_description
+
+    @long_description.setter
+    def long_description(self, new_value: str):
+        if self._long_description != new_value:
+            self._long_description = new_value
+            self.long_description_changed.emit()
+
+    # endregion
+
+    # region Day index
+
+    @Property(int, notify=day_index_changed)
+    def day_index(self):
+        return self._day_index
+
+    @day_index.setter
+    def day_index(self, new_value: int):
+        if self._day_index != new_value:
+            self._day_index = new_value
+            self.day_index_changed.emit()
+
+    # endregion
+
+    # region Month index
+
+    @Property(int, notify=month_index_changed)
+    def month_index(self):
+        return self._month_index
+
+    @month_index.setter
+    def month_index(self, new_value: int):
+        if self._month_index != new_value:
+            self._month_index = new_value
+            self.month_index_changed.emit()
+
+    # endregion
+
+    # region Year index
+
+    @Property(int, notify=year_index_changed)
+    def year_index(self):
+        return self._year_index
+
+    @year_index.setter
+    def year_index(self, new_value: int):
+        if self._year_index != new_value:
+            self._year_index = new_value
+            self.year_index_changed.emit()
+
+    # endregion
+
+    # region Coming soon
+
+    @Property(bool, notify=coming_soon_changed)
+    def coming_soon(self):
+        return self._coming_soon
+
+    @coming_soon.setter
+    def coming_soon(self, new_value: bool):
+        if self._coming_soon != new_value:
+            self._coming_soon = new_value
+            self.coming_soon_changed.emit()
+
+    # endregion
+
+    # region Is approved
+
+    @Property(bool, notify=is_approved_changed)
+    def is_approved(self):
+        return self._is_approved
+
+    @is_approved.setter
+    def is_approved(self, new_value: bool):
+        if self._is_approved != new_value:
+            self._is_approved = new_value
+            self.is_approved_changed.emit()
+
+    # endregion
+
+    # region Is published
+
+    @Property(bool, notify=is_published_changed)
+    def is_published(self):
+        return self._is_published
+
+    @is_published.setter
+    def is_published(self, new_value: bool):
+        if self._is_published != new_value:
+            self._is_published = new_value
+            self.is_published_changed.emit()
+
+    # endregion
 
     def reset_form(self):
         self.id = -1
@@ -229,55 +383,6 @@ class AppLogic(QObject):
         years_into_future = 10
         years = [i + base for i in range(current_year - base + years_into_future)]
         return years
-
-    id = Property(int,
-                  lambda self: self._id,
-                  lambda self, value: setattr(self, '_id', value),
-                  notify=id_changed)
-
-    title = Property(str,
-                     lambda self: self._title,
-                     lambda self, value: setattr(self, '_title', value),
-                     notify=title_changed)
-    price = Property(str,
-                     lambda self: self._price,
-                     lambda self, value: setattr(self, '_price', value),
-                     notify=price_changed)
-    short_description = Property(str,
-                                 lambda self: self._short_description,
-                                 lambda self, value: setattr(self, '_short_description', value),
-                                 notify=short_description_changed)
-    long_description = Property(str,
-                                lambda self: self._long_description,
-                                lambda self, value: setattr(self, '_long_description', value),
-                                notify=long_description_changed)
-
-    day_index = Property(int,
-                         lambda self: self._day_index,
-                         lambda self, value: setattr(self, '_day_index', value),
-                         notify=day_index_changed)
-    month_index = Property(int,
-                           lambda self: self._month_index,
-                           lambda self, value: setattr(self, '_month_index', value),
-                           notify=month_index_changed)
-    year_index = Property(int,
-                          lambda self: self._year_index,
-                          lambda self, value: setattr(self, '_year_index', value),
-                          notify=year_index_changed)
-    coming_soon = Property(int,
-                           lambda self: self._coming_soon,
-                           lambda self, value: setattr(self, '_coming_soon', value),
-                           notify=coming_soon_changed)
-
-    approved = Property(bool,
-                        lambda self: self.is_approved,
-                        lambda self, value: setattr(self, '_is_approved', value),
-                        notify=is_approved_changed)
-
-    is_published = Property(bool,
-                            lambda self: self._is_published,
-                            lambda self, value: setattr(self, '_is_published', value),
-                            notify=is_published_changed)
 
     possible_days = Property(list, lambda self: [_ for _ in range(1, 32)], constant=True)
     possible_months = Property(list, lambda self: [_ for _ in range(1, 13)], constant=True)

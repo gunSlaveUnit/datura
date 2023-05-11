@@ -1314,7 +1314,7 @@ Window {
                 }
 
                 Switcher {
-                    enabled: app_logic.approved
+                    enabled: app_logic.is_approved
                     position: app_logic.is_published
                     onToggled: app_logic.is_published = position
                     text: qsTr("Published")
