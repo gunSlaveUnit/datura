@@ -1657,7 +1657,7 @@ Window {
                         Layout.rightMargin: doubleDefaultMargin
                         function handler() {
                           build_logic.draft_new(app_logic.id)
-                          build_list_model.load_for_game(app_logic.id)booboo
+                          build_list_model.load_for_game(app_logic.id)
                         }
                       }
                     }
@@ -1733,7 +1733,7 @@ Window {
                       }
 
                       FormInputLabel {
-                        content: qsTr("Директория:")
+                        content: qsTr("ДИРЕКТОРИЯ:")
                       }
 
                       FormInputLabel {
