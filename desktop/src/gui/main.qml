@@ -1090,7 +1090,7 @@ Window {
               id: companyPayInfoForm
 
               Link {
-                content: qsTr("To company information")
+                content: qsTr("К информации о компании")
 
                 function handler() {
                   juridicalNameInput.focus = true
@@ -1101,7 +1101,7 @@ Window {
               Indent {}
 
               FormInputLabel {
-                text: qsTr("BIC")
+                content: qsTr("БИК")
               }
               FormInput {
                 id: bicInput
@@ -1113,7 +1113,7 @@ Window {
               Indent {}
 
               FormInputLabel {
-                text: qsTr("Bank address")
+                content: qsTr("АДРЕС БАНКА")
               }
               FormInput {
                 text: company_logic.bank_address
@@ -1123,7 +1123,7 @@ Window {
               Indent {}
 
               FormInputLabel {
-                text: qsTr("Bank account number")
+                content: qsTr("БАНКОВСКИЙ НОМЕР СЧЕТА")
               }
               FormInput {
                 text: company_logic.bank_account_number
@@ -1133,7 +1133,7 @@ Window {
               Indent {}
 
               ActionButton {
-                text: qsTr("Finish")
+                text: qsTr("Создать")
                 function handler() {
                   company_logic.new()
                 }
