@@ -318,56 +318,73 @@ Window {
           }
         }
 
-        ListView {
-          model: game_list_model
-          spacing: defaultMargin
-          boundsBehavior: Flickable.StopAtBounds
+        Scroll {
+          contentHeight: gamesList.contentHeight + 2 * defaultMargin
 
-          delegate: Rectangle {
+          Item {
+            width: layoutWidth - defaultMargin
+            height: parent.height
             anchors.horizontalCenter: parent.horizontalCenter
-            color: "transparent"
-            width: layoutWidth
-            height: 180
-            radius: defaultMargin / 2
 
-            RowLayout {
+            ColumnLayout {
               anchors.fill: parent
-              anchors.margins: defaultMargin
 
-              Image {
-                Layout.preferredWidth: height * 16 / 9
-                Layout.preferredHeight: parent.height
-                source: `http://127.0.0.1:8000/api/v1/games/${id}/header/`
-                mipmap: true
-              }
-
-              ColumnLayout {
+              ListView {
+                id: gamesList
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                model: game_list_model
+                spacing: defaultMargin
+                boundsBehavior: Flickable.StopAtBounds
 
-                Layout.alignment: Qt.AlignTop
+                delegate: Rectangle {
+                  anchors.horizontalCenter: parent.horizontalCenter
+                  color: "transparent"
+                  width: layoutWidth
+                  height: 180
+                  radius: defaultMargin / 2
 
-                Link {
-                  Layout.alignment: Qt.AlignTop
-                  text: title
-                  font.pointSize: 26
+                  RowLayout {
+                    anchors.fill: parent
+                    anchors.margins: defaultMargin
 
-                  function handler() {
-                    store_detailed_logic.map(id)
-                    storeStack.currentIndex = storeStack.storeDetailedIndex
+                    Image {
+                      Layout.preferredWidth: height * 16 / 9
+                      Layout.preferredHeight: parent.height
+                      source: `http://127.0.0.1:8000/api/v1/games/${id}/header/`
+                      mipmap: true
+                    }
+
+                    ColumnLayout {
+                      Layout.fillWidth: true
+                      Layout.fillHeight: true
+
+                      Layout.alignment: Qt.AlignTop
+
+                      Link {
+                        Layout.alignment: Qt.AlignTop
+                        text: title
+                        font.pointSize: 26
+
+                        function handler() {
+                          store_detailed_logic.map(id)
+                          storeStack.currentIndex = storeStack.storeDetailedIndex
+                        }
+                      }
+
+                      Span {
+                        text: release_date
+                      }
+
+                      Span {
+                        text: short_description
+                      }
+                    }
+
+                    Item {Layout.fillWidth: true}
                   }
                 }
-
-                Span {
-                  text: release_date
-                }
-
-                Span {
-                  text: short_description
-                }
               }
-
-              Item {Layout.fillWidth: true}
             }
           }
         }
