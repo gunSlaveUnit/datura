@@ -1258,7 +1258,7 @@ Window {
               id: appControl
 
               Link {
-                content: qsTr("To apps list")
+                content: qsTr("К списку приложений")
 
                 function handler() {
                   storeStack.currentIndex = storeStack.workshopAppsListIndex
@@ -1267,28 +1267,28 @@ Window {
 
               RowLayout {
                 NeutralButton {
-                  text: qsTr("Basic Info")
+                  text: qsTr("Основное")
                   function handler() {
                     gameControlStackLayout.currentIndex = gameControlStackLayout.basicInfoPageIndex
                   }
                 }
 
                 NeutralButton {
-                  text: qsTr("Descriptions")
+                  text: qsTr("Описания")
                   function handler() {
                     gameControlStackLayout.currentIndex = gameControlStackLayout.descriptionPageIndex
                   }
                 }
 
                 NeutralButton {
-                  text: qsTr("Assets")
+                  text: qsTr("Материалы")
                   function handler() {
                     gameControlStackLayout.currentIndex = gameControlStackLayout.assetsPageIndex
                   }
                 }
 
                 NeutralButton {
-                  text: qsTr("Builds")
+                  text: qsTr("Сборки")
                   function handler() {
                     build_logic.load_platforms()
                     build_list_model.load_for_game(app_logic.id)
@@ -1297,7 +1297,7 @@ Window {
                 }
 
                 ActionButton {
-                  text: qsTr("Save")
+                  text: qsTr("Сохранить")
                   function handler() {
                     app_logic.update()
                     build_logic.update(app_logic.id)
@@ -1317,7 +1317,7 @@ Window {
                     enabled: app_logic.is_approved
                     position: app_logic.is_published
                     onToggled: app_logic.is_published = position
-                    text: qsTr("Published")
+                    text: qsTr("Опубликовано")
                     onClicked: app_logic.publish()
                 }
               }
@@ -1332,7 +1332,7 @@ Window {
 
                 ColumnLayout {
                   FormInputLabel {
-                    text: qsTr("Title")
+                    content: qsTr("НАЗВАНИЕ")
                   }
                   FormInput {
                     text: app_logic.title
@@ -1341,13 +1341,13 @@ Window {
 
                   Checking {
                     id: is_coming_soon
-                    text: qsTr("Coming soon")
+                    text: qsTr("СКОРО")
                     checked: app_logic.coming_soon
                     onClicked: app_logic.coming_soon = checked
                   }
 
                   FormInputLabel {
-                    text: qsTr("Release date")
+                    content: qsTr("ДАТА ВЫХОДА")
                     visible: !is_coming_soon.checked
                   }
 
@@ -1356,22 +1356,24 @@ Window {
 
                     visible: !is_coming_soon.checked
 
+                    property int comboWidth: 97
+
                     Combo {
-                      implicitWidth: 76
+                      implicitWidth: parent.comboWidth
                       model: app_logic.possible_days
                       currentIndex: app_logic.day_index
                       onCurrentIndexChanged: app_logic.day_index = currentIndex
                     }
 
                     Combo {
-                      implicitWidth: 76
+                      implicitWidth: parent.comboWidth
                       model: app_logic.possible_months
                       currentIndex: app_logic.month_index
                       onCurrentIndexChanged: release_logic.month_index = currentIndex
                     }
 
                     Combo {
-                      implicitWidth: 76
+                      implicitWidth: parent.comboWidth
                       model: app_logic.possible_years
                       currentIndex: app_logic.year_index
                       onCurrentIndexChanged: app_logic.year_index = currentIndex
@@ -1383,7 +1385,7 @@ Window {
                   }
 
                   FormInputLabel {
-                    text: qsTr("Price")
+                    content: qsTr("ЦЕНА")
                   }
                   FormInput {
                     text: app_logic.price
@@ -1392,21 +1394,18 @@ Window {
                 }
 
                 ColumnLayout {
-                  Text {
-                    color: highlightedTextColor
+                  Regular {
+                    color: "#64BCEF"
                     Layout.preferredWidth: layoutWidth
                     wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                    textFormat: TextEdit.MarkdownText
-                    text: "
-Long description supports Markdown.
-"
+                    content: "Развернутое описание поддерживает Markdown"
                   }
 
                   Indent {}
 
                   RowLayout {
-                    Header {
-                      text: "# Short description"
+                    FormInputLabel {
+                      content: "КРАТКОЕ ОПИСАНИЕ"
                     }
 
                     Span {
@@ -1449,8 +1448,8 @@ Long description supports Markdown.
                   Indent {}
 
                   RowLayout {
-                    Header {
-                      text: "# Long description"
+                    FormInputLabel {
+                      content: "РАЗВЕРНУТОЕ ОПИСАНИЕ"
                     }
 
                     Span {

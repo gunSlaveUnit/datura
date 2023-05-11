@@ -3,7 +3,7 @@ import QtQuick.Controls 2.15
 
 ComboBox {
   id: combo
-  font.pointSize: 12
+  font.pointSize: 14
 
   property var notHoveredColor: "black"
   property var hoveredColor: Qt.darker("#0E151E", 1.5)
