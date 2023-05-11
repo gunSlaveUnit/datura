@@ -3,6 +3,6 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 2.15
 
 ActionButton {
-  notHoveredColor: "green"
-  hoveredColor: "lightgreen"
+  notHoveredColor: "#009A61"
+  hoveredColor: "#00E589"
 }

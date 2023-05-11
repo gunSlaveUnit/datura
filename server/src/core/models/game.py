@@ -7,6 +7,8 @@ class Game(Entity):
     __tablename__ = "games"
 
     title = Column(String, index=True, nullable=False)
+    developer = Column(String, index=True, nullable=False)
+    publisher = Column(String, index=True, nullable=False)
     release_date = Column(Integer, index=True)
     short_description = Column(Text, nullable=False)
     long_description = Column(Text, nullable=False)

@@ -450,7 +450,7 @@ Window {
 
               Rectangle {
                 width: game_screenshots_swipe_view.width
-                height: 40
+                height: 56
                 radius: defaultMargin / 2
                 color: "#586776"
 
@@ -462,19 +462,19 @@ Window {
                   Text {
                     textFormat: TextEdit.MarkdownText
                     color: "#ddd"
-                    text: "## Buy " + store_detailed_logic.title
+                    text: "## Купить " + store_detailed_logic.title
                   }
 
                   Item {Layout.fillWidth: true}
 
                   Text {
                     textFormat: TextEdit.MarkdownText
-                    color: "lightgreen"
+                    color: "#00E589"
                     text: "## " + store_detailed_logic.price + "$"
                   }
 
                   BuyButton {
-                    text: "Add to cart"
+                    text: "В корзину"
                     function handler() {
                       cart_logic.add(store_detailed_logic.id)
                       store_detailed_logic.location = 2
@@ -1395,6 +1395,18 @@ Window {
 
                   Indent {
                     visible: !is_coming_soon.checked
+                  }
+
+                  FormInputLabel {content: qsTr("РАЗРАБОТЧИК")}
+                  FormInput {
+                    text: app_logic.developer
+                    onTextChanged: app_logic.developer = text
+                  }
+
+                  FormInputLabel {content: qsTr("ИЗДАТЕЛЬ")}
+                  FormInput {
+                    text: app_logic.publisher
+                    onTextChanged: app_logic.publisher = text
                   }
 
                   FormInputLabel {

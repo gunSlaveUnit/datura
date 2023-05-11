@@ -33,6 +33,8 @@ class GameFilterSchema(BaseModel):
 class GameCreateSchema(BaseModel):
     title: str
     release_date: int | None
+    developer: str
+    publisher: str
     short_description: str
     long_description: str
     price: float

@@ -14,6 +14,8 @@ class AppLogic(QObject):
     id_changed = Signal()
 
     title_changed = Signal()
+    developer_changed = Signal()
+    publisher_changed = Signal()
     price_changed = Signal()
     short_description_changed = Signal()
     long_description_changed = Signal()
@@ -50,6 +52,8 @@ class AppLogic(QObject):
         self._is_approved = None
 
         self._title = 'Unnamed'
+        self._developer = ""
+        self._publisher = ""
         self._price = "0.00"
         self._short_description = ''
         self._long_description = ''
@@ -90,6 +94,26 @@ class AppLogic(QObject):
         if self._title != new_value:
             self._title = new_value
             self.title_changed.emit()
+
+    @Property(str, notify=developer_changed)
+    def developer(self):
+        return self._developer
+
+    @developer.setter
+    def developer(self, new_value: str):
+        if self._developer != new_value:
+            self._developer = new_value
+            self.developer_changed.emit()
+
+    @Property(str, notify=publisher_changed)
+    def publisher(self):
+        return self._publisher
+
+    @publisher.setter
+    def publisher(self, new_value: str):
+        if self._publisher != new_value:
+            self._publisher = new_value
+            self.publisher_changed.emit()
 
     # endregion
 
@@ -224,6 +248,8 @@ class AppLogic(QObject):
         self.is_approved = None
 
         self.title = 'Unnamed'
+        self.developer = ''
+        self.publisher = ''
         self.day_index = datetime.datetime.now().day - 1
         self.month_index = datetime.datetime.now().month - 1
         self.year_index = datetime.datetime.now().year - AppLogic.BASE_YEAR
@@ -251,6 +277,8 @@ class AppLogic(QObject):
             self.is_published = data['is_published']
 
             self.title = data['title']
+            self.developer = data['developer']
+            self.publisher = data['publisher']
             self.short_description = data['short_description']
             self.long_description = data['long_description']
             self.price = str(data['price'])
@@ -264,21 +292,12 @@ class AppLogic(QObject):
                 self.month_index = date.month
                 self.year_index = date.year - self.BASE_YEAR
 
-            self.title_changed.emit()
-            self.price_changed.emit()
-            self.short_description_changed.emit()
-            self.long_description_changed.emit()
-            self.day_index_changed.emit()
-            self.month_index_changed.emit()
-            self.year_index_changed.emit()
-            self.coming_soon_changed.emit()
-            self.is_approved_changed.emit()
-            self.is_published_changed.emit()
-
     @Slot()
     def update(self):
         data = {
             "title": self._title,
+            "developer": self._developer,
+            "publisher": self._publisher,
             "short_description": self._short_description,
             "long_description": self._long_description,
             "price": float(self._price),
@@ -362,6 +381,8 @@ class AppLogic(QObject):
         # TODO: need to get available age categories
         data = {
             "title": self._title,
+            "developer": self._developer,
+            "publisher": self._publisher,
             "short_description": self._short_description,
             "long_description": self._long_description,
             "price": float(self._price),

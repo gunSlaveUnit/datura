@@ -13,6 +13,8 @@ from desktop.src.settings import GAMES_URL, CART_URL, LIBRARY_URL
 @dataclass()
 class Game(Entity):
     title: str
+    developer: str
+    publisher: str
     release_date: int | None
     short_description: str
     long_description: str
