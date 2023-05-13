@@ -15,18 +15,18 @@ Image {
 
       Button {
         Layout.fillHeight: true
-        Layout.preferredWidth: 30
+        Layout.preferredWidth: 60
         text: "<"
         flat: true
         font.bold: true
-        font.pointSize: 16
+        font.pointSize: 32
         visible: image_mouse_area.containsMouse
         enabled: game_screenshots_swipe_view.currentIndex > 0
         onClicked: game_screenshots_swipe_view.decrementCurrentIndex()
         background: Rectangle {
           gradient: Gradient {
             orientation: Gradient.Horizontal
-            GradientStop { position: -1.0; color: "black" }
+            GradientStop { position: -3.0; color: "black" }
             GradientStop { position: 1.0; color: "transparent" }
           }
         }
@@ -36,11 +36,11 @@ Image {
 
       Button {
         Layout.fillHeight: true
-        Layout.preferredWidth: 30
+        Layout.preferredWidth: 60
         text: ">"
         flat: true
         font.bold: true
-        font.pointSize: 16
+        font.pointSize: 32
         visible: image_mouse_area.containsMouse
         enabled: game_screenshots_swipe_view.currentIndex < game_screenshots_swipe_view.count - 1
         onClicked: game_screenshots_swipe_view.incrementCurrentIndex()
@@ -48,7 +48,7 @@ Image {
           gradient: Gradient {
             orientation: Gradient.Horizontal
             GradientStop { position: 0.0; color: "transparent" }
-            GradientStop { position: 2.0; color: "black" }
+            GradientStop { position: 4.0; color: "black" }
           }
         }
       }
