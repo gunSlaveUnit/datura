@@ -20,6 +20,7 @@ Window {
   color: backgroundWindowColor
 
   function timestampToHuman(timestamp) {
+    var date = new Date()
     var dateString = date.toLocaleDateString('ru-RU', {
       year: 'numeric',
       month: 'long',
@@ -456,7 +457,7 @@ Window {
                   }
 
                   Regular {
-                    text: store_detailed_logic.release_date ? timestampToHuman(release_date) : "Скоро"
+                    text: store_detailed_logic.release_date ? timestampToHuman(store_detailed_logic.release_date) : "Скоро"
                   }
                 }
               }

@@ -42,7 +42,7 @@ class StoreDetailedLogic(QObject):
         self._title = ''
         self._short_description = ''
         self._long_description = ''
-        self._release_date = 0.0
+        self._release_date = int
         self._price = 0.0
 
         self._screenshots = []
