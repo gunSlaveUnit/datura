@@ -7,6 +7,7 @@ from starlette import status
 
 from server.src.core.models.company import Company
 from server.src.core.models.game import Game
+from server.src.core.models.library import Library
 from server.src.core.models.user import User
 from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX, GAMES_ASSETS_PATH, \
     GAMES_ASSETS_HEADER_DIR, GAMES_ASSETS_CAPSULE_DIR, GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, \
@@ -78,7 +79,16 @@ async def create(new_game_data: GameCreateSchema,
     assets_directory.joinpath(GAMES_ASSETS_BUILDS_DIR).mkdir()
     game.directory = new_directory_uuid
 
-    return await Game.create(db, game)
+    new_game = await Game.create(db, game)
+
+    new_library_record = Library(
+        player_id=current_user.id,
+        game_id=new_game.id
+    )
+
+    await Library.create(db, new_library_record)
+
+    return new_game
 
 
 @router.put('/{game_id}/')
