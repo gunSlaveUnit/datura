@@ -811,6 +811,7 @@ Window {
                     text: qsTr("Оплатить")
                     function handler() {
                       wallet_logic.top_up()
+                      storeStack.currentIndex = storeStack.walletIndex
                     }
                   }
                 }
