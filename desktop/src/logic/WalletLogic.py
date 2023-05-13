@@ -43,14 +43,14 @@ class WalletLogic(QObject):
 
         self.balance = self._wallet_service.balance
 
-    @Slot(int)
-    def top_up(self, amount: int):
+    @Slot()
+    def top_up(self):
         payment = PaymentCreateSchema(
             card_number="string",
             validity_month=0,
             validity_year=0,
             cvv_cvc=0,
-            amount=amount
+            amount=self.amount
         )
 
         response = self._wallet_service.top_up(payment)
