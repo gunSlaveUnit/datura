@@ -352,6 +352,7 @@ Window {
                     anchors.margins: defaultMargin
 
                     Image {
+                      id: storeHeaderImage
                       Layout.preferredWidth: height * 16 / 9
                       Layout.preferredHeight: parent.height
                       source: `http://127.0.0.1:8000/api/v1/games/${id}/header/`
@@ -375,12 +376,14 @@ Window {
                         }
                       }
 
-                      Span {
-                        text: release_date ? humanTimestamp(release_date) : "Скоро"
+                      Regular {
+                        content: release_date ? humanTimestamp(release_date) : "Скоро"
                       }
 
-                      Span {
-                        text: short_description
+                      Regular {
+                        content: short_description
+                        Layout.preferredWidth: layoutWidth - storeHeaderImage.width
+                        wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                       }
                     }
 
@@ -720,6 +723,7 @@ Window {
                 }
 
                 BuyButton {
+                  Layout.leftMargin: 4 * defaultMargin
                   text: "Оплатить"
                   function handler() {
                     cart_logic.pay()
