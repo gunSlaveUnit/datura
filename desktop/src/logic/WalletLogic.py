@@ -5,14 +5,15 @@ from desktop.src.services.WalletService import WalletService
 
 
 class WalletLogic(QObject):
-    balance_changed = Signal()
-
     def __init__(self, wallet_service: WalletService):
         super().__init__()
 
         self._wallet_service = wallet_service
 
         self._balance = 0.00
+        self._amount = 0.00
+
+    balance_changed = Signal()
 
     @Property(float, notify=balance_changed)
     def balance(self):
@@ -23,6 +24,18 @@ class WalletLogic(QObject):
         if self._balance != new_value:
             self._balance = new_value
             self.balance_changed.emit()
+
+    amount_changed = Signal()
+
+    @Property(float, notify=amount_changed)
+    def amount(self):
+        return self._amount
+
+    @amount.setter
+    def amount(self, new_value: float):
+        if self._amount != new_value:
+            self._amount = new_value
+            self.amount_changed.emit()
 
     @Slot()
     def map(self):
@@ -44,3 +57,5 @@ class WalletLogic(QObject):
 
         if response.ok:
             self.balance = self._wallet_service.balance
+
+        self.amount = 0

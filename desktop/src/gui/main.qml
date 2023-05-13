@@ -482,7 +482,7 @@ Window {
                   textFormat: TextEdit.MarkdownText
                   anchors.fill: parent
                   anchors.margins: defaultMargin
-                  text: "## Already in library"
+                  text: "## Уже в вашей библиотеке"
                   color: "white"
                   visible: store_detailed_logic.location === 1
                 }
@@ -491,7 +491,7 @@ Window {
                   textFormat: TextEdit.MarkdownText
                   anchors.fill: parent
                   anchors.margins: defaultMargin
-                  text: "## Already in cart"
+                  text: "## Уже в вашей корзине"
                   color: "white"
                   visible: store_detailed_logic.location === 2
                 }
@@ -698,18 +698,32 @@ Window {
             width: layoutWidth
             anchors.horizontalCenter: parent.horizontalCenter
 
-            ColumnLayout {
-              id: walletPage
+            RowLayout {
+              ColumnLayout {
+                id: walletPage
 
-              Header {
-                text: "# Your balance is: " + wallet_logic.balance + "$"
+                Header {
+                  Layout.bottomMargin: 2 * defaultMargin
+                  text: "# Пополнить баланс"
+                }
+
+                BalanceAddSection {
+                  content: "Добавить 50 руб."
+                  amount: 50
+                }
+                BalanceAddSection {content: "Добавить 100 руб."}
+                BalanceAddSection {content: "Добавить 300 руб."}
+                BalanceAddSection {content: "Добавить 500 руб."}
+                BalanceAddSection {content: "Добавить 1000 руб."}
+                BalanceAddSection {content: "Добавить 3000 руб."}
+                BalanceAddSection {content: "Добавить 5000 руб."}
               }
 
-              BuyButton {
-                text: "Top up"
-                function handler() {
-                  storeStack.currentIndex = storeStack.walletTopUpIndex
-                }
+              Header {
+                Layout.leftMargin: 2 * defaultMargin
+                Layout.topMargin: 8 * defaultMargin
+                Layout.alignment: Qt.AlignTop
+                text: "# Остаток средств: " + wallet_logic.balance + " руб."
               }
             }
           }
