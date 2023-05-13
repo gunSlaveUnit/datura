@@ -50,16 +50,17 @@ async def pay(db: Session = Depends(get_db),
             player_id=current_user.id,
             game_id=record.game_id
         )
-
-        game = await Game.by_id(db, record.game_id)
-        new_purchase_record = Purchase(
-            buyer_id=current_user.id,
-            game_id=record.game_id,
-            price=game.price
-        )
-
         await Library.create(db, new_library_record)
-        await Purchase.create(db, new_purchase_record)
+
+        if not current_user.is_superuser:
+            game = await Game.by_id(db, record.game_id)
+            new_purchase_record = Purchase(
+                buyer_id=current_user.id,
+                game_id=record.game_id,
+                price=game.price
+            )
+            await Purchase.create(db, new_purchase_record)
+
         await Cart.delete(db, record.id)
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
