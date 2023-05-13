@@ -4,6 +4,7 @@ import QtQuick.Layouts 2.15
 Rectangle {
   property string content: ""
   property double amount: 0.0
+  function handler() {}
 
   width: layoutWidth / 2
   height: 56
@@ -25,8 +26,9 @@ Rectangle {
 
     BuyButton {
       text: "Пополнить"
+
       function handler() {
-        walletLogic.amount = parent.parent.amount
+        parent.parent.handler()
       }
     }
   }

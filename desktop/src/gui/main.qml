@@ -709,7 +709,9 @@ Window {
 
                 BalanceAddSection {
                   content: "Добавить 50 руб."
-                  amount: 50
+                  function handler() {
+                    wallet_logic.amount = 50
+                  }
                 }
                 BalanceAddSection {content: "Добавить 100 руб."}
                 BalanceAddSection {content: "Добавить 300 руб."}
