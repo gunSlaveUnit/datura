@@ -711,14 +711,51 @@ Window {
                   content: "Добавить 50 руб."
                   function handler() {
                     wallet_logic.amount = 50
+                    storeStack.currentIndex = storeStack.walletTopUpIndex
                   }
                 }
-                BalanceAddSection {content: "Добавить 100 руб."}
-                BalanceAddSection {content: "Добавить 300 руб."}
-                BalanceAddSection {content: "Добавить 500 руб."}
-                BalanceAddSection {content: "Добавить 1000 руб."}
-                BalanceAddSection {content: "Добавить 3000 руб."}
-                BalanceAddSection {content: "Добавить 5000 руб."}
+                BalanceAddSection {
+                  content: "Добавить 100 руб."
+                  function handler() {
+                    wallet_logic.amount = 100
+                    storeStack.currentIndex = storeStack.walletTopUpIndex
+                  }
+                }
+                BalanceAddSection {
+                  content: "Добавить 300 руб."
+                  function handler() {
+                    wallet_logic.amount = 300
+                    storeStack.currentIndex = storeStack.walletTopUpIndex
+                  }
+                }
+                BalanceAddSection {
+                  content: "Добавить 500 руб."
+                  function handler() {
+                    wallet_logic.amount = 500
+                    storeStack.currentIndex = storeStack.walletTopUpIndex
+                  }
+                }
+                BalanceAddSection {
+                  content: "Добавить 1000 руб."
+                  function handler() {
+                    wallet_logic.amount = 1000
+                    storeStack.currentIndex = storeStack.walletTopUpIndex
+                  }
+                }
+                BalanceAddSection {
+                  content: "Добавить 3000 руб."
+                  function handler() {
+                    wallet_logic.amount = 3000
+                    storeStack.currentIndex = storeStack.walletTopUpIndex
+                  }
+                }
+                BalanceAddSection {
+                  content: "Добавить 5000 руб."
+                  function handler() {
+                    wallet_logic.amount = 5000
+                    storeStack.currentIndex = storeStack.walletTopUpIndex
+                  }
+                }
               }
 
               Header {
@@ -744,61 +781,56 @@ Window {
 
               ColumnLayout {
                 Link {
-                  content: qsTr("To wallet")
+                  content: qsTr("К балансу кошелька")
 
                   function handler() {
                     storeStack.currentIndex = storeStack.walletIndex
                   }
                 }
 
-                Span {
-                  text: qsTr("Choose a deposit method")
+                Header {
+                  Layout.bottomMargin: 2 * defaultMargin
+                  text: "# Оплата"
                 }
 
-                Combo {
-                  implicitWidth: 140
+                FormInputLabel {
+                  content: qsTr("Выберите метод оплаты")
+                }
 
-                  model: [
-                    "PayPal",
-                    "Visa",
-                    "MasterCard",
-                    "American Express",
-                    "Мир",
-                    "Яндекс.Деньги",
-                    "QIWI Wallet",
-                    "Mobile payments",
-                  ]
+                RowLayout {
+                  Combo {
+                    id: paymentMethods
+                    implicitWidth: 200
+
+                    model: [
+                      "Банковская карта"
+                    ]
+                  }
+
+                  BuyButton {
+                    text: qsTr("Оплатить")
+                    function handler() {
+                      wallet_logic.top_up()
+                    }
+                  }
                 }
 
                 Indent {}
 
-                Span {
-                  text: qsTr("Select amount")
-                }
+                GridLayout {
+                  rows: 4
+                  columns: 2
 
-                Combo {
-                  id: paymentCost
-                  implicitWidth: 140
-
-                  model: [
-                    "5",
-                    "10",
-                    "25",
-                    "50",
-                    "100",
-                  ]
-                  onCurrentTextChanged: {
-                    text = currentText + "$"
+                  FormInputLabel {content: "Номер карты"}
+                  FormInput {}
+                  FormInputLabel {content: "Месяц"}
+                  FormInput {}
+                  FormInputLabel {content: "Год"}
+                  FormInput {}
+                  FormInputLabel {
+                    content: "CVV / CVC"
                   }
-                }
-
-                ActionButton {
-                  text: qsTr("Pay")
-                  function handler() {
-                    var selectedValue = paymentCost.currentText
-                    selectedValue = selectedValue.replace("$", "")
-                    wallet_logic.top_up(selectedValue)
-                  }
+                  FormInput {echoMode: TextInput.Password}
                 }
               }
             }
