@@ -69,6 +69,11 @@ class AppLogic(QObject):
         self._capsule = ''
         self._trailers = []
 
+        self._server_screenshots = ''
+        self._server_header = ''
+        self._server_capsule = ''
+        self._server_trailers = ''
+
     # region Id
 
     @Property(int, notify=id_changed)
@@ -267,10 +272,10 @@ class AppLogic(QObject):
 
     @Slot(int)
     def map(self, game_id: int):
-        reply = self._auth_service.authorized_session.get(GAMES_URL + f'{str(game_id)}/')
+        response = self._auth_service.authorized_session.get(GAMES_URL + f'{str(game_id)}/')
 
-        if reply.status_code == requests.codes.ok:
-            data = reply.json()
+        if response.ok:
+            data = response.json()
 
             self.id = data['id']
             self.is_approved = data['is_approved']
@@ -291,6 +296,45 @@ class AppLogic(QObject):
                 self.day_index = date.day
                 self.month_index = date.month
                 self.year_index = date.year - self.BASE_YEAR
+
+            response = self._auth_service.authorized_session.get(GAMES_URL + f'{str(game_id)}/header/')
+            if response.ok:
+                content_disposition = response.headers['content-disposition']
+                filename = content_disposition.split('=')[1]
+                self.server_header = filename
+
+            response = self._auth_service.authorized_session.get(GAMES_URL + f'{str(game_id)}/capsule/')
+            if response.ok:
+                content_disposition = response.headers['content-disposition']
+                filename = content_disposition.split('=')[1]
+                self.server_capsule = filename
+
+            response = self._auth_service.authorized_session.get(GAMES_URL + f'{str(game_id)}/screenshots/')
+            if response.ok:
+                filenames = response.json()['filenames']
+                if filenames:
+                    first_file = filenames[0]
+                    amount = len(filenames) - 1
+
+                    if amount != 0:
+                        self.server_screenshots = f'{first_file} and {amount} more'
+                    else:
+                        self.server_screenshots = f'{first_file}'
+
+            response = self._auth_service.authorized_session.get(GAMES_URL + f'{str(game_id)}/trailers/')
+            if response.ok:
+                filenames = response.json()['filenames']
+                if filenames:
+                    first_file = filenames[0]
+                    amount = len(filenames) - 1
+
+                    if amount != 0:
+                        self.server_trailers = f'{first_file} and {amount} more'
+                    else:
+                        self.server_trailers = f'{first_file}'
+
+            print(self.server_screenshots)
+
 
     @Slot()
     def update(self):
@@ -358,6 +402,7 @@ class AppLogic(QObject):
 
         if reply.status_code == requests.codes.ok:
             self.reset_files()
+            self.map(self.id)
 
     @Slot()
     def send_for_verification(self):
@@ -408,6 +453,54 @@ class AppLogic(QObject):
     possible_days = Property(list, lambda self: [_ for _ in range(1, 32)], constant=True)
     possible_months = Property(list, lambda self: [_ for _ in range(1, 13)], constant=True)
     possible_years = Property(list, lambda self: self.get_possible_years(), constant=True)
+
+    server_header_changed = Signal()
+
+    @Property(str, notify=server_header_changed)
+    def server_header(self):
+        return self._server_header
+
+    @server_header.setter
+    def server_header(self, new_value: str):
+        if self._server_header != new_value:
+            self._server_header = new_value
+            self.server_header_changed.emit()
+
+    server_capsule_changed = Signal()
+
+    @Property(str, notify=server_capsule_changed)
+    def server_capsule(self):
+        return self._server_capsule
+
+    @server_capsule.setter
+    def server_capsule(self, new_value: str):
+        if self._server_capsule != new_value:
+            self._server_capsule = new_value
+            self.server_capsule_changed.emit()
+
+    server_screenshots_changed = Signal()
+
+    @Property(str, notify=server_screenshots_changed)
+    def server_screenshots(self):
+        return self._server_screenshots
+
+    @server_screenshots.setter
+    def server_screenshots(self, new_value: str):
+        if self._server_screenshots != new_value:
+            self._server_screenshots = new_value
+            self.server_screenshots_changed.emit()
+
+    server_trailers_changed = Signal()
+
+    @Property(str, notify=server_trailers_changed)
+    def server_trailers(self):
+        return self._server_trailers
+
+    @server_trailers.setter
+    def server_trailers(self, new_value: str):
+        if self._server_trailers != new_value:
+            self._server_trailers = new_value
+            self.server_trailers_changed.emit()
 
     @Property(str, notify=displayed_header_changed)
     def displayed_header(self):
