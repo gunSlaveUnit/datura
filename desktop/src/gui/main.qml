@@ -19,13 +19,9 @@ Window {
   visible: true
   color: backgroundWindowColor
 
-  function timestampToHuman(timestamp) {
+  function humanTimestamp(timestamp) {
     var date = new Date()
-    var dateString = date.toLocaleDateString('ru-RU', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    var dateString = date.toLocaleDateString('ru-RU', "dd MMM yyyy");
     return dateString
   }
 
@@ -380,7 +376,7 @@ Window {
                       }
 
                       Span {
-                        text: release_date ? timestampToHuman(release_date) : "Скоро"
+                        text: release_date ? humanTimestamp(release_date) : "Скоро"
                       }
 
                       Span {
@@ -457,7 +453,7 @@ Window {
                   }
 
                   Regular {
-                    text: store_detailed_logic.release_date ? timestampToHuman(store_detailed_logic.release_date) : "Скоро"
+                    text: store_detailed_logic.release_date ? humanTimestamp(store_detailed_logic.release_date) : "Скоро"
                   }
                 }
               }
