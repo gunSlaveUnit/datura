@@ -410,7 +410,7 @@ class AppLogic(QObject):
 
     @Slot()
     def publish(self):
-        reply = self._auth_service.authorized_session.patch(
+        self._auth_service.authorized_session.patch(
             GAMES_URL + f'{str(self.id)}/publish/',
             json={"is_published": self.is_published}
         )

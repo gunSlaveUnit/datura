@@ -32,6 +32,7 @@ class LibraryDetailedLogic(QObject):
         LOADING = auto()
         RUNNING = auto()
         NOT_AVAILABLE = auto()
+        NO_BUILDS = auto()
 
     def __init__(self, auth_service: AuthService):
         super().__init__()
@@ -207,7 +208,10 @@ class LibraryDetailedLogic(QObject):
                     else:
                         self.app_status = self.AppStatus.INSTALLED
             else:
-                self.app_status = self.AppStatus.NOT_AVAILABLE
+                if not builds:
+                    self.app_status = self.AppStatus.NO_BUILDS
+                else:
+                    self.app_status = self.AppStatus.NOT_AVAILABLE
 
             self.time = data["game_time"]
             if self.time < 3600:
