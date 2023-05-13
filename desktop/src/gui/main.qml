@@ -441,6 +441,7 @@ Window {
                 }
 
                 ColumnLayout {
+                  Layout.alignment: Qt.AlignTop
                   Layout.preferredWidth: layoutWidth - game_screenshots_swipe_view.width - defaultMargin
 
                   Text {
@@ -452,8 +453,51 @@ Window {
                     text: `<p align='justify'>${store_detailed_logic.short_description}</p>`
                   }
 
-                  Regular {
-                    text: store_detailed_logic.release_date ? humanTimestamp(store_detailed_logic.release_date) : "Скоро"
+                  RowLayout {
+                    Layout.preferredWidth: parent.width
+
+                    Regular {
+                      content: "Дата выхода:"
+                    }
+
+                    Regular {
+                      color: "#64BCEF"
+                      Layout.preferredWidth: parent.width
+                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                      content: store_detailed_logic.release_date ? humanTimestamp(store_detailed_logic.release_date) : "Скоро"
+                    }
+                  }
+
+                  RowLayout {
+                    Layout.preferredWidth: parent.width
+
+                    Regular {
+                      id: developerLabel
+                      content: "Разработчик:"
+                    }
+
+                    Regular {
+                      color: "#64BCEF"
+                      Layout.preferredWidth: parent.width - developerLabel.contentWidth
+                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                      content: store_detailed_logic.developer
+                    }
+                  }
+
+                  RowLayout {
+                    Layout.preferredWidth: parent.width
+
+                    Regular {
+                      id: publisherLabel
+                      content: "Издатель:"
+                    }
+
+                    Regular {
+                      color: "#64BCEF"
+                      Layout.preferredWidth: parent.width - publisherLabel.contentWidth
+                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                      content: store_detailed_logic.publisher
+                    }
                   }
                 }
               }

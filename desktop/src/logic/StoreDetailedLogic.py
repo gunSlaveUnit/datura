@@ -34,6 +34,8 @@ class StoreDetailedLogic(QObject):
                  cart_service: CartService):
         super().__init__()
 
+        self._publisher = ''
+        self._developer = ''
         self._game_service: GameService = game_service
         self._library_service: LibraryService = library_service
         self._cart_service: CartService = cart_service
@@ -174,6 +176,30 @@ class StoreDetailedLogic(QObject):
 
     # endregion
 
+    developer_changed = Signal()
+
+    @Property(str, notify=developer_changed)
+    def developer(self):
+        return self._developer
+
+    @developer.setter
+    def developer(self, new_value: str):
+        if self._developer != new_value:
+            self._developer = new_value
+            self.developer_changed.emit()
+
+    publisher_changed = Signal()
+
+    @Property(str, notify=publisher_changed)
+    def publisher(self):
+        return self._publisher
+
+    @publisher.setter
+    def publisher(self, new_value: str):
+        if self._publisher != new_value:
+            self._publisher = new_value
+            self.publisher_changed.emit()
+
     @Slot(int)
     def map(self, game_id: int):
         response = self._game_service.item(game_id)
@@ -185,6 +211,8 @@ class StoreDetailedLogic(QObject):
             self.short_description = game.short_description
             self.long_description = game.long_description
             self.price = game.price
+            self.developer = game.developer
+            self.publisher = game.publisher
             self.release_date = game.release_date
 
             self._set_game_location_status()
