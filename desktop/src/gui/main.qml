@@ -595,13 +595,13 @@ Window {
 
               Button {
                 visible: library_detailed_logic.app_status === 0
-                text: qsTr("Install")
+                text: qsTr("Установить")
                 onClicked:  library_detailed_logic.download()
               }
 
               Button {
                 visible: library_detailed_logic.app_status === 1
-                text: qsTr("Launch")
+                text: qsTr("Запуск")
                 onClicked: library_detailed_logic.launch()
               }
 
@@ -612,13 +612,19 @@ Window {
 
               Button {
                 visible: library_detailed_logic.app_status === 3
-                text: qsTr("Stop")
+                text: qsTr("Остановить")
                 onClicked: library_detailed_logic.shutdown()
               }
 
               Text {
                 visible: library_detailed_logic.app_status === 4
-                text: "Not available for your platform"
+                text: "Игра находится в вашей библиотеке, но недоступна для вашей платформы"
+                color: "white"
+              }
+
+              Text {
+                visible: library_detailed_logic.app_status === 5
+                text: "Недоступно для загрузки. Попробуйте позже"
                 color: "white"
               }
             }
@@ -1397,9 +1403,11 @@ Window {
                 Switcher {
                   enabled: app_logic.is_approved
                   position: app_logic.is_published
-                  onToggled: app_logic.is_published = position
+                  onToggled: {
+                    app_logic.is_published = position
+                    app_logic.publish()
+                  }
                   text: qsTr("Опубликовано")
-                  onClicked: app_logic.publish()
                   Layout.rightMargin: defaultMargin
                 }
               }
@@ -1589,13 +1597,13 @@ Window {
                     Platform.FileDialog {
                       id: attach_header_image_file_dialog
                       fileMode: Platform.FileDialog.OpenFile
-                      nameFilters: ["Images (*.webp)"]
+                      nameFilters: ["Images (*.webp *jpg *png)"]
                       onAccepted: app_logic.header = file
                       folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
                     }
 
                     FormInputLabel {
-                      content: qsTr("ПОСТЕР ДЛЯ МАГАЗИНА (*.webp):")
+                      content: qsTr("ПОСТЕР ДЛЯ МАГАЗИНА (*.webp *jpg *png):")
                     }
 
                     FormInputLabel {
@@ -1628,13 +1636,13 @@ Window {
                     Platform.FileDialog {
                       id: attach_capsule_image_file_dialog
                       fileMode: Platform.FileDialog.OpenFile
-                      nameFilters: ["Images (*.webp)"]
+                      nameFilters: ["Images (*.webp *jpg *png)"]
                       onAccepted: app_logic.capsule = file
                       folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
                     }
 
                     FormInputLabel {
-                      content: qsTr("ПОСТЕР ДЛЯ БИБЛИОТЕКИ (*.webp):")
+                      content: qsTr("ПОСТЕР ДЛЯ БИБЛИОТЕКИ (*.webp *jpg *png):")
                     }
 
                     FormInputLabel {
@@ -1667,13 +1675,13 @@ Window {
                     Platform.FileDialog {
                       id: attach_screenshots_file_dialog
                       fileMode: Platform.FileDialog.OpenFiles
-                      nameFilters: ["Images (*.webp)"]
+                      nameFilters: ["Images (*.webp *jpg *png)"]
                       onAccepted: app_logic.screenshots = files
                       folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
                     }
 
                     FormInputLabel {
-                      content: qsTr("СКРИНШОТЫ (*webp):")
+                      content: qsTr("СКРИНШОТЫ (*.webp *jpg *png):")
                     }
 
                     FormInputLabel {
