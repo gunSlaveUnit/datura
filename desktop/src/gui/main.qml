@@ -438,6 +438,7 @@ Window {
                   Layout.alignment: Qt.AlignTop
                   Layout.preferredWidth: layoutWidth - game_screenshots_swipe_view.width - defaultMargin
                   color: "#ddd"
+                  font.pointSize: 12
                   wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                   text: `<p align='justify'>${store_detailed_logic.short_description}</p>`
                 }
@@ -510,6 +511,7 @@ Window {
                 textFormat: TextEdit.MarkdownText
                 Layout.preferredWidth: game_screenshots_swipe_view.width
                 color: "#ddd"
+                font.pointSize: 12
                 wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
                 text: store_detailed_logic.long_description
               }
