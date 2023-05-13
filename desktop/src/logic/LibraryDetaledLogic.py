@@ -51,18 +51,28 @@ class LibraryDetailedLogic(QObject):
         self._loading_progress = ''
 
         self.time = 0
-        self.timer = QTimer()
+        self.play_timer = QTimer()
         minute = 1000 * 60
-        self.timer.setInterval(minute)
-        self.timer.timeout.connect(self.timer_tick)
+        self.play_timer.setInterval(minute)
+        self.play_timer.timeout.connect(self.play_timer_tick)
 
-    def timer_tick(self):
+        self.app_timer = QTimer()
+        second = 1000
+        self.app_timer.setInterval(second)
+        self.app_timer.timeout.connect(self.app_timer_tick)
+
+    def play_timer_tick(self):
         minute = 60
         self._auth_service.authorized_session.put(LIBRARY_URL + f'{self._id}/', json={
             "game_time": self.time + minute,
             "last_run": datetime.today().timestamp()
         })
         self.map(self._game_id)
+
+    def app_timer_tick(self):
+        poll = self.app.poll()
+        if poll is not None:
+            self.shutdown()
 
     # region App status
 
@@ -312,7 +322,8 @@ class LibraryDetailedLogic(QObject):
 
                     self.app = subprocess.Popen(path, *params, stdout=subprocess.PIPE)
                     self.app_status = self.AppStatus.RUNNING
-                    self.timer.start()
+                    self.play_timer.start()
+                    self.app_timer.start()
                     self._auth_service.authorized_session.put(LIBRARY_URL + f'{self._id}/', json={
                         "game_time": self.time,
                         "last_run": datetime.today().timestamp()
@@ -325,4 +336,5 @@ class LibraryDetailedLogic(QObject):
         self.app.kill()
         self.app.wait()
         self.app_status = self.AppStatus.INSTALLED
-        self.timer.stop()
+        self.play_timer.stop()
+        self.app_timer.stop()
