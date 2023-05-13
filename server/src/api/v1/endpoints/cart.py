@@ -1,11 +1,13 @@
+import json
 from typing import Type
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session, joinedload
 from starlette import status
 from starlette.responses import Response
 
 from common.api.v1.schemas.cart import CartDBSchema, CartCreateSchema
+from server.src.api.v1.endpoints.users import balance
 from server.src.core.models.cart import Cart
 from server.src.core.models.game import Game
 from server.src.core.models.library import Library
@@ -44,6 +46,17 @@ async def create(new_record: CartCreateSchema,
 async def pay(db: Session = Depends(get_db),
               current_user: User = Depends(GetCurrentUser())):
     cart_records = db.query(Cart).filter(Cart.buyer_id == current_user.id).all()
+
+    total_cost = sum((record.game.price for record in cart_records))
+
+    current_user_balance = await balance(current_user.id, db, current_user)
+    money_amount = json.loads(current_user_balance.body)
+
+    if total_cost > money_amount and not current_user.is_superuser:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Insufficient funds to pay"
+        )
 
     for record in cart_records:
         new_library_record = Library(
