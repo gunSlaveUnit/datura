@@ -244,10 +244,6 @@ Window {
 			        onTriggered: storeStack.currentIndex = storeStack.walletIndex
 			      }
 
-						MenuItem {
-			        text: qsTr("Settings")
-			      }
-
 			      MenuItem {
 			        text: qsTr("Logout")
 			        onTriggered: auth_logic.sign_out()
