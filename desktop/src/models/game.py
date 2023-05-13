@@ -62,7 +62,7 @@ class GameList(QAbstractListModel):
             self.beginResetModel()
             self._games = []
             for game in games:
-                self._games.append(Game(**game, is_checked=False))
+                self._games.append(Game(**game, is_checked=None))
             self.endResetModel()
 
     @Slot()
@@ -72,7 +72,7 @@ class GameList(QAbstractListModel):
             params = {"company_id": self._company_service.company.id}
             data = self._auth_service.authorized_session.get(GAMES_URL, params = params).json()
             self.beginResetModel()
-            self._games = [Game(**detailed_game_data, is_checked=False) for detailed_game_data in data]
+            self._games = [Game(**detailed_game_data, is_checked=None) for detailed_game_data in data]
             self.endResetModel()
 
     @Slot()
@@ -82,7 +82,7 @@ class GameList(QAbstractListModel):
         self._games = []
         for record in cart_records:
             game_data = record["game"]
-            self._games.append(Game(**game_data, is_checked=False))
+            self._games.append(Game(**game_data, is_checked=True))
         self.endResetModel()
 
     @Slot()
