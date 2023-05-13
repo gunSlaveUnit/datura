@@ -18,9 +18,11 @@ router = APIRouter(prefix=ASSETS_ROUTER_PREFIX, tags=[Tags.ASSETS])
 
 
 @router.get('/header/')
-async def header_info(game_id: int,
+async def download_header(game_id: int,
                           db=Depends(get_db),
                           current_user: User | None = Depends(GetCurrentUser(is_required=False))):
+    """Returns an image for the header section of the game."""
+
     game = await Game.by_id(db, game_id)
 
     admin_role = await Role.by_title(db, RoleType.ADMIN)
@@ -48,24 +50,11 @@ async def header_info(game_id: int,
             detail="File not found"
         )
 
-    return JSONResponse({"filename": files[0].name})
-
-
-@router.get('/header/file/')
-async def download_header(game_id: int,
-                          db=Depends(get_db),
-                          current_user: User | None = Depends(GetCurrentUser(is_required=False))):
-    """Returns an image for the header section of the game."""
-
-    info_response = await header_info(game_id, db, current_user)
-    info = json.loads(info_response.body)
-
-    game = await Game.by_id(db, game_id)
     searching_directory = GAMES_ASSETS_PATH.joinpath(game.directory, GAMES_ASSETS_HEADER_DIR)
 
     return FileResponse(
-        searching_directory.joinpath(info['filename']),
-        headers={"Content-Disposition": f"filename={info['filename']}"},
+        searching_directory.joinpath(files[0]),
+        headers={"Content-Disposition": f"filename={files[0].name}"},
         media_type="image/webp"
     )
 
