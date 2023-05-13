@@ -19,6 +19,15 @@ Window {
   visible: true
   color: backgroundWindowColor
 
+  function timestampToHuman(timestamp) {
+    var dateString = date.toLocaleDateString('ru-RU', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    return dateString
+  }
+
   StackLayout {
     id: mainStack
 
@@ -370,7 +379,7 @@ Window {
                       }
 
                       Span {
-                        text: release_date
+                        text: release_date ? timestampToHuman(release_date) : "Скоро"
                       }
 
                       Span {
@@ -397,7 +406,7 @@ Window {
               id: storeGameDetailedPage
 
               Link {
-                content: qsTr("To the store")
+                content: qsTr("В магазин")
 
                 function handler() {
                   game_list_model.load_store()
@@ -434,13 +443,21 @@ Window {
                   }
                 }
 
-                Text {
-                  Layout.alignment: Qt.AlignTop
+                ColumnLayout {
                   Layout.preferredWidth: layoutWidth - game_screenshots_swipe_view.width - defaultMargin
-                  color: "#ddd"
-                  font.pointSize: 12
-                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                  text: `<p align='justify'>${store_detailed_logic.short_description}</p>`
+
+                  Text {
+                    Layout.alignment: Qt.AlignTop
+                    Layout.preferredWidth: parent.width
+                    color: "#ddd"
+                    font.pointSize: 12
+                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                    text: `<p align='justify'>${store_detailed_logic.short_description}</p>`
+                  }
+
+                  Regular {
+                    text: store_detailed_logic.release_date ? timestampToHuman(release_date) : "Скоро"
+                  }
                 }
               }
 

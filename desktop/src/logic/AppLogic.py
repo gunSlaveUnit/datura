@@ -293,8 +293,8 @@ class AppLogic(QObject):
             else:
                 self.coming_soon = False
                 date = datetime.datetime.fromtimestamp(data['release_date'])
-                self.day_index = date.day
-                self.month_index = date.month
+                self.day_index = date.day - 1
+                self.month_index = date.month - 1
                 self.year_index = date.year - self.BASE_YEAR
 
             response = self._auth_service.authorized_session.get(GAMES_URL + f'{str(game_id)}/header/')
@@ -346,8 +346,9 @@ class AppLogic(QObject):
         }
 
         if not self._coming_soon:
+            # TODO: something wrong with indices
             release_date = datetime.datetime(
-                day=self._day_index,
+                day=self._day_index + 1,
                 month=self._month_index,
                 year=self._year_index + self.BASE_YEAR).timestamp()
             data["release_date"] = release_date

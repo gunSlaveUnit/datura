@@ -42,6 +42,7 @@ class StoreDetailedLogic(QObject):
         self._title = ''
         self._short_description = ''
         self._long_description = ''
+        self._release_date = 0.0
         self._price = 0.0
 
         self._screenshots = []
@@ -119,6 +120,18 @@ class StoreDetailedLogic(QObject):
 
     # endregion
 
+    release_date_changed = Signal()
+
+    @Property(int, notify=release_date_changed)
+    def release_date(self):
+        return self._release_date
+
+    @release_date.setter
+    def release_date(self, new_value: int):
+        if self._release_date != new_value:
+            self._release_date = new_value
+            self.release_date_changed.emit()
+
     # region Screenshots
 
     @Property(list, notify=screenshots_changed)
@@ -172,6 +185,7 @@ class StoreDetailedLogic(QObject):
             self.short_description = game.short_description
             self.long_description = game.long_description
             self.price = game.price
+            self.release_date = game.release_date
 
             self._set_game_location_status()
 
