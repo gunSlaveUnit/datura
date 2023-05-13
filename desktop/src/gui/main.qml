@@ -1599,8 +1599,11 @@ Window {
                     }
 
                     FormInputLabel {
-                      content: app_logic.displayed_header
-                      color: "orange"
+                      content: app_logic.displayed_header === '' ?
+                        (app_logic.server_header === '' ? 'Отсутствует' :  app_logic.server_header)
+                          :
+                        app_logic.displayed_header
+                      color: app_logic.displayed_header === '' ? 'white' : "orange"
                     }
 
                     NeutralButton {
@@ -1635,8 +1638,11 @@ Window {
                     }
 
                     FormInputLabel {
-                      content: app_logic.displayed_capsule
-                      color: "orange"
+                      content: app_logic.displayed_capsule === '' ?
+                        (app_logic.server_capsule === '' ? 'Отсутствует' :  app_logic.server_capsule)
+                          :
+                        app_logic.displayed_capsule
+                      color: app_logic.displayed_capsule === '' ? 'white' : "orange"
                     }
 
                     NeutralButton {
@@ -1671,8 +1677,11 @@ Window {
                     }
 
                     FormInputLabel {
-                      content: app_logic.displayed_screenshots
-                      color: "orange"
+                      content: app_logic.displayed_screenshots === '' ?
+                        (app_logic.server_screenshots === '' ? 'Отсутствует' :  app_logic.server_screenshots)
+                          :
+                        app_logic.displayed_screenshots
+                      color: app_logic.displayed_screenshots === '' ? 'white' : "orange"
                     }
 
                     NeutralButton {
@@ -1707,8 +1716,11 @@ Window {
                     }
 
                     FormInputLabel {
-                      content: app_logic.displayed_trailers
-                      color: "orange"
+                      content: app_logic.displayed_trailers === '' ?
+                        (app_logic.server_trailers === '' ? 'Отсутствует' :  app_logic.server_trailers)
+                          :
+                        app_logic.displayed_trailers
+                      color: app_logic.displayed_trailers === '' ? 'white' : "orange"
                     }
 
                     NeutralButton {
