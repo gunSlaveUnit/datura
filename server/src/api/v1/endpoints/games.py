@@ -172,5 +172,5 @@ async def publish(game_id: int,
 
     await game.update(db, {
         "is_send_for_verification": False,
-        "is_published": game.is_approved
+        "is_published": publishing.is_published
     })
