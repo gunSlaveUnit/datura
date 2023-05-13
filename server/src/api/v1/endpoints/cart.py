@@ -52,7 +52,7 @@ async def pay(db: Session = Depends(get_db),
     current_user_balance = await balance(current_user.id, db, current_user)
     money_amount = json.loads(current_user_balance.body)
 
-    if total_cost > money_amount and not current_user.is_superuser:
+    if total_cost > money_amount['balance'] and not current_user.is_superuser:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Insufficient funds to pay"
