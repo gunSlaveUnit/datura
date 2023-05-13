@@ -228,24 +228,25 @@ Window {
 			      y: parent.height
 
 						MenuItem {
-			        text: qsTr("Profile")
+			        text: qsTr("Профиль")
 			      }
 
 			      MenuItem {
-			        text: qsTr("Cart")
+			        text: qsTr("Корзина")
 			        onTriggered: {
 			          game_list_model.load_cart()
                 storeStack.currentIndex = storeStack.cartIndex
+                game_list_model.recount_total_cost()
               }
 			      }
 
 						MenuItem {
-			        text: qsTr("Wallet")
+			        text: qsTr("Кошелек")
 			        onTriggered: storeStack.currentIndex = storeStack.walletIndex
 			      }
 
 			      MenuItem {
-			        text: qsTr("Logout")
+			        text: qsTr("Выйти из аккаунта")
 			        onTriggered: auth_logic.sign_out()
 			      }
 			    }
@@ -478,22 +479,28 @@ Window {
                   }
                 }
 
-                Text {
-                  textFormat: TextEdit.MarkdownText
+                RowLayout {
                   anchors.fill: parent
                   anchors.margins: defaultMargin
-                  text: "## Уже в вашей библиотеке"
-                  color: "white"
-                  visible: store_detailed_logic.location === 1
+
+                  Text {
+                    textFormat: TextEdit.MarkdownText
+                    text: "## Уже в вашей библиотеке"
+                    color: "white"
+                    visible: store_detailed_logic.location === 1
+                  }
                 }
 
-                Text {
-                  textFormat: TextEdit.MarkdownText
+                RowLayout {
                   anchors.fill: parent
                   anchors.margins: defaultMargin
-                  text: "## Уже в вашей корзине"
-                  color: "white"
-                  visible: store_detailed_logic.location === 2
+
+                  Text {
+                    textFormat: TextEdit.MarkdownText
+                    text: "## Уже в вашей корзине"
+                    color: "white"
+                    visible: store_detailed_logic.location === 2
+                  }
                 }
               }
 
@@ -642,13 +649,12 @@ Window {
               id: cartPage
 
               RowLayout {
-                Text {
-                  color: "white"
-                  text: "Total Price: " + game_list_model.total_cost
+                Header {
+                  text: "# Сумма покупки: " + game_list_model.total_cost
                 }
 
                 BuyButton {
-                  text: "Buy"
+                  text: "Оплатить"
                   function handler() {
                     cart_logic.pay()
                     game_list_model.load_cart()
@@ -658,31 +664,49 @@ Window {
                 }
               }
 
+              Regular {
+                color: "#64BCEF"
+                content: "Деньги за покупку будут списаны с вашего кошелька Foggie. Если на нем недостаточно средств, пополните баланс"
+              }
+
               ListView {
                 model: game_list_model
 
-                delegate: RowLayout {
-                  Text {
-                    text: title
-                    color: "white"
-                    font.underline: true
+                delegate: Rectangle {
+                  implicitWidth: 400
+                  implicitHeight: 50
+                  radius: defaultMargin / 2
+                  color: "transparent"
 
-                    MouseArea {
-                      anchors.fill: parent
-                      cursorShape: Qt.PointingHandCursor
-                      hoverEnabled: true
-                      onClicked: {
-                        store_detailed_logic.map(id)
-                        storeStack.currentIndex = storeStack.storeDetailedIndex
-                      }
+                  RowLayout {
+                    anchors.fill: parent
+                    anchors.margins: defaultMargin
+
+                    Image {
+                      Layout.preferredWidth: height * 16 / 9
+                      Layout.preferredHeight: parent.height
+                      source: `http://127.0.0.1:8000/api/v1/games/${id}/header/`
+                      mipmap: true
                     }
+
+                    Regular {content: title}
+
+                    Item {
+                      Layout.fillWidth: true
+                    }
+
+                    Regular {content: price}
                   }
 
-                  Checking {
-                    checked: is_checked
-                    onCheckedChanged: {
-                      game_list_model.change_checked_state(index)
-                      game_list_model.recount_total_cost()
+                  MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onEntered: parent.color = "#446691"
+                    onExited: parent.color = "transparent"
+                    onClicked: {
+                      store_detailed_logic.map(id)
+                      storeStack.currentIndex = storeStack.storeDetailedIndex
                     }
                   }
                 }
@@ -1297,7 +1321,7 @@ Window {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     hoverEnabled: true
-                    onEntered: releaseRowBack.color = "gray"
+                    onEntered: releaseRowBack.color = "#446691"
                     onExited: releaseRowBack.color = "transparent"
                     onClicked: {
                       app_logic.map(id)
@@ -1796,7 +1820,7 @@ Window {
                           anchors.fill: parent
                           cursorShape: Qt.PointingHandCursor
                           hoverEnabled: true
-                          onEntered: buildRowBack.color = "gray"
+                          onEntered: buildRowBack.color = "#446691"
                           onExited: buildRowBack.color = "transparent"
                           onClicked: {
                             build_logic.map(id)
