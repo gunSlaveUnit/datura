@@ -333,9 +333,6 @@ class AppLogic(QObject):
                     else:
                         self.server_trailers = f'{first_file}'
 
-            print(self.server_screenshots)
-
-
     @Slot()
     def update(self):
         data = {
