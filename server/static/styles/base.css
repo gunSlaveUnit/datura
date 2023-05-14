@@ -3,11 +3,14 @@ body {
   background-color: #0E151E;
 }
 
-h1, h2, h3, p {
+h1, h2, h3, p, label {
   color: #ddd
 }
 
 p {font-size: 24px}
+label {font-size: 20px}
+input {font-size: 24px}
+textarea {font-size: 24px}
 
 a {
   font-size: 32px;

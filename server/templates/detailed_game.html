@@ -2,7 +2,8 @@
 
 {% block content %}
 
-<h1>{{game.title}}</h1>
+<div style="width: 80%;margin-left: auto; margin-right: auto; ">
+  <h1>{{game.title}}</h1>
 
 <div>
   <h2 style="display: inline-block">Одобрено:</h2>
@@ -28,7 +29,7 @@
 <input id="id" value="{{game.id}}" hidden="hidden"/>
 <input id="author" value="{{game.author}}" hidden="hidden"/>
 
-<h2>Общая информация</h2>
+<h2 style="color: #0079F2">Общая информация</h2>
 
 <div>
   <label>
@@ -38,50 +39,53 @@
     </div>
   </label>
 </div>
+  <br>
 
 <div>
   <label>
-    ДАТА ВЫХОДА
+    Дата выхода
     {% if game.release_date %}
     <div>
       <input value="{{game.release_date}}" disabled>
     </div>
     {% else %}
-    <div>СКОРО</div>
+    <div>Скоро</div>
     {% endif %}
   </label>
 </div>
+  <br>
 
 <div>
   <label>
-    ЦЕНА
+    Цена
     <div>
       <input value="{{game.price}}" disabled>
     </div>
   </label>
 </div>
 
-<h2>Описания</h2>
+  <h2 style="color: #0079F2">Описания</h2>
 
 <div>
   <label>
-    КРАТКОЕ ОПИСАНИЕ
+    Краткое описание
     <div>
-      <textarea placeholder="{{game.short_description}}" disabled></textarea>
+      <textarea style="width: 80%; height: 200px" placeholder="{{game.short_description}}" disabled></textarea>
+    </div>
+  </label>
+</div>
+  <br>
+
+<div>
+  <label>
+    Развернутое описание
+    <div>
+      <textarea style="width: 80%; height: 500px;" placeholder="{{game.long_description}}" disabled></textarea>
     </div>
   </label>
 </div>
 
-<div>
-  <label>
-    РАЗВЕРНУТОЕ ОПИСАНИЕ
-    <div>
-      <textarea placeholder="{{game.long_description}}" disabled></textarea>
-    </div>
-  </label>
-</div>
-
-<h2>МАТЕРИАЛЫ</h2>
+<h2 style="color: #0079F2">Материалы</h2>
 
 <h3>ПОСТЕР ДЛЯ МАГАЗИНА</h3>
 <img id="header" src="" alt="No header image">
@@ -95,7 +99,7 @@
 <h3>ТРЕЙЛЕРЫ</h3>
 <div id="trailers"></div>
 
-<h2>Сборки</h2>
+<h2 style="color: #0079F2">Сборки</h2>
 {% for build in builds %}
   <div style="display: inline-block">
       <label>
@@ -114,7 +118,7 @@
   </div>
   {% endfor %}
 
-<h2>Управление</h2>
+<h2 style="color: #0079F2">Управление</h2>
 
 <div>
   <label>
@@ -128,6 +132,7 @@
     Продукт опубликован:
     <input type="checkbox" {% if game.is_published %} checked {% endif %} onclick="publishing(this.checked)">
 </label>
+</div>
 </div>
 
 <script>
