@@ -14,8 +14,8 @@ Window {
   property int layoutWidth: 984
 
   title: qsTr("foggie")
-  width: 1000
-  height: 500
+  width: 1100
+  height: 600
   visible: true
   color: backgroundWindowColor
 
@@ -634,61 +634,106 @@ Window {
           contentHeight: libraryDetailedPage.height + 2 * defaultMargin
 
           Item {
-            width: layoutWidth
+            width: layoutWidth - 3 * defaultMargin
             anchors.horizontalCenter: parent.horizontalCenter
 
             ColumnLayout {
               id: libraryDetailedPage
 
-              Text {
-                text: library_detailed_logic.game_title
-                color: "white"
-              }
+              Layout.preferredWidth: parent.width
 
-              Text {
-                text: library_detailed_logic.last_launched
-                color: "white"
-              }
+              Image {
+                Layout.preferredWidth: layoutWidth - 3 * defaultMargin
+                Layout.preferredHeight: width * 9 / 16
+                source: `http://127.0.0.1:8000/api/v1/games/${library_detailed_logic.game_id}/header/`
+                mipmap: true
 
-              Text {
-                visible: library_detailed_logic.play_time !== "0"
-                text: library_detailed_logic.play_time
-                color: "white"
-              }
+                Rectangle {
+                  anchors.fill: parent
+                  gradient: Gradient {
+                    GradientStop { position: 0.9; color: backgroundWindowColor }
+                    GradientStop { position: -1.0; color: "transparent" }
+                  }
+                }
 
-              Button {
-                visible: library_detailed_logic.app_status === 0
-                text: qsTr("Установить")
-                onClicked:  library_detailed_logic.download()
-              }
+                RowLayout {
+                  anchors.bottom: parent.bottom
+                  anchors.left: parent.left
+                  anchors.right: parent.right
+                  anchors.margins: defaultMargin
 
-              Button {
-                visible: library_detailed_logic.app_status === 1
-                text: qsTr("Запуск")
-                onClicked: library_detailed_logic.launch()
-              }
+                  Header {
+                    text: "# " + library_detailed_logic.game_title
+                  }
 
-              Button {
-                visible: library_detailed_logic.app_status === 2
-                text: library_detailed_logic.loading_progress
-              }
+                  Item {
+                    Layout.preferredWidth: 2 * defaultMargin
+                  }
 
-              Button {
-                visible: library_detailed_logic.app_status === 3
-                text: qsTr("Остановить")
-                onClicked: library_detailed_logic.shutdown()
-              }
+                  ActionButton {
+                    visible: library_detailed_logic.app_status === 0
+                    text: qsTr("Установить")
+                    onClicked:  library_detailed_logic.download()
+                  }
 
-              Text {
-                visible: library_detailed_logic.app_status === 4
-                text: "Игра находится в вашей библиотеке, но недоступна для вашей платформы"
-                color: "white"
-              }
+                  BuyButton {
+                    visible: library_detailed_logic.app_status === 1
+                    text: qsTr("Запуск")
+                    onClicked: library_detailed_logic.launch()
+                  }
 
-              Text {
-                visible: library_detailed_logic.app_status === 5
-                text: "Недоступно для загрузки. Попробуйте позже"
-                color: "white"
+                  NeutralButton {
+                    visible: library_detailed_logic.app_status === 2
+                    text: library_detailed_logic.loading_progress
+                  }
+
+                  ActionButton {
+                    visible: library_detailed_logic.app_status === 3
+                    text: qsTr("Остановить")
+                    onClicked: library_detailed_logic.shutdown()
+                  }
+
+                  Text {
+                    visible: library_detailed_logic.app_status === 4
+                    text: "Игра находится в вашей библиотеке, но недоступна для вашей платформы"
+                    color: "white"
+                  }
+
+                  Text {
+                    visible: library_detailed_logic.app_status === 5
+                    text: "Недоступно для загрузки. Попробуйте позже"
+                    color: "white"
+                  }
+
+                  Item {
+                    Layout.fillWidth: true
+                  }
+
+                  Item {
+                    Layout.preferredWidth: 2 * defaultMargin
+                  }
+
+                  ColumnLayout {
+                    Regular {content: "Последний запуск"}
+                    Regular {
+                      Layout.alignment: Qt.AlignHCenter
+                      content: library_detailed_logic.last_launched
+                    }
+                  }
+
+                  Item {
+                    Layout.preferredWidth: 2 * defaultMargin
+                  }
+
+                  ColumnLayout {
+                    visible: library_detailed_logic.play_time !== "0"
+                    Regular {content: "Вы играли"}
+                    Regular {
+                      Layout.alignment: Qt.AlignHCenter
+                      content: library_detailed_logic.play_time
+                    }
+                  }
+                }
               }
             }
           }

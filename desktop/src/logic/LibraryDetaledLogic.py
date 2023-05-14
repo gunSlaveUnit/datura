@@ -173,6 +173,23 @@ class LibraryDetailedLogic(QObject):
 
     # endregion
 
+    # region Game id
+
+    game_id_changed = Signal()
+
+    @Property(int, notify=game_id_changed)
+    def game_id(self):
+        return self._game_id
+
+    @game_id.setter
+    def game_id(self, new_value: int):
+        if self._game_id == new_value:
+            return
+        self._game_id = new_value
+        self.game_id_changed.emit()
+
+    # endregion
+
     @Slot(int)
     def map(self, game_id: int):
         current_user_id = self._auth_service.current_user.id
@@ -186,7 +203,7 @@ class LibraryDetailedLogic(QObject):
             data = response.json()[0]
 
             self._id = data["id"]
-            self._game_id = data["game"]["id"]
+            self.game_id = data["game"]["id"]
             self.game_title = data["game"]["title"]
 
             params = {"game_id": self._game_id}
@@ -215,9 +232,9 @@ class LibraryDetailedLogic(QObject):
 
             self.time = data["game_time"]
             if self.time < 3600:
-                self.play_time = f"{self.time // 60} m"
+                self.play_time = f"{self.time // 60} м"
             else:
-                self.play_time = f"{self.time / 3600:.1f} h"
+                self.play_time = f"{self.time / 3600:.1f} ч"
 
             possible_last_launch_stamp: int | None = data["last_run"]
             if possible_last_launch_stamp:
@@ -230,7 +247,7 @@ class LibraryDetailedLogic(QObject):
                 else:
                     self.last_launched = launch_date.strftime('%d %b %Y')
             else:
-                self.last_launched = "Never"
+                self.last_launched = "Никогда"
 
     def load_build_files(self):
         params = {"game_id": self._game_id}
