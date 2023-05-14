@@ -17,6 +17,7 @@ GAMES_ASSETS_TRAILERS_DIR = 'trailers'
 GAMES_ASSETS_SCREENSHOTS_DIR = 'screenshots'
 GAMES_ASSETS_BUILDS_DIR = 'builds'
 TEMPLATES_DIR = BASE_PATH / 'templates'
+STATIC_PATH = BASE_PATH / 'static'
 
 templates = Jinja2Templates(directory=TEMPLATES_DIR)
 

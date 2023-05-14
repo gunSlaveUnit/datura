@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
+from starlette.staticfiles import StaticFiles
 
 from server.src.core.utils.db import Base, engine
 from server.src.core.utils.db_init import init_db
-from server.src.core.settings import DEBUG, Tags
+from server.src.core.settings import DEBUG, Tags, STATIC_PATH
 from server.src.api.v1.api import router as api_v1_router
 from server.src.admin.api import router as admin_router
 
@@ -20,6 +21,8 @@ app.add_middleware(
 
 app.include_router(api_v1_router)
 app.include_router(admin_router)
+
+app.mount("/static/", StaticFiles(directory=STATIC_PATH), name="static")
 
 
 @app.on_event("startup")
