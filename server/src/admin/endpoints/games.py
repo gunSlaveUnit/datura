@@ -1,3 +1,5 @@
+import datetime
+
 from fastapi import APIRouter, Depends
 from sqlalchemy import desc
 from sqlalchemy.orm import Session, joinedload
@@ -36,8 +38,11 @@ async def item(request: Request,
     builds_query = builds_query.join(Platform)
     builds_query = builds_query.options(joinedload(Build.platform))
 
+    game = await games.item(game_id, db)
+    game.release_date = datetime.datetime.fromtimestamp(game.release_date).strftime("%d.%m.%Y")
+
     return templates.TemplateResponse("detailed_game.html", {
         "request": request,
-        "game": await games.item(game_id, db),
+        "game": game,
         "builds": builds_query.all()
     })

@@ -1206,7 +1206,7 @@ Window {
               Indent {}
 
               FormInputLabel {
-                  content: qsTr("ЭЛЕКТРОННЫЙ АДРЕС ДЛЯ УВЕДОМЛЕНИЙ")
+                  content: qsTr("ЭЛЕКТРОННЫЙ ПОЧТОВЫЙ АДРЕС ДЛЯ УВЕДОМЛЕНИЙ")
               }
               FormInput {
                 text: company_logic.notification_email
