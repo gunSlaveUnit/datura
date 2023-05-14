@@ -12,7 +12,6 @@ Rectangle {
   color: "#586776"
 
   RowLayout {
-    visible: store_detailed_logic.location === 0
     anchors.fill: parent
     anchors.margins: defaultMargin
 
