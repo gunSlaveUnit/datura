@@ -2,6 +2,8 @@
 
 {% block content %}
 
+<div style="width: 80%;margin-left: auto; margin-right: auto; ">
+
 <h1>{{company.juridical_name}}</h1>
 <h2 style="display: inline-block">Статус:</h2>
 
@@ -14,81 +16,85 @@
 <input id="id" value="{{company.id}}" hidden="hidden"/>
 <input id="owner" value="{{company.owner_id}}" hidden="hidden"/>
 
-<h2>Общая информация</h2>
+<h2 style="color: #0079F2">Общая информация</h2>
 
 <div>
     <label>
-        ЮРИДИЧЕСКОЕ ИМЯ
+        Юридическое имя
         <div>
             <input value="{{company.juridical_name}}" disabled>
         </div>
     </label>
 </div>
 
+    <br>
+
 <div>
     <label>
-        ФОРМА КОМПАНИИ
+        Форма компании
         <div>
             <input value="{{company.form}}" disabled>
         </div>
     </label>
 </div>
+    <br>
 
 <div>
     <label>
-        УЛИЦА, ДОМ, НОМЕР КВАРТИРЫ / ОФИСА
+        Улица, дома, номер квартиры / офиса
         <div>
             <input value="{{company.street_house_apartment}}" disabled>
         </div>
     </label>
 </div>
+    <br>
 
 <div>
     <label>
-        ГОРОД
+        Город
         <div>
             <input value="{{company.city}}" disabled>
         </div>
     </label>
-</div>
+</div><br>
 
 <div>
     <label>
-        РЕГИОН / ОБЛАСТЬ
+        Регион / область
         <div>
             <input value="{{company.region}}" disabled>
         </div>
     </label>
-</div>
+</div><br>
 
 <div>
     <label>
-        СТРАНА
+        Страна
         <div>
             <input value="{{company.country}}" disabled>
         </div>
     </label>
-</div>
+</div><br>
 
 <div>
     <label>
-        ПОЧТОВЫЙ ИНДЕКС
+        Почтовый индекс
         <div>
             <input value="{{company.postal_code}}" disabled>
         </div>
     </label>
-</div>
+</div><br>
 
 <div>
     <label>
-        ЭЛЕКТРОННЫЙ ПОЧТОВЫЙ АДРЕС ДЛЯ УВЕДОМЛЕНИЙ
+        Электронный почтовый адрес для уведомлений
         <div>
             <input value="{{company.notification_email}}" disabled>
         </div>
     </label>
-</div>
+</div><br>
 
-<h2>ПЛАТЕЖНАЯ ИНФОРМАЦИЯ</h2>
+<h2 style="color: #0079F2">ПЛАТЕЖНАЯ ИНФОРМАЦИЯ</h2>
 
 <div>
     <label>
@@ -96,33 +102,34 @@
         <div>
             <input value="{{company.bic}}" disabled>
         </div>
-    </label>
+    </label><br>
 </div>
 
 <div>
     <label>
-        АДРЕС БАНКА
+        Адрес банка
         <div>
             <input value="{{company.bank_address}}" disabled>
         </div>
-    </label>
+    </label><br>
 </div>
 
 <div>
     <label>
-        БАНКОВСКИЙ НОМЕР СЧЕТА
+        Банковский номер счета
         <div>
             <input value="{{company.bank_account_number}}" disabled>
         </div>
-    </label>
+    </label><br>
 </div>
 
-<h2>Управление</h2>
+<h2 style="color: #0079F2">Управление</h2>
 
 <label>
     Компания одобрена:
     <input type="checkbox" {% if company.is_approved %} checked {% endif %} onclick="approving(this.checked)">
 </label>
+</div>
 
 <script>
     function approving(value) {
