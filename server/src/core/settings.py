@@ -60,6 +60,7 @@ LANGUAGES_ROUTER_PREFIX = '/languages'
 GAME_TAGS_ROUTER_PREFIX = '/{game_id}/tags'
 TAGS_ROUTER_PREFIX = '/tags'
 REVIEWS_ROUTER_PREFIX = '/{game_id}/reviews'
+NOTIFICATIONS_ROUTER_PREFIX = '/notifications'
 ADMIN_ROUTER_PREFIX = '/admin'
 PAYMENTS_ROUTER_PREFIX = '/payments'
 
@@ -75,6 +76,7 @@ class Tags(str, Enum):
     USERS = 'Users'
     ROLES = 'Roles'
 
+    NOTIFICATIONS = 'Roles'
     COMPANIES = 'Companies'
 
     LIBRARY = 'Library'
@@ -104,6 +106,7 @@ tags_metadata = [
     {'name': Tags.USERS, 'description': ''},
     {'name': Tags.ROLES, 'description': ''},
     {'name': Tags.COMPANIES, 'description': ''},
+    {'name': Tags.NOTIFICATIONS, 'description': ''},
     {'name': Tags.LIBRARY, 'description': ''},
     {'name': Tags.CART, 'description': ''},
     {'name': Tags.PAYMENTS, 'description': ''},
