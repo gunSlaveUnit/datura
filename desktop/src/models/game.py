@@ -26,6 +26,7 @@ class Game(Entity):
     age_category_id: int
     directory: str
     is_checked: bool | None = None
+    cart_record_id: int | None = None
 
 
 class GameList(QAbstractListModel):
@@ -82,8 +83,9 @@ class GameList(QAbstractListModel):
         self._games = []
         for record in cart_records:
             game_data = record["game"]
-            self._games.append(Game(**game_data, is_checked=True))
+            self._games.append(Game(**game_data, is_checked=True, cart_record_id=record['id']))
         self.endResetModel()
+        self.recount_total_cost()
 
     @Slot()
     def load_library(self):
