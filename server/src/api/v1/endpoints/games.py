@@ -5,13 +5,15 @@ from sqlalchemy import or_
 from sqlalchemy.orm import Session
 from starlette import status
 
+from common.api.v1.schemas.notification import NotificationCreateSchema
+from server.src.api.v1.endpoints import notifications
 from server.src.core.models.company import Company
 from server.src.core.models.game import Game
 from server.src.core.models.library import Library
 from server.src.core.models.user import User
 from server.src.core.settings import Tags, GAMES_ROUTER_PREFIX, GAMES_ASSETS_PATH, \
     GAMES_ASSETS_HEADER_DIR, GAMES_ASSETS_CAPSULE_DIR, GAMES_ASSETS_TRAILERS_DIR, GAMES_ASSETS_SCREENSHOTS_DIR, \
-    GAMES_ASSETS_BUILDS_DIR
+    GAMES_ASSETS_BUILDS_DIR, RoleType
 from server.src.core.utils.auth import GetCurrentUser
 from server.src.core.utils.db import get_db
 from common.api.v1.schemas.game import GameFilterSchema, GameCreateSchema, GameApprovingSchema, GameSendingSchema, \
@@ -107,9 +109,10 @@ async def update(game_id: int,
 
 @router.patch('/{game_id}/approve/')
 async def approve(
-    game_id: int,
-    approving: GameApprovingSchema,
-    db: Session = Depends(get_db)
+        game_id: int,
+        approving: GameApprovingSchema,
+        db: Session = Depends(get_db),
+        current_user: User = Depends(GetCurrentUser(scopes=(RoleType.ADMIN,)))
 ):
     """
     Update the status of a game based on its approval.
@@ -133,6 +136,15 @@ async def approve(
     if not approving.is_approved:
         update_dict["is_published"] = False
     await game.update(db, update_dict)
+
+    if approving.is_approved:
+        owner = await User.by_id(db, game.owner_id)
+        email_notification_body = f"Уважаемый {owner.account_name}! " \
+                                  f"Сведения о Вашем продукте {game.title} были успешно проверены и одобрены. " \
+                                  "Вы можете опубликовать его в магазине. " \
+                                  "Спасибо, что пользуетесь нашими услугами! С уважением, команда Foggie."
+        notification = NotificationCreateSchema(user_id=game.owner_id, content=email_notification_body)
+        await notifications.create(notification, db, current_user)
 
     # Return the updated game object.
     return game

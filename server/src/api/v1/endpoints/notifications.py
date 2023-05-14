@@ -33,7 +33,7 @@ async def create(notification_data: NotificationCreateSchema,
     message['To'] = user.email
     message['Subject'] = Header(subject, 'utf-8')
 
-    body = MIMEText(notification_data.body, 'plain', 'utf-8')
+    body = MIMEText(notification_data.content, 'plain', 'utf-8')
     message.attach(body)
 
     try:

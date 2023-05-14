@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from starlette import status
 
 from common.api.v1.schemas.company import CompanyCreateSchema, ApprovingSchema
+from common.api.v1.schemas.notification import NotificationCreateSchema
+from server.src.api.v1.endpoints import notifications
 from server.src.core.models.company import Company
 from server.src.core.models.game import Game
 from server.src.core.models.user import User
@@ -80,5 +82,14 @@ async def approve(company_id: int,
             "is_send_for_verification": False,
             "is_published": False
         })
+
+    if approving.is_approved:
+        owner = await User.by_id(db, company_owner_id)
+        email_notification_body = f"Уважаемый {owner.account_name}! " \
+                                  "Сведения о Вашей компании были успешно проверены и одобрены. " \
+                                  "Вы можете публиковать новые релизы. Надеемся на долгое и плодотворное сотрудничество. " \
+                                  "Спасибо, что пользуетесь нашими услугами! С уважением, команда Foggie."
+        notification = NotificationCreateSchema(user_id=company_owner_id, content=email_notification_body)
+        await notifications.create(notification, db, current_user)
 
     await company.update(db, {"is_approved": approving.is_approved})

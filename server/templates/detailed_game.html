@@ -27,7 +27,7 @@
 
 
 <input id="id" value="{{game.id}}" hidden="hidden"/>
-<input id="author" value="{{game.author}}" hidden="hidden"/>
+<input id="author" value="{{game.owner_id}}" hidden="hidden"/>
 
 <h2 style="color: #0079F2">Общая информация</h2>
 
@@ -133,9 +133,30 @@
     <input type="checkbox" {% if game.is_published %} checked {% endif %} onclick="publishing(this.checked)">
 </label>
 </div>
+
+  <div>
+    <h2 style="color: #0079F2">Уведомление</h2>
+    <textarea id="notification" style="width: 80%; height: 200px"></textarea>
+  </div>
+  <button style="padding: 12px 24px; border-radius: 8px; background-color: #0079F2; color: white;" onclick="send_notification()">Отправить</button>
 </div>
 
 <script>
+    function send_notification() {
+        const owner = document.getElementById("author").value
+        const content = document.getElementById("notification").value
+
+        if (content !== "")
+          fetch(`http://localhost:8000/api/v1/notifications/`, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                  user_id: owner,
+                  content: content
+              }),
+          }).then(async response => location.reload())
+    }
+
     const id = document.getElementById("id").value
     let imageUrl = `http://localhost:8000/api/v1/games/${id}/header/`
 
