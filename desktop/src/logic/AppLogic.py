@@ -349,7 +349,7 @@ class AppLogic(QObject):
             # TODO: something wrong with indices
             release_date = datetime.datetime(
                 day=self._day_index + 1,
-                month=self._month_index,
+                month=self._month_index + 1,
                 year=self._year_index + self.BASE_YEAR).timestamp()
             data["release_date"] = release_date
         else:

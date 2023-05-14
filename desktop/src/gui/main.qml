@@ -1616,7 +1616,7 @@ Window {
                       implicitWidth: parent.comboWidth
                       model: app_logic.possible_months
                       currentIndex: app_logic.month_index
-                      onCurrentIndexChanged: release_logic.month_index = currentIndex
+                      onCurrentIndexChanged: app_logic.month_index = currentIndex
                     }
 
                     Combo {
