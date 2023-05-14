@@ -31,6 +31,7 @@ else:
 admin_config = dotenv_values(ENVS_PATH / ".admin")
 redis_config = dotenv_values(ENVS_PATH / ".redis")
 database_config = dotenv_values(ENVS_PATH / ".db")
+email_config = dotenv_values(ENVS_PATH / ".email")
 
 if DEBUG:
     CONNECTION_STRING = f"sqlite:///{BASE_PATH / database_config['NAME']}"
