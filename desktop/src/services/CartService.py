@@ -23,3 +23,6 @@ class CartService(QObject):
 
     def pay(self):
         return self._auth_service.authorized_session.post(CART_URL + "pay/")
+
+    def delete(self, record_id):
+        return self._auth_service.authorized_session.delete(CART_URL + f"{record_id}/")

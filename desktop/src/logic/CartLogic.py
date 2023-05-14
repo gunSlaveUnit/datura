@@ -13,6 +13,10 @@ class CartLogic(QObject):
     def add(self, game_id: int):
         self._cart_service.add(game_id)
 
+    @Slot(int)
+    def delete(self, record_id: int):
+        self._cart_service.delete(record_id)
+
     @Slot()
     def pay(self):
         self._cart_service.pay()
