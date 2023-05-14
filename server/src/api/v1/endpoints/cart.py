@@ -42,6 +42,13 @@ async def create(new_record: CartCreateSchema,
     return await Cart.create(db, record)
 
 
+@router.delete('/{item_id}/')
+async def delete(item_id: int,
+                 db: Session = Depends(get_db),
+                 _: User = Depends(GetCurrentUser())):
+    return await Cart.delete(db, item_id)
+
+
 @router.post('/pay/')
 async def pay(db: Session = Depends(get_db),
               current_user: User = Depends(GetCurrentUser())):
