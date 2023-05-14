@@ -529,7 +529,7 @@ Window {
                   Text {
                     textFormat: TextEdit.MarkdownText
                     color: "#00E589"
-                    text: "## " + store_detailed_logic.price + "$"
+                    text: "## " + store_detailed_logic.price + " руб."
                   }
 
                   BuyButton {
@@ -708,22 +708,30 @@ Window {
         }
 
         Scroll {
-          contentHeight: cartPage.height + 2 * defaultMargin
+          contentHeight: yse.contentHeight + 2 * defaultMargin + 200
 
           Item {
             width: layoutWidth
+            height: parent.height
             anchors.horizontalCenter: parent.horizontalCenter
 
             ColumnLayout {
               id: cartPage
 
+              anchors.fill: parent
+
+              Header {
+                Layout.bottomMargin: 2 * defaultMargin
+                text: "# Корзина"
+              }
+
               RowLayout {
                 Header {
-                  text: "# Сумма покупки: " + game_list_model.total_cost
+                  text: "# Сумма покупки: " + game_list_model.total_cost + " руб."
                 }
 
                 BuyButton {
-                  Layout.leftMargin: 4 * defaultMargin
+                  Layout.leftMargin: 2 * defaultMargin
                   text: "Оплатить"
                   function handler() {
                     cart_logic.pay()
@@ -734,49 +742,89 @@ Window {
                 }
               }
 
+              Indent {}
+
               Regular {
                 color: "#64BCEF"
                 content: "Деньги за покупку будут списаны с вашего кошелька Foggie. Если на нем недостаточно средств, пополните баланс"
               }
 
+              Indent {}
+
               ListView {
+                id: yse
+                Layout.fillHeight: true
                 model: game_list_model
+                spacing: defaultMargin
+                boundsBehavior: Flickable.StopAtBounds
 
-                delegate: Rectangle {
-                  implicitWidth: 400
-                  implicitHeight: 50
-                  radius: defaultMargin / 2
-                  color: "transparent"
+                delegate: RowLayout {
+                  Layout.preferredWidth: 450
+                  Layout.preferredHeight: 70
 
-                  RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: defaultMargin
+                  Rectangle {
+                    implicitWidth: 400
+                    implicitHeight: 70
+                    radius: defaultMargin / 2
+                    color: "transparent"
 
-                    Image {
-                      Layout.preferredWidth: height * 16 / 9
-                      Layout.preferredHeight: parent.height
-                      source: `http://127.0.0.1:8000/api/v1/games/${id}/header/`
-                      mipmap: true
+                    RowLayout {
+                      anchors.fill: parent
+                      anchors.margins: defaultMargin
+
+                      Image {
+                        Layout.preferredWidth: height * 16 / 9
+                        Layout.preferredHeight: parent.height
+                        source: `http://127.0.0.1:8000/api/v1/games/${id}/header/`
+                        mipmap: true
+                      }
+
+                      Regular {content: title}
+
+                      Item {
+                        Layout.fillWidth: true
+                      }
+
+                      Regular {content: price + "руб."}
                     }
 
-                    Regular {content: title}
-
-                    Item {
-                      Layout.fillWidth: true
+                    MouseArea {
+                      anchors.fill: parent
+                      cursorShape: Qt.PointingHandCursor
+                      hoverEnabled: true
+                      onEntered: parent.color = "#446691"
+                      onExited: parent.color = "transparent"
+                      onClicked: {
+                        store_detailed_logic.map(id)
+                        storeStack.currentIndex = storeStack.storeDetailedIndex
+                      }
                     }
-
-                    Regular {content: price}
                   }
 
-                  MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    hoverEnabled: true
-                    onEntered: parent.color = "#446691"
-                    onExited: parent.color = "transparent"
-                    onClicked: {
-                      store_detailed_logic.map(id)
-                      storeStack.currentIndex = storeStack.storeDetailedIndex
+                  Image {
+                    Layout.leftMargin: 2 * defaultMargin
+                    Layout.preferredWidth: parent.height - 5 * defaultMargin
+                    Layout.preferredHeight: parent.height - 5 * defaultMargin
+                    source: "../../resources/icons/trash.png"
+
+                    Rectangle {
+                      anchors.fill: parent
+                      color: "lightgray"
+                      opacity: 0
+                      radius: defaultMargin / 2
+
+                      MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onEntered: parent.opacity = 0.3
+                        onExited: parent.opacity = 0
+                        onClicked: {
+                          cart_logic.delete(cart_record_id)
+                          game_list_model.load_cart()
+                          game_list_model.recount_total_cost()
+                        }
+                      }
                     }
                   }
                 }
