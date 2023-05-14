@@ -3,22 +3,22 @@
 <h1>{{game.title}}</h1>
 
 <div>
-  <h2 style="display: inline-block">Is approved:</h2>
+  <h2 style="display: inline-block">Одобрено:</h2>
 
 {% if game.is_approved %}
-    <h2 style="display: inline-block; color: gray">Approved</h2>
+    <h2 style="display: inline-block; color: gray">Да</h2>
 {% else %}
-    <h2 style="display: inline-block; color: orange">Not approved</h2>
+    <h2 style="display: inline-block; color: orange">Нет</h2>
 {%endif%}
 </div>
 
 <div>
-  <h2 style="display: inline-block">Is published:</h2>
+  <h2 style="display: inline-block">Опубликовано:</h2>
 
 {% if game.is_published %}
-    <h2 style="display: inline-block; color: green">Published</h2>
+    <h2 style="display: inline-block; color: green">Да</h2>
 {% else %}
-    <h2 style="display: inline-block; color: orange">Not published</h2>
+    <h2 style="display: inline-block; color: orange">Нет</h2>
 {%endif%}
 </div>
 
@@ -26,11 +26,11 @@
 <input id="id" value="{{game.id}}" hidden="hidden"/>
 <input id="author" value="{{game.author}}" hidden="hidden"/>
 
-<h2>Common information</h2>
+<h2>Общая информация</h2>
 
 <div>
   <label>
-    Title
+    Название
     <div>
       <input value="{{game.title}}" disabled>
     </div>
@@ -39,31 +39,31 @@
 
 <div>
   <label>
-    Release date
+    ДАТА ВЫХОДА
     {% if game.release_date %}
     <div>
       <input value="{{game.release_date}}" disabled>
     </div>
     {% else %}
-    <div>Coming soon</div>
+    <div>СКОРО</div>
     {% endif %}
   </label>
 </div>
 
 <div>
   <label>
-    Price
+    ЦЕНА
     <div>
       <input value="{{game.price}}" disabled>
     </div>
   </label>
 </div>
 
-<h2>Descriptions</h2>
+<h2>Описания</h2>
 
 <div>
   <label>
-    Short description
+    КРАТКОЕ ОПИСАНИЕ
     <div>
       <textarea placeholder="{{game.short_description}}" disabled></textarea>
     </div>
@@ -72,39 +72,39 @@
 
 <div>
   <label>
-    Long description
+    РАЗВЕРНУТОЕ ОПИСАНИЕ
     <div>
       <textarea placeholder="{{game.long_description}}" disabled></textarea>
     </div>
   </label>
 </div>
 
-<h2>Assets</h2>
+<h2>МАТЕРИАЛЫ</h2>
 
-<h3>Header</h3>
+<h3>ПОСТЕР ДЛЯ МАГАЗИНА</h3>
 <img id="header" src="" alt="No header image">
 
-<h3>Capsule</h3>
+<h3>ПОСТЕР ДЛЯ БИБЛИОТЕКИ</h3>
 <img id="capsule" src="" alt="No capsule image">
 
-<h3>Screenshots</h3>
+<h3>СКРИНШОТЫ</h3>
 <div id="screenshots"></div>
 
-<h3>Trailers</h3>
+<h3>ТРЕЙЛЕРЫ</h3>
 <div id="trailers"></div>
 
-<h2>Builds</h2>
+<h2>Сборки</h2>
 {% for build in builds %}
   <div style="display: inline-block">
       <label>
-        Platform
+        ПЛАТФОРМА
         <div>
-          <h4>{{ build.platform.title }}</h4>
+          <h4 style="display: inline-block">{{ build.platform.title }}</h4>
         </div>
       </label>
 
       <label>
-        Call
+        ИСПОЛНЯЕМЫЙ ФАЙЛ
         <div>
           <input value="{{build.call}}" disabled>
         </div>
@@ -112,18 +112,18 @@
   </div>
   {% endfor %}
 
-<h2>Manage</h2>
+<h2>Управление</h2>
 
 <div>
   <label>
-    Is game currently approved:
+    Продукт одобрен:
     <input type="checkbox" {% if game.is_approved %} checked {% endif %} onclick="approving(this.checked)">
 </label>
 </div>
 
 <div>
   <label>
-    Is game currently published:
+    Продукт опубликован:
     <input type="checkbox" {% if game.is_published %} checked {% endif %} onclick="publishing(this.checked)">
 </label>
 </div>

@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+
+<h1>Компании</h1>
+
 {% block content %}
 <div>
   {% for company in companies %}
@@ -8,9 +11,9 @@
     </h2>
 
     {% if company.is_approved %}
-      <h3 style="color: gray; display: inline-block;">Approved</h3>
+      <h3 style="color: gray; display: inline-block;">Одобрено</h3>
     {% else %}
-      <h3 style="color: orange; display: inline-block;">Not approved</h3>
+      <h3 style="color: orange; display: inline-block;">Не одобрено</h3>
     {%endif%}
   </div>
   {% endfor %}
