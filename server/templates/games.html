@@ -2,27 +2,57 @@
 
 {% block content %}
 
-<h1>Продукты</h1>
+<div style="width: 80%;margin-left: auto; margin-right: auto; ">
+    <p>Здесь вы можете просмотреть сведения об играх</p>
 
-<div>
-  {% for game in games %}
-  <div>
-    <h2 style="display: inline-block; margin-right: 8px;">
-      <a href="/admin/games/{{game.id}}/">{{ game.title }}</a>
-    </h2>
+    <style>
+      table {
+        border-collapse: collapse;
+      }
 
-    {% if game.is_approved %}
-      <h3 style="color: gray; display: inline-block;">Одобрено</h3>
-    {% else %}
-      <h3 style="color: orange; display: inline-block;">Не одобрено</h3>
-    {%endif%}
+      th {
+        border-bottom: 1px solid #0079F2;
+      }
 
-    {% if game.is_published %}
-      <h3 style="color: green; display: inline-block;">Опубликовано</h3>
-    {% else %}
-      <h3 style="color: orange; display: inline-block;">Не опубликовано</h3>
-    {%endif%}
+      td {
+        border-bottom: 1px solid #0079F2;
+        padding: 8px;
+      }
+    </style>
+
+    <table>
+      <thead>
+        <tr>
+          <th><h3>Название</h3></th>
+          <th><h3>Одобрено</h3></th>
+          <th><h3>Опубликовано</h3></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for game in games %}
+          <tr>
+            <td>
+              <a style="font-size: 32px;" href="/admin/games/{{game.id}}/">{{ game.title }}</a>
+            </td>
+
+            <td style="text-align: center;">
+              {% if game.is_approved %}
+                <h3 style="color: gray; display: inline-block;">Да</h3>
+              {% else %}
+                <h3 style="color: orange; display: inline-block;">Нет</h3>
+              {%endif%}
+            </td>
+
+            <td style="text-align: center;">
+              {% if game.is_published %}
+                <h3 style="color: green; display: inline-block;">Да</h3>
+              {% else %}
+                <h3 style="color: orange; display: inline-block;">Нет</h3>
+              {%endif%}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
-  {% endfor %}
-</div>
 {% endblock %}
