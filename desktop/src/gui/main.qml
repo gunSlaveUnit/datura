@@ -233,10 +233,6 @@ Window {
 
 			      y: parent.height
 
-						MenuItem {
-			        text: qsTr("Профиль")
-			      }
-
 			      MenuItem {
 			        text: qsTr("Корзина")
 			        onTriggered: {
@@ -360,9 +356,6 @@ Window {
                     }
 
                     ColumnLayout {
-                      Layout.fillWidth: true
-                      Layout.fillHeight: true
-
                       Layout.alignment: Qt.AlignTop
 
                       Link {
@@ -652,7 +645,7 @@ Window {
                   anchors.fill: parent
                   gradient: Gradient {
                     GradientStop { position: 0.9; color: backgroundWindowColor }
-                    GradientStop { position: -1.0; color: "transparent" }
+                    GradientStop { position: 0.5; color: "transparent" }
                   }
                 }
 
@@ -1771,19 +1764,23 @@ Window {
                       color: app_logic.displayed_header === '' ? 'white' : "orange"
                     }
 
+
+                  }
+
+                  RowLayout {
+                    ActionButton {
+                      visible: app_logic.header === ""
+                      text: qsTr("Прикрепить")
+                      function handler() {
+                       attach_header_image_file_dialog.open()
+                      }
+                    }
                     NeutralButton {
                       visible: app_logic.header !== ""
-                      text: qsTr("Unpin")
+                      text: qsTr("Открепить")
                       function handler() {
                        app_logic.header = ""
                       }
-                    }
-                  }
-
-                  ActionButton {
-                    text: qsTr("Прикрепить")
-                    function handler() {
-                     attach_header_image_file_dialog.open()
                     }
                   }
 
@@ -1809,6 +1806,16 @@ Window {
                         app_logic.displayed_capsule
                       color: app_logic.displayed_capsule === '' ? 'white' : "orange"
                     }
+                  }
+
+                  RowLayout {
+                    ActionButton {
+                      visible: app_logic.capsule === ""
+                      text: qsTr("Прикрепить")
+                      function handler() {
+                       attach_capsule_image_file_dialog.open()
+                      }
+                    }
 
                     NeutralButton {
                       visible: app_logic.capsule !== ""
@@ -1816,13 +1823,6 @@ Window {
                       function handler() {
                        app_logic.capsule = ""
                       }
-                    }
-                  }
-
-                  ActionButton {
-                    text: qsTr("Прикрепить")
-                    function handler() {
-                     attach_capsule_image_file_dialog.open()
                     }
                   }
 
@@ -1848,6 +1848,16 @@ Window {
                         app_logic.displayed_screenshots
                       color: app_logic.displayed_screenshots === '' ? 'white' : "orange"
                     }
+                  }
+
+                  RowLayout {
+                    ActionButton {
+                      visible: app_logic.displayed_screenshots === ""
+                      text: qsTr("Прикрепить")
+                      function handler() {
+                       attach_screenshots_file_dialog.open()
+                      }
+                    }
 
                     NeutralButton {
                       visible: app_logic.displayed_screenshots !== ""
@@ -1855,13 +1865,6 @@ Window {
                       function handler() {
                        app_logic.screenshots = []
                       }
-                    }
-                  }
-
-                  ActionButton {
-                    text: qsTr("Прикрепить")
-                    function handler() {
-                     attach_screenshots_file_dialog.open()
                     }
                   }
 
@@ -1887,6 +1890,16 @@ Window {
                         app_logic.displayed_trailers
                       color: app_logic.displayed_trailers === '' ? 'white' : "orange"
                     }
+                  }
+
+                  RowLayout {
+                    ActionButton {
+                      visible: app_logic.displayed_trailers === ""
+                      text: qsTr("Прикрепить")
+                      function handler() {
+                       attach_trailers_file_dialog.open()
+                      }
+                    }
 
                     NeutralButton {
                       visible: app_logic.displayed_trailers !== ""
@@ -1894,13 +1907,6 @@ Window {
                       function handler() {
                        app_logic.trailers = []
                       }
-                    }
-                  }
-
-                  ActionButton {
-                    text: qsTr("Прикрепить")
-                    function handler() {
-                     attach_trailers_file_dialog.open()
                     }
                   }
                 }
