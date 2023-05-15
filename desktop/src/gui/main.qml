@@ -20,7 +20,7 @@ Window {
   color: backgroundWindowColor
 
   function humanTimestamp(timestamp) {
-    var date = new Date()
+    var date = new Date(timestamp * 1000)
     var dateString = date.toLocaleDateString('ru-RU', "dd MMM yyyy");
     return dateString
   }
