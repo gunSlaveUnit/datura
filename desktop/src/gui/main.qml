@@ -1394,7 +1394,7 @@ Window {
         }
 
         Scroll {
-          contentHeight: boo.contentHeight + 2 * defaultMargin
+          contentHeight: boo.contentHeight + 2 * defaultMargin + 200
 
           Item {
             width: layoutWidth - defaultMargin
