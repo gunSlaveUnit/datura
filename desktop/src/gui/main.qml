@@ -1877,28 +1877,6 @@ Window {
                   Indent {}
 
                   RowLayout {
-                    Platform.FileDialog {
-                      id: attach_trailers_file_dialog
-                      fileMode: Platform.FileDialog.OpenFiles
-                      nameFilters: ["Videos (*.webm *.mp4)"]
-                      onAccepted: app_logic.trailers = files
-                      folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
-                    }
-
-                    FormInputLabel {
-                      content: qsTr("ТРЕЙЛЕРЫ (*.webm *.mp4):")
-                    }
-
-                    FormInputLabel {
-                      content: app_logic.displayed_trailers === '' ?
-                        (app_logic.server_trailers === '' ? 'Отсутствует' :  app_logic.server_trailers)
-                          :
-                        app_logic.displayed_trailers
-                      color: app_logic.displayed_trailers === '' ? 'white' : "orange"
-                    }
-                  }
-
-                  RowLayout {
                     ActionButton {
                       visible: app_logic.displayed_trailers === ""
                       text: qsTr("Прикрепить")
