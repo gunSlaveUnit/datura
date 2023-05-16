@@ -272,6 +272,11 @@ class AppLogic(QObject):
 
     @Slot(int)
     def map(self, game_id: int):
+        self.server_header = ''
+        self.server_capsule = ''
+        self.server_screenshots = ''
+        self.server_trailers = ''
+
         response = self._auth_service.authorized_session.get(GAMES_URL + f'{str(game_id)}/')
 
         if response.ok:
