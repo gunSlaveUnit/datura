@@ -995,6 +995,9 @@ Window {
 
                   BuyButton {
                     text: qsTr("Оплатить")
+
+                    enabled: cvvcvc.acceptableInput && cardNumber.acceptableInput && month.acceptableInput && year.acceptableInput
+
                     function handler() {
                       wallet_logic.top_up()
                       storeStack.currentIndex = storeStack.walletIndex
@@ -1008,16 +1011,38 @@ Window {
                   rows: 4
                   columns: 2
 
-                  FormInputLabel {content: "Номер карты"}
-                  FormInput {}
+                  FormInputLabel {
+                    content: "Номер карты"
+
+                    }
+                  FormInput {
+                  id: cardNumber
+                    validator: RegularExpressionValidator  {
+                    regularExpression: /^\d{16}$/
+                  }}
                   FormInputLabel {content: "Месяц"}
-                  FormInput {}
+                  FormInput {
+                  id: month
+                    validator: RegularExpressionValidator  {
+                    regularExpression: /^\d{2}$/
+                  }
+                  }
                   FormInputLabel {content: "Год"}
-                  FormInput {}
+                  FormInput {
+                  id: year
+                    validator: RegularExpressionValidator  {
+                    regularExpression: /^\d{2}$/
+                  }}
                   FormInputLabel {
                     content: "CVV / CVC"
                   }
-                  FormInput {echoMode: TextInput.Password}
+                  FormInput {
+                  id: cvvcvc
+                    echoMode: TextInput.Password
+                    validator: RegularExpressionValidator  {
+                    regularExpression: /^\d{3}$/
+                  }
+                    }
                 }
               }
             }
