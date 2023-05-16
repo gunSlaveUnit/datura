@@ -1,7 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Window 2.15
-import QtQuick.Layouts 2.15
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Controls
 import QtMultimedia
 import Qt.labs.platform as Platform
 
@@ -424,14 +424,20 @@ Window {
                     target: store_detailed_logic
 
                     function onLoaded() {
-                      var component = Qt.createComponent("Screenshot.qml")
-                      var game_id = store_detailed_logic.id
-                      var fileNames = store_detailed_logic.screenshots
-                      for (var i = 0; i < fileNames.length; i++) {
-                        var imageUrl = `http://127.0.0.1:8000/api/v1/games/${game_id}/screenshots/?filename=${fileNames[i]}`
-                        var image = component.createObject(game_screenshots_swipe_view, {source: imageUrl})
-                        game_screenshots_swipe_view.addItem(image)
+                      let component = Qt.createComponent("Screenshot.qml")
+                      let game_id = store_detailed_logic.id
+                      let fileNames = store_detailed_logic.screenshots
+                      for (let i = 0; i < fileNames.length; i++) {
+                        let imageUrl = `http://127.0.0.1:8000/api/v1/games/${game_id}/screenshots/?filename=${fileNames[i]}`
+                        let image = component.createObject(game_screenshots_swipe_view, {source: imageUrl})
+                        game_screenshots_swipe_view.insertItem(i, image)
                       }
+
+                      let c = game_screenshots_swipe_view.count
+                      for (let i = fileNames.length; i < c; i++)
+                        game_screenshots_swipe_view.removeItem(game_screenshots_swipe_view.itemAt(i))
+
+                      game_screenshots_swipe_view.setCurrentIndex(0)
                     }
                   }
                 }
@@ -1671,7 +1677,7 @@ Window {
 
                     TextArea {
                       id: shortDescriptionArea
-                      property int limit: 250
+                      property int limit: 500
                       background: Rectangle {
                         color: "black"
 
@@ -1715,7 +1721,7 @@ Window {
 
                     TextArea {
                       id: longDescriptionArea
-                      property int limit: 1000
+                      property int limit: 5000
                       background: Rectangle {
                         color:  "black"
 
