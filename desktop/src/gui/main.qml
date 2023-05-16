@@ -1873,26 +1873,6 @@ Window {
                       }
                     }
                   }
-
-                  Indent {}
-
-                  RowLayout {
-                    ActionButton {
-                      visible: app_logic.displayed_trailers === ""
-                      text: qsTr("Прикрепить")
-                      function handler() {
-                       attach_trailers_file_dialog.open()
-                      }
-                    }
-
-                    NeutralButton {
-                      visible: app_logic.displayed_trailers !== ""
-                      text: qsTr("Открепить")
-                      function handler() {
-                       app_logic.trailers = []
-                      }
-                    }
-                  }
                 }
 
                 StackLayout {
