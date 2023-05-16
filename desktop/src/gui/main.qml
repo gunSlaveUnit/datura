@@ -1390,6 +1390,9 @@ Window {
                 focus: true
                 text: company_logic.bic
                 onTextChanged: company_logic.bic = text
+                validator: RegularExpressionValidator  {
+                    regularExpression: /^\d{9}$/
+                  }
               }
 
               Indent {}
@@ -1408,13 +1411,18 @@ Window {
                 content: qsTr("БАНКОВСКИЙ НОМЕР СЧЕТА")
               }
               FormInput {
+              id: accountNumber
                 text: company_logic.bank_account_number
                 onTextChanged: company_logic.bank_account_number = text
+                validator: RegularExpressionValidator  {
+                    regularExpression: /^\d{20}$/
+                  }
               }
 
               Indent {}
 
               ActionButton {
+              enabled: bicInput.acceptableInput && accountNumber.acceptableInput
                 text: qsTr("Создать")
                 function handler() {
                   company_logic.new()
