@@ -25,3 +25,5 @@ class CompanyService:
 
         if response.ok:
             self.company = Company(**response.json()[0])
+        else:
+            self.company = None
