@@ -1315,6 +1315,10 @@ Window {
                 content: qsTr("ПОЧТОВЫЙ ИНДЕКС")
               }
               FormInput {
+              id: postIndex
+              validator: RegularExpressionValidator  {
+                    regularExpression: /^\d{6}$/
+                  }
                 text: company_logic.postal_code
                 Layout.preferredWidth: 308
                 onTextChanged: company_logic.postal_code = text
@@ -1326,6 +1330,10 @@ Window {
                   content: qsTr("ЭЛЕКТРОННЫЙ ПОЧТОВЫЙ АДРЕС ДЛЯ УВЕДОМЛЕНИЙ")
               }
               FormInput {
+                id: companyEmail
+                validator: RegularExpressionValidator  {
+                    regularExpression: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+                  }
                 text: company_logic.notification_email
                 Layout.preferredWidth: 308
                 onTextChanged: company_logic.notification_email = text
@@ -1342,6 +1350,7 @@ Window {
               }
 
               NeutralButton {
+              enabled: postIndex.acceptableInput && companyEmail.acceptableInput
                 text: qsTr("Продолжить")
                 function handler() {
                   bicInput.focus = true
