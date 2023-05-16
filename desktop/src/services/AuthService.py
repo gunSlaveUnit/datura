@@ -35,6 +35,7 @@ class AuthService(QObject):
 
         if response.ok:
             self.authorized_session = None
+            self.current_user = None
 
         return response
 
