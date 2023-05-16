@@ -241,9 +241,9 @@ class LibraryDetailedLogic(QObject):
                 launch_date = datetime.fromtimestamp(possible_last_launch_stamp)
 
                 if datetime.today().date() == launch_date.date():
-                    self.last_launched = "Today"
+                    self.last_launched = "Сегодня"
                 elif datetime.today().date() - timedelta(1) == launch_date.date():
-                    self.last_launched = "Yesterday"
+                    self.last_launched = "Вчера"
                 else:
                     self.last_launched = launch_date.strftime('%d %b %Y')
             else:
@@ -297,7 +297,7 @@ class LibraryDetailedLogic(QObject):
                                         break
                                     f.write(chunk)
                                     processed_bytes += len(chunk)
-                                    self.loading_progress = f"Downloading ... {(processed_bytes / build_size_bytes * 100):.2f}%"
+                                    self.loading_progress = f"Загрузка ... {(processed_bytes / build_size_bytes * 100):.2f}%"
 
                     game_running_config = {
                         "game_id": build["game_id"],
@@ -323,7 +323,7 @@ class LibraryDetailedLogic(QObject):
         executor = ThreadPoolExecutor(1)
         future = executor.submit(self.load_build_files)
         future.add_done_callback(self.loading_done)
-        self.loading_progress = 'Grab build ...'
+        self.loading_progress = 'Подготовка ...'
 
     @Slot()
     def launch(self):
