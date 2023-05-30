@@ -2,22 +2,19 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtMultimedia
 import Qt.labs.platform as Platform
 
 Window {
-  property int defaultMargin: 8
-  property int doubleDefaultMargin: defaultMargin * 2
-  property string backgroundWindowColor: "#0E151E"
-  property string highlightedTextColor: "#0079F2"
+  id: window
 
-  property int layoutWidth: 984
-
-  title: qsTr("foggie")
-  width: 1100
-  height: 600
+  width: 900
+  height: 450
+  minimumWidth: signUpForm.width + 2 * defaultMargin
+  minimumHeight: signUpForm.height + 2 * defaultMargin
   visible: true
-  color: backgroundWindowColor
+  title: "Salad"
+
+  property int defaultMargin: 8
 
   function humanTimestamp(timestamp) {
     var date = new Date(timestamp * 1000)
@@ -26,2072 +23,1600 @@ Window {
   }
 
   StackLayout {
-    id: mainStack
+    id: authStack
 
-    property int authorizationIndex: 0
-    property int storeIndex: 1
+    anchors.centerIn: parent
 
-    anchors.fill: parent
+    property int signInIndex: 0
+    property int signUpIndex: 1
 
-    StackLayout {
-			id: authStack
+    Connections {
+      target: auth_logic
 
-			property int signInFormIndex: 0
-	    property int signUpFormIndex: 1
+      function onRegistered() {
+        loadUserRelatedData()
 
-	    anchors.fill: parent
+        game_list_model.load_store()
 
-			Connections {
-				target: auth_logic
+        authStack.visible = false
+        storeSection.visible = true
+      }
 
-				function onRegistered() {
-				  current_user_logic.map()
-				  wallet_logic.map()
-					mainStack.currentIndex = mainStack.storeIndex
-				}
+      function onLogin() {
+        loadUserRelatedData()
 
-		    function onLogin() {
-				  current_user_logic.map()
-				  wallet_logic.map()
-					mainStack.currentIndex = mainStack.storeIndex
-		    }
-			}
+        game_list_model.load_store()
 
-      ColumnLayout {
-        id: signInForm
+        authStack.visible = false
+        storeSection.visible = true
+      }
 
-        anchors.centerIn: parent
+      function onLogout() {
+        authStack.currentIndex = authStack.signInFormIndex
+        mainStack.currentIndex = mainStack.authorizationIndex
+        storeStack.currentIndex = storeStack.storeIndex
+      }
 
-        FormInputLabel {
-          color: highlightedTextColor
-          content: qsTr("ВОЙТИ, ИСПОЛЬЗУЯ ИМЯ АККАУНТА")
+      function loadUserRelatedData() {
+        current_user_logic.map()
+        wallet_logic.map()
+      }
+    }
+
+    ColumnLayout {
+      Layout.alignment: Qt.AlignCenter
+
+      GridLayout {
+        columns: 2
+
+        Text {
+          Layout.alignment: Qt.AlignRight
+          text: qsTr("ACCOUNT NAME")
         }
-        FormInput {
-          id: signInAccountNameInput
-          Layout.bottomMargin: doubleDefaultMargin
+        TextField {
+          id: accountNameField
+          Layout.fillWidth: true
           focus: true
           text: auth_logic.account_name
           onTextChanged: auth_logic.account_name = text
         }
 
-        FormInputLabel {content: qsTr("ПАРОЛЬ")}
-        FormInput {
-          Layout.bottomMargin: doubleDefaultMargin
+        Text {
+          Layout.alignment: Qt.AlignRight
+          text: qsTr("PASSWORD")
+        }
+        TextField {
+          Layout.fillWidth: true
           echoMode: TextInput.Password
           text: auth_logic.password
           onTextChanged: auth_logic.password = text
-        }
-
-        ActionButton {
-          Layout.alignment: Qt.AlignHCenter
-          Layout.bottomMargin: doubleDefaultMargin
-          Layout.preferredWidth: 300
-          Layout.preferredHeight: 40
-          text: qsTr("Войти")
-          function handler() {
-            auth_logic.sign_in()
-          }
-        }
-
-        RowLayout {
-          Layout.alignment: Qt.AlignHCenter
-
-          Span {content: qsTr("Нужен аккаунт?")}
-
-          Link {
-            content: qsTr("Создайте бесплатный аккаунт")
-
-            function handler() {
-              auth_logic.reset()
-              signUpEmailInput.focus = true
-              authStack.currentIndex = authStack.signUpFormIndex
-            }
-          }
         }
       }
 
-      ColumnLayout {
-        id: signUpForm
-        anchors.centerIn: parent
+      CheckBox {
+        Layout.alignment: Qt.AlignHCenter
+        text: qsTr("Remember me")
+      }
 
-        FormInputLabel {content: qsTr("АДРЕС ЭЛЕКТРОННОЙ ПОЧТЫ")}
-        FormInput {
-          id: signUpEmailInput
-          Layout.bottomMargin: doubleDefaultMargin
-          text: auth_logic.email
-          onTextChanged: auth_logic.email = text
+      Button {
+        id: signInButton
+        Layout.alignment: Qt.AlignHCenter
+        text: qsTr("Sign in")
+        onClicked: auth_logic.sign_in()
+      }
+
+      Separator {}
+
+      GridLayout {
+        columns: 2
+        Text {
+          Layout.alignment: Qt.AlignRight
+          text: qsTr("Don't have a Salad account?")
         }
-
-        FormInputLabel {content: qsTr("ИМЯ АККАУНТА")}
-        FormInput {
-          Layout.bottomMargin: doubleDefaultMargin
-          text: auth_logic.account_name
-          onTextChanged: auth_logic.account_name = text
-        }
-
-        FormInputLabel {content: qsTr("ПАРОЛЬ")}
-        FormInput {
-          Layout.bottomMargin: doubleDefaultMargin
-          echoMode: TextInput.Password
-          text: auth_logic.password
-          onTextChanged: auth_logic.password = text
-        }
-
-        ActionButton {
-          Layout.alignment: Qt.AlignHCenter
-          Layout.bottomMargin: doubleDefaultMargin
-          Layout.preferredWidth: 300
-          Layout.preferredHeight: 40
-          text: qsTr("Зарегистрироваться")
-
-          function handler() {
-            auth_logic.sign_up()
+        Button {
+          Layout.fillWidth: true
+          text: qsTr("Create a new account ...")
+          onClicked: {
+            auth_logic.reset()
+            emailAddressField.focus = true
+            authStack.currentIndex = authStack.signUpIndex
           }
         }
-
-        RowLayout {
-          Layout.alignment: Qt.AlignHCenter
-
-          Span {content: qsTr("Уже есть аккаунт?")}
-
-          Link {
-            content: qsTr("Войти в существующий аккаунт")
-
-            function handler() {
-              auth_logic.reset()
-              signInAccountNameInput.focus = true
-              authStack.currentIndex = authStack.signInFormIndex
-            }
-          }
+        Text {
+          Layout.alignment: Qt.AlignRight
+          text: qsTr("Need help with sign in?")
+        }
+        Button {
+          Layout.fillWidth: true
+          text: qsTr("I can't sign in ...")
         }
       }
     }
 
     ColumnLayout {
-      RowLayout {
-        Layout.leftMargin: defaultMargin
-        Layout.rightMargin: defaultMargin
+      id: signUpForm
 
-        MenuButton {
-          text: qsTr("МАГАЗИН")
-          onClicked: {
-            game_list_model.load_store()
-            storeStack.currentIndex = storeStack.storeIndex
-          }
+      Layout.alignment: Qt.AlignCenter
+
+      GridLayout {
+        columns: 2
+
+        Text {
+          Layout.alignment: Qt.AlignRight
+          text: qsTr("EMAIL ADDRESS")
+        }
+        TextField {
+          id: emailAddressField
+          Layout.fillWidth: true
+          text: auth_logic.email
+          onTextChanged: auth_logic.email = text
         }
 
-        MenuButton {
-          text: qsTr("БИБЛИОТЕКА")
-          onClicked: {
-            game_list_model.load_library()
-            storeStack.currentIndex = storeStack.libraryIndex
-          }
+        Text {
+          Layout.alignment: Qt.AlignRight
+          text: qsTr("ACCOUNT NAME")
+        }
+        TextField {
+          Layout.fillWidth: true
+          text: auth_logic.account_name
+          onTextChanged: auth_logic.account_name = text
         }
 
-        MenuButton {
-          text: qsTr("МАСТЕРСКАЯ")
-          onClicked: {
-            storeStack.checkCompanyRegistration()
-          }
+        Text {
+          Layout.alignment: Qt.AlignRight
+          text: qsTr("PASSWORD")
+        }
+        TextField {
+          Layout.fillWidth: true
+          echoMode: TextInput.Password
+          text: auth_logic.password
+          onTextChanged: auth_logic.password = text
         }
 
-        Item {Layout.fillWidth: true}
-
-        Rectangle {
-		      Layout.preferredWidth: userAccountName.contentWidth + 32 + defaultMargin * 3 + userBalance.contentWidth
-		      Layout.preferredHeight: 32
-		      color: "#274257"
-
-		      RowLayout {
-		        anchors.fill: parent
-
-		        Image {
-              id: avatar
-              Layout.preferredHeight: parent.height
-              Layout.preferredWidth: height
-              mipmap: true
-              source: `http://127.0.0.1:8000/api/v1/users/${current_user_logic.id}/avatar/`
-            }
-
-            Span {
-              id: userAccountName
-              content: current_user_logic.displayed_name.slice(0, 15) + (current_user_logic.displayed_name.length > 15 ? "..." : "")
-              color: "#64BCEF"
-            }
-
-            Span {
-              id: userBalance
-              content: wallet_logic.balance + " руб."
-              Layout.rightMargin: defaultMargin
-            }
-		      }
-
-		      Menu {
-			      id: userProfileMenu
-
-			      width: parent.width
-
-			      y: parent.height
-
-			      MenuItem {
-			        text: qsTr("Корзина")
-			        onTriggered: {
-			          game_list_model.load_cart()
-                storeStack.currentIndex = storeStack.cartIndex
-                game_list_model.recount_total_cost()
-              }
-			      }
-
-						MenuItem {
-			        text: qsTr("Кошелек")
-			        onTriggered: storeStack.currentIndex = storeStack.walletIndex
-			      }
-
-			      MenuItem {
-			        text: qsTr("Выйти из аккаунта")
-			        onTriggered: auth_logic.sign_out()
-			      }
-			    }
-
-		      MouseArea {
-			      anchors.fill: parent
-			      hoverEnabled: true
-			      onEntered: parent.color = "#375D77"
-			      onExited: parent.color = "#274257"
-			      onClicked: userProfileMenu.open()
-			    }
+        Text {
+          Layout.alignment: Qt.AlignRight
+          text: qsTr("COUNTRY OF RESIDENCE")
+        }
+        ComboBox {
+          Layout.fillWidth: true
+          model: [
+            qsTr("Russia"),
+            qsTr("USA")
+          ]
         }
       }
 
-      StackLayout {
-        id: storeStack
+      Button {
+        id: signUpButton
+        Layout.alignment: Qt.AlignHCenter
+        text: qsTr("Sign up")
+        onClicked: auth_logic.sign_up()
+      }
 
-        property int storeIndex: 0
-        property int storeDetailedIndex: storeIndex + 1
-        property int libraryIndex: storeDetailedIndex + 1
-        property int libraryDetailedIndex: libraryIndex + 1
-        property int profileIndex: libraryDetailedIndex + 1
-        property int cartIndex: profileIndex + 1
-        property int walletIndex: cartIndex + 1
-        property int walletTopUpIndex: walletIndex + 1
-        property int workshopIntroductionIndex: walletTopUpIndex + 1
-        property int workshopRegisterCompanyInfoIndex: workshopIntroductionIndex + 1
-        property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
-        property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
-        property int workshopAppControlIndex: workshopAppsListIndex + 1
+      Separator {}
 
-        function checkCompanyRegistration() {
-          company_logic.check()
+      GridLayout {
+        columns: 2
+
+        Text {
+          Layout.alignment: Qt.AlignRight
+          text: qsTr("Already have an account?")
         }
-
-        Connections {
-          target: company_logic
-
-          function onNotRegistered() {
-            storeStack.currentIndex = storeStack.workshopIntroductionIndex
-          }
-
-          function onRegistered() {
-            game_list_model.load_personal()
-            storeStack.currentIndex = storeStack.workshopAppsListIndex
+        Button {
+          Layout.fillWidth: true
+          text: qsTr("Login to an existing account ...")
+          onClicked: {
+            accountNameField.focus = true
+            auth_logic.reset()
+            authStack.currentIndex = authStack.signInIndex
           }
         }
+      }
+    }
+  }
 
-        Connections {
-          target: auth_logic
+  ColumnLayout {
+    id: storeSection
+    visible: false
 
-          function onRegistered() {
-            wallet_logic.map()
-            game_list_model.load_store()
+    anchors.fill: parent
+
+    RowLayout {
+      Layout.fillWidth: true
+      Layout.leftMargin: defaultMargin
+      Layout.rightMargin: defaultMargin
+
+      Button {
+        text: qsTr("Store")
+        onClicked: {
+          game_list_model.load_store()
+          storeStack.currentIndex = storeStack.storeIndex
+        }
+      }
+
+      Button {
+        text: qsTr("Library")
+        onClicked: {
+          game_list_model.load_library()
+          storeStack.currentIndex = storeStack.libraryIndex
+        }
+      }
+
+      Button {
+        text: qsTr("Workshop")
+        onClicked: storeStack.checkCompanyRegistration()
+      }
+
+      Item {Layout.fillWidth: true}
+
+      Rectangle {
+        Layout.preferredWidth: userAccountName.contentWidth + 32 + defaultMargin * 3 + userBalance.contentWidth
+        Layout.preferredHeight: 24
+        color: "lightgray"
+        radius: defaultMargin / 4
+
+        RowLayout {
+          anchors.fill: parent
+
+          Image {
+            id: avatar
+            Layout.preferredHeight: parent.height
+            Layout.preferredWidth: height
+            mipmap: true
+            source: `http://127.0.0.1:8000/api/v1/users/${current_user_logic.id}/avatar/`
           }
 
-          function onLogin() {
-            wallet_logic.map()
-            game_list_model.load_store()
+          Text {
+            id: userAccountName
+            text: current_user_logic.displayed_name.slice(0, 15) + (current_user_logic.displayed_name.length > 15 ? "..." : "")
           }
 
-          function onLogout() {
-            authStack.currentIndex = authStack.signInFormIndex
-            mainStack.currentIndex = mainStack.authorizationIndex
-            storeStack.currentIndex = storeStack.storeIndex
+          Text {
+            id: userBalance
+            text: wallet_logic.balance + " $"
           }
         }
 
-        Scroll {
-          contentHeight: gamesList.contentHeight + 2 * defaultMargin
+        Menu {
+          id: userProfileMenu
 
-          Item {
-            width: layoutWidth - defaultMargin
-            height: parent.height
-            anchors.horizontalCenter: parent.horizontalCenter
+          width: parent.width
+
+          y: parent.height
+
+          MenuItem {
+            text: qsTr("Cart")
+            onTriggered: {
+              game_list_model.load_cart()
+              storeStack.currentIndex = storeStack.cartIndex
+              game_list_model.recount_total_cost()
+            }
+          }
+
+          MenuItem {
+            text: qsTr("Wallet")
+            onTriggered: storeStack.currentIndex = storeStack.walletIndex
+          }
+
+          MenuItem {
+            text: qsTr("Logout")
+            onTriggered: auth_logic.sign_out()
+          }
+        }
+
+        MouseArea {
+          anchors.fill: parent
+          hoverEnabled: true
+          onEntered: parent.color = "gray"
+          onExited: parent.color = "lightgray"
+          onClicked: userProfileMenu.open()
+        }
+      }
+    }
+
+    StackLayout {
+      id: storeStack
+
+      property int storeIndex: 0
+      property int storeDetailedIndex: storeIndex + 1
+      property int libraryIndex: storeDetailedIndex + 1
+      property int libraryDetailedIndex: libraryIndex + 1
+      property int profileIndex: libraryDetailedIndex + 1
+      property int cartIndex: profileIndex + 1
+      property int walletIndex: cartIndex + 1
+      property int walletTopUpIndex: walletIndex + 1
+      property int workshopIntroductionIndex: walletTopUpIndex + 1
+      property int workshopRegisterCompanyInfoIndex: workshopIntroductionIndex + 1
+      property int workshopRegisterPaymentInfoIndex: workshopRegisterCompanyInfoIndex + 1
+      property int workshopAppsListIndex: workshopRegisterPaymentInfoIndex + 1
+      property int workshopAppControlIndex: workshopAppsListIndex + 1
+
+      function checkCompanyRegistration() {
+        company_logic.check()
+      }
+
+      Connections {
+        target: company_logic
+
+        function onNotRegistered() {
+          storeStack.currentIndex = storeStack.workshopIntroductionIndex
+        }
+
+        function onRegistered() {
+          game_list_model.load_personal()
+          storeStack.currentIndex = storeStack.workshopAppsListIndex
+        }
+      }
+
+      Scroll {
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: gamesList.contentHeight
+
+        ColumnLayout {
+          implicitWidth: window.width - 2 * defaultMargin
+          height: parent.height
+
+          ListView {
+            id: gamesList
+            Layout.fillHeight: true
+            model: game_list_model
+            boundsBehavior: Flickable.StopAtBounds
+
+            delegate: RowLayout {
+              Image {
+                id: storeHeaderImage
+                Layout.preferredWidth: height * 16 / 9
+                Layout.preferredHeight: parent.height
+                source: `http://127.0.0.1:8000/api/v1/games/${id}/header/`
+                mipmap: true
+              }
+
+              Text {
+                text: title
+
+                MouseArea {
+                  anchors.fill: parent
+                  onClicked: {
+                    store_detailed_logic.map(id)
+                    storeStack.currentIndex = storeStack.storeDetailedIndex
+                  }
+                }
+              }
+
+              Text {
+                text: release_date ? humanTimestamp(release_date) : "Coming soon"
+              }
+
+              Text {
+                text: short_description
+                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+              }
+            }
+          }
+        }
+      }
+
+      Scroll {
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: storeGameDetailedPage.height
+
+        ColumnLayout {
+          id: storeGameDetailedPage
+          implicitWidth: window.width - 2 * defaultMargin // FIXME: ugly
+
+          Button {
+            text: qsTr("To the store")
+
+            onClicked: {
+              game_list_model.load_store()
+              storeStack.currentIndex = storeStack.storeIndex
+            }
+          }
+
+          Text {text: store_detailed_logic.title}
+
+          RowLayout {
+            width: parent.width
 
             ColumnLayout {
-              anchors.fill: parent
+              width: parent.width * 0.3
 
-              ListView {
-                id: gamesList
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                model: game_list_model
-                spacing: defaultMargin
-                boundsBehavior: Flickable.StopAtBounds
+              Text {
+                Layout.preferredWidth: parent.width
+                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                text: store_detailed_logic.short_description
+              }
 
-                delegate: Rectangle {
-                  anchors.horizontalCenter: parent.horizontalCenter
-                  color: "transparent"
-                  width: layoutWidth
-                  height: 180
-                  radius: defaultMargin / 2
+              RowLayout {
+                width: parent.width
 
-                  RowLayout {
-                    anchors.fill: parent
-                    anchors.margins: defaultMargin
+                Text {
+                  Layout.preferredWidth: parent.width
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                  text: qsTr("Release date: ") + (store_detailed_logic.release_date ? humanTimestamp(store_detailed_logic.release_date) : "Coming soon")
+                }
+              }
 
-                    Image {
-                      id: storeHeaderImage
-                      Layout.preferredWidth: height * 16 / 9
-                      Layout.preferredHeight: parent.height
-                      source: `http://127.0.0.1:8000/api/v1/games/${id}/header/`
-                      mipmap: true
-                    }
+              RowLayout {
+                width: parent.width
 
-                    ColumnLayout {
-                      Layout.alignment: Qt.AlignTop
+                Text {
+                  Layout.preferredWidth: parent.width
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                  text: qsTr("Developer: ") + store_detailed_logic.developer
+                }
+              }
 
-                      Link {
-                        Layout.alignment: Qt.AlignTop
-                        text: title
-                        font.pointSize: 26
+              RowLayout {
+                width: parent.width
 
-                        function handler() {
-                          store_detailed_logic.map(id)
-                          storeStack.currentIndex = storeStack.storeDetailedIndex
-                        }
-                      }
+                Text {
+                  Layout.preferredWidth: parent.width
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                  text: qsTr("Publisher: ") + store_detailed_logic.publisher
+                }
+              }
+            }
+          }
 
-                      Regular {
-                        content: release_date ? humanTimestamp(release_date) : "Скоро"
-                      }
+          RowLayout {
+            visible: store_detailed_logic.location === 0
 
-                      Regular {
-                        content: short_description
-                        Layout.preferredWidth: layoutWidth - storeHeaderImage.width
-                        wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                      }
-                    }
+            Text {
+              text: qsTr("Buy ") + store_detailed_logic.title
+            }
 
-                    Item {Layout.fillWidth: true}
+            Text {
+              text: store_detailed_logic.price + " $"
+            }
+
+            Button {
+              text: qsTr("Add to cart")
+              onClicked: {
+                cart_logic.add(store_detailed_logic.id)
+                store_detailed_logic.location = 2
+              }
+            }
+          }
+
+          Text {
+            text: qsTr("Already in library")
+            visible: store_detailed_logic.location === 1
+          }
+
+          Text {
+            text: qsTr("Already in cart")
+            visible: store_detailed_logic.location === 2
+          }
+
+          Text {
+            textFormat: TextEdit.MarkdownText
+            Layout.preferredWidth: parent.width
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+            text: store_detailed_logic.long_description
+          }
+        }
+      }
+
+      GridView {
+        id: storeGamesGridView
+
+        anchors.fill: parent
+        anchors.margins: defaultMargin
+
+        boundsBehavior: Flickable.StopAtBounds
+
+        property int capsuleImageWidth: 12 * 11
+        property int capsuleImageHeight: capsuleImageWidth * 16 / 11
+
+        property int idealWidth: capsuleImageWidth + defaultMargin * 2
+        property int itemsPerRow: storeGamesGridView.width / idealWidth
+        property double additionalCellWidth: (storeGamesGridView.width - itemsPerRow * idealWidth) / itemsPerRow
+        cellWidth: idealWidth + additionalCellWidth
+        cellHeight: capsuleImageHeight + defaultMargin * 2
+
+        clip: true
+
+        model: game_list_model
+
+        delegate: Rectangle {
+          width: storeGamesGridView.cellWidth
+          height: storeGamesGridView.cellHeight
+          color: "transparent"
+          radius: defaultMargin / 2
+
+          Image {
+            anchors.centerIn: parent
+            width: storeGamesGridView.capsuleImageWidth
+            height: storeGamesGridView.capsuleImageHeight
+            source: `http://127.0.0.1:8000/api/v1/games/${id}/capsule/`
+            mipmap: true
+          }
+
+          MouseArea {
+            id: cell_mouse_area
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            hoverEnabled: true
+            onEntered: parent.color = "#36373a"
+            onExited: parent.color = "transparent"
+            onClicked: {
+              library_detailed_logic.map(id)
+              storeStack.currentIndex = storeStack.libraryDetailedIndex
+            }
+          }
+        }
+      }
+
+      Scroll {
+        contentHeight: libraryDetailedPage.height + 2 * defaultMargin
+
+        Item {
+          width: layoutWidth - 3 * defaultMargin
+          anchors.horizontalCenter: parent.horizontalCenter
+
+          ColumnLayout {
+            id: libraryDetailedPage
+
+            Layout.preferredWidth: parent.width
+
+            Image {
+              Layout.preferredWidth: layoutWidth - 3 * defaultMargin
+              Layout.preferredHeight: width * 9 / 16
+              source: `http://127.0.0.1:8000/api/v1/games/${library_detailed_logic.game_id}/header/`
+              mipmap: true
+
+              Rectangle {
+                anchors.fill: parent
+                gradient: Gradient {
+                  GradientStop { position: 0.9; color: backgroundWindowColor }
+                  GradientStop { position: 0.5; color: "transparent" }
+                }
+              }
+
+              RowLayout {
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: defaultMargin
+
+                Header {
+                  text: "# " + library_detailed_logic.game_title
+                }
+
+                Item {
+                  Layout.preferredWidth: 2 * defaultMargin
+                }
+
+                ActionButton {
+                  visible: library_detailed_logic.app_status === 0
+                  text: qsTr("Установить")
+                  onClicked:  library_detailed_logic.download()
+                }
+
+                BuyButton {
+                  visible: library_detailed_logic.app_status === 1
+                  text: qsTr("Запуск")
+                  onClicked: library_detailed_logic.launch()
+                }
+
+                NeutralButton {
+                  visible: library_detailed_logic.app_status === 2
+                  text: library_detailed_logic.loading_progress
+                }
+
+                ActionButton {
+                  visible: library_detailed_logic.app_status === 3
+                  text: qsTr("Остановить")
+                  onClicked: library_detailed_logic.shutdown()
+                }
+
+                Text {
+                  visible: library_detailed_logic.app_status === 4
+                  text: "Игра находится в вашей библиотеке, но недоступна для вашей платформы"
+                  color: "white"
+                }
+
+                Text {
+                  visible: library_detailed_logic.app_status === 5
+                  text: "Недоступно для загрузки. Попробуйте позже"
+                  color: "white"
+                }
+
+                Item {
+                  Layout.fillWidth: true
+                }
+
+                Item {
+                  Layout.preferredWidth: 2 * defaultMargin
+                }
+
+                ColumnLayout {
+                  Regular {content: "Последний запуск"}
+                  Regular {
+                    Layout.alignment: Qt.AlignHCenter
+                    content: library_detailed_logic.last_launched
+                  }
+                }
+
+                Item {
+                  Layout.preferredWidth: 2 * defaultMargin
+                }
+
+                ColumnLayout {
+                  visible: library_detailed_logic.play_time !== "0"
+                  Regular {content: "Вы играли"}
+                  Regular {
+                    Layout.alignment: Qt.AlignHCenter
+                    content: library_detailed_logic.play_time
                   }
                 }
               }
             }
           }
         }
+      }
 
-        Scroll {
-          contentHeight: storeGameDetailedPage.height + 2 * defaultMargin
+      Scroll {
+        contentHeight: profilePage.height + 2 * defaultMargin
 
-          Item {
-            width: layoutWidth
-            anchors.horizontalCenter: parent.horizontalCenter
+        Item {
+          width: layoutWidth
+          anchors.horizontalCenter: parent.horizontalCenter
 
-            ColumnLayout {
-              id: storeGameDetailedPage
+          ColumnLayout {
+            id: profilePage
+          }
+        }
+      }
 
-              Link {
-                content: qsTr("В магазин")
+      Scroll {
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: cartList.contentHeight + paymentExplanation.height + buyButton.height
 
-                function handler() {
-                  game_list_model.load_store()
-                  storeStack.currentIndex = storeStack.storeIndex
+        ColumnLayout {
+          implicitWidth: window.width - 2 * defaultMargin // FIXME: ugly
+          height: parent.height
+
+          Button {
+            id: buyButton
+            text: qsTr("Pay ") + game_list_model.total_cost + " $"
+            onClicked: {
+              cart_logic.pay()
+              game_list_model.load_cart()
+              game_list_model.recount_total_cost()
+              wallet_logic.map()
+            }
+          }
+
+          Text {
+            id: paymentExplanation
+            Layout.preferredWidth: parent.width
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+            text: qsTr("Your purchase will be debited from your Salad wallet. If there are not enough funds on it, replenish the balance")
+          }
+
+          ListView {
+            id: cartList
+            Layout.fillHeight: true
+            model: game_list_model
+            boundsBehavior: Flickable.StopAtBounds
+
+            delegate: RowLayout {
+              Text {text: title}
+
+              Text {text: price + " $"}
+
+              MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                  store_detailed_logic.map(id)
+                  storeStack.currentIndex = storeStack.storeDetailedIndex
                 }
               }
 
-              Indent {}
+              Button {
+                text: qsTr("Remove")
+                onClicked: {
+                  cart_logic.delete(cart_record_id)
+                  game_list_model.load_cart()
+                  game_list_model.recount_total_cost()
+                }
+              }
+            }
+          }
+        }
+      }
 
-              Header {text: "# " + store_detailed_logic.title}
+      Scroll {
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: walletPage.height
+
+        ColumnLayout {
+          id: walletPage
+          implicitWidth: window.width - 2 * defaultMargin
+          height: parent.height
+
+          Text {text: qsTr("Balance: ") + wallet_logic.balance + " $"}
+
+          Button {
+            text: qsTr("Add 5 $")
+
+            onClicked: {
+              wallet_logic.amount = 5
+              storeStack.currentIndex = storeStack.walletTopUpIndex
+            }
+          }
+
+          Button {
+            text: qsTr("Add 10 $")
+
+            onClicked: {
+              wallet_logic.amount = 10
+              storeStack.currentIndex = storeStack.walletTopUpIndex
+            }
+          }
+
+          Button {
+            text: qsTr("Add 25 $")
+
+            onClicked: {
+              wallet_logic.amount = 25
+              storeStack.currentIndex = storeStack.walletTopUpIndex
+            }
+          }
+
+          Button {
+            text: qsTr("Add 50 $")
+
+            onClicked: {
+              wallet_logic.amount = 50
+              storeStack.currentIndex = storeStack.walletTopUpIndex
+            }
+          }
+
+          Button {
+            text: qsTr("Add 100 $")
+
+            onClicked: {
+              wallet_logic.amount = 100
+              storeStack.currentIndex = storeStack.walletTopUpIndex
+            }
+          }
+        }
+      }
+
+      Scroll {
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: walletTopUpPage.height
+
+        ColumnLayout {
+          id: walletTopUpPage
+          implicitWidth: window.width - 2 * defaultMargin
+          height: parent.height
+
+          Button {
+            text: qsTr("To wallet balance")
+
+            onClicked: storeStack.currentIndex = storeStack.walletIndex
+          }
+
+          Text {text: qsTr("Choose a payment method")}
+
+          RowLayout {
+            ComboBox {
+              id: paymentMethods
+
+              model: [
+                "Bank card"
+              ]
+            }
+
+            Button {
+              text: qsTr("Pay")
+
+              enabled: cvvcvc.acceptableInput && cardNumber.acceptableInput && month.acceptableInput && year.acceptableInput
+
+              onClicked: {
+                wallet_logic.top_up()
+                storeStack.currentIndex = storeStack.walletIndex
+              }
+            }
+          }
+
+          GridLayout {
+            rows: 4
+            columns: 2
+
+            Text {text: qsTr("Card number")}
+            TextField {
+              id: cardNumber
+              validator: RegularExpressionValidator  {
+                regularExpression: /^\d{16}$/
+              }
+            }
+
+            Text {text: qsTr("Month")}
+            TextField {
+              id: month
+              validator: RegularExpressionValidator  {
+                regularExpression: /^\d{2}$/
+              }
+            }
+
+            Text {text: qsTr("Year")}
+            TextField {
+              id: year
+              validator: RegularExpressionValidator  {
+                regularExpression: /^\d{2}$/
+              }
+            }
+
+            Text {text: qsTr("CVV / CVC")}
+            TextField {
+              id: cvvcvc
+              echoMode: TextInput.Password
+              validator: RegularExpressionValidator  {
+                regularExpression: /^\d{3}$/
+              }
+            }
+          }
+        }
+      }
+
+      Scroll {
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: storePageLayout.height
+
+        ColumnLayout {
+          id: storePageLayout
+          implicitWidth: window.width - 2 * defaultMargin // FIXME: ugly
+
+          Text {
+            Layout.preferredWidth: parent.width
+            textFormat: TextEdit.MarkdownText
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+            text: qsTr("# Salad Workshop
+Are you a developer and want to become an official partner, use the platform to distribute your games and software? That's great, let's get started.
+## What to expect
+---
+### The general procedure for publishing products is regulated as follows:
+1. Filling out electronic documents:
+      * Information about the legal entity
+      * Bank payment information
+2. After gaining access to the workshop, start preparing products for release. You need to create a store page, upload a build, and offer an estimated price.
+3. Before launching your game and store pages, we will launch the game and check the page build to ensure there are no errors or malicious elements. Verification usually takes 1 to 5 days.
+## Information we need
+---
+### Legal details and name
+Accurate legal information about the person or company signing the agreement so that we are qualified to know who you are and who you represent. This is information about your company. To work with our legal entity, it is desirable (to reduce coverage and perform monetary transactions), but not necessary. You can also become a self-employed expert
+### Billing Information
+Accurate banking information about where the proceeds from the sale of your application are transferred: bank code, bank account number and bank address.
+## Rules and restrictions
+---
+### What can't be distributed using our platform:
+* Promoting crime, crime, or terrorism against a group of people based on ethnicity, religion, gender, age, disability, or sexual orientation.
+* Images of a sexual nature with real people.
+* Adult content that is not labeled as such and has no age rating information.
+* Defamatory statements or statements that offend honor and dignity. Content for which you do not have rights.
+* Content for which you do not have rights.
+* Content that violates the laws of the countries in which it will be distributed.
+* Content that is blatantly offensive or intentionally shocking or disgusting to the public.
+* Content that is in any way related to the exploitation of minors.
+* Applications that are replaced by a user's computer that they don't expect or that cause harm, such as viruses or malware.
+* Applications that fraudulently obtain sensitive information (such as login information) or financial data (such as credit card information).
+* Video content that is not directly related to the product published on the platform.
+* Non-interactive panoramic videos of realistic reality.
+* Applications built using technologies that issue or exchange cryptocurrencies or NFTs (non-fungible tokens).
+### Allowed types of content
+First, we accept games. Non-gaming software may be accepted if it falls into one of the following categories:
+* animation and modeling;
+* work with sound and video;
+* design and illustrations;
+* photo processing;
+* education and training;
+* Finance and accounting;
+* tools for players;
+## Let's get started
+---
+Click the \"Continue\" button to proceed to enter your name and contact information.
+")
+          }
+
+          Button {
+            text: qsTr("Continue")
+            onClicked: {
+              juridicalNameInput.focus = true
+              storeStack.currentIndex = storeStack.workshopRegisterCompanyInfoIndex
+            }
+          }
+        }
+      }
+
+      Scroll {
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: companyInfoForm.height
+
+        ColumnLayout {
+          id: companyInfoForm
+
+          implicitWidth: window.width - 2 * defaultMargin
+
+          Button {
+            text: qsTr("To introduction")
+            onClicked: storeStack.currentIndex = storeStack.workshopIntroductionIndex
+          }
+
+          Text {
+            Layout.preferredWidth: parent.width
+            textFormat: TextEdit.MarkdownText
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+            text: qsTr("# Juridical name
+
+The organization whose name you enter below must be the legal entity that will sign the required license agreements. The company name entered here must match the name on official bank documents and documents submitted to the tax office, or foreign tax documents, if any.
+
+If you do not have a company name and are the sole owner of the content you wish to publish, please enter your full name and postal address in the \"Legal Name\" and \"Street, Building, and Apartment/Office\" fields. If you co-own the game together with other people, you will need to register a legal entity that will own the content and accept payments for it.
+
+The legal name specified here is used internally by the system. If you have a commercial or informal name that you want to use on your store, you can specify it separately when creating your store page.
+")}
+
+          Text {
+            text: qsTr("JURIDICAL NAME")
+          }
+          TextField {
+            id: juridicalNameInput
+            text: company_logic.juridical_name
+            onTextChanged: company_logic.juridical_name = text
+          }
+
+          Text {
+            Layout.preferredWidth: parent.width
+            textFormat: TextEdit.MarkdownText
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+            text: qsTr("# Company Form
+
+The legal form of the company must match the one indicated in the documentation of your company. Examples of what should be entered in this field: Limited Liability Company \"League\"; Public Joint Stock Company\"Sberbank of Russia\"; Sole Proprietor. If you are the sole owner of the game, please use \"Sole Proprietor\".
+")
+          }
+
+          Text {
+            text: qsTr("COMPANY FORM")
+          }
+          TextField {
+            text: company_logic.company_form
+            onTextChanged: company_logic.company_form = text
+          }
+
+          Text {text: qsTr("STREET, BUILDING, APARTMENT / OFFICE NUMBER")}
+          TextField {
+            text: company_logic.street_house_apartment
+            onTextChanged: company_logic.street_house_apartment = text
+          }
+
+          Text {text: qsTr("CITY")}
+          TextField {
+            text: company_logic.city
+            onTextChanged: company_logic.city = text
+          }
+
+          Text {text: qsTr("REGION")}
+          TextField {
+            text: company_logic.region
+            onTextChanged: company_logic.region = text
+          }
+
+          Text {text: qsTr("COUNTRY")}
+          TextField {
+            text: company_logic.country
+            onTextChanged: company_logic.country = text
+          }
+
+          Text {text: qsTr("POSTCODE")}
+          TextField {
+            text: company_logic.postal_code
+            onTextChanged: company_logic.postal_code = text
+          }
+
+          Text {text: qsTr("EMAIL ADDRESS FOR NOTIFICATIONS")}
+          TextField {
+            id: companyEmail
+            validator: RegularExpressionValidator  {
+                regularExpression: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+              }
+            text: company_logic.notification_email
+            onTextChanged: company_logic.notification_email = text
+          }
+
+          Text {
+            Layout.preferredWidth: parent.width
+            text: qsTr("Click the \"Continue\" button to proceed to enter payment information")
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+          }
+
+          Button {
+            enabled: companyEmail.acceptableInput
+            text: qsTr("Continue")
+            onClicked: {
+              bicInput.focus = true
+              storeStack.currentIndex = storeStack.workshopRegisterPaymentInfoIndex
+            }
+          }
+        }
+      }
+
+      Scroll {
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: companyPayInfoForm.height
+
+        ColumnLayout {
+          id: companyPayInfoForm
+
+          implicitWidth: window.width - 2 * defaultMargin
+
+          Button {
+            text: qsTr("To company information")
+            onClicked: storeStack.currentIndex = storeStack.workshopRegisterCompanyInfoIndex
+          }
+
+          Text {text: qsTr("BIC / SWIFT BANK CODE")}
+          TextField {
+            id: bicInput
+            text: company_logic.bic
+            onTextChanged: company_logic.bic = text
+            validator: RegularExpressionValidator  {
+              regularExpression: /^\d{9}$/
+            }
+          }
+
+          Text {text: qsTr("BANK ADDRESS")}
+          TextField {
+            text: company_logic.bank_address
+            onTextChanged: company_logic.bank_address = text
+          }
+
+          Text {text: qsTr("BANK ACCOUNT NUMBER")}
+          TextField {
+          id: accountNumber
+            text: company_logic.bank_account_number
+            onTextChanged: company_logic.bank_account_number = text
+            validator: RegularExpressionValidator  {
+                regularExpression: /^\d{20}$/
+              }
+          }
+
+          Text {
+            Layout.preferredWidth: parent.width
+            text: qsTr("After clicking on the \"Yes, I want to create a company\" button, a person will be registered in the system who will be able to publish releases. Please note that the information will be immediately sent for consideration. While it is running, you will not be able to publish your products. Please double-check all the information provided.")
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+          }
+
+          Button {
+            enabled: bicInput.acceptableInput && accountNumber.acceptableInput
+            text: qsTr("Yes, I want to create a company")
+            onClicked: company_logic.new()
+          }
+        }
+      }
+
+      Scroll {
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: releasesList.contentHeight + releasesListHeader.height + newGamePublishingTools.height + defaultMargin + (unverifiedCompanyWarning.visible ? unverifiedCompanyWarning.height : 0)
+
+        ColumnLayout {
+          implicitWidth: window.width - 2 * defaultMargin
+          height: parent.height
+
+          Connections {
+            target: app_logic
+
+            function onDrafted() {
+              storeStack.currentIndex = storeStack.workshopAppControlIndex
+            }
+          }
+
+          Text {
+            id: unverifiedCompanyWarning
+            text: qsTr("Until your company information is verified, you cannot create new releases")
+            visible: !company_logic.is_drafted_new_button_enabled
+            Layout.preferredWidth: parent.width
+            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+          }
+
+          RowLayout {
+            id: newGamePublishingTools
+
+            Text {
+              text: qsTr("Select a product to view and edit")
+              visible: game_list_model.rowCount() !== 0
+            }
+
+            Button {
+              text: qsTr("Draft new")
+              onClicked: {
+                app_logic.draft_new()
+                game_list_model.load_personal()
+              }
+              visible: company_logic.is_drafted_new_button_enabled
+            }
+          }
+
+          RowLayout {
+            id: releasesListHeader
+
+            Text {
+              Layout.preferredWidth: 200
+              text: qsTr("Title")
+            }
+            Text {
+              Layout.preferredWidth: 100
+              text: qsTr("Is approved")
+            }
+            Text {text: qsTr("Is published")}
+          }
+
+          ListView {
+            id: releasesList
+            Layout.fillHeight: true
+            model: game_list_model
+            boundsBehavior: Flickable.StopAtBounds
+
+            delegate: RowLayout {
+              Text {
+                Layout.preferredWidth: 200
+                text: title
+              }
+              Text {
+                Layout.preferredWidth: 100
+                text: is_approved ? qsTr("Approved") : qsTr("Not approved")
+              }
+              Text {
+                Layout.preferredWidth: 100
+                text: is_published ? qsTr("Published") : qsTr("Not published")
+              }
+
+              MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                  app_logic.map(id)
+                  storeStack.currentIndex = storeStack.workshopAppControlIndex
+                }
+              }
+            }
+          }
+        }
+      }
+
+      Scroll {
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: appControlPage.height
+
+        ColumnLayout {
+          id: appControlPage
+
+          implicitWidth: window.width - 2 * defaultMargin
+
+          Button {
+            text: qsTr("To releases list")
+            onClicked: storeStack.currentIndex = storeStack.workshopAppsListIndex
+          }
+
+          RowLayout {
+            TabBar {
+              id: appSettingsBar
+
+              width: parent.width
+
+              TabButton {text: qsTr("Common")}
+              TabButton {text: qsTr("Descriptions")}
+              TabButton {text: qsTr("Materials")}
+              TabButton {
+                text: qsTr("Builds")
+                onClicked: {
+                  build_logic.load_platforms()
+                  build_list_model.load_for_game(app_logic.id)
+                }
+              }
+            }
+
+            Button {
+              text: qsTr("Save")
+              onClicked: {
+                app_logic.update()
+                build_logic.update(app_logic.id)
+                game_list_model.load_personal()
+              }
+            }
+
+            Switch {
+              enabled: app_logic.is_approved
+              position: app_logic.is_published
+              onToggled: {
+                app_logic.is_published = position
+                app_logic.publish()
+              }
+              text: qsTr("Is published")
+            }
+          }
+
+          StackLayout {
+            currentIndex: appSettingsBar.currentIndex
+            implicitWidth: parent.width
+
+            ColumnLayout {
+              Text {text: qsTr("TITLE")}
+              TextField {
+                text: app_logic.title
+                onTextChanged: app_logic.title = text
+              }
+
+              CheckBox {
+                id: is_coming_soon
+                text: qsTr("COMING SOON")
+                checked: app_logic.coming_soon
+                onClicked: app_logic.coming_soon = checked
+              }
+
+              Text {
+                text: qsTr("RELEASE DATE")
+                visible: !is_coming_soon.checked
+              }
 
               RowLayout {
-                SwipeView {
-                  id: game_screenshots_swipe_view
+                id: dateSection
 
-                  Layout.preferredWidth: 700
-                  Layout.preferredHeight: width * 9 / 16
+                visible: !is_coming_soon.checked
 
-                  clip: true
+                ComboBox {
+                  model: app_logic.possible_days
+                  currentIndex: app_logic.day_index
+                  onCurrentIndexChanged: app_logic.day_index = currentIndex
+                }
 
-                  Connections {
-                    target: store_detailed_logic
+                ComboBox {
+                  model: app_logic.possible_months
+                  currentIndex: app_logic.month_index
+                  onCurrentIndexChanged: app_logic.month_index = currentIndex
+                }
 
-                    function onLoaded() {
-                      let component = Qt.createComponent("Screenshot.qml")
-                      let game_id = store_detailed_logic.id
-                      let fileNames = store_detailed_logic.screenshots
-                      for (let i = 0; i < fileNames.length; i++) {
-                        let imageUrl = `http://127.0.0.1:8000/api/v1/games/${game_id}/screenshots/?filename=${fileNames[i]}`
-                        let image = component.createObject(game_screenshots_swipe_view, {source: imageUrl})
-                        game_screenshots_swipe_view.insertItem(i, image)
-                      }
+                ComboBox {
+                  model: app_logic.possible_years
+                  currentIndex: app_logic.year_index
+                  onCurrentIndexChanged: app_logic.year_index = currentIndex
+                }
+              }
 
-                      let c = game_screenshots_swipe_view.count
-                      for (let i = fileNames.length; i < c; i++)
-                        game_screenshots_swipe_view.removeItem(game_screenshots_swipe_view.itemAt(i))
+              Text {text: qsTr("DEVELOPER")}
+              TextField {
+                text: app_logic.developer
+                onTextChanged: app_logic.developer = text
+              }
 
-                      game_screenshots_swipe_view.setCurrentIndex(0)
+              Text {text: qsTr("PUBLISHER")}
+              TextField {
+                text: app_logic.publisher
+                onTextChanged: app_logic.publisher = text
+              }
+
+              Text {text: qsTr("PRICE")}
+              TextField {
+                text: app_logic.price
+                onTextChanged: app_logic.price = text
+              }
+            }
+
+            ColumnLayout {
+              implicitWidth: parent.width
+
+              Text {
+                Layout.preferredWidth: parent.width
+                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                text: qsTr("Short description ") + shortDescriptionArea.length + "/" + shortDescriptionArea.limit
+              }
+
+              Scroll {
+                Layout.preferredWidth: parent.width / 2
+                Layout.preferredHeight: 125
+
+                TextArea {
+                  id: shortDescriptionArea
+
+                  property int limit: 500
+
+                  Layout.preferredWidth: parent.width / 2
+                  Layout.preferredHeight: 125
+
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+
+                  background: Rectangle {
+                    color: "lightgray"
+
+                    MouseArea {
+                      anchors.fill: parent
+                      hoverEnabled: true
+                      cursorShape: Qt.IBeamCursor
                     }
+                  }
+
+                  text: app_logic.short_description
+                  onTextChanged: {
+                    if (length > limit) remove(limit, length)
+                    app_logic.short_description = text
+                  }
+                }
+              }
+
+              Text {
+                Layout.preferredWidth: parent.width
+                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                text: "Long description (Markdown supported) " + longDescriptionArea.length + "/" + longDescriptionArea.limit
+              }
+
+              Scroll {
+                Layout.preferredWidth: parent.width / 2
+                Layout.preferredHeight: 350
+
+                TextArea {
+                  id: longDescriptionArea
+
+                  property int limit: 2000
+
+                  Layout.preferredWidth: parent.width / 2
+                  Layout.preferredHeight: 350
+
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+
+                  background: Rectangle {
+                    color: "lightgray"
+
+                    MouseArea {
+                      anchors.fill: parent
+                      hoverEnabled: true
+                      cursorShape: Qt.IBeamCursor
+                    }
+                  }
+
+                  text: app_logic.long_description
+                  onTextChanged: {
+                    if (length > limit) remove(limit, length)
+                    app_logic.long_description = text
+                  }
+                }
+              }
+            }
+
+            ColumnLayout {
+              implicitWidth: parent.width
+
+              RowLayout {
+                Platform.FileDialog {
+                  id: attach_header_image_file_dialog
+                  fileMode: Platform.FileDialog.OpenFile
+                  nameFilters: ["Images (*.webp *jpg *png)"]
+                  onAccepted: app_logic.header = file
+                  folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                }
+
+                Text {text: qsTr("SHOP POSTER (*.webp *jpg *png):")}
+
+                Text {
+                  text: app_logic.displayed_header === '' ?
+                    (app_logic.server_header === '' ? qsTr('Not provided') :  app_logic.server_header)
+                      :
+                    app_logic.displayed_header
+                }
+              }
+
+              RowLayout {
+                Button {
+                  visible: app_logic.header === ""
+                  text: qsTr("Attach")
+                  onClicked: attach_header_image_file_dialog.open()
+                }
+                Button {
+                  visible: app_logic.header !== ""
+                  text: qsTr("Unpin")
+                  onClicked: app_logic.header = ""
+                }
+              }
+
+              RowLayout {
+                Platform.FileDialog {
+                  id: attach_capsule_image_file_dialog
+                  fileMode: Platform.FileDialog.OpenFile
+                  nameFilters: ["Images (*.webp *jpg *png)"]
+                  onAccepted: app_logic.capsule = file
+                  folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                }
+
+                Text {text: qsTr("LIBRARY POSTER (*.webp *jpg *png):")}
+
+                Text {
+                  text: app_logic.displayed_capsule === '' ?
+                    (app_logic.server_capsule === '' ? qsTr('Not provided') :  app_logic.server_capsule)
+                      :
+                    app_logic.displayed_capsule
+                }
+              }
+
+              RowLayout {
+                Button {
+                  visible: app_logic.capsule === ""
+                  text: qsTr("Attach")
+                  onClicked: attach_capsule_image_file_dialog.open()
+                }
+
+                Button {
+                  visible: app_logic.capsule !== ""
+                  text: qsTr("Unpin")
+                  onClicked: app_logic.capsule = ""
+                }
+              }
+
+              RowLayout {
+                Platform.FileDialog {
+                  id: attach_screenshots_file_dialog
+                  fileMode: Platform.FileDialog.OpenFiles
+                  nameFilters: ["Images (*.webp *jpg *png)"]
+                  onAccepted: app_logic.screenshots = files
+                  folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+                }
+
+                Text {text: qsTr("SCREENSHOTS (*.webp *jpg *png):")}
+
+                Text {
+                  text: app_logic.displayed_screenshots === '' ?
+                    (app_logic.server_screenshots === '' ? qsTr('Not provided') :  app_logic.server_screenshots)
+                      :
+                    app_logic.displayed_screenshots
+                }
+              }
+
+              RowLayout {
+                Button {
+                  visible: app_logic.displayed_screenshots === ""
+                  text: qsTr("Attach")
+                  onClicked: attach_screenshots_file_dialog.open()
+                }
+
+                Button {
+                  visible: app_logic.displayed_screenshots !== ""
+                  text: qsTr("Unpin")
+                  onClicked: app_logic.screenshots = []
+                }
+              }
+            }
+
+            ColumnLayout {
+               RowLayout {
+                Text {
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                  text: qsTr("Here you can view and create a build of the application for a specific platform")
+                }
+
+                Button {
+                  text: qsTr("New")
+                  onClicked: {
+                    build_logic.draft_new(app_logic.id)
+                    build_list_model.load_for_game(app_logic.id)
+                  }
+                }
+              }
+
+              StackLayout {
+                id: buildsStackLayout
+                currentIndex: buildsBar.currentIndex
+                implicitWidth: parent.width
+
+                property int buildsListIndex: 0
+                property int buildControlIndex: buildsListIndex + 1
+
+                Connections {
+                  target: build_logic
+
+                  function onDrafted() {
+                    buildsStackLayout.currentIndex = buildsStackLayout.buildControlIndex
                   }
                 }
 
                 ColumnLayout {
-                  Layout.alignment: Qt.AlignTop
-                  Layout.preferredWidth: layoutWidth - game_screenshots_swipe_view.width - defaultMargin
-
-                  Text {
-                    Layout.alignment: Qt.AlignTop
-                    Layout.preferredWidth: parent.width
-                    color: "#ddd"
-                    font.pointSize: 12
-                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                    text: `<p align='justify'>${store_detailed_logic.short_description}</p>`
-                  }
-
                   RowLayout {
-                    Layout.preferredWidth: parent.width
-
-                    Regular {
-                      content: "Дата выхода:"
-                    }
-
-                    Regular {
-                      color: "#64BCEF"
-                      Layout.preferredWidth: parent.width
-                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                      content: store_detailed_logic.release_date ? humanTimestamp(store_detailed_logic.release_date) : "Скоро"
-                    }
+                    Text {text: "VERSION"}
+                    Text {text: "PLATFORM"}
+                    Text {text: "CALL"}
+                    Text {text: "PARAMS"}
                   }
 
-                  RowLayout {
-                    Layout.preferredWidth: parent.width
-
-                    Regular {
-                      id: developerLabel
-                      content: "Разработчик:"
-                    }
-
-                    Regular {
-                      color: "#64BCEF"
-                      Layout.preferredWidth: parent.width - developerLabel.contentWidth
-                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                      content: store_detailed_logic.developer
-                    }
-                  }
-
-                  RowLayout {
-                    Layout.preferredWidth: parent.width
-
-                    Regular {
-                      id: publisherLabel
-                      content: "Издатель:"
-                    }
-
-                    Regular {
-                      color: "#64BCEF"
-                      Layout.preferredWidth: parent.width - publisherLabel.contentWidth
-                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                      content: store_detailed_logic.publisher
-                    }
-                  }
-                }
-              }
-
-              Indent {}
-
-              Rectangle {
-                width: game_screenshots_swipe_view.width
-                height: 56
-                radius: defaultMargin / 2
-                color: "#586776"
-
-                RowLayout {
-                  visible: store_detailed_logic.location === 0
-                  anchors.fill: parent
-                  anchors.margins: defaultMargin
-
-                  Text {
-                    textFormat: TextEdit.MarkdownText
-                    color: "#ddd"
-                    text: "## Купить " + store_detailed_logic.title
-                  }
-
-                  Item {Layout.fillWidth: true}
-
-                  Text {
-                    textFormat: TextEdit.MarkdownText
-                    color: "#00E589"
-                    text: "## " + store_detailed_logic.price + " руб."
-                  }
-
-                  BuyButton {
-                    text: "В корзину"
-                    function handler() {
-                      cart_logic.add(store_detailed_logic.id)
-                      store_detailed_logic.location = 2
-                    }
-                  }
-                }
-
-                RowLayout {
-                  anchors.fill: parent
-                  anchors.margins: defaultMargin
-
-                  Text {
-                    textFormat: TextEdit.MarkdownText
-                    text: "## Уже в вашей библиотеке"
-                    color: "white"
-                    visible: store_detailed_logic.location === 1
-                  }
-                }
-
-                RowLayout {
-                  anchors.fill: parent
-                  anchors.margins: defaultMargin
-
-                  Text {
-                    textFormat: TextEdit.MarkdownText
-                    text: "## Уже в вашей корзине"
-                    color: "white"
-                    visible: store_detailed_logic.location === 2
-                  }
-                }
-              }
-
-              Indent {}
-
-              Text {
-                textFormat: TextEdit.MarkdownText
-                Layout.preferredWidth: game_screenshots_swipe_view.width
-                color: "#ddd"
-                font.pointSize: 12
-                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                text: store_detailed_logic.long_description
-              }
-            }
-          }
-        }
-
-        GridView {
-          id: storeGamesGridView
-
-          anchors.fill: parent
-          anchors.margins: defaultMargin
-
-          boundsBehavior: Flickable.StopAtBounds
-
-          property int capsuleImageWidth: 12 * 11
-          property int capsuleImageHeight: capsuleImageWidth * 16 / 11
-
-          property int idealWidth: capsuleImageWidth + defaultMargin * 2
-          property int itemsPerRow: storeGamesGridView.width / idealWidth
-          property double additionalCellWidth: (storeGamesGridView.width - itemsPerRow * idealWidth) / itemsPerRow
-          cellWidth: idealWidth + additionalCellWidth
-          cellHeight: capsuleImageHeight + defaultMargin * 2
-
-          clip: true
-
-          model: game_list_model
-
-          delegate: Rectangle {
-            width: storeGamesGridView.cellWidth
-            height: storeGamesGridView.cellHeight
-            color: "transparent"
-            radius: defaultMargin / 2
-
-            Image {
-              anchors.centerIn: parent
-              width: storeGamesGridView.capsuleImageWidth
-              height: storeGamesGridView.capsuleImageHeight
-              source: `http://127.0.0.1:8000/api/v1/games/${id}/capsule/`
-              mipmap: true
-            }
-
-            MouseArea {
-              id: cell_mouse_area
-              anchors.fill: parent
-              cursorShape: Qt.PointingHandCursor
-              hoverEnabled: true
-              onEntered: parent.color = "#36373a"
-              onExited: parent.color = "transparent"
-              onClicked: {
-                library_detailed_logic.map(id)
-                storeStack.currentIndex = storeStack.libraryDetailedIndex
-              }
-            }
-          }
-        }
-
-        Scroll {
-          contentHeight: libraryDetailedPage.height + 2 * defaultMargin
-
-          Item {
-            width: layoutWidth - 3 * defaultMargin
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            ColumnLayout {
-              id: libraryDetailedPage
-
-              Layout.preferredWidth: parent.width
-
-              Image {
-                Layout.preferredWidth: layoutWidth - 3 * defaultMargin
-                Layout.preferredHeight: width * 9 / 16
-                source: `http://127.0.0.1:8000/api/v1/games/${library_detailed_logic.game_id}/header/`
-                mipmap: true
-
-                Rectangle {
-                  anchors.fill: parent
-                  gradient: Gradient {
-                    GradientStop { position: 0.9; color: backgroundWindowColor }
-                    GradientStop { position: 0.5; color: "transparent" }
-                  }
-                }
-
-                RowLayout {
-                  anchors.bottom: parent.bottom
-                  anchors.left: parent.left
-                  anchors.right: parent.right
-                  anchors.margins: defaultMargin
-
-                  Header {
-                    text: "# " + library_detailed_logic.game_title
-                  }
-
-                  Item {
-                    Layout.preferredWidth: 2 * defaultMargin
-                  }
-
-                  ActionButton {
-                    visible: library_detailed_logic.app_status === 0
-                    text: qsTr("Установить")
-                    onClicked:  library_detailed_logic.download()
-                  }
-
-                  BuyButton {
-                    visible: library_detailed_logic.app_status === 1
-                    text: qsTr("Запуск")
-                    onClicked: library_detailed_logic.launch()
-                  }
-
-                  NeutralButton {
-                    visible: library_detailed_logic.app_status === 2
-                    text: library_detailed_logic.loading_progress
-                  }
-
-                  ActionButton {
-                    visible: library_detailed_logic.app_status === 3
-                    text: qsTr("Остановить")
-                    onClicked: library_detailed_logic.shutdown()
-                  }
-
-                  Text {
-                    visible: library_detailed_logic.app_status === 4
-                    text: "Игра находится в вашей библиотеке, но недоступна для вашей платформы"
-                    color: "white"
-                  }
-
-                  Text {
-                    visible: library_detailed_logic.app_status === 5
-                    text: "Недоступно для загрузки. Попробуйте позже"
-                    color: "white"
-                  }
-
-                  Item {
-                    Layout.fillWidth: true
-                  }
-
-                  Item {
-                    Layout.preferredWidth: 2 * defaultMargin
-                  }
-
-                  ColumnLayout {
-                    Regular {content: "Последний запуск"}
-                    Regular {
-                      Layout.alignment: Qt.AlignHCenter
-                      content: library_detailed_logic.last_launched
-                    }
-                  }
-
-                  Item {
-                    Layout.preferredWidth: 2 * defaultMargin
-                  }
-
-                  ColumnLayout {
-                    visible: library_detailed_logic.play_time !== "0"
-                    Regular {content: "Вы играли"}
-                    Regular {
-                      Layout.alignment: Qt.AlignHCenter
-                      content: library_detailed_logic.play_time
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        Scroll {
-          contentHeight: profilePage.height + 2 * defaultMargin
-
-          Item {
-            width: layoutWidth
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            ColumnLayout {
-              id: profilePage
-            }
-          }
-        }
-
-        Scroll {
-          contentHeight: yse.contentHeight + 2 * defaultMargin + 200
-
-          Item {
-            width: layoutWidth
-            height: parent.height
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            ColumnLayout {
-              id: cartPage
-
-              anchors.fill: parent
-
-              Header {
-                Layout.bottomMargin: 2 * defaultMargin
-                text: "# Корзина"
-              }
-
-              RowLayout {
-                Header {
-                  text: "# Сумма покупки: " + game_list_model.total_cost + " руб."
-                }
-
-                BuyButton {
-                  Layout.leftMargin: 2 * defaultMargin
-                  text: "Оплатить"
-                  function handler() {
-                    cart_logic.pay()
-                    game_list_model.load_cart()
-                    game_list_model.recount_total_cost()
-                    wallet_logic.map()
-                  }
-                }
-              }
-
-              Indent {}
-
-              Regular {
-                color: "#64BCEF"
-                content: "Деньги за покупку будут списаны с вашего кошелька Foggie. Если на нем недостаточно средств, пополните баланс"
-              }
-
-              Indent {}
-
-              ListView {
-                id: yse
-                Layout.fillHeight: true
-                model: game_list_model
-                spacing: defaultMargin
-                boundsBehavior: Flickable.StopAtBounds
-
-                delegate: RowLayout {
-                  Layout.preferredWidth: 450
-                  Layout.preferredHeight: 70
-
-                  Rectangle {
-                    implicitWidth: 400
-                    implicitHeight: 70
-                    radius: defaultMargin / 2
-                    color: "transparent"
-
-                    RowLayout {
-                      anchors.fill: parent
-                      anchors.margins: defaultMargin
-
-                      Image {
-                        Layout.preferredWidth: height * 16 / 9
-                        Layout.preferredHeight: parent.height
-                        source: `http://127.0.0.1:8000/api/v1/games/${id}/header/`
-                        mipmap: true
-                      }
-
-                      Regular {content: title}
-
-                      Item {
-                        Layout.fillWidth: true
-                      }
-
-                      Regular {content: price + "руб."}
-                    }
-
-                    MouseArea {
-                      anchors.fill: parent
-                      cursorShape: Qt.PointingHandCursor
-                      hoverEnabled: true
-                      onEntered: parent.color = "#446691"
-                      onExited: parent.color = "transparent"
-                      onClicked: {
-                        store_detailed_logic.map(id)
-                        storeStack.currentIndex = storeStack.storeDetailedIndex
-                      }
-                    }
-                  }
-
-                  Image {
-                    Layout.leftMargin: 2 * defaultMargin
-                    Layout.preferredWidth: parent.height - 5 * defaultMargin
-                    Layout.preferredHeight: parent.height - 5 * defaultMargin
-                    source: "../../resources/icons/trash.png"
-
-                    Rectangle {
-                      anchors.fill: parent
-                      color: "lightgray"
-                      opacity: 0
-                      radius: defaultMargin / 2
+                  ListView {
+                    Layout.fillHeight: true
+                    model: build_list_model
+                    boundsBehavior: Flickable.StopAtBounds
+
+                    delegate: RowLayout {
+                      Text {text: platform_title}
+                      Text {text: version}
+                      Text {text: call}
+                      Text {text: params}
 
                       MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
-                        onEntered: parent.opacity = 0.3
-                        onExited: parent.opacity = 0
                         onClicked: {
-                          cart_logic.delete(cart_record_id)
-                          game_list_model.load_cart()
-                          game_list_model.recount_total_cost()
+                          build_logic.map(id)
+                          buildsStackLayout.currentIndex = buildsStackLayout.buildControlIndex
                         }
                       }
                     }
                   }
                 }
-              }
-            }
-          }
-        }
 
-        Scroll {
-          contentHeight: walletPage.height + 2 * defaultMargin
+                ColumnLayout {
+                  Button {
+                    text: qsTr("To builds list")
 
-          Item {
-            width: layoutWidth
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            RowLayout {
-              ColumnLayout {
-                id: walletPage
-
-                Header {
-                  Layout.bottomMargin: 2 * defaultMargin
-                  text: "# Пополнить баланс"
-                }
-
-                BalanceAddSection {
-                  content: "Добавить 50 руб."
-                  function handler() {
-                    wallet_logic.amount = 50
-                    storeStack.currentIndex = storeStack.walletTopUpIndex
-                  }
-                }
-                BalanceAddSection {
-                  content: "Добавить 100 руб."
-                  function handler() {
-                    wallet_logic.amount = 100
-                    storeStack.currentIndex = storeStack.walletTopUpIndex
-                  }
-                }
-                BalanceAddSection {
-                  content: "Добавить 300 руб."
-                  function handler() {
-                    wallet_logic.amount = 300
-                    storeStack.currentIndex = storeStack.walletTopUpIndex
-                  }
-                }
-                BalanceAddSection {
-                  content: "Добавить 500 руб."
-                  function handler() {
-                    wallet_logic.amount = 500
-                    storeStack.currentIndex = storeStack.walletTopUpIndex
-                  }
-                }
-                BalanceAddSection {
-                  content: "Добавить 1000 руб."
-                  function handler() {
-                    wallet_logic.amount = 1000
-                    storeStack.currentIndex = storeStack.walletTopUpIndex
-                  }
-                }
-                BalanceAddSection {
-                  content: "Добавить 3000 руб."
-                  function handler() {
-                    wallet_logic.amount = 3000
-                    storeStack.currentIndex = storeStack.walletTopUpIndex
-                  }
-                }
-                BalanceAddSection {
-                  content: "Добавить 5000 руб."
-                  function handler() {
-                    wallet_logic.amount = 5000
-                    storeStack.currentIndex = storeStack.walletTopUpIndex
-                  }
-                }
-              }
-
-              Header {
-                Layout.leftMargin: 2 * defaultMargin
-                Layout.topMargin: 8 * defaultMargin
-                Layout.alignment: Qt.AlignTop
-                text: "# Остаток средств: " + wallet_logic.balance + " руб."
-              }
-            }
-          }
-        }
-
-        Scroll {
-          contentHeight: walletTopUpPage.height + 2 * defaultMargin
-
-          Item {
-            width: layoutWidth
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            RowLayout {
-              id: walletTopUpPage
-              Layout.fillWidth: true
-
-              ColumnLayout {
-                Link {
-                  content: qsTr("К балансу кошелька")
-
-                  function handler() {
-                    storeStack.currentIndex = storeStack.walletIndex
-                  }
-                }
-
-                Header {
-                  Layout.bottomMargin: 2 * defaultMargin
-                  text: "# Оплата"
-                }
-
-                FormInputLabel {
-                  content: qsTr("Выберите метод оплаты")
-                }
-
-                RowLayout {
-                  Combo {
-                    id: paymentMethods
-                    implicitWidth: 200
-
-                    model: [
-                      "Банковская карта"
-                    ]
-                  }
-
-                  BuyButton {
-                    text: qsTr("Оплатить")
-
-                    enabled: cvvcvc.acceptableInput && cardNumber.acceptableInput && month.acceptableInput && year.acceptableInput
-
-                    function handler() {
-                      wallet_logic.top_up()
-                      storeStack.currentIndex = storeStack.walletIndex
-                    }
-                  }
-                }
-
-                Indent {}
-
-                GridLayout {
-                  rows: 4
-                  columns: 2
-
-                  FormInputLabel {
-                    content: "Номер карты"
-
-                    }
-                  FormInput {
-                  id: cardNumber
-                    validator: RegularExpressionValidator  {
-                    regularExpression: /^\d{16}$/
-                  }}
-                  FormInputLabel {content: "Месяц"}
-                  FormInput {
-                  id: month
-                    validator: RegularExpressionValidator  {
-                    regularExpression: /^\d{2}$/
-                  }
-                  }
-                  FormInputLabel {content: "Год"}
-                  FormInput {
-                  id: year
-                    validator: RegularExpressionValidator  {
-                    regularExpression: /^\d{2}$/
-                  }}
-                  FormInputLabel {
-                    content: "CVV / CVC"
-                  }
-                  FormInput {
-                  id: cvvcvc
-                    echoMode: TextInput.Password
-                    validator: RegularExpressionValidator  {
-                    regularExpression: /^\d{3}$/
-                  }
-                    }
-                }
-              }
-            }
-          }
-        }
-
-        Scroll {
-          contentHeight: introduction.height + 2 * defaultMargin
-
-          Item {
-            width: layoutWidth
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            ColumnLayout {
-              id: introduction
-
-              QtObject{
-                id: introductionContent
-                property string text: "# Foggie Workshop
-
-&nbsp;
-### Вы разработчик и хотите стать нашим партнером, использовать нашу платформу для распространения своих игр и программного обеспечения? Это здорово, давайте начнем.
-
-&nbsp;
-
-<h2 style=\"color:#64BCEF\">Чего ожидать</h2>
-&nbsp;
-
----
-### Общая процедура публикации продуктов состоит в следующем:
-### 1. Заполните электронные документы:
-###     * Информация о юридическом лице
-###     * Банковская платежная информация
-### 2. Получив доступ к Workshop, начните подготовку продукта к выпуску. Вам нужно будет создать страницу магазина, загрузить сборку и ввести желаемую цену.
-### 3. Перед окончательным запуском вашей сборки игры и страницы магазина мы запустим игру и проверим страницу, чтобы убедиться в отсутствии ошибок или вредоносных элементов. Проверка обычно занимает от 1 до 5 дней.
-
-&nbsp;
-
-<h2 style=\"color:#64BCEF\">Информация, которая нам понадобится</h2>
-&nbsp;
-
----
-### * Юридические данные и название
-
-### Точная юридическая информация о лице или компании, подписавших соглашение, чтобы мы понимали, кто вы и кого представляете. Это информация о вашей компании. Для работы с нами юридическое лицо желательно (для упрощения налогообложения и совершения денежных операций), но необязательно. Вы также можете представлять индивидуального предпринимателя
-
-&nbsp;
-### * Платежная информация
-
-### Точная банковская информация о том, куда перевести выручку от продажи вашего приложения: код банка, номер банковского счета и адрес банка.
-
-&nbsp;
-
-<h2 style=\"color:#64BCEF\">Правила и ограничения</h2>
-&nbsp;
-
----
-### Что нельзя распространять с помощью нашей платформы:
-### * Пропаганда ненависти, насилия или дискриминации в отношении групп людей по признаку этнической принадлежности, религии, пола, возраста, инвалидности или сексуальной ориентации.
-### * Изображения сексуального характера с реальными людьми.
-### * Контент для взрослых, который не помечен как таковой и не содержит информации о возрастном рейтинге.
-### * Клеветнические высказывания или высказывания, оскорбляющие честь и достоинство. Контент, на который у вас нет прав.
-### * Контент, на который у вас нет прав.
-### * Контент, нарушающий законы стран, в которых он будет распространяться.
-### * Контент, который является откровенно оскорбительным или намеренно шокирует или вызывает отвращение у публики.
-### * Контент, который каким-либо образом связан с эксплуатацией несовершеннолетних.
-### * Приложения, которые изменяют компьютер пользователя неожиданным для него образом или причиняют вред, например вирусы или вредоносное ПО.
-### * Приложения, которые пытаются обманным путем получить конфиденциальную информацию (например, данные для входа) или финансовые данные (например, информацию о кредитной карте).
-### * Видеоконтент, не имеющий прямого отношения к продукту, выпущенному на платформе.
-### * Неинтерактивные панорамные видеоролики виртуальной реальности.
-### * Приложения, созданные с использованием технологии блокчейн, которые выпускают или обменивают криптовалюты или NFT (невзаимозаменяемые токены).
-
-&nbsp;
-### Разрешенные типы контента:
-### Во-первых, мы принимаем игры. Неигровое программное обеспечение может быть принято, если оно относится к одной из следующих категорий:
-### * анимация и моделирование;
-### * работа со звуком и видео;
-### * дизайн и иллюстрации;
-### * обработка фото;
-### * образование и обучение;
-### * Финансы и учет;
-### * инструменты для игроков;
-
-&nbsp;
-
-<h2 style=\"color:#64BCEF\">Давайте приступим</h2>
-&nbsp;
-
----
-### Нажмите кнопку «Продолжить», чтобы перейти к вводу вашего официального имени и контактной информации.
-"}
-              Text{
-                Layout.preferredWidth: layoutWidth - 2 * defaultMargin
-                textFormat: TextEdit.MarkdownText
-                text: introductionContent.text
-                color: "#ddd"
-                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-              }
-
-              NeutralButton {
-                text: qsTr("Продолжить")
-                function handler() {
-                  bicInput.focus = true
-                  storeStack.currentIndex = storeStack.workshopRegisterCompanyInfoIndex
-                }
-              }
-            }
-          }
-        }
-
-        Scroll {
-          contentHeight: companyInfoForm.height + 2 * defaultMargin
-
-          Item {
-            width: layoutWidth
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            ColumnLayout {
-              id: companyInfoForm
-
-              Link {
-                content: qsTr("К введению")
-
-                function handler() {
-                  juridicalNameInput.focus = true
-                  storeStack.currentIndex = storeStack.workshopIntroductionIndex
-                }
-              }
-
-              Indent {}
-
-              Rectangle {
-                width: layoutWidth - 2 * defaultMargin
-                height: 312
-                radius: defaultMargin
-                border.color: "orange"
-                border.width: 1
-                color: "transparent"
-
-                Item {
-                  width: parent.width - 2 * defaultMargin
-                  anchors.horizontalCenter: parent.horizontalCenter
-
-                  ColumnLayout {
-                    id: legalNameExplanationLayout
-
-                    QtObject{
-                      id: legalNameContent
-                      property string text: "<h1 style=\"color:white\">Юридическое имя</h1>
-
-### Организация, название которой вы введете ниже, должна быть юридическим лицом, которое подпишет необходимые лицензионные соглашения. Введенное здесь название компании должно совпадать с названием в официальных банковских документах и документах, предоставленных в налоговую инспекцию, или иностранных налоговых документах, если таковые имеются.
-
-### Если у вас нет названия компании и вы являетесь единственным владельцем контента, который вы хотите опубликовать, укажите свое полное имя и почтовый адрес в полях \"Юридическое название\" и \"Улица, дом и квартира/офис Числовое поле. Если вы являетесь совладельцем игры вместе с другими людьми, вам потребуется зарегистрировать юридическое лицо, которое будет владеть контентом и принимать за него платежи.
-
-### Указанное здесь юридическое имя используется внутри системы. Если у вас есть коммерческое или неофициальное имя, которое вы хотите использовать в своем магазине, вы можете указать его отдельно при создании страницы своего магазина.
-"}
-                    Text {
-                      Layout.preferredWidth: layoutWidth - 4 * defaultMargin
-                      textFormat: TextEdit.MarkdownText
-                      text: legalNameContent.text
-                      color: "orange"
-                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                      Layout.bottomMargin: defaultMargin
-                    }
-
-                    FormInputLabel {
-                      content: qsTr("ЮРИДИЧЕСКОЕ ИМЯ")
-                    }
-                    FormInput {
-                      id: juridicalNameInput
-                      focus: true
-                      Layout.preferredWidth: 308
-                      text: company_logic.juridical_name
-                      onTextChanged: company_logic.juridical_name = text
-                    }
-                  }
-                }
-              }
-
-              Indent {}
-
-              Rectangle {
-                width: layoutWidth - 2 * defaultMargin
-                height: 190
-                radius: defaultMargin
-                border.color: "orange"
-                border.width: 1
-                color: "transparent"
-
-                Item {
-                  width: parent.width - 2 * defaultMargin
-                  anchors.horizontalCenter: parent.horizontalCenter
-
-                  ColumnLayout {
-                    id: companyFormExplanationLayout
-
-                    QtObject{
-                      id: companyFormContent
-                      property string text: "<h1 style=\"color:white\">Форма компании</h1>
-
-### Организационно-правовая форма компании должна соответствовать той, что указана в документации вашей компании. Примеры того, что следует вводить в это поле: Общество с ограниченной ответственностью \"Лига\"; Публичное акционерное общество \"Сбербанк России\"; Индивидуальный предприниматель. Если вы являетесь единственным владельцем игры, используйте \"Индивидуальный предприниматель\".
-"}
-                    Text {
-                      Layout.preferredWidth: layoutWidth - 3 * defaultMargin
-                      textFormat: TextEdit.MarkdownText
-                      text: companyFormContent.text
-                      color: "orange"
-                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                    }
-
-                    FormInputLabel {
-                      content: qsTr("ФОРМА КОМПАНИИ")
-                    }
-                    FormInput {
-                      text: company_logic.company_form
-                      Layout.preferredWidth: 308
-                      onTextChanged: company_logic.company_form = text
-                    }
-                  }
-                }
-              }
-
-              Indent {}
-
-              FormInputLabel {
-                content: qsTr("УЛИЦА, ДОМ, НОМЕР КВАРТИРЫ / ОФИСА")
-              }
-              FormInput {
-                text: company_logic.street_house_apartment
-                Layout.preferredWidth: 308
-                onTextChanged: company_logic.street_house_apartment = text
-              }
-
-              Indent {}
-
-              FormInputLabel {
-                content: qsTr("ГОРОД")
-              }
-              FormInput {
-                text: company_logic.city
-                Layout.preferredWidth: 308
-                onTextChanged: company_logic.city = text
-              }
-
-              Indent {}
-
-              FormInputLabel {
-                content: qsTr("РЕГИОН / ОБЛАСТЬ")
-              }
-              FormInput {
-                text: company_logic.region
-                Layout.preferredWidth: 308
-                onTextChanged: company_logic.region = text
-              }
-
-              Indent {}
-
-              FormInputLabel {
-                content: qsTr("СТРАНА")
-              }
-              FormInput {
-                text: company_logic.country
-                Layout.preferredWidth: 308
-                onTextChanged: company_logic.country = text
-              }
-
-              Indent {}
-
-              FormInputLabel {
-                content: qsTr("ПОЧТОВЫЙ ИНДЕКС")
-              }
-              FormInput {
-              id: postIndex
-              validator: RegularExpressionValidator  {
-                    regularExpression: /^\d{6}$/
-                  }
-                text: company_logic.postal_code
-                Layout.preferredWidth: 308
-                onTextChanged: company_logic.postal_code = text
-              }
-
-              Indent {}
-
-              FormInputLabel {
-                  content: qsTr("ЭЛЕКТРОННЫЙ ПОЧТОВЫЙ АДРЕС ДЛЯ УВЕДОМЛЕНИЙ")
-              }
-              FormInput {
-                id: companyEmail
-                validator: RegularExpressionValidator  {
-                    regularExpression: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-                  }
-                text: company_logic.notification_email
-                Layout.preferredWidth: 308
-                onTextChanged: company_logic.notification_email = text
-              }
-
-              Indent {}
-
-              Text{
-                Layout.preferredWidth: layoutWidth - 2 * defaultMargin
-                textFormat: TextEdit.MarkdownText
-                text: "### Нажмите кнопку «Продолжить», чтобы перейти к вводу платежной информации"
-                color: "#ddd"
-                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-              }
-
-              NeutralButton {
-              enabled: postIndex.acceptableInput && companyEmail.acceptableInput
-                text: qsTr("Продолжить")
-                function handler() {
-                  bicInput.focus = true
-                  storeStack.currentIndex = storeStack.workshopRegisterPaymentInfoIndex
-                }
-              }
-            }
-          }
-        }
-
-        Scroll {
-          contentHeight: companyInfoForm.height + 2 * defaultMargin
-
-          Item {
-            width: layoutWidth
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            ColumnLayout {
-              id: companyPayInfoForm
-
-              Link {
-                content: qsTr("К информации о компании")
-
-                function handler() {
-                  juridicalNameInput.focus = true
-                  storeStack.currentIndex = storeStack.workshopRegisterCompanyInfoIndex
-                }
-              }
-
-              Indent {}
-
-              FormInputLabel {
-                content: qsTr("БИК")
-              }
-              FormInput {
-                id: bicInput
-                focus: true
-                text: company_logic.bic
-                onTextChanged: company_logic.bic = text
-                validator: RegularExpressionValidator  {
-                    regularExpression: /^\d{9}$/
-                  }
-              }
-
-              Indent {}
-
-              FormInputLabel {
-                content: qsTr("АДРЕС БАНКА")
-              }
-              FormInput {
-                text: company_logic.bank_address
-                onTextChanged: company_logic.bank_address = text
-              }
-
-              Indent {}
-
-              FormInputLabel {
-                content: qsTr("БАНКОВСКИЙ НОМЕР СЧЕТА")
-              }
-              FormInput {
-              id: accountNumber
-                text: company_logic.bank_account_number
-                onTextChanged: company_logic.bank_account_number = text
-                validator: RegularExpressionValidator  {
-                    regularExpression: /^\d{20}$/
-                  }
-              }
-
-              Indent {}
-
-              ActionButton {
-              enabled: bicInput.acceptableInput && accountNumber.acceptableInput
-                text: qsTr("Создать")
-                function handler() {
-                  company_logic.new()
-                }
-              }
-
-              Indent {}
-            }
-          }
-        }
-
-        Scroll {
-          contentHeight: boo.contentHeight + 2 * defaultMargin + 200
-
-          Item {
-            width: layoutWidth - defaultMargin
-            height: parent.height
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            ColumnLayout {
-              id: releasesAppsList
-
-              anchors.fill: parent
-
-              Connections {
-                target: app_logic
-
-                function onDrafted() {
-                  storeStack.currentIndex = storeStack.workshopAppControlIndex
-                }
-              }
-
-              Regular {
-                content: qsTr("Пока информация о вашей компании не проверена, Вы не можете создавать новые релизы")
-                color: "orange"
-                visible: !company_logic.is_drafted_new_button_enabled
-              }
-
-              RowLayout {
-                Regular {
-                  content: "Выберите продукт для просмотра и редактирования"
-                }
-
-                Item {Layout.fillWidth: true}
-
-                ActionButton {
-                  Layout.rightMargin: defaultMargin
-                  text: qsTr("Создать")
-                  function handler() {
-                    app_logic.draft_new()
-                    game_list_model.load_personal()
-                  }
-                  visible: company_logic.is_drafted_new_button_enabled
-                }
-              }
-
-              RowLayout {
-                FormInputLabel {
-                  Layout.preferredWidth: 250
-                  content: "Название"
-                }
-                FormInputLabel {content: "Одобрено"}
-                FormInputLabel {content: "Опубликовано"}
-              }
-
-              ListView {
-                id: boo
-                Layout.fillHeight: true
-                model: game_list_model
-                spacing: defaultMargin
-                boundsBehavior: Flickable.StopAtBounds
-
-                delegate: RowLayout {
-                  Rectangle {
-                    id: releaseRowBack
-                    anchors.fill: parent
-                    color: "transparent"
-                    radius: defaultMargin / 2
-                    opacity: 0.2
-                  }
-
-                  FormInputLabel {
-                    content: title
-                    Layout.preferredWidth: 272
-                  }
-
-                  FormInputLabel {
-                    color: is_approved ? "#ddd" : "red"
-                    Layout.preferredWidth: 88
-                    content: is_approved ? qsTr("Да") : qsTr("Нет")
-                  }
-
-                  FormInputLabel {
-                    color: is_published ? "orange" : "#ccc"
-                    Layout.preferredWidth: 50
-                    content: is_published ? qsTr("Да") : qsTr("Нет")
-                  }
-
-                  MouseArea {
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    hoverEnabled: true
-                    onEntered: releaseRowBack.color = "#446691"
-                    onExited: releaseRowBack.color = "transparent"
                     onClicked: {
-                      app_logic.map(id)
-                      storeStack.currentIndex = storeStack.workshopAppControlIndex
+                      build_list_model.load_for_game(app_logic.id)
+                      buildsStackLayout.currentIndex = buildsStackLayout.buildsListIndex
                     }
                   }
-                }
-              }
-            }
-          }
-        }
 
-        Scroll {
-          contentHeight: appControl.height + 2 * defaultMargin
-
-          Item {
-            width: layoutWidth
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            ColumnLayout {
-              id: appControl
-
-              Link {
-                content: qsTr("К списку приложений")
-
-                function handler() {
-                  storeStack.currentIndex = storeStack.workshopAppsListIndex
-                }
-              }
-
-              RowLayout {
-                NeutralButton {
-                  text: qsTr("Основное")
-                  function handler() {
-                    gameControlStackLayout.currentIndex = gameControlStackLayout.basicInfoPageIndex
-                  }
-                }
-
-                NeutralButton {
-                  text: qsTr("Описания")
-                  function handler() {
-                    gameControlStackLayout.currentIndex = gameControlStackLayout.descriptionPageIndex
-                  }
-                }
-
-                NeutralButton {
-                  text: qsTr("Материалы")
-                  function handler() {
-                    gameControlStackLayout.currentIndex = gameControlStackLayout.assetsPageIndex
-                  }
-                }
-
-                NeutralButton {
-                  text: qsTr("Сборки")
-                  function handler() {
-                    build_logic.load_platforms()
-                    build_list_model.load_for_game(app_logic.id)
-                    gameControlStackLayout.currentIndex = gameControlStackLayout.buildsPageIndex
-                  }
-                }
-
-                Item {Layout.fillWidth: true}
-
-                ActionButton {
-                  text: qsTr("Сохранить")
-                  function handler() {
-                    app_logic.update()
-                    build_logic.update(app_logic.id)
-                    game_list_model.load_personal()
-                  }
-                }
-
-                Switcher {
-                  enabled: app_logic.is_approved
-                  position: app_logic.is_published
-                  onToggled: {
-                    app_logic.is_published = position
-                    app_logic.publish()
-                  }
-                  text: qsTr("Опубликовано")
-                  Layout.rightMargin: defaultMargin
-                }
-              }
-
-              StackLayout {
-                id: gameControlStackLayout
-
-                property int basicInfoPageIndex: 0
-                property int descriptionPageIndex: basicInfoPageIndex + 1
-                property int assetsPageIndex: descriptionPageIndex + 1
-                property int buildsPageIndex: assetsPageIndex + 1
-
-                ColumnLayout {
-                  FormInputLabel {
-                    content: qsTr("НАЗВАНИЕ")
-                  }
-                  FormInput {
-                    text: app_logic.title
-                    onTextChanged: app_logic.title = text
+                  Text {text: qsTr("VERSION")}
+                  TextField {
+                    text: build_logic.version
+                    onTextChanged: build_logic.version = text
                   }
 
-                  Checking {
-                    id: is_coming_soon
-                    text: qsTr("СКОРО")
-                    checked: app_logic.coming_soon
-                    onClicked: app_logic.coming_soon = checked
+                  Text {text: qsTr("CALL")}
+                  TextField {
+                    text: build_logic.call
+                    onTextChanged: build_logic.call = text
                   }
 
-                  FormInputLabel {
-                    content: qsTr("ДАТА ВЫХОДА")
-                    visible: !is_coming_soon.checked
+                  Text {text: qsTr("PARAMETERS")}
+                  TextField {
+                    text: build_logic.params
+                    onTextChanged: build_logic.params = text
+                  }
+
+                  Text {text: qsTr("PLATFORM")}
+                  ComboBox {
+                    model: build_logic.displayed_platforms
+                    currentIndex: build_logic.selected_platform_index
+                    onCurrentIndexChanged: build_logic.selected_platform_index = currentIndex
                   }
 
                   RowLayout {
-                    id: dateSection
-
-                    visible: !is_coming_soon.checked
-
-                    property int comboWidth: 97
-
-                    Combo {
-                      implicitWidth: parent.comboWidth
-                      model: app_logic.possible_days
-                      currentIndex: app_logic.day_index
-                      onCurrentIndexChanged: app_logic.day_index = currentIndex
+                    Platform.FolderDialog {
+                      id: attach_project_archive_file_dialog
+                      onAccepted: build_logic.project_archive = folder
                     }
 
-                    Combo {
-                      implicitWidth: parent.comboWidth
-                      model: app_logic.possible_months
-                      currentIndex: app_logic.month_index
-                      onCurrentIndexChanged: app_logic.month_index = currentIndex
-                    }
+                    Text {text: qsTr("DIRECTORY:")}
 
-                    Combo {
-                      implicitWidth: parent.comboWidth
-                      model: app_logic.possible_years
-                      currentIndex: app_logic.year_index
-                      onCurrentIndexChanged: app_logic.year_index = currentIndex
+                    Text {
+                      text: build_logic.project_archive
                     }
                   }
 
-                  Indent {
-                    visible: !is_coming_soon.checked
+                  Button {
+                    text: qsTr("Attach")
+                    onClicked: attach_project_archive_file_dialog.open()
                   }
 
-                  FormInputLabel {content: qsTr("РАЗРАБОТЧИК")}
-                  FormInput {
-                    text: app_logic.developer
-                    onTextChanged: app_logic.developer = text
-                  }
-
-                  FormInputLabel {content: qsTr("ИЗДАТЕЛЬ")}
-                  FormInput {
-                    text: app_logic.publisher
-                    onTextChanged: app_logic.publisher = text
-                  }
-
-                  FormInputLabel {
-                    content: qsTr("ЦЕНА")
-                  }
-                  FormInput {
-                    text: app_logic.price
-                    onTextChanged: app_logic.price = text
-                  }
-                }
-
-                ColumnLayout {
-                  Regular {
-                    color: "#64BCEF"
-                    Layout.preferredWidth: layoutWidth
-                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                    content: "Развернутое описание поддерживает Markdown"
-                  }
-
-                  Indent {}
-
-                  RowLayout {
-                    FormInputLabel {
-                      content: "КРАТКОЕ ОПИСАНИЕ"
-                    }
-
-                    Span {
-                      text: shortDescriptionArea.length + "/" + shortDescriptionArea.limit
-                    }
-                  }
-
-                  Scroll {
-                    Layout.preferredWidth: layoutWidth / 2
-                    Layout.preferredHeight: 125
-
-                    TextArea {
-                      id: shortDescriptionArea
-                      property int limit: 500
-                      background: Rectangle {
-                        color: "black"
-
-                        radius: 4
-
-                        MouseArea {
-                          anchors.fill: parent
-                          hoverEnabled: true
-                          cursorShape: Qt.IBeamCursor
-                          onEntered: parent.color = Qt.darker("#0E151E", 1.5)
-                          onExited: parent.color =  "black"
-                        }
-                      }
-                      font.pointSize: 12
-                      Layout.preferredWidth: layoutWidth / 2
-                      Layout.preferredHeight: 125
-                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                      text: app_logic.short_description
-                      onTextChanged: {
-                        if (length > limit) remove(limit, length)
-                        app_logic.short_description = text
-                      }
-                    }
-                  }
-
-                  Indent {}
-
-                  RowLayout {
-                    FormInputLabel {
-                      content: "РАЗВЕРНУТОЕ ОПИСАНИЕ"
-                    }
-
-                    Span {
-                      text: longDescriptionArea.length + "/" + longDescriptionArea.limit
-                    }
-                  }
-
-                  Scroll {
-                    Layout.preferredWidth: layoutWidth / 2
-                    Layout.preferredHeight: 350
-
-                    TextArea {
-                      id: longDescriptionArea
-                      property int limit: 5000
-                      background: Rectangle {
-                        color:  "black"
-
-                        radius: 4
-
-                        MouseArea {
-                          anchors.fill: parent
-                          hoverEnabled: true
-                          cursorShape: Qt.IBeamCursor
-                          onEntered: parent.color = Qt.darker("#0E151E", 1.5)
-                          onExited: parent.color =  "black"
-                        }
-                      }
-                      font.pointSize: 12
-                      Layout.preferredWidth: layoutWidth / 2
-                      Layout.preferredHeight: 350
-                      wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                      text: app_logic.long_description
-                      onTextChanged: {
-                        if (length > limit) remove(limit, length)
-                        app_logic.long_description = text
-                      }
-                    }
-                  }
-                }
-
-                ColumnLayout {
-                  RowLayout {
-                    Platform.FileDialog {
-                      id: attach_header_image_file_dialog
-                      fileMode: Platform.FileDialog.OpenFile
-                      nameFilters: ["Images (*.webp *jpg *png)"]
-                      onAccepted: app_logic.header = file
-                      folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
-                    }
-
-                    FormInputLabel {
-                      content: qsTr("ПОСТЕР ДЛЯ МАГАЗИНА (*.webp *jpg *png):")
-                    }
-
-                    FormInputLabel {
-                      content: app_logic.displayed_header === '' ?
-                        (app_logic.server_header === '' ? 'Отсутствует' :  app_logic.server_header)
-                          :
-                        app_logic.displayed_header
-                      color: app_logic.displayed_header === '' ? 'white' : "orange"
-                    }
-
-
-                  }
-
-                  RowLayout {
-                    ActionButton {
-                      visible: app_logic.header === ""
-                      text: qsTr("Прикрепить")
-                      function handler() {
-                       attach_header_image_file_dialog.open()
-                      }
-                    }
-                    NeutralButton {
-                      visible: app_logic.header !== ""
-                      text: qsTr("Открепить")
-                      function handler() {
-                       app_logic.header = ""
-                      }
-                    }
-                  }
-
-                  Indent {}
-
-                  RowLayout {
-                    Platform.FileDialog {
-                      id: attach_capsule_image_file_dialog
-                      fileMode: Platform.FileDialog.OpenFile
-                      nameFilters: ["Images (*.webp *jpg *png)"]
-                      onAccepted: app_logic.capsule = file
-                      folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
-                    }
-
-                    FormInputLabel {
-                      content: qsTr("ПОСТЕР ДЛЯ БИБЛИОТЕКИ (*.webp *jpg *png):")
-                    }
-
-                    FormInputLabel {
-                      content: app_logic.displayed_capsule === '' ?
-                        (app_logic.server_capsule === '' ? 'Отсутствует' :  app_logic.server_capsule)
-                          :
-                        app_logic.displayed_capsule
-                      color: app_logic.displayed_capsule === '' ? 'white' : "orange"
-                    }
-                  }
-
-                  RowLayout {
-                    ActionButton {
-                      visible: app_logic.capsule === ""
-                      text: qsTr("Прикрепить")
-                      function handler() {
-                       attach_capsule_image_file_dialog.open()
-                      }
-                    }
-
-                    NeutralButton {
-                      visible: app_logic.capsule !== ""
-                      text: qsTr("Открепить")
-                      function handler() {
-                       app_logic.capsule = ""
-                      }
-                    }
-                  }
-
-                  Indent {}
-
-                  RowLayout {
-                    Platform.FileDialog {
-                      id: attach_screenshots_file_dialog
-                      fileMode: Platform.FileDialog.OpenFiles
-                      nameFilters: ["Images (*.webp *jpg *png)"]
-                      onAccepted: app_logic.screenshots = files
-                      folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
-                    }
-
-                    FormInputLabel {
-                      content: qsTr("СКРИНШОТЫ (*.webp *jpg *png):")
-                    }
-
-                    FormInputLabel {
-                      content: app_logic.displayed_screenshots === '' ?
-                        (app_logic.server_screenshots === '' ? 'Отсутствует' :  app_logic.server_screenshots)
-                          :
-                        app_logic.displayed_screenshots
-                      color: app_logic.displayed_screenshots === '' ? 'white' : "orange"
-                    }
-                  }
-
-                  RowLayout {
-                    ActionButton {
-                      visible: app_logic.displayed_screenshots === ""
-                      text: qsTr("Прикрепить")
-                      function handler() {
-                       attach_screenshots_file_dialog.open()
-                      }
-                    }
-
-                    NeutralButton {
-                      visible: app_logic.displayed_screenshots !== ""
-                      text: qsTr("Открепить")
-                      function handler() {
-                       app_logic.screenshots = []
-                      }
-                    }
-                  }
-                }
-
-                StackLayout {
-                  id: buildsStackLayout
-
-                  property int buildsListIndex: 0
-                  property int buildControlIndex: buildsListIndex + 1
-
-                  Connections {
-                    target: build_logic
-
-                    function onDrafted() {
-                      buildsStackLayout.currentIndex = buildsStackLayout.buildControlIndex
-                    }
-                  }
-
-                  ColumnLayout {
-                    RowLayout {
-                      Regular {
-                        color: "#64BCEF"
-                        content: "Здесь вы можете просмотреть и создать сборку приложения для конкретной платформы"
-                      }
-
-                      Item {Layout.fillWidth: true}
-
-                      ActionButton {
-                        text: qsTr("Создать")
-                        Layout.rightMargin: doubleDefaultMargin
-                        function handler() {
-                          build_logic.draft_new(app_logic.id)
-                          build_list_model.load_for_game(app_logic.id)
-                        }
-                      }
-                    }
-
-                    RowLayout {
-                      FormInputLabel {
-                        Layout.preferredWidth: 140
-                        content: "ПЛАТФОРМА"
-                      }
-                      FormInputLabel {
-                        Layout.preferredWidth: 100
-                        content: "ВЕРСИЯ"
-                      }
-                      FormInputLabel {
-                        Layout.preferredWidth: 190
-                        content: "ВЫПОЛНИТЬ"
-                      }
-                      FormInputLabel {
-                        Layout.preferredWidth: 100
-                        content: "ПАРАМЕТРЫ"
-                      }
-                    }
-
-                    ListView {
-                      Layout.fillHeight: true
-                      model: build_list_model
-                      spacing: defaultMargin
-                      boundsBehavior: Flickable.StopAtBounds
-
-                      delegate: RowLayout {
-                        Rectangle {
-                          id: buildRowBack
-                          anchors.fill: parent
-                          color: "transparent"
-                          radius: defaultMargin / 2
-                          opacity: 0.2
-                        }
-
-                        Regular {
-                          content: platform_title
-                          Layout.preferredWidth: 142
-                          font.underline: true
-                        }
-
-                        Regular {
-                          Layout.preferredWidth: 94
-                          content: version
-                        }
-
-                        Regular {
-                          Layout.preferredWidth: 190
-                          content: call
-                        }
-
-                        Regular {
-                          Layout.preferredWidth: 80
-                          content: params
-                        }
-
-                        MouseArea {
-                          anchors.fill: parent
-                          cursorShape: Qt.PointingHandCursor
-                          hoverEnabled: true
-                          onEntered: buildRowBack.color = "#446691"
-                          onExited: buildRowBack.color = "transparent"
-                          onClicked: {
-                            build_logic.map(id)
-                            buildsStackLayout.currentIndex = buildsStackLayout.buildControlIndex
-                          }
-                        }
-                      }
-                    }
-                  }
-
-                  ColumnLayout {
-                    Link {
-                      content: qsTr("К списку сборок")
-
-                      function handler() {
-                        build_list_model.load_for_game(app_logic.id)
-                        buildsStackLayout.currentIndex = buildsStackLayout.buildsListIndex
-                      }
-                    }
-
-                    Indent {}
-
-                    FormInputLabel {content: qsTr("ВЕРСИЯ")}
-                    FormInput {
-                      text: build_logic.version
-                      onTextChanged: build_logic.version = text
-                    }
-
-                    Indent {}
-
-                    FormInputLabel {content: qsTr("ИСПОЛНЯЕМЫЙ ФАЙЛ")}
-                    FormInput {
-                      text: build_logic.call
-                      onTextChanged: build_logic.call = text
-                    }
-
-                    Indent {}
-
-                    FormInputLabel {content: qsTr("ПАРАМЕТРЫ")}
-                    FormInput {
-                      text: build_logic.params
-                      onTextChanged: build_logic.params = text
-                    }
-
-                    Indent {}
-
-                    FormInputLabel {content: qsTr("ПЛАТФОРМА")}
-                    Combo {
-                      model: build_logic.displayed_platforms
-                      currentIndex: build_logic.selected_platform_index
-                      onCurrentIndexChanged: build_logic.selected_platform_index = currentIndex
-                    }
-
-                    Indent {}
-
-                    RowLayout {
-                      Platform.FolderDialog {
-                        id: attach_project_archive_file_dialog
-                        onAccepted: build_logic.project_archive = folder
-                      }
-
-                      FormInputLabel {
-                        content: qsTr("ДИРЕКТОРИЯ:")
-                      }
-
-                      FormInputLabel {
-                        content: build_logic.project_archive
-                        color: "orange"
-                      }
-                    }
-
-                    ActionButton {
-                      text: qsTr("Выбрать")
-                      function handler() {
-                       attach_project_archive_file_dialog.open()
-                      }
-                    }
-
-                    FormInputLabel {
-                      content: build_logic.displayed_status
-                      color: "orange"
-                    }
+                  Text {
+                    text: build_logic.displayed_status
                   }
                 }
               }
