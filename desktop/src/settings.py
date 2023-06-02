@@ -19,6 +19,7 @@ ME_URL = AUTH_URL + "me/"
 USERS_URL = SERVER_URL + "users/"
 PAYMENTS_URL = SERVER_URL + "payments/"
 GAMES_URL = SERVER_URL + 'games/'
+REVIEWS_URL = SERVER_URL + 'reviews/'
 BUILDS_URL = SERVER_URL + 'builds/'
 PLATFORMS_URL = SERVER_URL + 'platforms/'
 COMPANIES_URL = SERVER_URL + 'companies/'
