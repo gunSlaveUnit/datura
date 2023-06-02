@@ -6,7 +6,7 @@ from PySide6.QtCore import QAbstractListModel, QModelIndex, QByteArray, Qt, Slot
 
 from desktop.src.models.entity import Entity
 from desktop.src.services.AuthService import AuthService
-from desktop.src.settings import REVIEWS_URL
+from desktop.src.settings import GAMES_URL
 
 
 @dataclass()
@@ -29,7 +29,7 @@ class ReviewList(QAbstractListModel):
     @Slot(int)
     def load(self, game_id: int):
         params = {"game_id": game_id}
-        reply = self._auth_service.authorized_session.get(REVIEWS_URL, params=params)
+        reply = self._auth_service.authorized_session.get(f'{GAMES_URL}{game_id}/reviews/', params=params)
 
         if reply.status_code == requests.codes.ok:
             reviews = reply.json()
