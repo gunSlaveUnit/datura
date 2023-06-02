@@ -11,6 +11,7 @@ from desktop.src.logic.CartLogic import CartLogic
 from desktop.src.logic.CompanyLogic import CompanyLogic
 from desktop.src.logic.CurrentUserLogic import CurrentUserLogic
 from desktop.src.logic.LibraryDetaledLogic import LibraryDetailedLogic
+from desktop.src.logic.ReviewLogic import ReviewLogic
 from desktop.src.logic.StoreDetailedLogic import StoreDetailedLogic
 from desktop.src.logic.WalletLogic import WalletLogic
 from desktop.src.models.build import BuildList
@@ -75,6 +76,9 @@ if __name__ == '__main__':
 
     reviews_list_model = ReviewList(auth_service)
     engine.rootContext().setContextProperty("reviews_list_model", reviews_list_model)
+
+    review_logic = ReviewLogic(auth_service)
+    engine.rootContext().setContextProperty("review_logic", review_logic)
 
     start_file_location = LAYOUTS_DIR / "main.qml"
     engine.load(start_file_location)
