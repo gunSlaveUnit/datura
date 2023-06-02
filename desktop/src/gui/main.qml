@@ -401,102 +401,116 @@ Window {
       Scroll {
         leftPadding: defaultMargin
         bottomPadding: defaultMargin
-        contentHeight: storeGameDetailedPage.height
+        contentHeight: storeGameDetailedPage.height + reviewsList.contentHeight + defaultMargin
 
         ColumnLayout {
-          id: storeGameDetailedPage
           implicitWidth: window.width - 2 * defaultMargin // FIXME: ugly
+          height: parent.height
 
-          Button {
-            text: qsTr("To the store")
-
-            onClicked: {
-              game_list_model.load_store()
-              storeStack.currentIndex = storeStack.storeIndex
-            }
-          }
-
-          Text {text: store_detailed_logic.title}
-
-          RowLayout {
-            width: parent.width
-
-            ColumnLayout {
-              width: parent.width * 0.3
-
-              Text {
-                Layout.preferredWidth: parent.width
-                wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                text: store_detailed_logic.short_description
-              }
-
-              RowLayout {
-                width: parent.width
-
-                Text {
-                  Layout.preferredWidth: parent.width
-                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                  text: qsTr("Release date: ") + (store_detailed_logic.release_date ? humanTimestamp(store_detailed_logic.release_date) : "Coming soon")
-                }
-              }
-
-              RowLayout {
-                width: parent.width
-
-                Text {
-                  Layout.preferredWidth: parent.width
-                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                  text: qsTr("Developer: ") + store_detailed_logic.developer
-                }
-              }
-
-              RowLayout {
-                width: parent.width
-
-                Text {
-                  Layout.preferredWidth: parent.width
-                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-                  text: qsTr("Publisher: ") + store_detailed_logic.publisher
-                }
-              }
-            }
-          }
-
-          RowLayout {
-            visible: store_detailed_logic.location === 0
-
-            Text {
-              text: qsTr("Buy ") + store_detailed_logic.title
-            }
-
-            Text {
-              text: store_detailed_logic.price + " $"
-            }
+          ColumnLayout {
+            id: storeGameDetailedPage
+            implicitWidth: parent.width
 
             Button {
-              text: qsTr("Add to cart")
+              text: qsTr("To the store")
+
               onClicked: {
-                cart_logic.add(store_detailed_logic.id)
-                store_detailed_logic.location = 2
+                game_list_model.load_store()
+                storeStack.currentIndex = storeStack.storeIndex
               }
+            }
+
+            Text {text: store_detailed_logic.title}
+
+            RowLayout {
+              width: parent.width
+
+              ColumnLayout {
+                width: parent.width * 0.3
+
+                Text {
+                  Layout.preferredWidth: parent.width
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                  text: store_detailed_logic.short_description
+                }
+
+                RowLayout {
+                  width: parent.width
+
+                  Text {
+                    Layout.preferredWidth: parent.width
+                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                    text: qsTr("Release date: ") + (store_detailed_logic.release_date ? humanTimestamp(store_detailed_logic.release_date) : "Coming soon")
+                  }
+                }
+
+                RowLayout {
+                  width: parent.width
+
+                  Text {
+                    Layout.preferredWidth: parent.width
+                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                    text: qsTr("Developer: ") + store_detailed_logic.developer
+                  }
+                }
+
+                RowLayout {
+                  width: parent.width
+
+                  Text {
+                    Layout.preferredWidth: parent.width
+                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                    text: qsTr("Publisher: ") + store_detailed_logic.publisher
+                  }
+                }
+              }
+            }
+
+            RowLayout {
+              visible: store_detailed_logic.location === 0
+
+              Text {text: qsTr("Buy ") + store_detailed_logic.title}
+
+              Text {text: store_detailed_logic.price + " $"}
+
+              Button {
+                text: qsTr("Add to cart")
+                onClicked: {
+                  cart_logic.add(store_detailed_logic.id)
+                  store_detailed_logic.location = 2
+                }
+              }
+            }
+
+            Text {
+              text: qsTr("Already in library")
+              visible: store_detailed_logic.location === 1
+            }
+
+            Text {
+              text: qsTr("Already in cart")
+              visible: store_detailed_logic.location === 2
+            }
+
+            Text {
+              textFormat: TextEdit.MarkdownText
+              Layout.preferredWidth: parent.width
+              wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+              text: store_detailed_logic.long_description
             }
           }
 
-          Text {
-            text: qsTr("Already in library")
-            visible: store_detailed_logic.location === 1
-          }
+          ListView {
+            id: reviewsList
+            Layout.fillHeight: true
+            model: reviews_list_model
+            boundsBehavior: Flickable.StopAtBounds
 
-          Text {
-            text: qsTr("Already in cart")
-            visible: store_detailed_logic.location === 2
-          }
-
-          Text {
-            textFormat: TextEdit.MarkdownText
-            Layout.preferredWidth: parent.width
-            wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
-            text: store_detailed_logic.long_description
+            delegate: RowLayout {
+              Text {
+                text: content
+              }
+            }
           }
         }
       }
