@@ -498,6 +498,53 @@ Window {
               wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
               text: store_detailed_logic.long_description
             }
+
+            ColumnLayout {
+              visible: store_detailed_logic.location === 1
+
+              Text {text: qsTr("Share your opinion about this product")}
+
+              Scroll {
+                Layout.preferredWidth: parent.width / 2
+                Layout.preferredHeight: 125
+
+                TextArea {
+                  property int limit: 500
+
+                  Layout.preferredWidth: parent.width / 2
+                  Layout.preferredHeight: 125
+
+                  wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+
+                  background: Rectangle {
+                    color: "lightgray"
+
+                    MouseArea {
+                      anchors.fill: parent
+                      hoverEnabled: true
+                      cursorShape: Qt.IBeamCursor
+                    }
+                  }
+
+                  text: review_logic.content
+                  onTextChanged: {
+                    if (length > limit) remove(limit, length)
+                    review_logic.content = text
+                  }
+                }
+              }
+
+              CheckBox {
+                text: qsTr("I recommend this game")
+                checked: review_logic.is_recommended
+                onClicked: review_logic.is_recommended = checked
+              }
+
+              Button {
+                text: qsTr("Send")
+                onClicked: review_logic.new(store_detailed_logic.id)
+              }
+            }
           }
 
           ListView {
