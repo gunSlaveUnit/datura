@@ -68,7 +68,8 @@ class GameList(QAbstractListModel):
 
     @Slot()
     def load_store(self):
-        reply = self._auth_service.authorized_session.get(GAMES_URL)
+        params = {"title": self._search if self._search != '' else None}
+        reply = self._auth_service.authorized_session.get(GAMES_URL, params=params)
 
         if reply.status_code == requests.codes.ok:
             games = reply.json()
@@ -84,7 +85,7 @@ class GameList(QAbstractListModel):
         self._company_service.load_personal()
         if self._company_service.company is not None:
             params = {"company_id": self._company_service.company.id}
-            data = self._auth_service.authorized_session.get(GAMES_URL, params = params).json()
+            data = self._auth_service.authorized_session.get(GAMES_URL, params=params).json()
             self.beginResetModel()
             self._games = [Game(**detailed_game_data, is_checked=None) for detailed_game_data in data]
             self.endResetModel()
