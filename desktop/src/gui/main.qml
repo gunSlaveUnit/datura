@@ -463,6 +463,23 @@ Window {
                     text: qsTr("Publisher: ") + store_detailed_logic.publisher
                   }
                 }
+
+                RowLayout {
+                  width: parent.width
+
+                  Text {
+                    Layout.preferredWidth: parent.width
+                    wrapMode: TextEdit.WrapAtWordBoundaryOrAnywhere
+                    text: qsTr("Reviews: ") + (
+                      reviews_list_model.rating > 0.9 ? qsTr("Very positive") :
+                      reviews_list_model.rating > 0.78 ? qsTr("Positive") :
+                      reviews_list_model.rating > 0.6 ? qsTr("Mostly positive") :
+                      reviews_list_model.rating > 0.4 ? qsTr("Neutral") :
+                      reviews_list_model.rating > 0.22 ? qsTr("Mostly negative") :
+                      reviews_list_model.rating > 0.1 ? qsTr("Negative") : qsTr("Extremely negative")
+                    )
+                  }
+                }
               }
             }
 
