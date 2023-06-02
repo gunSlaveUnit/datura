@@ -285,6 +285,11 @@ Window {
           y: parent.height
 
           MenuItem {
+            text: qsTr("Profile")
+            onTriggered: storeStack.currentIndex = storeStack.profileIndex
+          }
+
+          MenuItem {
             text: qsTr("Cart")
             onTriggered: {
               game_list_model.load_cart()
@@ -748,15 +753,23 @@ Window {
       }
 
       Scroll {
-        contentHeight: profilePage.height + 2 * defaultMargin
+        leftPadding: defaultMargin
+        bottomPadding: defaultMargin
+        contentHeight: profilePage.height
 
-        Item {
-          width: layoutWidth
-          anchors.horizontalCenter: parent.horizontalCenter
+        ColumnLayout {
+          id: profilePage
 
-          ColumnLayout {
-            id: profilePage
+          implicitWidth: window.width - 2 * defaultMargin
+
+          Image {
+            Layout.preferredWidth: 100
+            Layout.preferredHeight: 100
+            mipmap: true
+            source: `http://127.0.0.1:8000/api/v1/users/${current_user_logic.id}/avatar/`
           }
+
+          Text {text: current_user_logic.displayed_name}
         }
       }
 
