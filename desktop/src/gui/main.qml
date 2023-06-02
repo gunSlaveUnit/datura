@@ -379,6 +379,7 @@ Window {
                   anchors.fill: parent
                   onClicked: {
                     store_detailed_logic.map(id)
+                    reviews_list_model.load(id)
                     storeStack.currentIndex = storeStack.storeDetailedIndex
                   }
                 }
@@ -715,6 +716,7 @@ Window {
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                   store_detailed_logic.map(id)
+                  reviews_list_model.load(id)
                   storeStack.currentIndex = storeStack.storeDetailedIndex
                 }
               }
