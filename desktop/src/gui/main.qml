@@ -351,11 +351,20 @@ Window {
       Scroll {
         leftPadding: defaultMargin
         bottomPadding: defaultMargin
-        contentHeight: gamesList.contentHeight
+        contentHeight: searchField.height + gamesList.contentHeight
 
         ColumnLayout {
           implicitWidth: window.width - 2 * defaultMargin
           height: parent.height
+
+          TextField {
+            id: searchField
+            text: game_list_model.search
+            onTextChanged: {
+              game_list_model.search = text
+              game_list_model.load_store()
+            }
+          }
 
           ListView {
             id: gamesList

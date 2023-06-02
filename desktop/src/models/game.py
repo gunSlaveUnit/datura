@@ -40,6 +40,7 @@ class GameList(QAbstractListModel):
 
         self._games = []
         self._total_cost = 0.0
+        self._search = ''
 
     total_cost_changed = Signal()
 
@@ -52,6 +53,18 @@ class GameList(QAbstractListModel):
         if self._total_cost != new_value:
             self._total_cost = new_value
             self.total_cost_changed.emit()
+
+    search_changed = Signal()
+
+    @Property(str, notify=search_changed)
+    def search(self):
+        return self._search
+
+    @search.setter
+    def search(self, new_value: str):
+        if self._search != new_value:
+            self._search = new_value
+            self.search_changed.emit()
 
     @Slot()
     def load_store(self):
