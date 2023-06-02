@@ -2,7 +2,7 @@ from dataclasses import fields, dataclass
 from typing import Any
 
 import requests
-from PySide6.QtCore import QAbstractListModel, QModelIndex, QByteArray, Qt, Slot
+from PySide6.QtCore import QAbstractListModel, QModelIndex, QByteArray, Qt, Slot, Signal, Property
 
 from desktop.src.models.entity import Entity
 from desktop.src.services.AuthService import AuthService
@@ -25,6 +25,7 @@ class ReviewList(QAbstractListModel):
         self._auth_service = auth_service
 
         self._reviews = []
+        self._rating = 0.0
 
     @Slot(int)
     def load(self, game_id: int):
@@ -39,6 +40,23 @@ class ReviewList(QAbstractListModel):
             for review in reviews:
                 self._reviews.append(Review(**review))
             self.endResetModel()
+
+            total_reviews = len(self._reviews)
+            recommended_reviews = sum(review.is_game_recommended for review in self._reviews)
+
+            self.rating = recommended_reviews / total_reviews
+
+    rating_changed = Signal()
+
+    @Property(float, notify=rating_changed)
+    def rating(self):
+        return self._rating
+
+    @rating.setter
+    def rating(self, new_value: float):
+        if self._rating != new_value:
+            self._rating = new_value
+            self.rating_changed.emit()
 
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
         if 0 <= index.row() < self.rowCount():
