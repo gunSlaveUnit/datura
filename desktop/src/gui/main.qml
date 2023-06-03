@@ -258,7 +258,7 @@ Window {
         RowLayout {
           anchors.fill: parent
 
-          Image {
+          AnimatedImage {
             id: avatar
             Layout.preferredHeight: parent.height
             Layout.preferredWidth: height
@@ -762,7 +762,7 @@ Window {
 
           implicitWidth: window.width - 2 * defaultMargin
 
-          Image {
+          AnimatedImage {
             Layout.preferredWidth: 100
             Layout.preferredHeight: 100
             mipmap: true
