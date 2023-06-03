@@ -17,6 +17,12 @@ from server.src.core.utils.io import remove, save
 router = APIRouter(prefix=USERS_ROUTER_PREFIX, tags=[Tags.USERS])
 
 
+@router.get('/')
+async def items(db=Depends(get_db),
+                _: User = Depends(GetCurrentUser(is_required=False))):
+    return db.query(User).all()
+
+
 @router.get('/{user_id}/balance/')
 async def balance(user_id: int,
                   db: Session = Depends(get_db),
