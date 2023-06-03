@@ -769,7 +769,20 @@ Window {
             source: `http://127.0.0.1:8000/api/v1/users/${current_user_logic.id}/avatar/`
           }
 
-          Text {text: current_user_logic.displayed_name}
+          TextField {
+            id: displayedNameField
+            property string newDisplayedName: ""
+            text: current_user_logic.displayed_name
+            onTextChanged: newDisplayedName = text
+          }
+
+          Button {
+            text: qsTr("Save")
+            onClicked: {
+              current_user_logic.displayed_name = displayedNameField.newDisplayedName
+              current_user_logic.update()
+            }
+          }
         }
       }
 
