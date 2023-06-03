@@ -31,7 +31,7 @@ async def clear(directory: Path):
 
 async def remove(directory: str, files: List[str]):
     for file in files:
-        os.remove(Path(directory).joinpath(file.filename))
+        os.remove(Path(directory).joinpath(file))
 
 
 def _read_chunks(file_object: BinaryIO, chunk_size: int = CHUNK_SIZE) -> bytes:
