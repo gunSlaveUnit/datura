@@ -1,6 +1,7 @@
 from PySide6.QtCore import QObject, Signal, Slot, Property
 
 from desktop.src.services.AuthService import AuthService
+from desktop.src.settings import USERS_URL
 
 
 class CurrentUserLogic(QObject):
@@ -41,3 +42,14 @@ class CurrentUserLogic(QObject):
 
         self.id = self._auth_service.current_user.id
         self.displayed_name = self._auth_service.current_user.displayed_name
+
+    @Slot()
+    def update(self):
+        data = {
+            "displayed_name": self._displayed_name
+        }
+
+        url = USERS_URL + f"{self.id}/"
+        response = self._auth_service.authorized_session.put(url, json=data)
+        if response.ok:
+            self.map()
