@@ -770,6 +770,19 @@ Window {
             source: `http://127.0.0.1:8000/api/v1/users/${current_user_logic.id}/avatar/`
           }
 
+          Platform.FileDialog {
+            id: selectNewUserAvatarDialog
+            fileMode: Platform.FileDialog.OpenFile
+            nameFilters: ["Images (*.webp *jpg *png *gif)"]
+            onAccepted: current_user_logic.avatar = file
+            folder: StandardPaths.writableLocation(StandardPaths.PicturesLocation)
+          }
+
+          Button {
+            text: qsTr("Change avatar ...")
+            onClicked: selectNewUserAvatarDialog.open()
+          }
+
           TextField {
             id: displayedNameField
             property string newDisplayedName: ""
