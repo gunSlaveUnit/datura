@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 from starlette.responses import FileResponse, JSONResponse
 
+from common.api.v1.schemas.user import UserUpdateSchema
 from server.src.core.models.payment import Payment
 from server.src.core.models.purchase import Purchase
 from server.src.core.models.user import User
@@ -27,6 +28,15 @@ async def items(db=Depends(get_db),
 async def item(user_id: int,
                db=Depends(get_db)):
     return await User.by_id(db, user_id)
+
+
+@router.put('/{user_id}/')
+async def update(user_id: int,
+                 updated_user_data: UserUpdateSchema,
+                 db: Session = Depends(get_db),
+                 _: User = Depends(GetCurrentUser())):
+    user = await User.by_id(db, user_id)
+    return await user.update(db, updated_user_data.dict())
 
 
 @router.get('/{user_id}/balance/')
