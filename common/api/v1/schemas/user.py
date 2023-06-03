@@ -1,13 +1,15 @@
 import datetime
 
+from pydantic import BaseModel
+
 from common.api.v1.schemas.entity import EntityDBSchema
 
 
-class UserUpdateSchema(EntityDBSchema):
+class UserUpdateSchema(BaseModel):
     displayed_name: str
 
 
-class UserDBSchema(UserUpdateSchema):
+class UserDBSchema(UserUpdateSchema, EntityDBSchema):
     email: str
     account_name: str
     password: str
