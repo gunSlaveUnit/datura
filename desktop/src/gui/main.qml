@@ -391,6 +391,7 @@ Window {
 
                 MouseArea {
                   anchors.fill: parent
+                  cursorShape: Qt.PointingHandCursor
                   onClicked: {
                     store_detailed_logic.map(id)
                     reviews_list_model.load(id)
