@@ -64,6 +64,7 @@ REVIEWS_ROUTER_PREFIX = '/{game_id}/reviews'
 NOTIFICATIONS_ROUTER_PREFIX = '/notifications'
 ADMIN_ROUTER_PREFIX = '/admin'
 PAYMENTS_ROUTER_PREFIX = '/payments'
+WISHLIST_ROUTER_PREFIX = '/wishlist'
 
 
 # Tags
@@ -81,6 +82,7 @@ class Tags(str, Enum):
     COMPANIES = 'Companies'
 
     LIBRARY = 'Library'
+    WISHLIST = 'Wishlist'
 
     CART = 'Cart'
     PAYMENTS = 'Payments'
@@ -109,6 +111,7 @@ tags_metadata = [
     {'name': Tags.COMPANIES, 'description': ''},
     {'name': Tags.NOTIFICATIONS, 'description': ''},
     {'name': Tags.LIBRARY, 'description': ''},
+    {'name': Tags.WISHLIST, 'description': ''},
     {'name': Tags.CART, 'description': ''},
     {'name': Tags.PAYMENTS, 'description': ''},
     {'name': Tags.GAMES, 'description': ''},
