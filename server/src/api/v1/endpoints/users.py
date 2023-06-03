@@ -23,6 +23,12 @@ async def items(db=Depends(get_db),
     return db.query(User).all()
 
 
+@router.get('/{user_id}/')
+async def item(user_id: int,
+               db=Depends(get_db)):
+    return await User.by_id(db, user_id)
+
+
 @router.get('/{user_id}/balance/')
 async def balance(user_id: int,
                   db: Session = Depends(get_db),
