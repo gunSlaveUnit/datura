@@ -273,7 +273,7 @@ Window {
 
           Text {
             id: userBalance
-            text: wallet_logic.balance + " $"
+            text: (wallet_logic.balance).toFixed(2) + " $"
           }
         }
 
