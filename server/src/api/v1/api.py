@@ -15,6 +15,7 @@ from server.src.api.v1.endpoints.builds import router as builds_router
 from server.src.api.v1.endpoints.requirements import router as requirements_router
 from server.src.api.v1.endpoints.payments import router as payments_router
 from server.src.api.v1.endpoints.notifications import router as notifications_router
+from server.src.api.v1.endpoints.wishlist import router as wishlist_router
 
 router = APIRouter(prefix=API_VERSION_1_PREFIX, tags=[Tags.V1])
 
@@ -32,3 +33,4 @@ router.include_router(builds_router)
 router.include_router(requirements_router)
 router.include_router(payments_router)
 router.include_router(notifications_router)
+router.include_router(wishlist_router)
