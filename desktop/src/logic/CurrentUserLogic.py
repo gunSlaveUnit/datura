@@ -1,4 +1,6 @@
-from PySide6.QtCore import QObject, Signal, Slot, Property
+import os
+
+from PySide6.QtCore import QObject, Signal, Slot, Property, QUrl
 
 from desktop.src.services.AuthService import AuthService
 from desktop.src.settings import USERS_URL
@@ -15,6 +17,7 @@ class CurrentUserLogic(QObject):
 
         self._id = -1
         self._displayed_name = ''
+        self._avatar = ''
 
     @Property(int, notify=id_changed)
     def id(self):
@@ -36,6 +39,18 @@ class CurrentUserLogic(QObject):
             self._displayed_name = new_value
             self.displayed_name_changed.emit()
 
+    avatar_changed = Signal()
+
+    @Property(str, notify=avatar_changed)
+    def avatar(self):
+        return self._avatar
+
+    @avatar.setter
+    def avatar(self, new_value: str):
+        if self._avatar != new_value:
+            self._avatar = new_value
+            self.avatar_changed.emit()
+
     @Slot()
     def map(self):
         self._auth_service.load_current_user()
@@ -45,11 +60,17 @@ class CurrentUserLogic(QObject):
 
     @Slot()
     def update(self):
-        data = {
-            "displayed_name": self._displayed_name
-        }
+        data = {"displayed_name": self._displayed_name}
 
         url = USERS_URL + f"{self.id}/"
-        response = self._auth_service.authorized_session.put(url, json=data)
-        if response.ok:
-            self.map()
+        self._auth_service.authorized_session.put(url, json=data)
+
+        if self._avatar != '':
+            filename = QUrl(self._avatar).toLocalFile()
+            with open(filename, 'rb') as avatar_file:
+                files = [('file', (os.path.basename(filename), avatar_file))]
+                url = USERS_URL + f"{self.id}" + '/avatar/'
+                self._auth_service.authorized_session.put(url, files=files)
+            self._avatar = ''
+
+        self.map()
