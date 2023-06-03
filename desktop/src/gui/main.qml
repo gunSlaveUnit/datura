@@ -512,6 +512,11 @@ Window {
                   store_detailed_logic.location = 2
                 }
               }
+
+              Button {
+                text: qsTr("Add to wishlist")
+                onClicked: wishlist_logic.new(store_detailed_logic.id)
+              }
             }
 
             Text {
