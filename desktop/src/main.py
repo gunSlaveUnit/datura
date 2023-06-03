@@ -14,6 +14,7 @@ from desktop.src.logic.LibraryDetaledLogic import LibraryDetailedLogic
 from desktop.src.logic.ReviewLogic import ReviewLogic
 from desktop.src.logic.StoreDetailedLogic import StoreDetailedLogic
 from desktop.src.logic.WalletLogic import WalletLogic
+from desktop.src.logic.WishlistLogic import WishlistLogic
 from desktop.src.models.build import BuildList
 from desktop.src.models.game import GameList
 from desktop.src.models.review import ReviewList
@@ -79,6 +80,9 @@ if __name__ == '__main__':
 
     review_logic = ReviewLogic(auth_service)
     engine.rootContext().setContextProperty("review_logic", review_logic)
+
+    wishlist_logic = WishlistLogic(auth_service)
+    engine.rootContext().setContextProperty("wishlist_logic", wishlist_logic)
 
     start_file_location = LAYOUTS_DIR / "main.qml"
     engine.load(start_file_location)
