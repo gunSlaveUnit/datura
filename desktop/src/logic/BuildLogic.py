@@ -7,8 +7,8 @@ from pathlib import Path
 from PySide6.QtCore import QObject, Slot, Signal, Property, QUrl
 
 from desktop.src.settings import GAMES_URL, BUILDS_URL, PLATFORMS_URL
-from server.src.core.models.platform import Platform
-from server.src.core.utils.io import read_compressed_chunks, read_uncompressed_chunks
+from server.oldsrc.core.models.platform import Platform
+from server.oldsrc.core.utils.io import read_compressed_chunks, read_uncompressed_chunks
 
 
 class BuildLogic(QObject):

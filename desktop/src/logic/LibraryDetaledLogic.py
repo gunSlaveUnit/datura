@@ -13,7 +13,7 @@ from PySide6.QtCore import QObject, Slot, Signal, Property, QTimer, QUrl
 
 from desktop.src.services.AuthService import AuthService
 from desktop.src.settings import LIBRARY_URL, BUILDS_URL, PLATFORMS_URL
-from server.src.core.utils.io import CHUNK_SIZE
+from server.oldsrc.core.utils.io import CHUNK_SIZE
 
 
 def _check_game_installed(game_id: int) -> bool:

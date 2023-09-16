@@ -1,0 +1,54 @@
+from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import JSONResponse
+from starlette.staticfiles import StaticFiles
+
+from server.oldsrc.core.utils.db import Base, engine
+from server.oldsrc.core.utils.db_init import init_db
+from server.oldsrc.core.settings import DEBUG, Tags, STATIC_PATH
+from server.oldsrc.api.v1.api import router as api_v1_router
+from server.oldsrc.admin.api import router as admin_router
+
+app = FastAPI(debug=DEBUG)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:8000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(api_v1_router)
+app.include_router(admin_router)
+
+app.mount("/static/", StaticFiles(directory=STATIC_PATH), name="static")
+
+
+@app.on_event("startup")
+async def startup_event() -> None:
+    """
+    Creating models and calling the database initializer at application startup
+    """
+
+    Base.metadata.create_all(bind=engine)
+    init_db()
+
+
+@app.get("/", tags=[Tags.HOME])
+async def api_information() -> JSONResponse:
+    """
+    Information about the current versions of the service API
+    """
+
+    return JSONResponse({
+        "title": "Foggie API",
+        "purpose": "Online service for digital distribution of computer games and programs",
+        "api": [
+            {
+                "version": "1",
+                "status": "development",
+                "description": ""
+            }
+        ]
+    })
