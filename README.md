@@ -1,6 +1,6 @@
-# foggie
+# sadal
 
-My graduation project is actually an attempt to copy Steam
+My graduation project (sadal, aka foggie) is actually an attempt to copy Steam
 
 ## Used
 - PySide6 with QML for desktop application 
