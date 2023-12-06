@@ -14,4 +14,4 @@ class ReviewDBSchema(ReviewCreateSchema, EntityDBSchema):
     game_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -9,7 +9,7 @@ class LibraryUpdateSchema(BaseModel):
     last_run: int | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class LibraryDBSchema(EntityDBSchema):
@@ -19,7 +19,7 @@ class LibraryDBSchema(EntityDBSchema):
     last_run: int | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class LibraryJoinedSchema(LibraryDBSchema):

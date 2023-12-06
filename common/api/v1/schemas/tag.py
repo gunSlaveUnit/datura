@@ -13,4 +13,4 @@ class GameTagAssociationCreateSchema(BaseModel):
 
 class TagDBSchema(TagCreateSchema, EntityDBSchema):
     class Config:
-        orm_mode = True
+        from_attributes = True

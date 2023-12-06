@@ -10,4 +10,4 @@ class WishlistCreateSchema(BaseModel):
 
 class WishlistDBSchema(EntityDBSchema):
     class Config:
-        orm_mode = True
+        from_attributes = True

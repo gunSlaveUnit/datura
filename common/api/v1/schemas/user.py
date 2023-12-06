@@ -20,4 +20,4 @@ class UserDBSchema(UserUpdateSchema, EntityDBSchema):
     role_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
