@@ -1,6 +1,6 @@
 # foggie
 
-My graduation project is actually an attempt to copy Steam
+This project is actually an attempt to copy Steam.
 
 ## Used
 - PySide6 with QML for desktop application 
