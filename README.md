@@ -19,14 +19,23 @@ This project is actually an attempt to copy Steam.
 
 ## Screenshots
 ![Page 1](desktop/screenshots/screenshot_1.png)
+
 ![Page 2](desktop/screenshots/screenshot_2.png)
+
 ![Page 3](desktop/screenshots/screenshot_3.png)
+
 ![Page 4](desktop/screenshots/screenshot_4.png)
+
 ![Page 5](desktop/screenshots/screenshot_5.png)
+
 ![Page 6](desktop/screenshots/screenshot_6.png)
+
 ![Page 7](desktop/screenshots/screenshot_7.png)
+
 ![Page 8](desktop/screenshots/screenshot_8.png)
+
 ![Page 9](desktop/screenshots/screenshot_9.png)
+
 ![Page 10](desktop/screenshots/screenshot_10.png)
 
 ## I would like to do
